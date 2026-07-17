@@ -9,10 +9,11 @@ principles it encourages developers to use when building software.
 
 The language architecture follows SOLID principles.
 
-The Core Language, Standard Library, and Implementation Strategy have
-distinct responsibilities. User programs depend on language interfaces
-rather than implementation details. Evolution happens primarily through
-new strategies and libraries instead of changes to the language core.
+The Core Language and Standard Library define interfaces and contracts;
+the Implementation Strategy fulfills them. User programs depend on
+language interfaces rather than implementation details. Evolution happens
+primarily through new strategies and libraries instead of changes to the
+language core.
 
 ## Learn from What Came Before
 

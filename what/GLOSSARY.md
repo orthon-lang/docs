@@ -11,6 +11,11 @@
 
 The layered structure of Orthon: Core Language → Syntax → Standard Library → Implementation Strategy.
 
+The central architectural invariant: the **Core Language** and **Standard
+Library** define interfaces and contracts; the **Implementation Strategy**
+fulfills them. User code depends only on the interfaces, never on the
+strategy.
+
 - **Source:** `../how/architecture/ARCHITECTURE.md`
 - **See also:** [Core Language](#core-language), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)
 
@@ -27,7 +32,10 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 
 ### Core Language
 
-The minimal, stable set of language semantics, independent of any particular implementation. The Core defines *what programs mean*, not *how they execute*.
+The minimal, stable set of language semantics and semantic contracts,
+independent of any particular implementation. The Core defines *what
+programs mean*, not *how they execute*. It specifies the interfaces
+that every Implementation Strategy must fulfill.
 
 - **Source:** `../how/architecture/ARCHITECTURE.md` § Core Language, `DESIGN_PRINCIPLES.md` § Minimal Core
 - **See also:** [Architecture](#architecture), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)

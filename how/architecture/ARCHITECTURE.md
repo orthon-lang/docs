@@ -1,43 +1,68 @@
 # Architecture
 
+> Orthon is a programming language designed using the same engineering
+> principles it encourages developers to use when building software.
+> The language architecture follows the same principles — SOLID, separation
+> of concerns, abstraction, and dependency inversion — that developers use
+> to design maintainable software.
+>
+> This principle extends across the entire platform: the Core Language
+> defines interfaces and contracts; the Implementation Strategy fulfills them.
+> The Standard Library becomes the analog of a set of interfaces, and each
+> Implementation Strategy provides the concrete implementations.
+> This pattern applies to memory allocation, expression evaluation,
+> algorithm selection, object representation, and every other execution
+> mechanism in the language.
+
 ## Overview
 
 Orthon is structured as a layered architecture with a clear separation
 between language definition and implementation.
 
-``` text
-User Program
-      │
-      ▼
-Language Syntax
-      │
-      ▼
-Standard Library (Interfaces)
-      │
-      ▼
-Implementation Strategy (Implementations)
-      │
-      ▼
-Compiler / Runtime / Platform
+``` mermaid
+flowchart TD
+    UC["User code"]
+
+    subgraph LANG["Language"]
+        CL["Core Language"]
+        SX["Syntax"]
+        SL["Standard Library"]
+    end
+
+    IS["Implementation Strategy"]
+
+    subgraph EXEC["Execution Environment"]
+        C["Compiler"]
+        R["Runtime"]
+        P["Platform"]
+    end
+
+    UC --> LANG
+    LANG --> IS
+    IS --> EXEC
 ```
 
 ## Layers
 
-### Core Language
+### Language
 
-Defines the semantics of the language: what programs mean, not how they
-execute. The core is minimal, stable, and implementation-independent.
+Contains three components that together define what the language provides
+and how it is perceived by the programmer.
 
-### Language Syntax
+**Core Language** — defines the semantic contracts of the language: the
+interfaces and rules that every implementation must fulfill. The core
+specifies *what programs mean*, not *how they execute*. It is minimal,
+stable, and implementation-independent. No implementation detail leaks
+into the core.
 
-The human interface to the language. It should be obvious, consistent,
-predictable, and free from implementation details.
+**Syntax** — the human interface to the language. It should be obvious,
+consistent, predictable, and free from implementation details.
 
-### Standard Library
-
-Defines the public abstractions exposed by the language. It serves as
-the interface between user code and the implementation. It specifies
-behavior, not implementation.
+**Standard Library** — defines the public interface contracts exposed by
+the language. It specifies *behavior* and *contract* — not implementation.
+It is the analog of a set of interfaces in classical software engineering:
+user code programs against the Standard Library, not against any concrete
+strategy.
 
 ### Implementation Strategy
 
@@ -46,16 +71,47 @@ Different strategies may optimize for performance, memory usage, startup
 time, determinism, embedded systems, or parallel hardware. Replacing a
 strategy must not change program semantics.
 
+### Execution Environment
+
+The target where the Strategy runs. Consists of:
+
+**Compiler** — translates the program into executable form.
+
+**Runtime** — provides services like memory management, scheduling, and
+I/O that the Strategy relies on.
+
+**Platform** — the underlying system: operating system, virtual machine,
+WebAssembly runtime, or bare metal.
+
 ## Design Principles
 
--   **Single Responsibility** --- each layer has one responsibility.
--   **Open/Closed** --- the core remains stable while implementations
-    evolve.
--   **Liskov Substitution** --- strategies are interchangeable.
--   **Interface Segregation** --- user code depends only on language
-    interfaces.
--   **Dependency Inversion** --- implementations depend on abstractions,
-    not the other way around.
+The architecture applies SOLID principles at the language level:
+
+| Principle | In conventional software | In Orthon |
+|---|---|---|
+| **Single Responsibility** | A class has one responsibility | Core Language, Standard Library, and Implementation Strategy each have distinct responsibilities |
+| **Open / Closed** | Interface is stable, implementations extend | The core and standard library are stable; new capabilities are added through strategies and libraries |
+| **Liskov Substitution** | Implementations are interchangeable | Any Implementation Strategy can replace another without changing program semantics |
+| **Interface Segregation** | Small, focused interfaces | User code depends only on language interfaces and standard library contracts, never on strategy internals |
+| **Dependency Inversion** | Code depends on interfaces | User code depends on the language and standard library (abstractions), not on any concrete implementation |
+
+## Scope of the Pattern
+
+The interface/implementation separation applies to virtually every
+mechanism in the language:
+
+| Aspect | Interface (Language / StdLib) | Implementation (Strategy) |
+|---|---|---|
+| **Memory allocation** | Declarative allocation semantics | Heap, arena, linear, or GC-backed allocator |
+| **Expression evaluation** | Expression semantics and composition | AST walker, bytecode VM, JIT, or interpreter |
+| **Algorithm selection** | What the program expresses | Sorting, searching, hashing strategy implementations |
+| **Object representation** | Data model and structural contracts | Struct-of-fields, SOA, tagged unions, or pointer-based layout |
+| **Concurrency model** | Task and communication semantics | Thread pool, work-stealing, event loop, or hardware dispatch |
+| **Error handling** | Result and error propagation model | Stack unwinding, error codes, or return-value branching |
+
+Each aspect is defined at the language level as a contract. The choice of
+implementation is deferred to the strategy layer. This guarantees that
+program semantics are independent of the execution strategy.
 
 ## Evolution Model
 
