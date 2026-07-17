@@ -6,11 +6,28 @@ Design Principles
 ├── Simplicity
 ├── Explicitness
 ├── Consistency
-└── Documentation Principles
-      ├── Show All Canonical Forms
-      ├── One Concept — One Place
-      ├── Examples Before Theory
-      └── Explain the Rationale
+├── Documentation Principles
+
+Core Philosophy
+├── Data First
+├── Intent Over Implementation
+├── Orthogonality
+├── Uniformity
+├── Explicit Semantics
+├── Named Before Symbolic
+├── Minimal Core
+├── Designed by the Same Principles
+
+Language Consistency
+├── Representation Symmetry
+├── Deterministic Behavior
+├── Stable Mental Model
+
+Execution Model
+├── Semantics Before Optimization
+├── Explicit Optimization
+├── Correctness Before Performance
+
 ```
 
 # Core Philosophy
@@ -68,6 +85,27 @@ Both represent exactly the same semantics.
 ## Minimal Core
 
 Complex language features should emerge from composition of simple primitives rather than from introducing new keywords or execution models.
+
+
+
+## Designed by the Same Principles
+
+The same SOLID principles that guide good software engineering also
+guide the design of Orthon itself.
+
+-   **Single Responsibility** — Core, Standard Library, and
+    Implementation Strategy each have one responsibility.
+-   **Open/Closed** — The language core is stable; behavior is
+    extended through strategies and libraries.
+-   **Liskov Substitution** — Different implementation strategies are
+    interchangeable without changing program semantics.
+-   **Interface Segregation** — Programs depend on a minimal, coherent
+    language interface.
+-   **Dependency Inversion** — High-level code depends on language
+    abstractions, not runtime implementation details.
+
+This architecture makes the language maintainable, evolvable, and
+implementation-independent.
 
 
 
@@ -156,14 +194,3 @@ determinism, and the defined semantics of the language.
 When documenting a language feature, always present all canonical ways to use it, not just the most common one.
 
 If a feature has multiple equivalent forms, they should be shown together in the same section.
-
-# Example
-
-Generators can be created in two ways:
-
-- **Generator function** — a function using yield.
-- **Generator expression** — (x for x in range(n)).
-
-## Rationale
-
-Documentation should be complete rather than incremental. After reading a section, the reader should know every official way to accomplish the described task, without having to discover alternative forms later in unrelated chapters.
