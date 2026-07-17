@@ -1,22 +1,19 @@
 # Language Design Principles
 
 ```
-Design Principles
-├── Orthogonality
-├── Simplicity
-├── Explicitness
-├── Consistency
-├── Documentation Principles
-
 Core Philosophy
 ├── Data First
 ├── Intent Over Implementation
 ├── Orthogonality
+├── Simplicity
+├── Explicitness
+├── Consistency
 ├── Uniformity
 ├── Explicit Semantics
 ├── Named Before Symbolic
 ├── Minimal Core
-├── Designed by the Same Principles
+├── Software Design Principles
+├── Justified Solutions
 
 Language Consistency
 ├── Representation Symmetry
@@ -27,7 +24,6 @@ Execution Model
 ├── Semantics Before Optimization
 ├── Explicit Optimization
 ├── Correctness Before Performance
-
 ```
 
 # Core Philosophy
@@ -53,6 +49,33 @@ Each language construct should solve exactly one problem.
 Language features should be composable rather than overlapping. Complex
 behavior should emerge from combining simple, orthogonal building
 blocks.
+
+
+## Simplicity
+
+A language should be simple to learn, read, and reason about.
+
+Every feature carries a cognitive cost. Simplicity is achieved not by limiting expressiveness, but by ensuring each construct earns its place.
+Complexity belongs in the compiler, not the programmer.
+
+
+## Explicitness
+
+The meaning of code should be apparent from its surface form.
+
+Behavior-changing operations — ownership transfer, mutability,
+allocation — must be visible in the syntax. Code should not depend on hidden rules or implicit heuristics.
+
+Explicitness is the goal; **Explicit Semantics** is the rule that enforces it.
+
+
+## Consistency
+
+Similar concepts should look similar. Different concepts should look different.
+
+A consistent language reduces the learning surface area: once a pattern is learned in one context, it applies in all analogous contexts.
+
+Consistency is the foundation of a **Stable Mental Model**.
 
 
 ## Uniformity
@@ -88,26 +111,28 @@ Complex language features should emerge from composition of simple primitives ra
 
 
 
-## Designed by the Same Principles
+## Software Design Principles
 
-The same SOLID principles that guide good software engineering also
-guide the design of Orthon itself.
+The same SOLID principles that guide good software engineering also guide the design of Orthon itself.
 
 -   **Single Responsibility** — Core, Standard Library, and
     Implementation Strategy each have one responsibility.
 -   **Open/Closed** — The language core is stable; behavior is
     extended through strategies and libraries.
--   **Liskov Substitution** — Different implementation strategies are
-    interchangeable without changing program semantics.
--   **Interface Segregation** — Programs depend on a minimal, coherent
-    language interface.
--   **Dependency Inversion** — High-level code depends on language
-    abstractions, not runtime implementation details.
+-   **Liskov Substitution** — Different implementation strategies are interchangeable without changing program semantics.
+-   **Interface Segregation** — Programs depend on a minimal, coherent language interface.
+-   **Dependency Inversion** — High-level code depends on language abstractions, not runtime implementation details.
 
-This architecture makes the language maintainable, evolvable, and
-implementation-independent.
+This architecture makes the language maintainable, evolvable, and implementation-independent.
 
 
+## Justified Solutions
+
+Every problem deserves its own tool.
+
+A solution is justified by being the right match for the specific problem — not by familiarity, fashion, or convenience.
+
+---
 
 # Language Consistency
 
@@ -175,8 +200,7 @@ Optimization is explicit, never implicit.
 
 Performance-oriented execution strategies are enabled intentionally by
 the programmer rather than silently applied by the language.
-
-The default execution model favors predictability over performance.
+\nThe default execution model favors predictability over performance.
 
 ------------------------------------------------------------------------
 
@@ -184,13 +208,10 @@ The default execution model favors predictability over performance.
 
 Correctness always takes precedence over performance.
 
-Performance improvements are valuable only when they preserve clarity,
-determinism, and the defined semantics of the language.
+Performance improvements are valuable only when they preserve clarity, determinism, and the defined semantics of the language.
 
 ---
 
-# Documentation Principle: Show All Canonical Forms
+# Documentation Principles
 
-When documenting a language feature, always present all canonical ways to use it, not just the most common one.
-
-If a feature has multiple equivalent forms, they should be shown together in the same section.
+See [DOCUMENTATION_PRINCIPLES.md](../how/DOCUMENTATION_PRINCIPLES.md).
