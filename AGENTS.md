@@ -57,6 +57,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/templates/_design-review.md` | Meta | Design review template (fill-in form) |
 | `how/adr/ADR-*.md` | Meta | Architecture Decision Records — logged per-decision |
 | `how/gates/_language-design.md` | Meta | Quality gate checklist for language design decisions |
+| `how/gates/DECISION_VALIDATION.md` | How | Six independent validation gates for language design decisions |
 
 Convention: **one file, one coherent topic**. Do not create a file titled "Miscellaneous" or "Various."
 
@@ -122,6 +123,7 @@ docs/
 │   ├── adr/
 │   │   └── ADR-*.md
 │   ├── gates/
+│   │   ├── DECISION_VALIDATION.md
 │   │   └── _language-design.md
 │   └── templates/
 │       ├── _adr.md

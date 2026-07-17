@@ -8,7 +8,8 @@ which any language decision passes.
 ```mermaid
 flowchart TD
     V[Vision] --> P[Core Principles]
-    P --> G[Language Design Gate]
+    P --> DV[Decision Validation\n6 independent gates]
+    DV --> G[Language Design Gate]
     G --> C[Concept]
     C --> S[Default Strategy]
 ```
@@ -19,6 +20,7 @@ Each layer answers its own question and passes the result to the next:
 |---|---|---|---|
 | Vision | *Why does the language exist?* | Direction, top-level values | [`docs/why/VISION.md`](../why/VISION.md) |
 | Core Principles | *What rules do we follow?* | Concrete criteria for every decision | [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md), [`docs/what/DESIGN_PRINCIPLES.md`](../what/DESIGN_PRINCIPLES.md) |
+| Decision Validation | *Does the proposal pass all independent validation gates?* | Multi-perspective assessment of the proposal | [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
 | Language Design Gate | *Does the solution satisfy the principles?* | Approval or rejection of the concept | [`docs/how/gates/_language-design.md`](gates/_language-design.md) |
 | Concept | *What are we introducing?* | Formal semantic definition | [`docs/what/concepts/`](../what/concepts/) |
 | Default Strategy | *How is it implemented by default?* | Concrete implementation plan | [`docs/how/strategies/DEFAULT_STRATEGY.md`](strategies/DEFAULT_STRATEGY.md) |
@@ -91,12 +93,34 @@ satisfy.
 
 ---
 
-## Layer 3: Language Design Gate
+## Layer 3: Decision Validation
+
+**File:** [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md)
+
+Before a proposal enters the Language Design Gate, it must first pass
+through **Decision Validation** — a set of six independent validation
+gates. Each gate examines the proposal from a different perspective:
+user value, logical consistency, conceptual simplicity, architectural
+integrity, implementation independence, and long-term maintainability.
+
+The six gates are defined in
+[`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) with detailed
+criteria, pass/fail conditions, and a recommended flow.
+
+**Output:** a multi-perspective assessment of the proposal (pass with
+flags, or fail with documented issues to address).
+
+---
+
+### Layer 3a: Language Design Gate
 
 **File:** [`docs/how/gates/_language-design.md`](gates/_language-design.md)
 
-The Language Design Gate is a checkpoint. Before a concept enters the
-language specification, it is checked against the principles.
+The Language Design Gate is a concrete checklist that operationalises
+the six Decision Validation gates into a single review form. While
+Decision Validation defines *what* must be checked and *why*, this
+gate provides the *how* — a structured template for recording the
+outcome.
 
 Questions the Gate answers:
 
@@ -176,7 +200,15 @@ Design Principles: "Data First" — data as the primary abstraction;
 compiler decides *how*; "Explicit Semantics" — semantically significant
 changes are visible in syntax.
 
-### 3. Language Design Gate
+### 3. Decision Validation
+
+The six validation gates check the proposal from multiple perspectives.
+Data modifiers address a real programmer need (User Value), their
+definition is free of contradictions (Logical Consistency), and the
+concept is a single-purpose transformation not expressible through
+existing constructs (Conceptual Simplicity).
+
+### 3a. Language Design Gate
 
 The Gate checks: do data modifiers solve the problem of expressing intent
 explicitly? Do they violate the minimal core principle? Do they compose

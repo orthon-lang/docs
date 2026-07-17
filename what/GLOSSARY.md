@@ -70,6 +70,21 @@ The same source code must produce identical observable behavior across optimizat
 
 ---
 
+## D (cont.)
+
+### Decision Validation
+
+A framework of six independent validation gates that every language
+design decision must pass. Each gate examines the proposal from a
+different perspective: user value, logical consistency, conceptual
+simplicity, architectural integrity, implementation independence,
+and long-term maintainability.
+
+- **Source:** `../how/gates/DECISION_VALIDATION.md`
+- **See also:** [Language Design Gate](#language-design-gate), [Validation Gate](#validation-gate)
+
+---
+
 ## E
 
 ### Explicit Optimization
@@ -227,6 +242,19 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 
 - **Source:** `concepts/CORE_CONCEPTS.md` § Sequence
 - **See also:** [Representation](#representation)
+
+---
+
+## V
+
+### Validation Gate
+
+One of six independent perspectives used in [Decision Validation](#decision-validation)
+to assess a language design proposal. Each gate has its own criteria,
+pass/fail conditions, and scope of examination.
+
+- **Source:** `../how/gates/DECISION_VALIDATION.md`
+- **See also:** [Decision Validation](#decision-validation), [Language Design Gate](#language-design-gate)
 
 ### Stable Mental Model
 
