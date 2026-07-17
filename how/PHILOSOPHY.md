@@ -79,7 +79,8 @@ The Manifesto states the language's fundamental agreements:
 Design Principles expand the Manifesto into three groups of rules:
 
 - **Core Philosophy** — Data First, Orthogonality, Simplicity,
-  Explicitness, Consistency, Uniformity, Explicit Semantics, Minimal Core
+  Explicitness, Consistency, Uniformity, Explicit Semantics, Minimal Core,
+  Transparency
 - **Language Consistency** — Representation Symmetry, Deterministic
   Behavior, Stable Mental Model
 - **Execution Model** — Semantics Before Optimization, Explicit

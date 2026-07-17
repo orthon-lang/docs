@@ -14,6 +14,7 @@ Core Philosophy
 ├── Minimal Core
 ├── Software Design Principles
 ├── Justified Solutions
+├── Transparency
 
 Language Consistency
 ├── Representation Symmetry
@@ -131,6 +132,48 @@ This architecture makes the language maintainable, evolvable, and implementation
 Every problem deserves its own tool.
 
 A solution is justified by being the right match for the specific problem — not by familiarity, fashion, or convenience.
+
+
+## Transparency
+
+Every design decision must be traceable from its originating idea through
+to the final decision.
+
+When a new concept is introduced or an existing one is modified, the full
+path must be documented:
+
+- **Origin** — what idea, problem, or gap prompted the change
+- **Considered alternatives** — what other approaches were evaluated
+- **Rationale** — why the chosen solution was selected over alternatives
+- **Gate review** — how the decision satisfies the Language Design Gate
+- **Impact** — which existing concepts, documents, or decisions are affected
+
+Transparency serves both as a process guard and an architecture health
+metric:
+
+**Gate guard.** If a proposal is similar to one already rejected by the
+Language Design Gate, the record of that rejection must be consulted
+before re-opening the discussion. Re-opening requires the proponent to
+explicitly state what circumstances have changed and why the original
+grounds for rejection no longer apply. A proposal that rehashes a
+rejected idea without new context is dismissed without review.
+
+**Architecture metric.** A concept that requires more than one
+substantive semantic change after its initial Gate approval triggers a
+mandatory architectural review. Frequent revision of a single concept
+suggests poor factoring in the architecture itself, not merely an
+incomplete design. Clarifications, documentation improvements, and
+additive scope extensions do not count toward this threshold — only
+changes that alter previously approved semantics.
+
+Traceability without a decision journal is impossible. See
+[`docs/how/gates/_language-design.md`](../how/gates/_language-design.md)
+for the Gate checklist and
+[`docs/how/architecture/ARCHITECTURE.md`](../how/architecture/ARCHITECTURE.md)
+for architecture fitness functions.
+
+A design decision without a traceable path is indistinguishable from
+arbitrary choice.
 
 ---
 
