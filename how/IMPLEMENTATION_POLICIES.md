@@ -43,14 +43,18 @@ concrete implementation beneath them.
 
 ## Policy Catalogue
 
-Each Policy type corresponds to a separable language concept. A Policy
-type is added when its corresponding concept is designed (see
+Each Policy type relates to one or more language concepts. A Policy
+type is added when its first corresponding concept is designed (see
 [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) —
 `IMPLEMENTATION_INDEPENDENCE_GATE`).
 
+> **Note:** The exact many-to-many mapping between concepts and Policy
+> types is pending validation. When a concept is designed, its Policy
+> footprint must be determined (see `_language-design.md` § Policy footprint).
+
 ### Allocation Policy
 
-**Concept:** [`concepts/ALLOCATION.md`](../what/concepts/ALLOCATION.md)
+**Related Concepts:** [`concepts/ALLOCATION.md`](../what/concepts/ALLOCATION.md) *(+ pending validation)*
 
 Controls memory acquisition and deallocation strategy.
 
@@ -130,13 +134,15 @@ concept is designed.*
 New Policy types are added as new language concepts are designed. Each
 new Policy must:
 
-1. Correspond to a separable language concept (documented in
+1. Have at least one corresponding language concept (documented in
    `docs/what/concepts/`).
 2. Pass the [`IMPLEMENTATION_INDEPENDENCE_GATE`](gates/DECISION_VALIDATION.md#gate-catalogue):
    the concept must be definable without reference to the Policy.
 3. Define declarative values — not procedures.
-4. Be added to this catalogue and cross-referenced from the
-   concept document.
+4. Be added to this catalogue and cross-referenced from each
+   related concept document.
+5. If the Policy type already exists, verify compatibility with
+   existing related concepts before adding new ones.
 
 ## See Also
 

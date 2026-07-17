@@ -19,8 +19,16 @@
 - [ ] **Named equivalence** — if symbolic, does the named function form
       exist?
 - [ ] **All canonical forms** — are all equivalent forms documented?
-- [ ] **Impact analysis** — which existing concepts, documents, and
-      decisions are affected?
+- [ ] **Impact analysis** — which existing concepts, documents,
+      Policy types, and decisions are affected?
+- [ ] **Policy footprint** — which Policy Types does the concept
+      affect, and is compatibility confirmed for each:
+      • concept does not depend on specific Policy values
+        (see `IMPLEMENTATION_INDEPENDENCE_GATE`)
+      • if the Policy Type does not yet exist — it is created
+        in `IMPLEMENTATION_POLICIES.md`
+      • if it exists — compatibility with existing concepts
+        that share this Policy Type is verified
 - [ ] **Traceability** — is the full path from origin to decision
       documented (alternatives considered, rationale, rejected
       approaches)?

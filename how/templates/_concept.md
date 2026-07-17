@@ -22,6 +22,18 @@ Which principles must not be violated?
 
 Reference `DESIGN_PRINCIPLES.md` and other relevant documents. List the constraints that every implementation of this concept must satisfy.
 
+## Policy Footprint
+
+Which Policy Types does this concept involve?
+
+| Policy Type | Role in the concept |
+|---|---|
+| _(e.g. Allocation Policy)_ | _(how this Policy Type relates to the concept)_ |
+| _(e.g. Lifetime Policy)_ | _(second relation, if any)_ |
+
+*The specific list is filled in during concept design and passes
+verification through `IMPLEMENTATION_INDEPENDENCE_GATE`.*
+
 ## Model (What)
 
 What does the language concept look like?
