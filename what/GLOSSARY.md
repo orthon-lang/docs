@@ -11,7 +11,7 @@
 
 The layered structure of Orthon: Core Language → Syntax → Standard Library → Implementation Strategy.
 
-- **Source:** `ARCHITECTURE.md`
+- **Source:** `../how/architecture/ARCHITECTURE.md`
 - **See also:** [Core Language](#core-language), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)
 
 ---
@@ -29,7 +29,7 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 
 The minimal, stable set of language semantics, independent of any particular implementation. The Core defines *what programs mean*, not *how they execute*.
 
-- **Source:** `ARCHITECTURE.md` § Core Language, `DESIGN_PRINCIPLES.md` § Minimal Core
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Core Language, `DESIGN_PRINCIPLES.md` § Minimal Core
 - **See also:** [Architecture](#architecture), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)
 
 ---
@@ -45,14 +45,14 @@ The primary abstraction in Orthon. Values viewed without imposed semantic meanin
 tuple(1, 2, 3) → the same data, now explicitly a Tuple
 ```
 
-- **Source:** `CORE_CONCEPTS.md` § Data, `DATA_MODEL.md`
+- **Source:** `concepts/CORE_CONCEPTS.md` § Data, `concepts/DATA_MODEL.md`
 - **See also:** [Data Modifier](#data-modifier), [Representation](#representation)
 
 ### Data Modifier
 
 A construct that transforms data from one representation to another. Modifiers express programmer intent; the compiler determines the most efficient implementation.
 
-- **Source:** `CORE_CONCEPTS.md` § Data Modifiers
+- **Source:** `concepts/CORE_CONCEPTS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
 
 ### Declaration Model (Unified)
@@ -94,7 +94,7 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 A concrete backend that implements language semantics (compiler backend, runtime, interpreter, etc.). Strategies are interchangeable: replacing one must not change program semantics.
 
-- **Source:** `ARCHITECTURE.md` § Implementation Strategy, `../how/IMPLEMENTATION_STRATEGIES.md`
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Implementation Strategy, `../how/strategies/IMPLEMENTATION_STRATEGIES.md`
 - **See also:** [Architecture](#architecture), [Core Language](#core-language), [Standard Library](#standard-library)
 
 ### Intent Over Implementation
@@ -155,7 +155,7 @@ Every language operator has an equivalent named function. Operators are syntacti
 x->         == sequence(x)
 ```
 
-- **Source:** `CORE_CONCEPTS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
+- **Source:** `concepts/CORE_CONCEPTS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Named Before Symbolic](#named-before-symbolic)
 
 ### Orthogonality
@@ -192,7 +192,7 @@ A specific view of data. Orthon provides several fundamental representations:
 - **Option** — A value that may be absent.
 - **Result** — A value that may be an error.
 
-- **Source:** `CORE_CONCEPTS.md` § Fundamental Data Types
+- **Source:** `concepts/CORE_CONCEPTS.md` § Fundamental Data Types
 - **See also:** [Data](#data), [Data Modifier](#data-modifier)
 
 ### Representation Symmetry
@@ -225,7 +225,7 @@ Language semantics are independent of optimization. A correct Orthon program mus
 
 A fundamental type representing a sequence of values produced over time. Unlike traditional generators or streams, a Sequence describes *what the result is*, not *how it is produced*. It is a normal object: it can be returned, stored, passed, transformed, or consumed incrementally.
 
-- **Source:** `CORE_CONCEPTS.md` § Sequence
+- **Source:** `concepts/CORE_CONCEPTS.md` § Sequence
 - **See also:** [Representation](#representation)
 
 ### Stable Mental Model
@@ -239,7 +239,7 @@ Programmers should reason about language semantics, not compiler internals. User
 
 The layer that defines public abstractions exposed by the language. It specifies *behaviour*, not *implementation*. The Standard Library is the interface between user code and the Implementation Strategy.
 
-- **Source:** `ARCHITECTURE.md` § Standard Library
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Standard Library
 - **See also:** [Architecture](#architecture), [Core Language](#core-language), [Implementation Strategy](#implementation-strategy)
 
 ---

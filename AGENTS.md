@@ -19,8 +19,8 @@ All documentation follows the **Why → How → What** (Golden Circle) framework
 | Layer | Question | Documents |
 |-------|----------|-----------|
 | **Why** | Why does Orthon exist? What do we believe? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md` |
-| **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `what/ARCHITECTURE.md`, `how/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
-| **What** | What is Orthon concretely? | `what/CORE_CONCEPTS.md`, `what/DATA_MODEL.md`, future syntax and type specs |
+| **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
+| **What** | What is Orthon concretely? | `what/concepts/CORE_CONCEPTS.md`, `what/concepts/DATA_MODEL.md`, future syntax and type specs |
 
 An agent must **always** anchor new content to the correct layer. A "Why" argument must not be smuggled into a "What" document. If a new piece of documentation spans layers, split it or add cross-references.
 
@@ -34,11 +34,23 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `why/MANIFESTO.md` | Why | Explicit principles — consistency over legacy, minimal core, composition over exceptions |
 | `why/ZEN.md` | Why | Aphorisms capturing the language's spirit |
 | `what/DESIGN_PRINCIPLES.md` | How | Orthogonality, simplicity, explicitness, consistency, execution model principles |
-| `what/ARCHITECTURE.md` | How | Layered architecture — Core Language → Syntax → Standard Library → Implementation Strategy |
-| `how/IMPLEMENTATION_STRATEGIES.md` | How | How strategies provide interchangeable implementations |
+| `how/architecture/ARCHITECTURE.md` | How | Layered architecture — Core Language → Syntax → Standard Library → Implementation Strategy |
+| `how/strategies/IMPLEMENTATION_STRATEGIES.md` | How | How strategies provide interchangeable implementations |
 | `how/IMPLEMENTATION_POLICIES.md` | How | Policy-level decisions for implementation work |
-| `what/CORE_CONCEPTS.md` | What | Data and Data Modifiers — the two fundamental abstractions |
-| `what/DATA_MODEL.md` | What | Formal data model specification |
+| `how/architecture/PARSER.md` | How | Source code parsing and lexing |
+| `how/architecture/TYPE_SYSTEM.md` | How | Type checking and type inference |
+| `how/architecture/NAME_RESOLUTION.md` | How | Symbol resolution and scope management |
+| `how/architecture/IR.md` | How | Intermediate representation and code generation |
+| `how/strategies/DEFAULT_STRATEGY.md` | How | Default implementation strategy |
+| `how/strategies/EMBEDDED_STRATEGY.md` | How | Strategy for embedded / resource-constrained targets |
+| `how/strategies/HIGH_PERFORMANCE_STRATEGY.md` | How | Strategy for performance-optimized targets |
+| `what/concepts/CORE_CONCEPTS.md` | What | Data and Data Modifiers — the two fundamental abstractions |
+| `what/concepts/DATA_MODEL.md` | What | Formal data model specification |
+| `what/concepts/EQUALITY.md` | What | Equality semantics and comparison model |
+| `what/concepts/ALLOCATION.md` | What | Memory allocation and lifetime model |
+| `what/concepts/OWNERSHIP.md` | What | Ownership and borrowing semantics |
+| `what/concepts/MUTABILITY.md` | What | Mutability model and immutable-by-default design |
+| `what/concepts/FUNCTIONS.md` | What | Function declarations, parameters, and closures |
 | `AGENTS.md` | Meta | This file — instructions for AI agents |
 | `what/GLOSSARY.md` | Meta | Unified terminology reference with cross-document links |
 | `how/templates/_adr.md` | Meta | ADR template (fill-in form) |
@@ -84,14 +96,29 @@ docs/
 │   ├── MANIFESTO.md
 │   └── ZEN.md
 ├── what/                     # WHAT — language design & reference
-│   ├── ARCHITECTURE.md
-│   ├── CORE_CONCEPTS.md
-│   ├── DATA_MODEL.md
 │   ├── DESIGN_PRINCIPLES.md
-│   └── GLOSSARY.md
+│   ├── GLOSSARY.md
+│   └── concepts/             # Core language concepts
+│       ├── CORE_CONCEPTS.md
+│       ├── DATA_MODEL.md
+│       ├── EQUALITY.md
+│       ├── ALLOCATION.md
+│       ├── OWNERSHIP.md
+│       ├── MUTABILITY.md
+│       └── FUNCTIONS.md
 ├── how/                      # HOW — implementation & process
-│   ├── IMPLEMENTATION_STRATEGIES.md
 │   ├── IMPLEMENTATION_POLICIES.md
+│   ├── architecture/         # Compiler architecture
+│   │   ├── ARCHITECTURE.md
+│   │   ├── PARSER.md
+│   │   ├── TYPE_SYSTEM.md
+│   │   ├── NAME_RESOLUTION.md
+│   │   └── IR.md
+│   ├── strategies/           # Implementation strategies
+│   │   ├── IMPLEMENTATION_STRATEGIES.md
+│   │   ├── DEFAULT_STRATEGY.md
+│   │   ├── EMBEDDED_STRATEGY.md
+│   │   └── HIGH_PERFORMANCE_STRATEGY.md
 │   ├── adr/
 │   │   └── ADR-*.md
 │   ├── gates/
@@ -133,7 +160,7 @@ When assigned a task in this project, follow this protocol:
 
 ### 5.1 Orient
 
-1. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/CORE_CONCEPTS.md` and `what/DATA_MODEL.md`. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
+1. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/concepts/CORE_CONCEPTS.md` and `what/concepts/DATA_MODEL.md`. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
 2. **Check cross-references.** A design decision in one document may affect documents in other layers.
 3. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 
