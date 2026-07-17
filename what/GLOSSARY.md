@@ -115,10 +115,14 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 ### Implementation Strategy
 
-A concrete backend that implements language semantics (compiler backend, runtime, interpreter, etc.). Strategies are interchangeable: replacing one must not change program semantics.
+A named set of Policies that governs how language semantics are
+realised. A Strategy is a coherent profile — for example, the
+Default Strategy uses `Arena` allocation while the Embedded Strategy
+uses `Static` allocation. Strategies are interchangeable: replacing
+one must not change program semantics.
 
 - **Source:** `../how/architecture/ARCHITECTURE.md` § Implementation Strategy, `../how/strategies/IMPLEMENTATION_STRATEGIES.md`
-- **See also:** [Architecture](#architecture), [Core Language](#core-language), [Standard Library](#standard-library)
+- **See also:** [Architecture](#architecture), [Core Language](#core-language), [Policy](#policy), [Standard Library](#standard-library)
 
 ### Intent Over Implementation
 
@@ -191,6 +195,18 @@ Each language construct solves exactly one problem and combines freely with othe
 ---
 
 ## P
+
+### Policy
+
+A declarative constraint or preference within a single domain-specific
+area of implementation (allocation, algorithm selection, evaluation
+mode, lifetime management, concurrency, etc.). Each Policy makes
+decisions independently in its area of responsibility. Policies are
+not part of the language — they are implementation choices assembled
+into named Strategies.
+
+- **Source:** `../how/IMPLEMENTATION_POLICIES.md`
+- **See also:** [Implementation Strategy](#implementation-strategy), [Architecture](#architecture)
 
 ### Principle of Least Astonishment
 

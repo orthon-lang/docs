@@ -29,7 +29,16 @@ flowchart TD
         SL["Standard Library"]
     end
 
-    IS["Implementation Strategy"]
+    subgraph STRAT["Implementation Strategy"]
+        direction LR
+        STRAT_LBL["<b>Strategy</b><br/><i>named set of Policies</i>"]
+        POL1["Allocation Policy"]
+        POL2["Algorithm Policy"]
+        POL3["Evaluation Policy"]
+        POL4["Lifetime Policy"]
+        POL5["Concurrency Policy"]
+        POL6["⋯"]
+    end
 
     subgraph EXEC["Execution Environment"]
         C["Compiler"]
@@ -38,8 +47,8 @@ flowchart TD
     end
 
     UC --> LANG
-    LANG --> IS
-    IS --> EXEC
+    LANG --> STRAT
+    STRAT --> EXEC
 ```
 
 ## Layers
@@ -66,10 +75,58 @@ strategy.
 
 ### Implementation Strategy
 
-Provides concrete implementations of language and library abstractions.
-Different strategies may optimize for performance, memory usage, startup
-time, determinism, embedded systems, or parallel hardware. Replacing a
-strategy must not change program semantics.
+The **Implementation Strategy** bridges language semantics and the
+execution environment through a set of **Policies** — declarative
+choices in domain-specific areas such as memory allocation, algorithm
+selection, evaluation mode, lifetime management, and concurrency.
+
+A **Strategy** is a named set of Policies. Each Policy is a
+declarative constraint within its own area of responsibility.
+Strategies are interchangeable: replacing one must not change program
+semantics.
+
+This introduces a three-layer model:
+
+```
+Language Semantics (what the program means)
+        │
+        ▼
+Implementation Strategy (named set of Policies)
+        │
+        ├── Allocation Policy
+        ├── Algorithm Policy
+        ├── Evaluation Policy
+        ├── Lifetime Policy
+        ├── Concurrency Policy
+        └── ...
+        │
+        ▼
+Implementation (compiler, runtime, platform)
+```
+
+**Language Semantics** defines *what* the program guarantees — for
+example, `sort(data)` guarantees sortedness and stability if
+specified, but never dictates *which* sorting algorithm is used.
+
+**Policies** decide *how* each concern is realised. A Policy is
+declarative, not procedural: it states a preference (e.g.,
+`Allocation Policy = Arena`) rather than prescribing a conditional
+branch (`if speed then TimSort else MergeSort`).
+
+**Implementation** makes the final concrete choice, constrained by
+the active set of Policies.
+
+Different strategies may optimise for performance, memory usage,
+startup time, determinism, embedded systems, or parallel hardware.
+For concrete profiles, see
+[`DEFAULT_STRATEGY.md`](../strategies/DEFAULT_STRATEGY.md),
+[`EMBEDDED_STRATEGY.md`](../strategies/EMBEDDED_STRATEGY.md), and
+[`HIGH_PERFORMANCE_STRATEGY.md`](../strategies/HIGH_PERFORMANCE_STRATEGY.md).
+
+This decoupling is validated by the
+[`IMPLEMENTATION_INDEPENDENCE_GATE`](../gates/DECISION_VALIDATION.md#gate-catalogue):
+language concepts must be definable without tying to any specific
+Strategy or Policy.
 
 ### Execution Environment
 

@@ -34,8 +34,8 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `why/MANIFESTO.md` | Why | Explicit principles — consistency over legacy, minimal core, composition over exceptions |
 | `why/ZEN.md` | Why | Aphorisms capturing the language's spirit |
 | `what/DESIGN_PRINCIPLES.md` | How | Orthogonality, simplicity, explicitness, consistency, execution model principles |
-| `how/architecture/ARCHITECTURE.md` | How | Layered architecture — Core Language → Syntax → Standard Library → Implementation Strategy |
-| `how/strategies/IMPLEMENTATION_STRATEGIES.md` | How | How strategies provide interchangeable implementations |
+| `how/architecture/ARCHITECTURE.md` | How | Layered architecture — Core Language → Syntax → Standard Library → Implementation Strategy (with Policies) |
+| `how/strategies/IMPLEMENTATION_STRATEGIES.md` | How | Strategy = named set of Policies; declarative profiles and aspect mapping |
 | `how/IMPLEMENTATION_POLICIES.md` | How | Policy-level decisions for implementation work |
 | `how/architecture/PARSER.md` | How | Source code parsing and lexing |
 | `how/architecture/TYPE_SYSTEM.md` | How | Type checking and type inference |
