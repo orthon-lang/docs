@@ -32,12 +32,6 @@ flowchart TD
     subgraph STRAT["Implementation Strategy"]
         direction LR
         STRAT_LBL["<b>Strategy</b><br/><i>named set of Policies</i>"]
-        POL1["Allocation Policy"]
-        POL2["Algorithm Policy"]
-        POL3["Evaluation Policy"]
-        POL4["Lifetime Policy"]
-        POL5["Concurrency Policy"]
-        POL6["⋯"]
     end
 
     subgraph EXEC["Execution Environment"]
@@ -85,7 +79,7 @@ declarative constraint within its own area of responsibility.
 Strategies are interchangeable: replacing one must not change program
 semantics.
 
-This introduces a three-layer model:
+This relationship forms a **resolution chain**:
 
 ```
 Language Semantics (what the program means)
@@ -101,7 +95,7 @@ Implementation Strategy (named set of Policies)
         └── ...
         │
         ▼
-Implementation (compiler, runtime, platform)
+Concrete Implementation
 ```
 
 **Language Semantics** defines *what* the program guarantees — for
@@ -130,7 +124,7 @@ Strategy or Policy.
 
 ### Execution Environment
 
-The target where the Strategy runs. Consists of:
+The architectural layer that hosts the **Concrete Implementation** — the final link in the resolution chain. Consists of:
 
 **Compiler** — translates the program into executable form.
 
