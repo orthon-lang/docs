@@ -1,7 +1,8 @@
 # Decision Validation
 
-> Every language decision must pass a set of independent validation gates.
-> Each gate examines the proposal from a different perspective.
+> Every language decision must pass a set of independent validation
+> gates. Each gate examines the proposal from a different perspective
+> using a dedicated method.
 
 ---
 
@@ -10,17 +11,17 @@
 A language design proposal is not complete when it works in one
 context — it must be sound across multiple independent dimensions.
 Decision Validation formalises this requirement: before a proposal
-enters the formal specification, it must pass through **six validation
-gates**, each with its own lens.
+enters the formal specification, it is evaluated through a set of
+**validation gates**, each with its own lens and method.
 
-| # | Gate | Core Question |
-|---|------|---------------|
-| 1 | User Value | Does this solve a real problem for the programmer? |
-| 2 | Logical Consistency | Is the proposal internally consistent and free of contradictions? |
-| 3 | Conceptual Simplicity | Is the concept as simple as it can be? |
-| 4 | Architectural Integrity | Does it fit within the layered architecture? |
-| 5 | Implementation Independence | Can it be defined without tying to a specific strategy? |
-| 6 | Long-Term Maintainability | Will this decision age well? |
+| Gate | Core Question | Method |
+|------|---------------|--------|
+| `USER_VALUE_GATE` | Does this solve a real problem for the programmer? | [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md) |
+| `LOGICAL_CONSISTENCY_GATE` | Is the proposal internally consistent and free of contradictions? | [Socratic Method](methods/SOCRATIC_METHOD.md) |
+| `CONCEPTUAL_SIMPLICITY_GATE` | Is the concept as simple as it can be? | [Scientific Method](methods/SCIENTIFIC_METHOD.md) |
+| `ARCHITECTURAL_INTEGRITY_GATE` | Does it fit within the layered architecture? | [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md) |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | Can it be defined without tying to a specific strategy? | [TRIZ](methods/TRIZ_METHOD.md) |
+| `LONG_TERM_MAINTAINABILITY_GATE` | Will this decision age well? | [Einstein's Method](methods/EINSTEIN_METHOD.md) |
 
 These gates are **independent** — a proposal that passes one gate may
 still fail another. Each gate produces a binary verdict (pass / fail)
@@ -29,7 +30,27 @@ or a conditional flag. A proposal with any **fail** or unresolved
 
 ---
 
-## Gate 1 — User Value
+## Gate Selection
+
+Not every proposal needs to pass every gate. The set of required
+gates depends on the **type of decision** being validated.
+
+| Decision Type | Gates Typically Required | Optional Gates |
+|---------------|-------------------------|----------------|
+| New language construct | All six | — |
+| Syntax change | `LOGICAL_CONSISTENCY_GATE`, `CONCEPTUAL_SIMPLICITY_GATE`, `ARCHITECTURAL_INTEGRITY_GATE` | `USER_VALUE_GATE` (if purely syntactic sugar), `IMPLEMENTATION_INDEPENDENCE_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` |
+| Semantic refinement | `LOGICAL_CONSISTENCY_GATE`, `ARCHITECTURAL_INTEGRITY_GATE` | `CONCEPTUAL_SIMPLICITY_GATE` (if narrowing existing concept) |
+| Standard Library addition | `USER_VALUE_GATE`, `CONCEPTUAL_SIMPLICITY_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` | `ARCHITECTURAL_INTEGRITY_GATE` (if within Library), `IMPLEMENTATION_INDEPENDENCE_GATE` |
+| Compiler optimisation | `IMPLEMENTATION_INDEPENDENCE_GATE` | All others (optimisations do not change semantics) |
+
+The default for any proposal that adds, changes, or removes a
+language rule is **all six gates**.
+
+---
+
+## Gate Catalogue
+
+### `USER_VALUE_GATE`
 
 **Perspective:** *Does this solve a real problem justified by the
 project's Vision?*
@@ -37,6 +58,10 @@ project's Vision?*
 A language feature must earn its place by serving a tangible
 programmer need, not by being technically interesting. The burden of
 proof is on the proposal.
+
+**Method:** [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md) —
+start from the programmer's experience and reason backwards to the
+language construct.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -55,13 +80,17 @@ proof is on the proposal.
 
 ---
 
-## Gate 2 — Logical Consistency
+### `LOGICAL_CONSISTENCY_GATE`
 
 **Perspective:** *Is the proposal internally consistent and free of
 contradictions?*
 
 A language concept must follow from its own definitions without
 producing paradoxes, ambiguous cases, or context-dependent behaviour.
+
+**Method:** [Socratic Method](methods/SOCRATIC_METHOD.md) —
+disciplined questioning to expose hidden contradictions and tacit
+assumptions.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -80,7 +109,7 @@ producing paradoxes, ambiguous cases, or context-dependent behaviour.
 
 ---
 
-## Gate 3 — Conceptual Simplicity
+### `CONCEPTUAL_SIMPLICITY_GATE`
 
 **Perspective:** *Is the concept as simple as it can be, or could it
 be expressed through composition of existing concepts?*
@@ -88,6 +117,10 @@ be expressed through composition of existing concepts?*
 This gate enforces Orthon's commitment to a minimal core. Every new
 concept must justify its existence against the question: *"Can this
 be achieved with what already exists?"*
+
+**Method:** [Scientific Method](methods/SCIENTIFIC_METHOD.md) —
+treat the claim of simplicity as a hypothesis; separate what is known
+from what is assumed.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -105,7 +138,7 @@ be achieved with what already exists?"*
 
 ---
 
-## Gate 4 — Architectural Integrity
+### `ARCHITECTURAL_INTEGRITY_GATE`
 
 **Perspective:** *Does the proposal fit within Orthon's layered
 architecture and compose freely with existing constructs?*
@@ -113,6 +146,10 @@ architecture and compose freely with existing constructs?*
 This gate ensures the decision does not violate the project's
 architectural boundaries or introduce coupling between layers
 that are meant to be independent.
+
+**Method:** [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md) —
+derive the consequences of the proposal from explicit premises and
+verify consistency with the architecture.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -133,7 +170,7 @@ layered architecture definition.
 
 ---
 
-## Gate 5 — Implementation Independence
+### `IMPLEMENTATION_INDEPENDENCE_GATE`
 
 **Perspective:** *Can the concept be defined semantically without
 tying it to a specific implementation strategy?*
@@ -141,6 +178,10 @@ tying it to a specific implementation strategy?*
 Orthon separates *what* from *how*. A concept must be expressible as
 a semantic definition that any implementation strategy can realise
 without changing the programmer's mental model.
+
+**Method:** [TRIZ](methods/TRIZ_METHOD.md) — systematically resolve
+contradictions between semantic requirements and strategy constraints
+without compromising either.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -163,13 +204,17 @@ specific constraints.
 
 ---
 
-## Gate 6 — Long-Term Maintainability
+### `LONG_TERM_MAINTAINABILITY_GATE`
 
 **Perspective:** *Will this decision age well? Is the evolution path
 clear, and does the proposal incur conceptual debt?*
 
 A language lives for decades. This gate examines whether the decision
 can survive evolution without becoming a constraint or a regret.
+
+**Method:** [Einstein's Method](methods/EINSTEIN_METHOD.md) — radical
+simplification as a maturity test: if you cannot explain a concept
+simply, it is not yet ready.
 
 | Criterion | Pass | Flag | Fail |
 |-----------|------|------|------|
@@ -190,44 +235,69 @@ can survive evolution without becoming a constraint or a regret.
 
 ---
 
+## Methods Overview
+
+Each validation gate applies a distinct reasoning method. These are
+not random techniques — they are chosen to cover complementary modes
+of thinking, ensuring no single cognitive bias dominates the
+validation process.
+
+| Mode | Method | Gate | What it prevents |
+|------|--------|------|------------------|
+| Empathic | [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md) | `USER_VALUE_GATE` | Building features nobody asked for |
+| Critical | [Socratic Method](methods/SOCRATIC_METHOD.md) | `LOGICAL_CONSISTENCY_GATE` | Contradictions hidden by imprecise language |
+| Empirical | [Scientific Method](methods/SCIENTIFIC_METHOD.md) | `CONCEPTUAL_SIMPLICITY_GATE` | Over-engineering disguised as completeness |
+| Deductive | [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md) | `ARCHITECTURAL_INTEGRITY_GATE` | Layering violations that seem harmless |
+| Inventive | [TRIZ](methods/TRIZ_METHOD.md) | `IMPLEMENTATION_INDEPENDENCE_GATE` | Strategy-specific compromises accepted too early |
+| Reductive | [Einstein's Method](methods/EINSTEIN_METHOD.md) | `LONG_TERM_MAINTAINABILITY_GATE` | Complexity that becomes permanent debt |
+
+Each method is described in its own file under [`methods/`](methods/),
+with the full technique, application steps, and the gate it serves.
+
+---
+
 ## Gate Flow
 
-A proposal does not need to pass gates in strict order, but the
-recommended sequence is:
+The recommended sequence for a full validation (all six gates) is:
 
 ```mermaid
 flowchart LR
-    UV[1. User Value] --> LC[2. Logical Consistency]
-    LC --> CS[3. Conceptual Simplicity]
-    CS --> AI[4. Architectural Integrity]
-    AI --> II[5. Implementation Independence]
-    II --> LM[6. Long-Term Maintainability]
+    UV["USER_VALUE_GATE\nWorking Backwards"] --> LC["LOGICAL_CONSISTENCY_GATE\nSocratic Method"]
+    LC --> CS["CONCEPTUAL_SIMPLICITY_GATE\nScientific Method"]
+    CS --> AI["ARCHITECTURAL_INTEGRITY_GATE\nLogical Analysis"]
+    AI --> II["IMPLEMENTATION_INDEPENDENCE_GATE\nTRIZ"]
+    II --> LM["LONG_TERM_MAINTAINABILITY_GATE\nEinstein's Method"]
 ```
+
+When gates are selectively applied (see [Gate Selection](#gate-selection)),
+they should still follow this priority order: user value first,
+long-term impact last.
 
 **Rules:**
 - A **Fail** at any gate sends the proposal back for revision. The
   revision must address the specific fail condition before
   re-entering the same gate.
 - A **Flag** means the proposal may proceed but the flagged issue
-  must be resolved before the final gate. Unresolved flags at
-  Gate 6 block the proposal.
+  must be resolved before the final gate.
 - Gates may be revisited as the proposal evolves. A change that
   addresses a previous fail condition may surface new issues in a
   later gate.
+- Optional gates are skipped only when the decision type explicitly
+  does not concern that perspective. When in doubt, apply the gate.
 
 ---
 
 ## Relationship to the Language Design Gate
 
 The existing [`_language-design.md`](_language-design.md) is a
-fill-in checklist that operationalises the six validation gates into
-a single concrete review form. While Decision Validation defines
+fill-in checklist that operationalises the validation gates into a
+single concrete review form. While Decision Validation defines
 *what* must be checked and *why*, the Language Design Gate provides
 the *how* — a structured template for recording the outcome of each
 check.
 
 When using the Language Design Gate, each criterion in that checklist
-should be traceable to one or more of the six validation gates above.
+should be traceable to one or more of the validation gates above.
 This ensures broad coverage and prevents any single perspective from
 dominating the review.
 
@@ -236,8 +306,9 @@ dominating the review.
 ## Decision Journal
 
 Use this table to record decisions validated through these gates.
-Each row captures one proposal and its outcome across all six gates.
+Each row captures one proposal and its outcome across the applied
+gates.
 
-| Date | Proposal | Gate 1 | Gate 2 | Gate 3 | Gate 4 | Gate 5 | Gate 6 | Verdict |
-|------|----------|--------|--------|--------|--------|--------|--------|---------|
-|      |          |        |        |        |        |        |        |         |
+| Date | Proposal | Gates Applied | Verdict | Notes |
+|------|----------|---------------|---------|-------|
+|      |          |               |         |       |
