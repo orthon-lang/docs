@@ -49,3 +49,8 @@ solves one problem and combines freely with others. There are no special
 cases, no context-dependent syntax, and no conflicting rules to
 memorize. What you learn in one part of the language transfers directly
 to every other part.
+
+## Goal
+
+Keep the language stable for decades while allowing implementations
+to continuously improve without breaking existing programs.

@@ -123,8 +123,10 @@ program semantics are independent of the execution strategy.
 
 ## Goal
 
-Keep the language stable for decades while allowing implementations to
-continuously improve without breaking existing programs.
+This architecture serves the goal described in
+[`VISION.md`](../../why/VISION.md): keeping the language stable for
+decades while allowing implementations to continuously improve without
+breaking existing programs.
 
 ## Fitness Functions
 
