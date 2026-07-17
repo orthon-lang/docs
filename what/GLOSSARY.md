@@ -59,7 +59,7 @@ A construct that transforms data from one representation to another. Modifiers e
 
 Variables, functions, types, classes, and modules follow the same declaration principles and modifier system. No special-case declaration syntax for different kinds of entities.
 
-- **Source:** `MANIFESTO.md` § A unified declaration model
+- **Source:** `../why/MANIFESTO.md` § A unified declaration model
 
 ### Deterministic Behavior
 
@@ -94,7 +94,7 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 A concrete backend that implements language semantics (compiler backend, runtime, interpreter, etc.). Strategies are interchangeable: replacing one must not change program semantics.
 
-- **Source:** `ARCHITECTURE.md` § Implementation Strategy, `IMPLEMENTATION_STRATEGIES.md`
+- **Source:** `ARCHITECTURE.md` § Implementation Strategy, `../how/IMPLEMENTATION_STRATEGIES.md`
 - **See also:** [Architecture](#architecture), [Core Language](#core-language), [Standard Library](#standard-library)
 
 ### Intent Over Implementation
@@ -126,7 +126,7 @@ The set of cross-cutting design rules that ensure uniform behaviour across Ortho
 
 Complex language features should emerge from composition of simple primitives rather than from introducing new keywords or execution models. The language is *grown*, not *invented*.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Minimal Core, `MANIFESTO.md` § Minimal core, maximum expressiveness
+- **Source:** `DESIGN_PRINCIPLES.md` § Minimal Core, `../why/MANIFESTO.md` § Minimal core, maximum expressiveness
 - **See also:** [Orthogonality](#orthogonality)
 
 ---
@@ -162,7 +162,7 @@ x->         == sequence(x)
 
 Each language construct solves exactly one problem and combines freely with other constructs. No special cases, no context-dependent syntax, no conflicting rules. What you learn in one part of the language transfers directly to every other part.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Orthogonality, `VISION.md` § Comfortable by Design, `ZEN.md`, `MANIFESTO.md`
+- **Source:** `DESIGN_PRINCIPLES.md` § Orthogonality, `../why/VISION.md` § Comfortable by Design, `../why/ZEN.md`, `../why/MANIFESTO.md`
 - **See also:** [Minimal Core](#minimal-core), [Uniformity](#uniformity)
 
 ---
@@ -173,7 +173,7 @@ Each language construct solves exactly one problem and combines freely with othe
 
 The behaviour of a construct must match what a competent programmer intuitively expects. Surprises belong in discovery, not in semantics.
 
-- **Source:** `VISION.md` § Comfortable by Design
+- **Source:** `../why/VISION.md` § Comfortable by Design
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Semantics](#explicit-semantics)
 
 ---
@@ -266,7 +266,7 @@ The four guiding aphorisms of the language:
 > Consistency defeats complexity.
 > Simplicity is the result of orthogonality.
 
-- **Source:** `ZEN.md`
+- **Source:** `../why/ZEN.md`
 - **See also:** [Orthogonality](#orthogonality)
 
 ---

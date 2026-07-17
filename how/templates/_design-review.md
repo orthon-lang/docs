@@ -23,10 +23,10 @@ Is the proposal consistent with the project's core beliefs?
 
 | Criterion | ✅ Pass | ⚠️ Flag | ❌ Block | Notes |
 |-----------|---------|---------|---------|-------|
-| Aligned with `VISION.md` | | | | |
-| Aligned with `MANIFESTO.md` | | | | |
-| Aligned with `ZEN.md` | | | | |
-| Aligned with `DESIGN_PRINCIPLES.md` | | | | |
+| Aligned with `../../why/VISION.md` | | | | |
+| Aligned with `../../why/MANIFESTO.md` | | | | |
+| Aligned with `../../why/ZEN.md` | | | | |
+| Aligned with `../../what/DESIGN_PRINCIPLES.md` | | | | |
 
 ---
 
@@ -73,7 +73,7 @@ Does the proposal cover all necessary ground?
 
 | Criterion | ✅ Pass | ⚠️ Flag | ❌ Block | Notes |
 |-----------|---------|---------|---------|-------|
-| Terms used consistently with `GLOSSARY.md` | | | | |
+| Terms used consistently with `../../what/GLOSSARY.md` | | | | |
 | All content is in English | | | | |
 | Examples are valid Orthon (or clearly marked as pseudocode) | | | | |
 | Cross-references to existing docs are correct | | | | |

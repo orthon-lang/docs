@@ -1,8 +1,8 @@
 # ADR Template — Architecture Decision Record
 
 > Use this template to record significant design decisions in the Orthon language project.
-> Place each ADR as `docs/adr/ADR-NNN-title-with-dashes.md`.
-> Use this template from `docs/templates/_adr.md`.
+> Place each ADR as `docs/how/adr/ADR-NNN-title-with-dashes.md`.
+> Use this template from `docs/how/templates/_adr.md`.
 
 ---
 
@@ -20,7 +20,7 @@
 
 What is the problem or design tension that prompted this decision?
 
-Describe the forces at play: technical constraints, philosophical principles, trade-offs, conflicting requirements. Include relevant references to `VISION.md`, `MANIFESTO.md`, `DESIGN_PRINCIPLES.md`, or other documents.
+Describe the forces at play: technical constraints, philosophical principles, trade-offs, conflicting requirements. Include relevant references to `../../why/VISION.md`, `../../why/MANIFESTO.md`, `../../what/DESIGN_PRINCIPLES.md`, or other documents.
 
 > *Anchor the context in the project's Why or How layer.*
 
