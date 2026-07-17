@@ -19,8 +19,10 @@ This repository contains the language design documentation — the *why*,
 | Document | What it tells you |
 |---|---|
 | [Manifesto](why/MANIFESTO.md) | The core beliefs Orthon is built on |
+| [Working Backwards](why/WORKING_BACKWARDS.md) | Why Orthon exists — derived from the programmer's perspective |
 | [Design Philosophy](how/PHILOSOPHY.md) | How design decisions flow from vision to implementation |
 | [Core Concepts](what/concepts/CORE_CONCEPTS.md) | The fundamental building blocks |
+| [TODO](../TODO.md) | What remains to be designed, documented, and built |
 
 ## For AI Agents
 
