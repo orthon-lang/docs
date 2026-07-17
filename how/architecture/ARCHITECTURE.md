@@ -85,15 +85,9 @@ WebAssembly runtime, or bare metal.
 
 ## Design Principles
 
-The architecture applies SOLID principles at the language level:
-
-| Principle | In conventional software | In Orthon |
-|---|---|---|
-| **Single Responsibility** | A class has one responsibility | Core Language, Standard Library, and Implementation Strategy each have distinct responsibilities |
-| **Open / Closed** | Interface is stable, implementations extend | The core and standard library are stable; new capabilities are added through strategies and libraries |
-| **Liskov Substitution** | Implementations are interchangeable | Any Implementation Strategy can replace another without changing program semantics |
-| **Interface Segregation** | Small, focused interfaces | User code depends only on language interfaces and standard library contracts, never on strategy internals |
-| **Dependency Inversion** | Code depends on interfaces | User code depends on the language and standard library (abstractions), not on any concrete implementation |
+Architecture follows SOLID. See
+[`what/DESIGN_PRINCIPLES.md`](../what/DESIGN_PRINCIPLES.md#software-design-principles)
+for the canonical mapping of each principle to the language layers.
 
 ## Scope of the Pattern
 
