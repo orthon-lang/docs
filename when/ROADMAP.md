@@ -3,7 +3,6 @@
 > Process-oriented milestones for the Orthon language design project.
 > Each milestone represents a stage in the design process, from Vision
 > to Language Specification Freeze.
-> See [TODO.md](../TODO.md) for detailed task tracking.
 
 ---
 
@@ -72,18 +71,30 @@ infrastructure (gates, templates, methods) is in place.
 
 ---
 
-## Milestone 1 — Language Inventory ⬜
+## Milestone 1 — Language Inventory & Policy Research ⬜
 
-**Goal:** Produce a complete inventory of all language concepts to be
-designed.
+**Goal:** Produce a complete inventory of all language concepts and
+Policy types to be designed. This is a research phase — concepts are
+identified and catalogued, not yet designed.
 
 Every concept that will appear in the language specification must be
 identified and listed. This includes core concepts (data, types,
 functions) as well as higher-level constructs (modules, concurrency,
 macros).
 
-**Deliverable:** `LANGUAGE_INVENTORY.md` — categorised list of all
-concepts with brief descriptions and dependency relationships.
+Additionally, the **Policy types** required by the language are
+researched and catalogued. Each Policy type's preliminary association
+with concepts is documented in `IMPLEMENTATION_POLICIES.md`, providing
+the Policy footprint context needed before individual concept design
+begins. (The `IMPLEMENTATION_POLICIES.md` framework is established in
+Milestone 0 as a draft; concrete Policy types and their values are
+filled in based on this research and finalised through Milestone 2.)
+
+**Deliverables:**
+- `LANGUAGE_INVENTORY.md` — categorised list of all concepts with brief
+  descriptions and dependency relationships.
+- `IMPLEMENTATION_POLICIES.md` (updated) — initial Policy Type catalogue
+  with preliminary concept associations.
 
 **Dependencies:** Milestone 0 (Vision provides the criteria for what
 belongs in the language).
@@ -104,10 +115,16 @@ gates (see [`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md)),
 and satisfies the [`_language-design.md`](../how/gates/_language-design.md)
 checklist before being accepted.
 
-> **Existing partial concept docs** (`CORE_CONCEPTS.md`, `DATA_MODEL.md`,
-> `EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
+> **Existing partial concept docs** (`concepts/CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
+> `concepts/EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
 > formally reviewed through this milestone's process. A concept is
 > registered only after acceptance via ADR.
+
+> **Note on interactions (Step 7):** At this stage, Step 7 only
+> **identifies which existing concepts** the new concept interacts with.
+> The detailed pair-wise interaction analysis is deferred to
+> Milestone 3 (Cross-cutting Review), when the full set of accepted
+> concepts is available for systematic analysis.
 
 **Deliverables:** One concept document per concept + one ADR per
 accepted concept.
@@ -142,11 +159,15 @@ boundaries are typically discovered.
 **Dependencies:** Milestone 2 (concepts must be individually designed
 before their interactions can be assessed).
 
+> **Input from Milestone 2:** Each concept's Step 7 identifies which
+> other concepts it interacts with. This milestone receives that list
+> of affected pairs and performs the full pair-wise interaction
+> analysis, resolving conflicts at concept boundaries.
+
 > **Note on format:** The exact format of the interaction matrix
-> requires separate investigation (see `docs/notes/interaction-matrix-format.md`
-> and `TODO.md`). The current approach uses per-concept "Interactions"
-> sections (Milestone 2) that feed into a consolidated matrix in this
-> milestone.
+> requires separate investigation (see `docs/notes/interaction-matrix-format.md`).
+> The current approach uses per-concept "Interactions" sections
+> (Milestone 2) that feed into a consolidated matrix in this milestone.
 
 ---
 
@@ -164,6 +185,13 @@ The language is examined as one coherent system:
 - Minimality — no concept duplicates another's responsibility
 - No redundancy — "interesting" but unnecessary capabilities removed
 
+> **Distinction from Milestone 2:** Milestone 2 (Steps 4 and 6) checks
+> *internal* minimality — is each individual concept as lean as it can
+> be? This milestone checks *global* minimality — does the language as
+> a whole have redundant, overlapping, or unnecessary concepts? The
+> same feature that appears justified in isolation may be removed here
+> because another concept already covers its responsibility.
+>
 > *This is where approximately half of "interesting" features are
 > removed.*
 
@@ -277,14 +305,15 @@ milestone.
 | Document | Purpose |
 |----------|---------|
 | `ARCHITECTURE.md` | Layered architecture definition |
-| `PARSER.md` | Parsing strategy and grammar structure |
-| `TYPE_SYSTEM.md` | Type system architecture |
-| `NAME_RESOLUTION.md` | Name resolution and scoping rules |
-| `IR.md` | Intermediate representation design |
+| `FITNESS_FUNCTIONS.md` | Architectural fitness functions — measurable checks guarding against design decay |
 | `IMPLEMENTATION_STRATEGIES.md` | Strategy model: Default, Embedded, High-Performance |
 | `DEFAULT_STRATEGY.md` | Default implementation strategy profile |
 | `EMBEDDED_STRATEGY.md` | Embedded implementation strategy profile |
 | `HIGH_PERFORMANCE_STRATEGY.md` | High-performance strategy profile |
+
+> Concept-specific architecture documents (Parser, Type System, Name
+> Resolution, IR) are initial stubs and will be designed through
+> the Concept Design Review process (Milestone 2).
 
 ---
 

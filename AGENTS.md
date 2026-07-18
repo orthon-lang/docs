@@ -317,3 +317,12 @@ Agents operating in this repository must follow these rules:
 5. **One intention per commit.** When making changes, group edits by topic, not by file.
 6. **Gate before merge.** Any design decision must pass the gate before being considered final.
 7. **When in doubt, reference `why/ZEN.md`.** The Zen aphorisms are the shortest path to a guiding principle.
+8. **Verify paths.** Every cross-reference (link) added or modified in a
+   document must resolve to an existing file in the repository, relative
+   to the source document's location. This applies to all referenced
+   files — concept docs, gate checklists, strategies, ADRs, templates,
+   and any other path — not only those under `what/concepts/`.
+   Additionally, cross-references to documents under `what/concepts/`
+   must use the `concepts/` prefix (e.g., `concepts/CORE_CONCEPTS.md`,
+   not `CORE_CONCEPTS.md`), as these files reside in a subdirectory and
+   bare filenames would not resolve.
