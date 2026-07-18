@@ -111,6 +111,19 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 ---
 
+## F
+
+### Foreign Function Interface (FFI)
+
+A mechanism that allows Orthon programs to call functions written in
+other languages (primarily C). The FFI defines the boundary between
+Orthon's type system and memory model and those of foreign languages.
+
+- **Source:** `../when/ROADMAP.md` § Milestone 8
+- **See also:** [Standard Library](#standard-library)
+
+---
+
 ## I
 
 ### Implementation Strategy
@@ -144,6 +157,16 @@ The set of cross-cutting design rules that ensure uniform behaviour across Ortho
 - **Stable Mental Model** — Programmers reason about language semantics, not compiler internals.
 
 - **Source:** `DESIGN_PRINCIPLES.md` § Language Consistency
+
+### Language Server Protocol (LSP)
+
+An open protocol that standardises communication between a language
+server — which provides language features like autocompletion,
+diagnostics, and go-to-definition — and a code editor or IDE. Orthon's
+tooling implements an LSP server to provide IDE support.
+
+- **Source:** `../when/ROADMAP.md` § Milestone 9
+- **See also:** —
 
 ---
 

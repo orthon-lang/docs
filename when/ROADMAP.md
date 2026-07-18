@@ -95,24 +95,12 @@ belongs in the language).
 **Goal:** Design each concept from Milestone 1 through a rigorous,
 uniform review process.
 
-Each concept goes through the same 11-step procedure:
-
-| Step | Section | Description |
-|------|---------|-------------|
-| 1 | **Problem** | What problem does this concept solve? Without which problem would its existence be meaningless? |
-| 2 | **Use Cases** | Where is it used? What real problems does it solve? |
-| 3 | **Necessity** | Can we live without it? If removed, what becomes impossible? What becomes inconvenient? |
-| 4 | **Sufficiency** | Is the concept too large? Can it be split? Does it contain unnecessary capabilities? |
-| 5 | **Alternatives** | What alternative implementations exist? (e.g., generator → yield → iterator → stream → pipeline → callback) |
-| 6 | **Principles Check** | Verified against all Design Principles (Simplicity, Orthogonality, Explicitness, etc.) |
-| 7 | **Interactions** | How does this concept interact with every other concept? Any non-orthogonal behaviours? |
-| 8 | **Rationale** | Why was this specific option chosen? Why were others rejected? |
-| 9 | **Examples** | Minimal, typical, edge case, and incorrect usage examples |
-| 10 | **Open Questions** | What remains unresolved? |
-| 11 | **ADR** | If a decision is made, it is formalised as an Architecture Decision Record |
-
-Each concept passes through all 6 Decision Validation gates
-(see [`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md))
+Each concept goes through the
+[Concept Design Review](../how/concept-design-review.md) procedure —
+an 11-step process (Problem → Use Cases → Necessity → Sufficiency →
+Alternatives → Principles Check → Interactions → Rationale →
+Examples → Open Questions → ADR) — passes all 6 Decision Validation
+gates (see [`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md)),
 and satisfies the [`_language-design.md`](../how/gates/_language-design.md)
 checklist before being accepted.
 
@@ -260,7 +248,7 @@ language specification).
 | # | Item | Description |
 |---|------|-------------|
 | 9.1 | Build System | Build system & package manager design |
-| 9.2 | Tooling | Formatter, linter, LSP protocol |
+| 9.2 | Tooling | Formatter, linter, LSP (Language Server Protocol) |
 
 **Dependencies:** Milestones 0–7 (tooling depends on the frozen specification).
 
