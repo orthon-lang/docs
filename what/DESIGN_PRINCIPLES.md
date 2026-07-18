@@ -108,9 +108,85 @@ Both represent exactly the same semantics.
 
 ## Minimal Core
 
-Complex language features should emerge from composition of simple primitives rather than from introducing new keywords or execution models.
+The language must have a **minimal, but sufficient, core** that does not
+require change as new technologies, platforms, or optimisation techniques
+emerge.
 
+Language evolution occurs not through changes to the Core, but through
+development of:
 
+- **Implementation Strategy** — how semantics are realised
+- **Standard Library** — higher-level abstractions built on primitives
+
+Program semantics remain unchanged as implementations evolve freely.
+
+### Responsibility Separation
+
+```
+User Program
+       │
+       ▼
+Core Language — semantic primitives (what the program means)
+       │
+       ▼
+Implementation Strategy — named set of Policies (how it is realised)
+       │
+       ▼
+Standard Library — interface contracts (high-level abstractions)
+       │
+       ▼
+Platform Implementation — concrete compiler, runtime, platform
+```
+
+Each level is responsible for its own domain.
+
+- **Core** defines the meaning of the program — the semantic primitives.
+- **Implementation Strategy** defines how each concern is realised
+  through declarative Policies.
+- **Standard Library** provides high-level abstractions and interface
+  contracts built on Core primitives.
+- **Implementation** leverages the capabilities of a specific platform.
+
+### Consequence
+
+The emergence of a new capability must not require changing the language.
+
+For example, when GPU computing emerged:
+
+```
+sort(data)
+```
+
+does not change. The **Strategy** changes — an `Algorithm Policy` selects a
+GPU-optimised sorting implementation. The same applies to NUMA, quantum
+computing, new sorting algorithms, new garbage collectors, or a different
+allocator: the **Strategy and Library** adapt. The **Core remains the same**.
+
+Orthon Core should become a **stable interface between any program and
+any implementation** — a semantic instruction set for the programmer.
+
+### Core Change Criterion
+
+**The Core changes only when new semantics cannot be expressed through
+composition of existing Core primitives.**
+
+In all other cases, the solution must live at the level of:
+
+- Implementation Strategy (Policies)
+- Standard Library (new abstractions on existing primitives)
+- Platform Implementation (concrete realisation)
+
+This rule protects the language from gradual specification bloat. If
+enforced strictly, after many years the language specification remains
+nearly unchanged, while implementations continue to evolve — similar to
+RISC architectures: a small, stable set of primitives, with evolution
+happening around them. In Orthon's case, these primitives are the
+**Orthon Primitive Blocks** — the immutable foundation upon which
+implementation strategies and the standard library are built.
+
+The Core is not "assembly for the machine." It is a **Semantic ISA** —
+a semantic instruction set for the programmer. The compiler translates
+this semantics into concrete implementation.
 
 ## Software Design Principles
 
@@ -118,8 +194,9 @@ The same SOLID principles that guide good software engineering also guide the de
 
 -   **Single Responsibility** — Core, Standard Library, and
     Implementation Strategy each have one responsibility.
--   **Open/Closed** — The language core is stable; behavior is
-    extended through strategies and libraries.
+-   **Open/Closed** — The Core Language is closed for modification;
+    behavior is extended through the Standard Library (new contracts)
+    and Implementation Strategies (new realisations).
 -   **Liskov Substitution** — Different implementation strategies are interchangeable without changing program semantics.
 -   **Interface Segregation** — Programs depend on a minimal, coherent language interface.
 -   **Dependency Inversion** — High-level code depends on language abstractions, not runtime implementation details.

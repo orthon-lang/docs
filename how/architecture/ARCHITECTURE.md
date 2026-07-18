@@ -82,7 +82,10 @@ semantics.
 This relationship forms a **resolution chain**:
 
 ```
-Language Semantics (what the program means)
+Language Layer (what the program means)
+├── Core Language — semantic primitives (minimal, stable)
+├── Standard Library — interface contracts (extensible)
+└── Syntax — human interface
         │
         ▼
 Implementation Strategy (named set of Policies)
@@ -158,6 +161,33 @@ program semantics are independent of the execution strategy.
 3.  Improve execution through new Implementation Strategies.
 4.  Extend the language itself only when higher abstraction layers
     cannot solve the problem.
+
+### Semantic ISA
+
+This evolution model mirrors the role of Instruction Set Architectures
+in computing.
+
+Assembly language is a stable interface between the program and the
+processor. The ISA does not change when a new microarchitecture is
+introduced — the same instructions run on different hardware
+implementations.
+
+Orthon Core is designed as a **Semantic ISA**: a stable semantic
+interface between the program and any implementation. Just as a
+compiler translates assembly into micro-ops for a specific CPU, the
+Orthon compiler translates Core semantics into a concrete
+implementation guided by the active Implementation Strategy.
+
+| ISA Concept | Orthon Analogy |
+|---|---|
+| Instruction set | Semantic primitives (Core Language) |
+| Microarchitecture | Implementation Strategy (Policies) |
+| System library | Standard Library contracts |
+| Silicon / hardware | Platform implementation |
+
+A RISC-like philosophy applies: a small, stable set of semantic
+primitives, with nearly all evolution happening in the strategy and
+library layers around them.
 
 ## Goal
 
