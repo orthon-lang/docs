@@ -15,6 +15,7 @@ Core Philosophy
 ├── Software Design Principles
 ├── Justified Solutions
 ├── Transparency
+├── Principle of Parsimony
 
 Language Consistency
 ├── Representation Symmetry
@@ -251,6 +252,25 @@ for the architecture fitness functions catalogue.
 
 A design decision without a traceable path is indistinguishable from
 arbitrary choice.
+
+
+## Principle of Parsimony
+
+When multiple valid solutions exist for a given problem, prefer the one
+that introduces the fewest additional assumptions or entities.
+
+Parsimony serves as the tiebreaker when the Language Design Gate and
+Decision Validation gates produce ambiguous or evenly balanced results.
+A solution that requires fewer new concepts, fewer special cases, or
+fewer implicit rules is preferred over one that requires more — all else
+being equal.
+
+This principle also applies when evaluating controversial Engineering
+Decision Records (EDRs): among competing alternatives with comparable
+merit, the most parsimonious explanation and solution should be adopted.
+
+> *Entia non sunt multiplicanda praeter necessitatem.*
+> (Entities must not be multiplied beyond necessity.)
 
 ---
 

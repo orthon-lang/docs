@@ -289,6 +289,32 @@ satisfy prerequisites established during the Concept Design Review
 - Optional gates are skipped only when the decision type explicitly
   does not concern that perspective. When in doubt, apply the gate.
 
+### Tiebreaking: Principle of Parsimony
+
+When all applied gates have been passed but the proposal remains
+evenly balanced between competing alternatives — for example, when
+two design options both pass with flags, or when the gate verdicts
+point in conflicting directions — the **Principle of Parsimony**
+resolves the tie.
+
+**Rule:** Among competing solutions of equal merit, select the one
+that introduces the fewest additional assumptions, entities, or
+special cases. A solution that requires fewer new concepts, fewer
+implicit rules, or fewer modifications to existing constructs is
+preferred.
+
+This principle applies to:
+
+- **Concept design** — when two semantic models both satisfy all
+  six gates, prefer the model with the smaller ontological footprint.
+- **EDR resolution** — when evaluating alternative approaches in an
+  Engineering Decision Record, the most parsimonious documented
+  alternative is adopted unless a specific gate provides grounds to
+  reject it.
+
+The Principle of Parsimony is defined formally in
+[`../../what/DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md).
+
 ---
 
 ## Relationship to the Design Process
