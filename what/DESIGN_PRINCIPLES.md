@@ -246,8 +246,8 @@ changes that alter previously approved semantics.
 Traceability without a decision journal is impossible. See
 [`docs/how/gates/_language-design.md`](../how/gates/_language-design.md)
 for the Gate checklist and
-[`docs/how/architecture/ARCHITECTURE.md`](../how/architecture/ARCHITECTURE.md)
-for architecture fitness functions.
+[`docs/how/architecture/FITNESS_FUNCTIONS.md`](../how/architecture/FITNESS_FUNCTIONS.md)
+for the architecture fitness functions catalogue.
 
 A design decision without a traceable path is indistinguishable from
 arbitrary choice.

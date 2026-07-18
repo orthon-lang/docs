@@ -180,25 +180,7 @@ breaking existing programs.
 
 ## Fitness Functions
 
-> Architectural fitness functions guard against decay of the core
-> design. These metrics are checked when a concept is revised or a new
-> concept is introduced.
-
-- **Concept stability.** A concept that requires more than one
-  substantive semantic change after its initial Gate approval triggers
-  an architectural review. Frequent semantic revision of a single
-  concept indicates the concept or its surrounding abstractions are
-  poorly factored. (See
-  [`what/DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md) —
-  Transparency principle.)
-
-- **Layered isolation.** A change to one layer (Core Language, Standard
-  Library, Implementation Strategy) must not ripple into another layer's
-  semantics. If a strategy change forces a concept-level redefinition,
-  the layer boundary is breached.
-
-- **Composition surface.** The number of documented canonical forms for
-  a concept must not decrease across revisions — composition should
-  expand, not contract.
-
-*Additional fitness functions may be added here as the language evolves.*
+Architectural fitness functions guard against decay of the core design.
+Each function is a measurable check applied when a concept is revised
+or a new concept is introduced. See
+[`FITNESS_FUNCTIONS.md`](./FITNESS_FUNCTIONS.md) for the full catalogue.
