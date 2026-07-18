@@ -4,6 +4,14 @@
 
 > Orthogonality removes exceptions.
 
-> Consistency defeats complexity.
+> Rules are few and consistent.
+
+> Consistency governs complexity.
 
 > Simplicity is the result of orthogonality.
+
+> Explicitness reduces surprise.
+
+> Abstraction hides complexity from view.
+
+> What you learn transfers without exception.
