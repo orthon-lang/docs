@@ -60,7 +60,7 @@ and the process infrastructure for making design decisions.
 | **Vision & Philosophy** | `VISION.md`, `MANIFESTO.md`, `ZEN.md` | 🔄 In Progress |
 | **Design Method** | `WORKING_BACKWARDS.md` | 🔄 In Progress |
 | **Design Principles** | `DESIGN_PRINCIPLES.md` | 🔄 In Progress |
-| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md` | 🔄 In Progress |
+-| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
 | **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein | 🔄 In Progress |
 | **Templates** | ADR template, Design review template, Concept template | 🔄 In Progress |
 | **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy | 🔄 In Progress |
@@ -95,6 +95,8 @@ filled in based on this research and finalised through Milestone 2.)
   descriptions and dependency relationships.
 - `IMPLEMENTATION_POLICIES.md` (updated) — initial Policy Type catalogue
   with preliminary concept associations.
+- `PROCESS_INVENTORY.md` — process-lens catalogue of all tools, methods,
+  and approaches used in the design process.
 
 **Dependencies:** Milestone 0 (Vision provides the criteria for what
 belongs in the language).
@@ -310,6 +312,7 @@ milestone.
 | `DEFAULT_STRATEGY.md` | Default implementation strategy profile |
 | `EMBEDDED_STRATEGY.md` | Embedded implementation strategy profile |
 | `HIGH_PERFORMANCE_STRATEGY.md` | High-performance strategy profile |
+| `PROCESS_INVENTORY.md` | Process-lens catalogue of all tools, methods, and approaches |
 
 > Concept-specific architecture documents (Parser, Type System, Name
 > Resolution, IR) are initial stubs and will be designed through
