@@ -62,7 +62,7 @@ and the process infrastructure for making design decisions.
 | **Design Principles** | `DESIGN_PRINCIPLES.md` | 🔄 In Progress |
 -| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
 | **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein | 🔄 In Progress |
-| **Templates** | ADR template, Design review template, Concept template | 🔄 In Progress |
+| **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template | 🔄 In Progress |
 | **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy | 🔄 In Progress |
 
 **Exit criteria:** Vision, Goals, Non-goals, Target Audience, Use Cases,
@@ -120,7 +120,7 @@ checklist before being accepted.
 > **Existing partial concept docs** (`concepts/CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
 > `concepts/EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
 > formally reviewed through this milestone's process. A concept is
-> registered only after acceptance via ADR.
+> registered only after acceptance via EDR (Architecture category).
 
 > **Note on interactions (Step 7):** At this stage, Step 7 only
 > **identifies which existing concepts** the new concept interacts with.

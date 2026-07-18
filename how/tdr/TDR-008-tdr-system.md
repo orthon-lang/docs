@@ -1,6 +1,6 @@
 # TDR-008: Tools Decision Records (TDR)
 
-**Status:** Proposed
+**Status:** Superseded by [EDR-001](../decision_records/process/EDR-001-edr-system.md)
 
 **Date:** 2026-07-18
 

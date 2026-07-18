@@ -1,8 +1,12 @@
 # ADR Template — Architecture Decision Record
 
-> Use this template to record significant design decisions in the Orthon language project.
-> Place each ADR as `docs/how/adr/ADR-NNN-title-with-dashes.md`.
-> Use this template from `docs/how/templates/_adr.md`.
+> **⚠️ DEPRECATED.** This template has been superseded by the
+> [EDR Architecture template](_edr-architecture.md). ADRs are now a
+> category of Engineering Decision Records (EDR) — see
+> [EDR-001](../decision_records/process/EDR-001-edr-system.md).
+>
+> Do not use this template for new decisions. Use `_edr-architecture.md`
+> instead and place records in `docs/how/decision_records/architecture/`.
 
 ---
 

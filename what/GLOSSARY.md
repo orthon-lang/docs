@@ -95,6 +95,21 @@ and long-term maintainability.
 
 ## E
 
+### EDR (Engineering Decision Record)
+
+A unified record of a consequential engineering decision, classified
+by one of 15 categorical lenses: Architecture, Technology, Tooling,
+Process, Delivery, Operations, Quality, Security, Governance, Data,
+AI, Documentation, Knowledge, Collaboration, or Product.
+
+EDRs replace the earlier dual ADR (Architecture) / TDR (Tools) system.
+ADR and TDR are now categories of EDR. All EDRs are stored in
+`docs/how/decision_records/{category}/EDR-NNN-slug.md` with a master
+index at `decision_records/INDEX.md`.
+
+- **Source:** `../how/decision_records/process/EDR-001-edr-system.md`
+- **See also:** [Architecture](#architecture), [Decision Validation](#decision-validation)
+
 ### Explicit Optimization
 
 Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.

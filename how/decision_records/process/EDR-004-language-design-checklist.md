@@ -1,19 +1,21 @@
-# TDR-003: Language Design Gate Checklist
+# EDR-004: Language Design Gate Checklist
 
-**Status:** Superseded by [EDR-004](../decision_records/process/EDR-004-language-design-checklist.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Process
+**Category:** Process
 
-**Milestone:** 0
+**Scope:** Project
+
+**Supersedes:** TDR-003
 
 ---
 
 ### Context
 
-Decision Validation Gates (TDR-001) define *what* must be checked.
-Validation Methods (TDR-002) define *how* to think during evaluation.
+Decision Validation Gates (EDR-002) define *what* must be checked.
+Validation Methods (EDR-003) define *how* to think during evaluation.
 But without a concrete checklist, there is no operational form —
 evaluators may pass a gate superficially without checking all
 criteria.
@@ -43,20 +45,6 @@ entry.
 | Incomplete coverage | Medium | Some criteria consistently skipped |
 | Inconsistent reviews | Medium | Different reviewers check different things |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| Every proposal entering Milestone 2 gates | Milestone 0 documents (Vision, Manifesto) |
-| | Proposals that don't require full gate review |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-001 (Gate System) | Checklist operationalises the gates |
-| TDR-006 (Concept Design Review) | Checklist is applied after the 11-step procedure |
-
 ### Consequences
 
 - **Positive:**
@@ -67,6 +55,16 @@ entry.
   - Form-filling overhead
   - Risk of checklist becoming a ritual without genuine evaluation
 
+### Evolution
+
+- Checklist items can be **added** when a new gate is introduced.
+- Checklist items can be **removed** if a criterion becomes obsolete.
+
+### Compliance
+
+The checklist itself is the compliance mechanism. Its application is
+verified through EDR-007 (Concept Design Review).
+
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
@@ -74,20 +72,9 @@ entry.
 | Gates alone (no checklist) | Too abstract; no operational form |
 | Automated checks only | Cannot verify philosophical or semantic criteria |
 
-### Evolution
+### Relationship to Other Records
 
-- Checklist items can be **added** when a new gate is introduced.
-- Checklist items can be **removed** if a criterion becomes
-  universally satisfied or irrelevant.
-- Format may evolve from Markdown checklist to a more structured
-  format if needed.
-
-### Affected Documents
-
-- [x] `DECISION_VALIDATION.md`
-- [ ] `FITNESS_FUNCTIONS.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [ ] `ARCHITECTURE.md`
-- [x] `_language-design.md`
-- [x] `concept-design-review.md`
+| Record | Relationship |
+|--------|-------------|
+| EDR-002 (Gate System) | Checklist operationalises the gates |
+| EDR-007 (Concept Design Review) | Checklist is applied after the 11-step procedure |

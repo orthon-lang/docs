@@ -84,4 +84,4 @@ graph LR
   languages (classic PL research)
 - ROSEC (Resolving Object-oriented Specifications Effectively and
   Consistently) — interaction analysis method
-- ADR template — `docs/how/templates/_adr.md`
+- EDR Architecture template — `docs/how/templates/_edr-architecture.md`

@@ -54,9 +54,12 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `what/concepts/FUNCTIONS.md` | What | Function declarations, parameters, and closures |
 | `AGENTS.md` | Meta | This file — instructions for AI agents |
 | `what/GLOSSARY.md` | Meta | Unified terminology reference with cross-document links |
-| `how/templates/_adr.md` | Meta | ADR template (fill-in form) |
+| `how/templates/_edr.md` | Meta | EDR base template (fill-in form) |
+| `how/templates/_edr-architecture.md` | Meta | EDR Architecture category template |
+| `how/templates/_edr-process.md` | Meta | EDR Process category template |
 | `how/templates/_design-review.md` | Meta | Design review template (fill-in form) |
-| `how/adr/ADR-*.md` | Meta | Architecture Decision Records — logged per-decision |
+| `how/decision_records/{category}/EDR-*.md` | Meta | Engineering Decision Records — logged per-decision |
+| `how/decision_records/INDEX.md` | Meta | Unified EDR journal — master index of all decisions |
 | `how/gates/_language-design.md` | Meta | Quality gate checklist for language design decisions |
 | `how/gates/DECISION_VALIDATION.md` | How | Six independent validation gates for language design decisions |
 
@@ -121,14 +124,36 @@ docs/
 │   │   ├── DEFAULT_STRATEGY.md
 │   │   ├── EMBEDDED_STRATEGY.md
 │   │   └── HIGH_PERFORMANCE_STRATEGY.md
-│   ├── adr/
-│   │   └── ADR-*.md
+│   ├── decision_records/    # Engineering Decision Records
+│   │   ├── INDEX.md          #   Unified EDR journal
+│   │   ├── architecture/     #   Architecture-category EDRs
+│   │   ├── process/          #   Process-category EDRs
+│   │   ├── quality/          #   Quality-category EDRs
+│   │   ├── technology/       #   Technology-category EDRs
+│   │   ├── tedr.md
+│       ├── _edr-architecture.md
+│       ├── _edr-process.md
+│       ├── _design-review.md
+│       └── _concept    #   Delivery-category EDRs
+│   │   ├── operations/       #   Operations-category EDRs
+│   │   ├── security/         #   Security-category EDRs
+│   │   ├── governance/       #   Governance-category EDRs
+│   │   ├── data/             #   Data-category EDRs
+│   │   ├── ai/               #   AI-category EDRs
+│   │   ├── documentation/    #   Documentation-category EDRs
+│   │   ├── knowledge/        #   Knowledge-category EDRs
+│   │   ├── collaboration/    #   Collaboration-category EDRs
+│   │   └── product/          #   Product-category EDRs
+│   ├── tdr/                  #   Superseded TDR records
 │   ├── gates/
 │   │   ├── DECISION_VALIDATION.md
 │   │   └── _language-design.md
 │   └── templates/
-│       ├── _adr.md
-│       └── _design-review.md
+│       ├── _edr.md
+│       ├── _edr-architecture.md
+│       ├── _edr-process.md
+│       ├── _design-review.md
+│       └── _concept.md
 └── when/                     # WHEN — roadmap, milestones
 ```
 
@@ -139,19 +164,19 @@ All files in `docs/` follow a consistent naming pattern:
 | Convention | Rule | Examples |
 |------------|------|----------|
 | **Content documents** | UPPER_CASE, single topic per file | `VISION.md`, `CORE_CONCEPTS.md`, `DESIGN_PRINCIPLES.md` |
-| **Category directories** | Lowercase, plural | `why/`, `what/`, `how/`, `when/`, `adr/`, `templates/`, `gates/` |
-| **Fill-in templates** | `_` prefix + kebab-case inside category dir | `how/templates/_adr.md`, `how/templates/_design-review.md` |
+| **Category directories** | Lowercase, plural | `why/`, `what/`, `how/`, `when/`, `decision_records/`, `templates/`, `gates/` |
+| **Fill-in templates** | `_` prefix + kebab-case inside `templates/` | `how/templates/_edr.md`, `how/templates/_design-review.md` |
 | **Gate checklists** | `_` prefix + kebab-case inside `gates/` | `how/gates/_language-design.md` |
-| **ADR records** | `ADR-NNN-title-with-dashes.md` inside `adr/` | `how/adr/ADR-001-tuple-immutability.md` |
+| **EDR records** | `EDR-NNN-title-with-dashes.md` inside `decision_records/{category}/` | `how/decision_records/architecture/EDR-042-event-sourcing.md` |
 | **Glossary / reference** | UPPER_CASE, `GLOSSARY.md` | `what/GLOSSARY.md` |
 
 **Rules:**
 
 1. **Content docs** live inside their layer directory (`why/`, `what/`, `how/`), use `UPPER_CASE.md`.
 2. **`AGENTS.md`** stays at `docs/` root as the single entry-point for agent instructions.
-3. **Templates** (fill-in forms) use the `_` prefix so they sort first in directory listings. Place them inside the category directory they belong to.
-4. **Category directories** (`why/`, `what/`, `how/`, `when/`, `adr/`, `templates/`, `gates/`) are lowercase, plural nouns.
-5. **Actual records** (filled-in ADRs, completed gates) drop the `_` prefix — they are content, not forms.
+3. **Templates** (fill-in forms) use the `_` prefix so they sort first in directory listings. Place them inside `how/templates/`.
+4. **Category directories** (`why/`, `what/`, `how/`, `when/`, `decision_records/`, `templates/`, `gates/`) are lowercase, plural nouns.
+5. **Actual records** (filled-in EDRs, completed gates) drop the `_` prefix — they are content, not forms.
 6. **Do not nest directories deeper than `docs/{layer}/{category}/`** unless explicitly justified.
 7. **When adding a new document type**, create a matching category directory and template, then update this section and §3 Document Map.
 
@@ -239,16 +264,21 @@ If the decision is significant enough to warrant a review pass, add an entry to 
 - [ ] All three forms compile to the same semantics.
 ```
 
-### 7.3 ADR (for foundational or cross-cutting decisions)
+### 7.3 EDR (for consequential engineering decisions)
 
-For decisions with long-lasting impact — architectural choices, principle changes, or trade-offs that affect multiple documents — create an Architecture Decision Record in `docs/how/adr/`.
+For decisions with long-lasting impact — architectural choices, principle changes,
+process decisions, or trade-offs that affect multiple documents — create an
+Engineering Decision Record in `docs/how/decision_records/{category}/`.
 
-Use the template at [`docs/how/templates/_adr.md`](../how/templates/_adr.md). Name the file `ADR-NNN-title-with-dashes.md` where `NNN` is the next sequential number.
+Use the base template at [`docs/how/templates/_edr.md`](../how/templates/_edr.md)
+or a category-specific template (`_edr-architecture.md`, `_edr-process.md`).
+Name the file `EDR-NNN-title-with-dashes.md` where `NNN` is the next sequential
+number (see [`decision_records/INDEX.md`](../how/decision_records/INDEX.md)).
 
-ADRs are appropriate when:
+EDRs are appropriate when:
 - The decision affects how future design work is evaluated.
 - The rationale needs to be *findable* years later.
-- The decision supersedes or deprecates a previous ADR.
+- The decision supersedes or deprecates a previous EDR.
 
 ---
 
@@ -296,12 +326,12 @@ Before finalizing any document or proposal, verify against this checklist. For f
 - [ ] **Orthogonality:** Does this combine freely with existing constructs?
 - [ ] **Minimality:** Is this adding a new concept when composition would suffice?
 - [ ] **Explicitness:** Are semantic changes syntactically visible?
-- [ ] **Named equivalence:** If symbolic, does the named function form exist?
+- [ ] **EDR:** Does this decision warrant an EDR in `docs/how/decision_records/`?
 - [ ] **All canonical forms:** Are all equivalent forms documented?
 - [ ] **English:** Is all content in English?
 - [ ] **Terminology:** Are project terms used consistently with [`what/GLOSSARY.md`](what/GLOSSARY.md)?
 - [ ] **Gate:** Does the decision have a gate entry if needed?
-- [ ] **ADR:** Does this decision warrant an ADR in `docs/how/adr/`?
+- [ ] **EDR:** Does this decision warrant an EDR in `docs/how/decision_records/`?
 - [ ] **Cross-references:** Are related documents linked?
 
 ---

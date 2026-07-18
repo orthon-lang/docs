@@ -1,12 +1,14 @@
-# TDR-002: Validation Methods
+# EDR-003: Validation Methods
 
-**Status:** Superseded by [EDR-003](../decision_records/process/EDR-003-validation-methods.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Method
+**Category:** Process
 
-**Milestone:** 0
+**Scope:** Project
+
+**Supersedes:** TDR-002
 
 ---
 
@@ -45,20 +47,6 @@ full technique, application steps, and the gate it serves.
 | Method-gate mismatch | Medium | Right question, wrong technique to answer it |
 | Cognitive bias dominance | High | Single cognitive mode dominates all evaluations |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| Every gate evaluation | Informal discussions |
-| All proposal types that require gates | Quick design sketches |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-001 (Gate System) | Methods are the engines that power the gates |
-| TDR-003 (Checklist) | Checklist prompts method application |
-
 ### Consequences
 
 - **Positive:**
@@ -69,6 +57,15 @@ full technique, application steps, and the gate it serves.
   - Learning curve — evaluators must understand 6 distinct methods
   - Risk of mechanical application without understanding the spirit
 
+### Evolution
+
+- Methods can be **replaced** if a better technique is discovered for a gate.
+- Methods can be **added** if new gates are introduced.
+
+### Compliance
+
+Verified through EDR-004 (Checklist) which prompts method application per gate.
+
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
@@ -77,22 +74,9 @@ full technique, application steps, and the gate it serves.
 | Ad-hoc per-proposal method selection | Inconsistent; no guarantee of coverage |
 | Checklist-only (no methods) | Checklist says *what* to check, not *how* to think |
 
-### Evolution
+### Relationship to Other Records
 
-- Methods can be **replaced** if a better technique is found for a
-  given cognitive mode.
-- New methods can be **added** if a new gate (TDR-001 evolution)
-  requires a cognitive mode not yet covered.
-- Methods are stable — replacing one requires strong evidence that
-  the current method is insufficient.
-
-### Affected Documents
-
-- [x] `DECISION_VALIDATION.md`
-- [ ] `FITNESS_FUNCTIONS.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [ ] `ARCHITECTURE.md`
-- [ ] `_language-design.md`
-- [ ] `concept-design-review.md`
-- [x] `gates/methods/*.md` (6 files)
+| Record | Relationship |
+|--------|-------------|
+| EDR-002 (Gate System) | Methods are the engines that power the gates |
+| EDR-004 (Checklist) | Checklist prompts method application |

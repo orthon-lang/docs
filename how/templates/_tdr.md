@@ -1,9 +1,12 @@
 # TDR Template — Tools Decision Record
 
-> Use this template to record decisions about process tools and
-> approaches in the Orthon language design project.
-> Place each TDR as `docs/how/tdr/TDR-NNN-title-with-dashes.md`.
-> Use this template from `docs/how/templates/_tdr.md`.
+> **⚠️ DEPRECATED.** This template has been superseded by the
+> [EDR Process template](_edr-process.md). TDRs are now a category of
+> Engineering Decision Records (EDR) — see
+> [EDR-001](../decision_records/process/EDR-001-edr-system.md).
+>
+> Do not use this template for new decisions. Use `_edr-process.md`
+> instead and place records in `docs/how/decision_records/process/`.
 
 ---
 

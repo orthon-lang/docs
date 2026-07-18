@@ -1,12 +1,14 @@
-# TDR-009: Layered Architecture
+# EDR-010: Layered Architecture
 
-**Status:** Superseded by [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Architecture
+**Category:** Architecture
 
-**Milestone:** 0
+**Scope:** Platform
+
+**Supersedes:** TDR-009
 
 ---
 
@@ -42,22 +44,6 @@ programs depend on language interfaces, not implementation details.
 | Implementation lock-in | High | Only one compiler/runtime is possible |
 | Standard Library bloat | Medium | Library absorbs implementation concerns |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| All language design | External tooling (build system, formatter) |
-| Standard Library design | |
-| Implementation design | |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-005 (Policies & Strategies) | Policies are the mechanism for the Implementation Strategy layer |
-| TDR-004 (Fitness Functions) | Layered Isolation guards layer boundaries |
-| TDR-001 (Gate System) | `ARCHITECTURAL_INTEGRITY_GATE` verifies layer compliance |
-
 ### Consequences
 
 - **Positive:**
@@ -68,6 +54,16 @@ programs depend on language interfaces, not implementation details.
   - Requires discipline to maintain layer boundaries
   - Some designs are harder because they can't cross layers
 
+### Evolution
+
+The three-layer model is fundamental to Orthon's architecture. Changes
+to the layer structure itself require an Architecture-category EDR.
+
+### Compliance
+
+Verified through `ARCHITECTURAL_INTEGRITY_GATE` (EDR-002) and the
+Layered Isolation fitness function (EDR-005).
+
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
@@ -76,20 +72,10 @@ programs depend on language interfaces, not implementation details.
 | Two-layer (Language + Implementation) | Standard Library has no clear home |
 | Microkernel + plugins | Overly complex for a language design phase |
 
-### Evolution
+### Relationship to Other Records
 
-- Layers can be **split** if a layer grows to cover two distinct
-  concerns.
-- New layers can be **added** if a new architectural concern emerges.
-- Layer boundaries are stable — moving a concern across layers
-  requires an ADR.
-
-### Affected Documents
-
-- [ ] `DECISION_VALIDATION.md`
-- [ ] `FITNESS_FUNCTIONS.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [x] `ARCHITECTURE.md`
-- [ ] `_language-design.md`
-- [ ] `concept-design-review.md`
+| Record | Relationship |
+|--------|-------------|
+| EDR-006 (Policies & Strategies) | Policies are the mechanism for the Implementation Strategy layer |
+| EDR-005 (Fitness Functions) | Layered Isolation guards layer boundaries |
+| EDR-002 (Gate System) | `ARCHITECTURAL_INTEGRITY_GATE` verifies layer compliance |

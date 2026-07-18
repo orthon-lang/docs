@@ -1,12 +1,14 @@
-# TDR-010: Process Inventory
+# EDR-011: Process Inventory
 
-**Status:** Superseded by [EDR-011](../decision_records/process/EDR-011-process-inventory.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Process
+**Category:** Process
 
-**Milestone:** 1
+**Scope:** Project
+
+**Supersedes:** TDR-010
 
 ---
 
@@ -28,7 +30,7 @@ Adopt `PROCESS_INVENTORY.md` — a catalogue of all process tools
 and approaches, providing a process-lens counterpart to
 `LANGUAGE_INVENTORY.md`.
 
-The inventory includes for each tool: name and type, TDR reference
+The inventory includes for each tool: name and type, EDR reference
 (for full rationale), what failure mode it prevents, what we lose
 without it, and which milestones it applies to.
 
@@ -43,21 +45,6 @@ coverage map shows which tools are active at each milestone.
 | Onboarding friction | Medium | New contributors must discover tools by reading all docs |
 | Process fragmentation | Low | No single view of how tools fit together |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| All process tools in `docs/how/` | Language concepts (see LANGUAGE_INVENTORY.md) |
-| | External tools (git, editor, etc.) |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-001–TDR-009 | Each tool's full rationale is in its TDR |
-| LANGUAGE_INVENTORY.md | Process-lens counterpart to language-lens inventory |
-| TDR-008 (TDR System) | Process Inventory aggregates all TDRs into one view |
-
 ### Consequences
 
 - **Positive:**
@@ -66,24 +53,30 @@ coverage map shows which tools are active at each milestone.
   - Dependency graph reveals implicit relationships
 - **Negative:**
   - Must be kept in sync as tools are added/deprecated
-  - Duplicates some information from individual TDRs
+  - Duplicates some information from individual EDRs
+
+### Evolution
+
+The inventory is updated whenever a new EDR is created or an existing
+one is deprecated.
+
+### Compliance
+
+The inventory's accuracy is verified by cross-referencing with the
+EDR INDEX.md.
 
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
 |-------------|-------------------------|
 | No inventory — rely on file listing | Not discoverable; no relationships visible |
-| Auto-generated from TDRs | Premature automation for a small catalogue |
+| Auto-generated from EDRs | Premature automation for a small catalogue |
 | Embed in ROADMAP | ROADMAP is about milestones, not tool catalogue |
 
-### Evolution
+### Relationship to Other Records
 
-- Inventory is **updated** whenever a tool is added, deprecated,
-  or significantly changed.
-- Format may **evolve** from Markdown table to a more structured
-  format if the catalogue grows beyond ~30 tools.
-
-### Affected Documents
-
-- [x] `PROCESS_INVENTORY.md`
-- [x] `ROADMAP.md` (Milestone 1 deliverables)
+| Record | Relationship |
+|--------|-------------|
+| EDR-001 through EDR-010 | Each tool's full rationale is in its EDR |
+| EDR-001 (EDR System) | Process Inventory is the aggregated view of all Process-category EDRs |
+| INDEX.md | Cross-reference for completeness |

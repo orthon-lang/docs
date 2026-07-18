@@ -4,7 +4,7 @@
 > It was created during Milestone 0 (Foundation) as exploratory work.
 > It will be formally reviewed through the Concept Design Review
 > process (Milestone 2). A concept is registered only after
-> acceptance via ADR.
+> acceptance via EDR (Architecture category).
 
 ## Philosophy
 

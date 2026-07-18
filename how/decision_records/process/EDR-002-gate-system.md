@@ -1,12 +1,14 @@
-# TDR-001: Decision Validation Gate System
+# EDR-002: Decision Validation Gate System
 
-**Status:** Superseded by [EDR-002](../decision_records/process/EDR-002-gate-system.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Process
+**Category:** Process
 
-**Milestone:** 0
+**Scope:** Project
+
+**Supersedes:** TDR-001
 
 ---
 
@@ -49,23 +51,6 @@ Any **fail** or unresolved **flag** sends the proposal back for revision.
 | Groupthink | Medium | Team converges on consensus without critical examination |
 | Hidden contradictions | High | Inconsistencies discovered late, when fix is expensive |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| All new language constructs | Documentation fixes |
-| Syntax changes | Typo corrections |
-| Semantic refinements | Compiler optimisations (partial gates only) |
-| Standard Library additions (partial) | |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-002 (Validation Methods) | Each gate applies one method |
-| TDR-003 (Checklist) | Checklist operationalises gates into review form |
-| TDR-006 (Concept Design Review) | Gates evaluate the output of the 11-step procedure |
-
 ### Consequences
 
 - **Positive:**
@@ -75,30 +60,30 @@ Any **fail** or unresolved **flag** sends the proposal back for revision.
 - **Negative:**
   - Adds process overhead — 6 gates per proposal
   - Requires discipline to apply consistently
-  - Risk of perfunctory gate-checking without the checklist (TDR-003)
+  - Risk of perfunctory gate-checking without the checklist (EDR-004)
+
+### Evolution
+
+- Gates can be **added** when a new failure mode is identified.
+- Gates can be **removed** if a failure mode becomes irrelevant.
+- The gate system itself is validated through EDR-001 (EDR System).
+
+### Compliance
+
+Verified through EDR-004 (Checklist) and EDR-007 (Concept Design Review).
 
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
 |-------------|-------------------------|
-| Single comprehensive review | Single perspective; no guarantee of coverage |
-| Ad-hoc peer review | Unstructured; depends on reviewer's experience and biases |
-| Automated lint/checks only | Cannot verify semantic or philosophical criteria |
+| Single reviewer approval | No systematic coverage; bias dominates |
+| Peer review without gates | Unstructured; misses specific failure modes |
+| Automated checks only | Cannot verify philosophical or user-value criteria |
 
-### Evolution
+### Relationship to Other Records
 
-- Gates can be **extended** with new gates if a new failure mode is
-  discovered that no existing gate covers.
-- Gates can be **deprecated** if the failure mode they prevent is no
-  longer relevant (unlikely for core validation perspectives).
-- A gate may be **split** if it grows to cover two distinct concerns.
-
-### Affected Documents
-
-- [x] `DECISION_VALIDATION.md`
-- [ ] `FITNESS_FUNCTIONS.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [ ] `ARCHITECTURE.md`
-- [x] `_language-design.md`
-- [x] `concept-design-review.md`
+| Record | Relationship |
+|--------|-------------|
+| EDR-003 (Validation Methods) | Each gate applies one method |
+| EDR-004 (Checklist) | Checklist operationalises gates into review form |
+| EDR-007 (Concept Design Review) | Gates evaluate the output of the 11-step procedure |

@@ -1,6 +1,6 @@
 # TDR-006: Concept Design Review (11-Step Procedure)
 
-**Status:** Proposed
+**Status:** Superseded by [EDR-007](../decision_records/process/EDR-007-concept-design-review.md)
 
 **Date:** 2026-07-18
 

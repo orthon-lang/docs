@@ -24,7 +24,7 @@ undergoes a uniform 11-step procedure that ensures the design is:
 - **Validated** — passes all six Decision Validation gates before
   acceptance.
 - **Traceable** — every decision is recorded with rationale,
-  alternatives considered, and an Architecture Decision Record.
+  alternatives considered, and an Engineering Decision Record.
 
 ---
 
@@ -75,7 +75,7 @@ the third column.
 | 8 | **Rationale** | Why was this specific option chosen? Why were others rejected? | [`_language-design.md`](gates/_language-design.md) § Traceability |
 | 9 | **Examples** | Minimal, typical, edge case, and incorrect usage examples | Comprehension check (no gate) |
 | 10 | **Open Questions** | What remains unresolved? | `LONG_TERM_MAINTAINABILITY_GATE` |
-| 11 | **ADR** | If a decision is made, it is formalised as an Architecture Decision Record | [`_language-design.md`](gates/_language-design.md) § Decision journal |
+| 11 | **EDR** | If a decision is made, it is formalised as an Engineering Decision Record (Architecture category) | [`_language-design.md`](gates/_language-design.md) § Decision journal |
 
 ### Step Details
 
@@ -173,13 +173,13 @@ work. If there are no open questions, state that explicitly.
 **Output:** A list of open questions with owner (if assigned) and
 target milestone for resolution.
 
-#### 11. ADR
+#### 11. EDR (Architecture)
 
-Formalise the decision as an Architecture Decision Record using the
-[ADR template](templates/_adr.md). The ADR captures the context,
-decision, consequences, and links to the concept document.
+Formalise the decision as an Engineering Decision Record using the
+[EDR Architecture template](templates/_edr-architecture.md). The EDR captures
+the context, decision, consequences, and links to the concept document.
 
-**Output:** One `adr/NNN-concept-name.md` file per accepted concept.
+**Output:** One `decision_records/architecture/EDR-NNN-concept-name.md` file per accepted concept.
 
 ---
 
@@ -214,8 +214,8 @@ The deliverables of a Concept Design Review are:
 1. **Concept document** in `docs/what/concepts/` — the formal semantic
    definition of the concept (see the [`_concept.md`](templates/_concept.md)
    template for the required structure).
-2. **ADR** in `docs/how/adr/` — records the decision, rationale, and
-   alternatives considered.
+2. **EDR** in `docs/how/decision_records/architecture/` — records the decision, rationale, and
+   alternatives considered (Architecture category).
 
 ---
 

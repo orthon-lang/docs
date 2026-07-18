@@ -1,12 +1,14 @@
-# TDR-004: Fitness Functions
+# EDR-005: Fitness Functions
 
-**Status:** Superseded by [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md)
+**Status:** Accepted
 
 **Date:** 2026-07-18
 
-**Domain:** Fitness Function
+**Category:** Quality
 
-**Milestone:** 0
+**Scope:** Project
+
+**Supersedes:** TDR-004
 
 ---
 
@@ -47,20 +49,6 @@ are identified.
 | Concept instability unnoticed | Medium | A concept is revised repeatedly without root-cause analysis |
 | Layer breaches accumulate | High | Strategy concerns leak into Core definitions |
 
-### Scope
-
-| Applies to | Does NOT apply to |
-|------------|-------------------|
-| Every concept revision | New concepts (first approval uses Gates only) |
-| Cross-cutting changes | Documentation changes |
-
-### Relationship to Other Tools
-
-| Tool | Relationship |
-|------|-------------|
-| TDR-001 (Gate System) | Fitness Functions complement Gates with continuous measurement |
-| TDR-009 (Layered Architecture) | Fitness Functions guard the architecture defined in TDR-009 |
-
 ### Consequences
 
 - **Positive:**
@@ -71,6 +59,15 @@ are identified.
   - Adds another check before approval
   - Requires discipline to measure consistently
 
+### Evolution
+
+New fitness functions can be added as new quality concerns are identified.
+
+### Compliance
+
+Fitness functions are checked during EDR-007 (Concept Design Review).
+Results are documented in the concept's gate evaluation.
+
 ### Alternatives Considered
 
 | Alternative | Rationale for Rejection |
@@ -79,20 +76,9 @@ are identified.
 | Periodic architecture reviews | Too infrequent; drift accumulates between reviews |
 | No fitness functions | Accepts architectural decay as inevitable |
 
-### Evolution
+### Relationship to Other Records
 
-- New fitness functions can be **added** as new architectural
-  concerns emerge.
-- Functions can be **retired** if the concern they measure is no
-  longer relevant.
-- Functions should remain **measurable** — avoid subjective criteria.
-
-### Affected Documents
-
-- [ ] `DECISION_VALIDATION.md`
-- [x] `FITNESS_FUNCTIONS.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [x] `ARCHITECTURE.md`
-- [ ] `_language-design.md`
-- [ ] `concept-design-review.md`
+| Record | Relationship |
+|--------|-------------|
+| EDR-002 (Gate System) | Fitness Functions complement Gates with continuous measurement |
+| EDR-010 (Layered Architecture) | Fitness Functions guard the architecture defined in EDR-010 |
