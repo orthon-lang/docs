@@ -164,30 +164,12 @@ program semantics are independent of the execution strategy.
 
 ### Semantic ISA
 
-This evolution model mirrors the role of Instruction Set Architectures
-in computing.
-
-Assembly language is a stable interface between the program and the
-processor. The ISA does not change when a new microarchitecture is
-introduced — the same instructions run on different hardware
-implementations.
-
 Orthon Core is designed as a **Semantic ISA**: a stable semantic
-interface between the program and any implementation. Just as a
-compiler translates assembly into micro-ops for a specific CPU, the
-Orthon compiler translates Core semantics into a concrete
-implementation guided by the active Implementation Strategy.
-
-| ISA Concept | Orthon Analogy |
-|---|---|
-| Instruction set | Semantic primitives (Core Language) |
-| Microarchitecture | Implementation Strategy (Policies) |
-| System library | Standard Library contracts |
-| Silicon / hardware | Platform implementation |
-
-A RISC-like philosophy applies: a small, stable set of semantic
-primitives, with nearly all evolution happening in the strategy and
-library layers around them.
+interface between the program and any implementation, analogous to how
+a processor ISA decouples software from microarchitecture.
+See [`ANALOGIES.md`](./ANALOGIES.md) for the full analogy, its
+implications for the evolution model, and the boundaries where the
+comparison breaks down.
 
 ## Goal
 
