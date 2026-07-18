@@ -9,3 +9,7 @@
 
 - [ ] investigate Interaction Matrix format and finalise (`docs/notes/interaction-matrix-format.md`)
 
+## Milestone 6 — Naming
+
+- [ ] verify whether the name «Orthon» fits the language being developed, or whether a more suitable name should be chosen
+
