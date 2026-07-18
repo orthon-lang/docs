@@ -273,6 +273,10 @@ When gates are selectively applied (see [Gate Selection](#gate-selection)),
 they should still follow this priority order: user value first,
 long-term impact last.
 
+**Preconditions:** Before entering certain gates, the proposal must
+satisfy prerequisites established during the Concept Design Review
+(see [Relationship to the Design Process](#relationship-to-the-design-process) § Gate Preconditions).
+
 **Rules:**
 - A **Fail** at any gate sends the proposal back for revision. The
   revision must address the specific fail condition before
@@ -284,6 +288,37 @@ long-term impact last.
   later gate.
 - Optional gates are skipped only when the decision type explicitly
   does not concern that perspective. When in doubt, apply the gate.
+
+---
+
+## Relationship to the Design Process
+
+The validation gates are applied at specific stages of the design
+process, defined in the [ROADMAP](../../when/ROADMAP.md). Each
+milestone maps to a subset of gates relevant to the work at that
+stage.
+
+| Milestone | Primary Gates | Notes |
+|-----------|--------------|-------|
+| 0 — Vision | — (gates apply to concepts, not vision) | Vision sets the frame; gates operate within it |
+| 1 — Inventory | — (cataloguing, not deciding) | No gates needed |
+| 2 — Concept Design | All 6 gates per concept | Each concept validated independently |
+| 3 — Cross-cutting | `ARCHITECTURAL_INTEGRITY_GATE`, `LOGICAL_CONSISTENCY_GATE` | Conflict detection at concept boundaries |
+| 4 — Consistency | `CONCEPTUAL_SIMPLICITY_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` | Language-wide audits, redundancy removal |
+| 5–7 | — (specification, not decision) | Gates already passed |
+
+### Gate Preconditions
+
+Before entering certain gates, the proposal must satisfy prerequisites
+established during the Concept Design Review (Milestone 2):
+
+| Gate | Precondition |
+|------|-------------|
+| `USER_VALUE_GATE` | A clear **Problem statement** must exist (step 1 of Concept Design Review). Without a well-defined problem, user value cannot be assessed. |
+| `ARCHITECTURAL_INTEGRITY_GATE` | **Interactions** with all existing concepts must be documented (step 7 of Concept Design Review). The gate evaluates fit within the architecture, which requires knowing how the concept composes with existing ones. |
+
+These preconditions ensure that no gate is applied in isolation — each
+builds on analysis done earlier in the design process.
 
 ---
 

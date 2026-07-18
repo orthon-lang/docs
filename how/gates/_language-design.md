@@ -2,11 +2,19 @@
 
 > Gate checklist for language design decisions. Every proposal must
 > satisfy these criteria before entering formal specification.
+> This checklist is used during **Milestone 2 (Concept Design Review)**
+> and maps to specific milestones in the [ROADMAP](../../when/ROADMAP.md).
 
 ## Criteria
 
 - [ ] **Vision alignment** — does this solve a real problem justified
       by the project's Vision?
+- [ ] **Problem-first** — is the problem clearly stated before the
+      solution?
+      • The problem is described in user terms, not implementation terms
+      • A realistic code example demonstrates the pain point
+      • Without this concept, is the problem genuinely unsolvable or
+        significantly harder?
 - [ ] **Principle compliance** — does it violate any Manifesto or Design
       Principle? If yes, is the violation intentional and documented?
 - [ ] **Orthogonality** — does it compose freely with existing concepts?
@@ -26,6 +34,11 @@
 - [ ] **All canonical forms** — are all equivalent forms documented?
 - [ ] **Impact analysis** — which existing concepts, documents,
       Policy types, and decisions are affected?
+- [ ] **Interaction analysis** — are interactions with other concepts
+      explicitly documented?
+      • For each existing concept, is the interaction described?
+      • Are edge cases at concept boundaries identified?
+      • Are any special cases or non-orthogonal behaviors documented?
 - [ ] **Policy footprint** — which Policy Types does the concept
       affect, and is compatibility confirmed for each:
       • concept does not depend on specific Policy values
@@ -39,6 +52,12 @@
       approaches)?
 - [ ] **Gate guard** — has a similar proposal been rejected before? If
       so, what circumstances have changed?
+- [ ] **Evolution strategy** — is the decision's future-proofing
+      documented?
+      • Is this decision fundamental or experimental?
+      • Can it be extended without breaking changes?
+      • Can it be deprecated without ecosystem breakage?
+      • What alternatives might be reconsidered in the future?
 - [ ] **Decision journal** — is the decision recorded with date,
       concept, verdict, and rationale for future reference?
 

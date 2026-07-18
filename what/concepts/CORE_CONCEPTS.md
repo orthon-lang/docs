@@ -1,5 +1,11 @@
 # Core Concepts
 
+> **⚠️ DRAFT — This document is a preliminary draft.**
+> It was created during Milestone 0 (Foundation) as exploratory work.
+> It will be formally reviewed through the Concept Design Review
+> process (Milestone 2). A concept is registered only after
+> acceptance via ADR.
+
 Orthon consists of two fundamental concepts:
 
 1. **Data**
