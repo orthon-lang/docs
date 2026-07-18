@@ -6,6 +6,8 @@
 
 > Rules are few and consistent.
 
+> Just enough. Nothing less, nothing more.
+
 > Consistency governs complexity.
 
 > Simplicity is the result of orthogonality.
