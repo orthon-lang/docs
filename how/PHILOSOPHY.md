@@ -236,7 +236,7 @@ without changing the semantics defined at the Concept layer.
 
 ### 5. Default Strategy
 
-Default Strategy определяет, как компилятор будет реализовывать каждый
-модификатор: какие структуры данных использовать, как оптимизировать,
-как обрабатывать граничные случаи — не меняя семантики, определённой на
-уровне Concept.
+Default Strategy defines how the compiler will implement each
+modifier: which data structures to use, how to optimise,
+how to handle edge cases — without changing the semantics defined at
+the Concept layer.

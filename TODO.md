@@ -31,6 +31,9 @@
 
 ## Orthon for LLM
 
+- [x] design: LLM_GENERABILITY_GATE — 7th gate for Decision Validation
+      (`docs/notes/llm-generability-gate.md`, recorded in
+      `EDR-011-llm-generability-gate.md`)
 - [ ] research: what makes a grammar ML-friendly? (tokenizer alignment, ambiguity metrics)
 - [ ] research: common LLM error patterns across programming languages
 - [ ] design: Literate Programming as LLM-native interface

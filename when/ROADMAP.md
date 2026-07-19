@@ -93,6 +93,11 @@ filled in based on this research and finalised through Milestone 2.)
 **Deliverables:**
 - `LANGUAGE_INVENTORY.md` — categorised list of all concepts with brief
   descriptions and dependency relationships.
+  • Includes **LLM Toolchain components**: Schema Provider, Code
+    Completer, Code Generator, Static Analyser, Documentation
+    Generator, Refactor/Migration Tool.
+  • Includes **LLM-related Policy Types**: Toolchain Policy, Error
+    Policy, Inference Policy.
 - `IMPLEMENTATION_POLICIES.md` (updated) — initial Policy Type catalogue
   with preliminary concept associations.
 - `PROCESS_INVENTORY.md` — process-lens catalogue of all tools, methods,
@@ -112,10 +117,16 @@ Each concept goes through the
 [Concept Design Review](../how/concept-design-review.md) procedure —
 an 11-step process (Problem → Use Cases → Necessity → Sufficiency →
 Alternatives → Principles Check → Interactions → Rationale →
-Examples → Open Questions → ADR) — passes all 6 Decision Validation
-gates (see [`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md)),
+Examples → Open Questions → ADR) — passes **all 7 Decision Validation
+gates** (including `LLM_GENERABILITY_GATE`, see
+[`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md)),
 and satisfies the [`_language-design.md`](../how/gates/_language-design.md)
 checklist before being accepted.
+
+> **LLM Toolchain components** (Schema Provider, Code Completer, etc.)
+> go through Concept Design Review as a **parallel track** with a lighter
+> set of gates: `ARCHITECTURAL_INTEGRITY_GATE`, `USER_VALUE_GATE`,
+> `LLM_GENERABILITY_GATE`.
 
 > **Existing partial concept docs** (`concepts/CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
 > `concepts/EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
@@ -221,7 +232,10 @@ Each section contains:
 - Examples
 - Links to ADRs
 
-**Deliverable:** `SPEC.md`
+**Deliverables:**
+- `SPEC.md` — canonical language specification.
+- `SCHEMA.md` — machine-readable language schema (grammar, types,
+  stdlib contracts) in a format consumable by the LLM Toolchain.
 
 **Dependencies:** Milestones 2–4 (all concepts designed, cross-cutting
 issues resolved, consistency confirmed).
@@ -235,6 +249,10 @@ issues resolved, consistency confirmed).
 - Write reference examples and real programs
 - Implement known algorithms to find ergonomic issues
 - Rewrite libraries to identify gaps
+- **LLM generation tests** — validate that LLMs can generate
+  correct Orthon code for each concept
+- **Schema round-trip tests** — verify that the schema →
+  generation → validation cycle works end-to-end
 - Document ambiguities and friction points
 - Produce new ADRs for issues discovered
 
@@ -265,6 +283,7 @@ interface.
 |---|------|-------------|
 | 8.1 | Standard Library | Collections, I/O, formatting, etc. |
 | 8.2 | FFI & Interoperability | C ABI, embedding API |
+| 8.3 | LLM Toolchain | Schema Provider, Code Completer, Code Generator, Static Analyser implementation |
 
 **Dependencies:** Milestones 0–7 (stdlib and FFI depend on the complete
 language specification).

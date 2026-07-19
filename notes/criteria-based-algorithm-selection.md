@@ -6,26 +6,26 @@
 
 ## Idea
 
-Не выбирать алгоритм, не выбирать категорию алгоритма (`Adaptive`,
-`MemoryOptimized`, `Parallel`), а выбирать **критерий оптимизации**.
-Компилятор (или рантайм) сам подбирает алгоритм, исходя из:
+Don't choose an algorithm, don't choose an algorithm category (`Adaptive`,
+`MemoryOptimized`, `Parallel`), but choose an **optimization criterion**.
+The compiler (or runtime) selects the algorithm itself, based on:
 
-- критериев оптимизации (скорость, память, предсказуемость)
-- платформы (CPU, GPU, WebAssembly, bare metal)
-- контекста данных (например, данные уже на GPU → GPU sort)
+- optimization criteria (speed, memory, predictability)
+- platform (CPU, GPU, WebAssembly, bare metal)
+- data context (e.g., data already on GPU → GPU sort)
 
-## Два уровня
+## Two Levels
 
-### Семантический (часть языка)
+### Semantic (part of the language)
 
 ```orthon
-sort(data)              // гарантирует: sortedness, stability
+sort(data)              // guarantees: sortedness, stability
 ```
 
-Это уже подсказка реализации. Она может отсутствовать на некоторых
-платформах.
+This is already an implementation hint. It may be absent on some
+platforms.
 
-### Policy (часть Strategy)
+### Policy (part of Strategy)
 
 ```orthon
 // ❌ Still names a strategy class
@@ -36,29 +36,29 @@ Algorithm Policy = Adaptive
 //    "maximize throughput, data is on GPU"
 ```
 
-## Пример: GPU sort
+## Example: GPU sort
 
-Если сортируемые данные находятся на GPU, компилятор автоматически
-выбирает GPU-оптимизированный алгоритм сортировки. Программист не
-пишет `GpuSort` — он указывает критерий (или ничего, используя
-стратегию по умолчанию).
+If the data being sorted is already on the GPU, the compiler automatically
+selects a GPU-optimised sorting algorithm. The programmer does not
+write `GpuSort` — they specify the criterion (or nothing, using the
+default strategy).
 
-## Связь с философией Orthon
+## Connection to Orthon's philosophy
 
-Это последовательное применение принципа «программист описывает WHAT,
-реализация выбирает HOW» — на уровень глубже, чем текущая модель Policy,
-где значения всё ещё именуют категории стратегий, а не чистые критерии.
+This is a consistent application of the principle "the programmer describes WHAT,
+the implementation chooses HOW" — one level deeper than the current Policy model,
+where values still name strategy categories rather than pure criteria.
 
-В других местах языка этот принцип уже проводится. Сортировка становится
-ещё одним примером.
+Elsewhere in the language, this principle is already applied. Sorting becomes
+another example.
 
 ## Open questions
 
-- Как сформулировать критерии оптимизации декларативно?
-- Как разрешать конфликты между критериями (speed vs memory)?
-- Может ли программист всё же «зафиксировать» алгоритм когда нужно?
-- Как это влияет на предсказуемость производительности?
-- Относится ли эта идея только к Algorithm Policy, или шире?
+- How to formulate optimisation criteria declaratively?
+- How to resolve conflicts between criteria (speed vs memory)?
+- Can the programmer still "pin" an algorithm when needed?
+- How does this affect performance predictability?
+- Does this idea apply only to Algorithm Policy, or more broadly?
 
 ## See also
 
