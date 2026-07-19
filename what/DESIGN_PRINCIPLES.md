@@ -10,6 +10,7 @@ Core Philosophy
 ├── Consistency
 ├── Uniformity
 ├── Explicit Semantics
+├── Declarative With Static Guarantees
 ├── Named Before Symbolic
 ├── Minimal Core
 ├── Software Design Principles
@@ -95,6 +96,31 @@ behavior of data, it should be expressed explicitly in the syntax.
 
 The language should avoid hidden conversions and implicit semantic
 changes.
+
+## Declarative With Static Guarantees
+
+The language provides declarative abstractions whose semantic guarantees
+are verified at compile time — never left to the programmer's manual
+discipline.
+
+The language itself bears the burden of complexity. When a recurring
+pattern can be captured as a declarative construct with a
+statically-checkable contract, the language prefers this over an
+imperative idiom that shifts correctness responsibility to the
+programmer.
+
+Modern language features — list comprehensions, context managers, Stream
+API, Optional, pattern matching, records, coroutines — succeed because
+they move incidental complexity from the programmer's manual discipline
+to the language's automatic enforcement. Orthon follows this principle
+systematically: what can be guaranteed statically should be guaranteed
+statically.
+
+Declarative abstractions are not merely syntactic sugar over imperative
+code. They represent a transfer of responsibility: imperative code
+requires the programmer to get every detail right every time; a
+declarative abstraction with static guarantees transfers that
+responsibility to the compiler.
 
 ## Named Before Symbolic
 
