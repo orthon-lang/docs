@@ -50,41 +50,64 @@ cases, no context-dependent syntax, and no conflicting rules to
 memorize. What you learn in one part of the language transfers directly
 to every other part.
 
-## Execution Image
+## Execution Program
 
-An Orthon program is not compiled into a binary. It is compiled into a
-**reproducible Execution Image** — a complete description of the
-program, its runtime, its standard library, its dependencies, its
-implementation strategy, and its required permissions and resources.
+Most languages treat **source code** as the primary artifact and the
+execution environment as external infrastructure — `venv`, Docker,
+Conda, Nix, or a virtual machine bolted on after the fact.
 
-This vision dissolves the artificial boundary between compilation,
-packaging, and deployment. The language defines a single pipeline:
+Orthon inverts this. A program becomes **fully defined** only after it
+is enriched with its required execution context.
+
+The central abstraction is the **Execution Program** — a reproducible,
+content-addressed, canonical representation of everything needed to
+execute the program.
+
+### Pipeline
 
 ```
-Source
-    ↓
-Resolve Environment
-    ↓
-Compile
-    ↓
-Bundle Runtime
-    ↓
-Execution Image
+Program
+    │
+    ▼
+Execution Descriptor (manifest of requirements)
+    │
+    ▼
+Program Enricher
+    │
+    ▼
+Execution Program
+    │
+    ▼
+Execution Engine
+    │
+    ├── Interpreter
+    ├── REPL
+    ├── Notebook Kernel
+    ├── Test Runner
+    ├── Debugger
+    ├── JIT / AOT Compiler
+    ├── OCI Builder
+    ├── MicroVM Builder
+    └── WASM Builder
 ```
+
+An interpreter and an OCI builder are the same kind of thing: both
+consume an Execution Program. They differ only in *how* they execute,
+not in *what* they execute.
 
 The language knows nothing about Docker, containers, or virtual
-machines. It knows only about an **execution environment** — an
-abstract contract with `resolve`, `materialize`, and `run`
-capabilities. Concrete deployment formats (OCI images, MicroVM images,
-WASM modules, native executables) are implementations of this
-contract, selected through the Implementation Strategy.
+machines. It knows only about an **Execution Descriptor** — an explicit
+declaration of language version, runtime, dependencies, strategy,
+platform, permissions, and resources. Concrete execution technologies
+are **Execution Engines**, selected through the Implementation Strategy
+or the developer's tooling choice.
 
 This approach extends the Semantic ISA into the deployment domain:
-the same program, compiled with the same strategy, produces the same
-Execution Image anywhere — a developer workstation, a CI pipeline,
-or a production orchestrator. Reproducibility, portability, and
-isolation move from DevOps tooling into the language architecture
-itself.
+the same Program, enriched by the same Descriptor, produces the same
+Execution Program anywhere — a developer workstation, a CI pipeline,
+a notebook kernel, or a production orchestrator. Reproducibility,
+portability, and isolation are no longer DevOps concerns. They are
+properties of the language architecture itself.
 
 ## Goal
 

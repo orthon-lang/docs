@@ -171,78 +171,103 @@ See [`ANALOGIES.md`](./ANALOGIES.md) for the full analogy, its
 implications for the evolution model, and the boundaries where the
 comparison breaks down.
 
-## Execution Image Pipeline
+## Execution Program Pipeline
 
-The architecture extends into the deployment domain through the
-**Execution Image** concept. An Orthon program is compiled not into
-a binary but into a reproducible Execution Image — a complete,
-content-addressed description of everything needed to run the program.
+The architecture extends into the execution domain through the
+**Execution Program** concept. The central artifact is not source code
+but a **fully-defined Execution Program** — a reproducible,
+content-addressed, canonical representation of everything needed to
+run.
 
 ### Pipeline
 
 ```
-Source
-    ↓
-Resolve Environment  ← Environment Policy determines the contract
-    ↓
-Compile              ← Compiler transforms source
-    ↓
-Bundle Runtime       ← Runtime + Stdlib + Dependencies assembled
-    ↓
-Execution Image      ← Content-addressed, reproducible
+Program  ← source code
+    │
+    ▼
+Execution Descriptor  ← manifest of requirements (Environment Policy)
+    │
+    ▼
+Program Enricher  ← resolves Descriptor into a fully-defined Program
+    │
+    ▼
+Execution Program  ← content-addressed, reproducible
+    │
+    ▼
+Execution Engine  ← consumer (interpreter, compiler, builder, ...)
 ```
 
-### Image Providers
+### Execution Engines
 
-An **Image Provider** materialises the Execution Image into a concrete
-output format. This is the final link in the resolution chain,
-extending the Concrete Implementation layer:
+An **Execution Engine** consumes an Execution Program. Engines are
+equal citizens — an interpreter and an OCI builder are the same kind
+of architectural component:
 
 ``` mermaid
 flowchart TD
-    EI["Execution Image"]
+    EP["Execution Program"]
 
-    subgraph PROVIDERS["Image Providers"]
-        NATIVE["Native executable<br/>(ELF / PE / Mach-O)"]
-        OCI["OCI Image"]
-        MICROVM["MicroVM Image"]
-        WASM["WASM Module"]
-        REMOTE["Remote Bundle"]
+    subgraph ENGINES["Execution Engines"]
+        INTERP["Interpreter"]
+        REPL["REPL"]
+        NOTEBOOK["Notebook Kernel"]
+        TEST["Test Runner"]
+        DEBUG["Debugger"]
+        JIT["JIT Compiler"]
+        AOT["AOT Compiler"]
+        OCI["OCI Builder"]
+        MICROVM["MicroVM Builder"]
+        WASM["WASM Builder"]
+        REMOTE["Remote Executor"]
     end
 
-    EI --> NATIVE
-    EI --> OCI
-    EI --> MICROVM
-    EI --> WASM
-    EI --> REMOTE
+    EP --> INTERP
+    EP --> REPL
+    EP --> NOTEBOOK
+    EP --> TEST
+    EP --> DEBUG
+    EP --> JIT
+    EP --> AOT
+    EP --> OCI
+    EP --> MICROVM
+    EP --> WASM
+    EP --> REMOTE
 ```
 
-### Environment abstraction
+### Key entities
 
-The language knows nothing about Docker, containers, or virtual
-machines. It knows only about:
+**Execution Descriptor** — a declarative manifest of program
+requirements: language version, runtime, standard library, dependencies,
+implementation strategy, target platform, permissions, and resources.
+It is a first-class artifact, explicitly declared and versioned
+alongside the Program.
 
-```
-Environment
-    resolve()       ← determine the composition
-    materialize()   ← make it available
-    run()           ← execute within this environment
-```
+**Program Enricher** — the component that combines a Program with its
+Execution Descriptor into an Execution Program. Internally it
+coordinates dependency, runtime, strategy, platform, permission, and
+resource resolvers. Externally it is a single step — the boundary
+between "incomplete" and "fully-defined".
 
-Concrete providers (`FilesystemEnvironment`, `OCIEnvironment`,
-`MicroVMEnvironment`, `WASMEnvironment`) implement this interface.
-The concept is detailed in
-[`EXECUTION_IMAGE.md`](../../what/concepts/EXECUTION_IMAGE.md).
+### Materialisation
+
+Materialisation — producing a distributable artifact (native executable,
+OCI image, MicroVM image, WASM module) — is not a separate build phase.
+It is what a specific Execution Engine does when its *modus operandi*
+is to produce a standalone artifact.
 
 ### Policy footprint
 
 Two new Policy Types extend the Implementation Strategy layer:
 
 - **Environment Policy** — declares the execution environment contract.
-- **Distribution Policy** — governs how the Execution Image is packaged.
+- **Distribution Policy** — governs how the Execution Program is
+  materialised.
 
 Both follow the same interface/implementation separation as all other
 Policies.
+
+The concept is detailed in
+[`EXECUTION_PROGRAM.md`](../../what/concepts/EXECUTION_PROGRAM.md).
 
 ## Goal
 

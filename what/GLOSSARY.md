@@ -110,6 +110,44 @@ index at `decision_records/INDEX.md`.
 - **Source:** `../how/decision_records/process/EDR-001-edr-system.md`
 - **See also:** [Architecture](#architecture), [Decision Validation](#decision-validation)
 
+### Execution Descriptor
+
+A declarative, first-class manifest of what a program requires to
+execute. Describes language version, runtime, standard library,
+dependencies, implementation strategy, target platform, permissions,
+resources, and configuration. The Descriptor is explicitly declared
+and versioned alongside the Program — it is never inferred from
+filesystem layout or environment variables.
+
+- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Descriptor
+- **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
+
+### Execution Engine
+
+Any consumer that takes an Execution Program and does something with
+it — runs, debugs, tests, compiles, materialises, or deploys.
+Interpreters, REPLs, notebook kernels, test runners, debuggers, JIT
+compilers, AOT compilers, OCI builders, MicroVM builders, and WASM
+builders are all Execution Engines. They differ only in *how* they
+execute, not in *what* they execute.
+
+```
+Execution Program
+    ├── Interpreter
+    ├── REPL
+    ├── Notebook Kernel
+    ├── Test Runner
+    ├── Debugger
+    ├── JIT / AOT Compiler
+    ├── OCI Builder
+    ├── MicroVM Builder
+    ├── WASM Builder
+    └── Remote Executor
+```
+
+- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Engine
+- **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
+
 ### Explicit Optimization
 
 Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.
@@ -117,40 +155,33 @@ Performance-oriented execution strategies are enabled intentionally by the progr
 - **Source:** `DESIGN_PRINCIPLES.md` § Explicit Optimization
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
 
-### Environment / Environment Provider
+### Execution Program
 
-The abstraction over an execution context. The language knows only
-that an Environment exists and can `resolve()` (determine composition),
-`materialize()` (make components available), and `run()` (execute within
-this context). Concrete providers (`FilesystemEnvironment`,
-`OCIEnvironment`, `MicroVMEnvironment`, `WASMEnvironment`) implement
-this interface.
+The central abstraction of the Orthon execution model. A fully-defined,
+reproducible, content-addressed canonical representation of everything
+needed to execute a program. Includes source code, runtime, standard
+library, dependencies, implementation strategy, configuration,
+permissions, resources, and metadata.
 
-- **Source:** `../what/concepts/EXECUTION_IMAGE.md` § Environment abstraction
-- **See also:** [Execution Image](#execution-image), [Image Provider](#image-provider)
-
-### Execution Image
-
-The complete, reproducible, content-addressed output of compiling an
-Orthon program. Includes the program code, runtime, standard library,
-dependencies, implementation strategy, metadata, permissions, and
-resource constraints. The Execution Image replaces the traditional
-concept of a "build artifact."
+The Execution Program is the **canonical representation** — not a
+binary, not a Docker image, not a virtual machine. It is an
+infrastructure-independent model of an executable program.
 
 ```
-Execution Image
+Execution Program
 ├── Program
 ├── Runtime
 ├── Standard Library
 ├── Dependencies
 ├── Implementation Strategy
-├── Metadata
+├── Configuration
 ├── Permissions
-└── Resources
+├── Resources
+└── Metadata
 ```
 
-- **Source:** `../what/concepts/EXECUTION_IMAGE.md`, `../how/architecture/ARCHITECTURE.md` § Execution Image Pipeline
-- **See also:** [Environment / Environment Provider](#environment--environment-provider), [Image Provider](#image-provider)
+- **Source:** `../what/concepts/EXECUTION_PROGRAM.md`, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
+- **See also:** [Execution Descriptor](#execution-descriptor), [Execution Engine](#execution-engine), [Program Enricher](#program-enricher)
 
 ### Explicit Optimization
 
@@ -201,25 +232,16 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 - **Source:** `DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
 
-### Image Provider
+### Program Enricher
 
-A component that materialises an Execution Image into a concrete
-distributable format. Image Providers are the deployment equivalent
-of Implementation Strategies: they implement the Environment contract
-without the language knowing about the specific technology.
+The component that combines a Program with its Execution Descriptor
+into a fully-defined Execution Program. Internally coordinates
+dependency, runtime, strategy, platform, permission, and resource
+resolvers. Externally it is a single step — the boundary between
+"incomplete" and "fully-defined" program.
 
-```
-Execution Image
-    ├── Native executable    (ELF / PE / Mach-O)
-    ├── OCI Image            (container)
-    ├── MicroVM Image        (Firecracker, Cloud Hypervisor)
-    ├── WASM Module          (WebAssembly)
-    ├── Shared Library       (dynamic link)
-    └── Remote Bundle        (distributed execution)
-```
-
-- **Source:** `../what/concepts/EXECUTION_IMAGE.md` § Image Providers
-- **See also:** [Environment / Environment Provider](#environment--environment-provider), [Execution Image](#execution-image)
+- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Program Enricher
+- **See also:** [Execution Descriptor](#execution-descriptor), [Execution Program](#execution-program)
 
 ---
 

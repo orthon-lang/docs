@@ -153,6 +153,9 @@ Concept documents include:
 - [`MUTABILITY.md`](../what/concepts/MUTABILITY.md) — mutability
 - [`ALLOCATION.md`](../what/concepts/ALLOCATION.md) — allocation
 - [`EQUALITY.md`](../what/concepts/EQUALITY.md) — equality
+- [`EXECUTION_PROGRAM.md`](../what/concepts/EXECUTION_PROGRAM.md) — execution
+  model: Program, Execution Descriptor, Program Enricher, Execution Program,
+  Execution Engines
 
 Each document defines the semantics of a concept independent of
 implementation: behavior, constraints, and interaction with other concepts.
