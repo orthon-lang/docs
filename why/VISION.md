@@ -174,6 +174,45 @@ a notebook kernel, or a production orchestrator. Reproducibility,
 portability, and isolation are no longer DevOps concerns. They are
 properties of the language architecture itself.
 
+### DevOps Transformation
+
+The Execution Program model reshapes how software is delivered, not
+just how it is written.
+
+**CI/CD becomes simpler.** A single pipeline produces one artifact type
+— the Execution Program — regardless of target. No more matrix builds,
+platform-specific branches, or conditional packaging logic. CI produces
+one thing; deployment chooses the engine.
+
+**Development-to-production parity is guaranteed by construction.**
+Because the same artifact runs in every environment, the class of bugs
+caused by "it worked on my machine" disappears. The artifact you
+debugged in the interpreter is the same artifact the OCI builder
+packages for production.
+
+**Deployment becomes a configuration choice, not a rebuild.**
+Switching from interpreted development to AOT-compiled production,
+from server deployment to edge deployment, or from standalone binary
+to OCI container — all become deployment-time engine selections on
+the same artifact. No recompilation, no new CI run, no risk of
+divergence.
+
+**Observability and resource governance are part of the descriptor.**
+The Execution Descriptor declares not just dependencies but also
+permissions, resource limits, and observability contracts. The
+Execution Engine enforces them. The platform does not need to guess
+what the program needs — the program declares it explicitly.
+
+**Microservices and monoliths are packaging choices, not architectural
+commitments.** The same Execution Program can be deployed as a
+standalone binary, a container, a serverless function, or a WASM
+module — without code changes. The architecture is in the code, not
+in the deployment topology.
+
+In short: Docker containerized the *environment*. Orthon containerizes
+the *program itself* — making every execution mode a first-class
+citizen and every deployment path a configuration option.
+
 ## Goal
 
 Keep the language stable for decades while allowing implementations

@@ -36,6 +36,14 @@ Variables, functions, types, classes, and modules follow the same declaration pr
 ### Minimal core, maximum expressiveness
 The language minimizes fundamental concepts while maximizing expressiveness through composition.
 
+### Build once, deploy anywhere
+The language produces an Execution Program — a self-contained,
+semantically complete artifact — not platform-specific binaries.
+Execution strategy is a deployment-time decision, not a build-time
+constraint. The language owns the boundary between code and
+environment, removing the need for external DevOps tooling to
+reconstruct what the program requires.
+
 ## Guiding Vision
 
 Orthon is designed around a small set of orthogonal concepts:
@@ -52,3 +60,5 @@ Orthon is designed around a small set of orthogonal concepts:
 This manifesto defines the philosophy of the language.
 
 Implementation strategies, performance trade-offs, standard library design, optimization techniques, and programming idioms belong to the Orthon Zen and are intentionally outside the scope of this document.
+
+The DevOps implications of the Execution Program model — deployment pipelines, engine selection, and operational concerns — follow from the principles above and are detailed in the Vision and Architecture documents.

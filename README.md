@@ -6,9 +6,22 @@ orthogonal core, explicit semantics, and implementation-independent
 evolution.
 
 At its architectural heart is the **Execution Program / Execution Engine**
-separation: interpreters, AOT compilers, OCI builders, and WASM builders
-are all equal citizens consuming the same intermediate artifact. You write
-Orthon once and choose the execution mode later.
+separation — a paradigm shift on par with Docker's decoupling of
+applications from operating systems. Docker made the *environment*
+portable; Orthon makes the *program's semantic meaning* portable,
+decoupling it from the execution strategy entirely.
+
+Interpreters, AOT compilers, OCI builders, and WASM builders are all
+equal citizens consuming the same intermediate artifact. You write
+Orthon once and produce a single **Execution Program** — an executable
+program environment, not a binary. You choose the execution mode at
+deployment time: interpretation in development, AOT compilation in
+production, OCI packaging for delivery, WASM for the edge — all from
+the same artifact, without rebuilding.
+
+This is not just a new way to compile programs. It redefines how
+software is built, shipped, and operated — collapsing the boundary
+between development and DevOps.
 
 Every consequential design choice is recorded as an **Engineering Decision
 Record (EDR)** — documented with context, rationale, and alternatives
@@ -35,7 +48,7 @@ This repository contains the language design documentation — the *why*,
 | Document | What it tells you |
 |---|---|
 | [Manifesto](why/MANIFESTO.md) | The core beliefs Orthon is built on |
-| [Vision](why/VISION.md) | The three pillars — Language Designed Like Software, Learn from What Came Before, and Designed for the LLM Era |
+| [Vision](why/VISION.md) | The five pillars — architectural design, human-centric comfort, LLM era readiness, the Execution Program model, and its DevOps transformation |
 | [Working Backwards](why/WORKING_BACKWARDS.md) | Why Orthon exists — derived from the programmer's perspective |
 | [Design Philosophy](how/PHILOSOPHY.md) | How design decisions flow from vision to implementation |
 | [Architecture](how/architecture/ARCHITECTURE.md) | The layered design — Language Core, Execution Environment, LLM Toolchain |
