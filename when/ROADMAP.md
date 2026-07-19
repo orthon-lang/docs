@@ -331,6 +331,7 @@ milestone.
 | `DEFAULT_STRATEGY.md` | Default implementation strategy profile |
 | `EMBEDDED_STRATEGY.md` | Embedded implementation strategy profile |
 | `HIGH_PERFORMANCE_STRATEGY.md` | High-performance strategy profile |
+| `LLM_STRATEGY.md` | LLM strategy profile — maximum LLM assistance during development |
 | `PROCESS_INVENTORY.md` | Process-lens catalogue of all tools, methods, and approaches |
 
 > Concept-specific architecture documents (Parser, Type System, Name
