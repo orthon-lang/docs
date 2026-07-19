@@ -171,6 +171,79 @@ See [`ANALOGIES.md`](./ANALOGIES.md) for the full analogy, its
 implications for the evolution model, and the boundaries where the
 comparison breaks down.
 
+## Execution Image Pipeline
+
+The architecture extends into the deployment domain through the
+**Execution Image** concept. An Orthon program is compiled not into
+a binary but into a reproducible Execution Image — a complete,
+content-addressed description of everything needed to run the program.
+
+### Pipeline
+
+```
+Source
+    ↓
+Resolve Environment  ← Environment Policy determines the contract
+    ↓
+Compile              ← Compiler transforms source
+    ↓
+Bundle Runtime       ← Runtime + Stdlib + Dependencies assembled
+    ↓
+Execution Image      ← Content-addressed, reproducible
+```
+
+### Image Providers
+
+An **Image Provider** materialises the Execution Image into a concrete
+output format. This is the final link in the resolution chain,
+extending the Concrete Implementation layer:
+
+``` mermaid
+flowchart TD
+    EI["Execution Image"]
+
+    subgraph PROVIDERS["Image Providers"]
+        NATIVE["Native executable<br/>(ELF / PE / Mach-O)"]
+        OCI["OCI Image"]
+        MICROVM["MicroVM Image"]
+        WASM["WASM Module"]
+        REMOTE["Remote Bundle"]
+    end
+
+    EI --> NATIVE
+    EI --> OCI
+    EI --> MICROVM
+    EI --> WASM
+    EI --> REMOTE
+```
+
+### Environment abstraction
+
+The language knows nothing about Docker, containers, or virtual
+machines. It knows only about:
+
+```
+Environment
+    resolve()       ← determine the composition
+    materialize()   ← make it available
+    run()           ← execute within this environment
+```
+
+Concrete providers (`FilesystemEnvironment`, `OCIEnvironment`,
+`MicroVMEnvironment`, `WASMEnvironment`) implement this interface.
+The concept is detailed in
+[`EXECUTION_IMAGE.md`](../../what/concepts/EXECUTION_IMAGE.md).
+
+### Policy footprint
+
+Two new Policy Types extend the Implementation Strategy layer:
+
+- **Environment Policy** — declares the execution environment contract.
+- **Distribution Policy** — governs how the Execution Image is packaged.
+
+Both follow the same interface/implementation separation as all other
+Policies.
+
 ## Goal
 
 This architecture serves the goal described in

@@ -50,6 +50,42 @@ cases, no context-dependent syntax, and no conflicting rules to
 memorize. What you learn in one part of the language transfers directly
 to every other part.
 
+## Execution Image
+
+An Orthon program is not compiled into a binary. It is compiled into a
+**reproducible Execution Image** — a complete description of the
+program, its runtime, its standard library, its dependencies, its
+implementation strategy, and its required permissions and resources.
+
+This vision dissolves the artificial boundary between compilation,
+packaging, and deployment. The language defines a single pipeline:
+
+```
+Source
+    ↓
+Resolve Environment
+    ↓
+Compile
+    ↓
+Bundle Runtime
+    ↓
+Execution Image
+```
+
+The language knows nothing about Docker, containers, or virtual
+machines. It knows only about an **execution environment** — an
+abstract contract with `resolve`, `materialize`, and `run`
+capabilities. Concrete deployment formats (OCI images, MicroVM images,
+WASM modules, native executables) are implementations of this
+contract, selected through the Implementation Strategy.
+
+This approach extends the Semantic ISA into the deployment domain:
+the same program, compiled with the same strategy, produces the same
+Execution Image anywhere — a developer workstation, a CI pipeline,
+or a production orchestrator. Reproducibility, portability, and
+isolation move from DevOps tooling into the language architecture
+itself.
+
 ## Goal
 
 Keep the language stable for decades while allowing implementations

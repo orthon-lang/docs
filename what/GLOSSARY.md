@@ -117,6 +117,48 @@ Performance-oriented execution strategies are enabled intentionally by the progr
 - **Source:** `DESIGN_PRINCIPLES.md` § Explicit Optimization
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
 
+### Environment / Environment Provider
+
+The abstraction over an execution context. The language knows only
+that an Environment exists and can `resolve()` (determine composition),
+`materialize()` (make components available), and `run()` (execute within
+this context). Concrete providers (`FilesystemEnvironment`,
+`OCIEnvironment`, `MicroVMEnvironment`, `WASMEnvironment`) implement
+this interface.
+
+- **Source:** `../what/concepts/EXECUTION_IMAGE.md` § Environment abstraction
+- **See also:** [Execution Image](#execution-image), [Image Provider](#image-provider)
+
+### Execution Image
+
+The complete, reproducible, content-addressed output of compiling an
+Orthon program. Includes the program code, runtime, standard library,
+dependencies, implementation strategy, metadata, permissions, and
+resource constraints. The Execution Image replaces the traditional
+concept of a "build artifact."
+
+```
+Execution Image
+├── Program
+├── Runtime
+├── Standard Library
+├── Dependencies
+├── Implementation Strategy
+├── Metadata
+├── Permissions
+└── Resources
+```
+
+- **Source:** `../what/concepts/EXECUTION_IMAGE.md`, `../how/architecture/ARCHITECTURE.md` § Execution Image Pipeline
+- **See also:** [Environment / Environment Provider](#environment--environment-provider), [Image Provider](#image-provider)
+
+### Explicit Optimization
+
+Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.
+
+- **Source:** `DESIGN_PRINCIPLES.md` § Explicit Optimization
+- **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
+
 ### Explicit Semantics
 
 Whenever an operation changes the meaning, lifetime, ownership, or behavior of data, it must be expressed explicitly in the syntax. No hidden conversions or implicit semantic changes.
@@ -158,6 +200,26 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 - **Source:** `DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
+
+### Image Provider
+
+A component that materialises an Execution Image into a concrete
+distributable format. Image Providers are the deployment equivalent
+of Implementation Strategies: they implement the Environment contract
+without the language knowing about the specific technology.
+
+```
+Execution Image
+    ├── Native executable    (ELF / PE / Mach-O)
+    ├── OCI Image            (container)
+    ├── MicroVM Image        (Firecracker, Cloud Hypervisor)
+    ├── WASM Module          (WebAssembly)
+    ├── Shared Library       (dynamic link)
+    └── Remote Bundle        (distributed execution)
+```
+
+- **Source:** `../what/concepts/EXECUTION_IMAGE.md` § Image Providers
+- **See also:** [Environment / Environment Provider](#environment--environment-provider), [Execution Image](#execution-image)
 
 ---
 
