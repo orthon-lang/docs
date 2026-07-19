@@ -50,6 +50,71 @@ cases, no context-dependent syntax, and no conflicting rules to
 memorize. What you learn in one part of the language transfers directly
 to every other part.
 
+## Designed for the LLM Era
+
+Orthon is designed for an era where code is increasingly written by
+large language models — not instead of human programmers, but alongside
+them. The same properties that make Orthon comfortable for humans make
+it uniquely suited for AI-generated code.
+
+### Small surface, consistent rules
+
+LLMs predict code probabilistically. Every special case, exception, and
+context-dependent rule expands the prediction space and increases the
+chance of error. Orthon's orthogonal design minimizes this surface.
+There are no special cases to hallucinate, no hidden conversions to
+forget, and no context-dependent syntax to confuse.
+
+What an LLM learns in one part of the language transfers directly to
+every other part — the same principle that benefits human readers.
+
+### Intent, not implementation
+
+LLMs are better at describing *what* a program should do than at
+making low-level implementation decisions. Orthon's
+Intent-Over-Implementation philosophy meets this strength directly:
+the LLM expresses intent through declarative constructs, modifiers,
+and standard library calls; the compiler and Implementation Strategy
+handle optimization, allocation, and execution details.
+
+```
+sort(data)              # LLM says WHAT — sort the data
+# Not: which algorithm, which memory, which comparison strategy
+```
+
+### Explicit semantics reduce hallucination
+
+Orthon's Explicit Semantics principle means every behavior-changing
+operation is visible in the syntax. An LLM generating Orthon code
+cannot accidentally introduce implicit behavior — there is none.
+What the LLM writes is exactly what the program does.
+
+### Execution Program as LLM-native artifact
+
+The Execution Program model dissolves the gap between "write code"
+and "run code." An LLM can produce not just source code, but a
+fully-defined Execution Program — a self-contained, reproducible
+artifact that includes runtime, dependencies, permissions, and
+target environment. The LLM does not need to know about Docker,
+containers, or deployment pipelines. The language handles the
+boundary between code and environment.
+
+### Extensibility without language changes
+
+Because Orthon evolves through libraries and Implementation
+Strategies rather than new keywords, an LLM can generate code that
+uses new capabilities without learning a changing language. The
+semantic core remains stable; expressiveness grows through the
+Standard Library and strategy profiles.
+
+### A foundation, not a conclusion
+
+The LLM era is just beginning. Orthon's design — orthogonality,
+explicit semantics, intent over implementation, Execution Program —
+provides a foundation that can grow with it. The language does not
+claim to solve all problems of AI-generated code. It claims to be
+designed for an age where those problems matter.
+
 ## Execution Program
 
 Most languages treat **source code** as the primary artifact and the

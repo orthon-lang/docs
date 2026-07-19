@@ -29,3 +29,11 @@
 
 - [ ] verify whether the name «Orthon» fits the language being developed, or whether a more suitable name should be chosen
 
+## Orthon for LLM
+
+- [ ] research: what makes a grammar ML-friendly? (tokenizer alignment, ambiguity metrics)
+- [ ] research: common LLM error patterns across programming languages
+- [ ] design: Literate Programming as LLM-native interface
+- [ ] decide: Opinionated Code Generation mode (lint-level constraints for LLM output)
+- [ ] decide: structured error format for LLM consumption (JSON schema)
+

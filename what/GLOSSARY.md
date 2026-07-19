@@ -265,7 +265,43 @@ diagnostics, and go-to-definition — and a code editor or IDE. Orthon's
 tooling implements an LSP server to provide IDE support.
 
 - **Source:** `../when/ROADMAP.md` § Milestone 9
-- **See also:** —
+- **See also:** [LLM Toolchain](#llm-toolchain)
+
+### LLM-Native
+
+A design property of the language and its toolchain: Orthon is
+*LLM-native*, not merely *LLM-compatible*. This means every language
+construct is exposed as structured, machine-readable schema (not just
+free-text documentation); the toolchain is strategy-aware and adjusts
+its output based on active Policies; and all interfaces are
+bidirectional — LLMs both consume language metadata and produce
+enriched artifacts back into the toolchain.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § LLM Toolchain — Design Rationale
+- **See also:** [LLM Strategy](#llm-strategy), [LLM Toolchain](#llm-toolchain)
+
+### LLM Strategy
+
+A named set of Policies governing how LLM-based tools interact with
+Orthon code — covering syntax tolerance, verbosity, style, toolchain
+activation, error formatting, and inference depth. An LLM Strategy
+is a specialised Implementation Strategy that applies to the
+LLM Toolchain layer rather than the execution environment.
+
+- **Source:** `../how/IMPLEMENTATION_POLICIES.md`, `../how/architecture/ARCHITECTURE.md` § LLM Toolchain
+- **See also:** [Implementation Strategy](#implementation-strategy), [LLM Toolchain](#llm-toolchain), [Policy](#policy)
+
+### LLM Toolchain
+
+A first-class architectural layer of tools and services that enable
+LLMs to generate, analyse, complete, and transform Orthon code with
+high fidelity. Components include the Schema Provider, Code Completer,
+Code Generator, Static Analyser, Documentation Generator, and
+Refactor/Migration Tool. The Toolchain sits alongside the Language and
+Execution layers with bidirectional interfaces.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § LLM Toolchain
+- **See also:** [LLM Strategy](#llm-strategy), [LLM-Native](#llm-native), [Architecture](#architecture)
 
 ---
 

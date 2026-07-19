@@ -40,9 +40,17 @@ flowchart TD
         P["Platform"]
     end
 
+    subgraph LLM["LLM Toolchain"]
+        LLM_LBL["Schema · Completion ·<br/>Generation · Analysis"]
+    end
+
     UC --> LANG
     LANG --> STRAT
     STRAT --> EXEC
+    LANG -.-> LLM
+    STRAT -.-> LLM
+    EXEC -.-> LLM
+    LLM -.-> UC
 ```
 
 ## Layers
@@ -202,6 +210,99 @@ Execution Engine  ← consumer (interpreter, compiler, builder, ...)
 An **Execution Engine** consumes an Execution Program. Engines are
 equal citizens — an interpreter and an OCI builder are the same kind
 of architectural component:
+
+## LLM Toolchain
+
+Orthon's architecture includes an **LLM Toolchain** layer — a set of
+tools and services that enable LLMs to generate, analyse, complete,
+and transform Orthon code with high fidelity. This layer sits alongside
+the Language and Execution layers, providing bidirectional interfaces
+that LLM-based tools consume and produce.
+
+``` mermaid
+flowchart TD
+    LANG["Language Layer"]
+    STRAT["Implementation Strategy"]
+    EXEC["Execution Environment"]
+
+    subgraph LLM["LLM Toolchain"]
+        SCHEMA["Schema Provider"]
+        COMPLETER["Code Completer"]
+        GEN["Code Generator"]
+        ANALYSER["Static Analyser"]
+        DOC_GEN["Documentation Generator"]
+        MIGRATOR["Refactor / Migrate"]
+    end
+
+    LANG --> SCHEMA
+    LANG --> COMPLETER
+    LANG --> GEN
+    LANG --> ANALYSER
+    LANG --> DOC_GEN
+    LANG --> MIGRATOR
+
+    STRAT --> SCHEMA
+    STRAT --> ANALYSER
+    EXEC --> ANALYSER
+    EXEC --> COMPLETER
+
+    LLM --> LANG
+    LLM --> STRAT
+    LLM --> EXEC
+```
+
+### Components
+
+**Schema Provider** — exposes the full language grammar, type system,
+standard library contracts, and strategy definitions as a machine-readable
+schema. LLMs consume this schema to generate syntactically and semantically
+valid code without hallucinating constructs that do not exist.
+
+**Code Completer** — provides context-aware code completion driven by
+both the language schema and the active Implementation Strategy. The
+completer understands which Policies are in effect and biases suggestions
+accordingly.
+
+**Code Generator** — generates Orthon code from natural language
+descriptions, migration scripts, or higher-level specifications. Uses
+the Schema Provider to validate output before it reaches the user.
+
+**Static Analyser** — performs deep semantic analysis on generated or
+hand-written Orthon code. Reports policy violations, type errors, and
+deviations from the active Strategy. Serves as the LLM's internal
+feedback loop — catch mistakes before the user does.
+
+**Documentation Generator** — produces human-readable and
+LLM-parseable documentation from code, schema definitions, and
+policy metadata. Maintains a machine-readable knowledge base that
+LLMs can retrieve via retrieval-augmented generation (RAG).
+
+**Refactor / Migration Tool** — automates safe, semantics-preserving
+code transformations. Guided by the Schema Provider and Static Analyser
+to ensure correctness across strategy boundaries.
+
+### Design Rationale
+
+The LLM Toolchain is a first-class architectural layer — not an
+afterthought — because LLMs are a primary interface through which
+future programmers will interact with Orthon. The language must be
+*LLM-native*, not merely *LLM-compatible*:
+
+- **Schema-first**: every language construct is exposed as structured
+  data, not just free-text documentation. This eliminates the dominant
+  failure mode of LLM code generation — hallucination of non-existent
+  APIs or syntax.
+- **Strategy-aware**: the toolchain knows which Policies are active and
+  adjusts its output accordingly. Generated code respects the active
+  Implementation Strategy without explicit prompting.
+- **Bidirectional**: the toolchain both reads from and writes to the
+  language layer. LLMs consume the schema to generate code and produce
+  enriched metadata (documentation, refactoring plans) back into the
+  toolchain.
+
+The LLM Toolchain Policies are defined in
+[`IMPLEMENTATION_POLICIES.md`](../IMPLEMENTATION_POLICIES.md) and
+govern how each component behaves under different deployment profiles.
 
 ``` mermaid
 flowchart TD

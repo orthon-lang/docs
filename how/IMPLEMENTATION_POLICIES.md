@@ -129,6 +129,104 @@ Controls how concurrent tasks are scheduled and executed.
 *Specific values will be formalised when the corresponding language
 concept is designed.*
 
+### Syntax Policy
+
+**Status:** *Pending concept design.*
+
+Controls how syntax is parsed and interpreted, accommodating both
+hand-written and LLM-generated code.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Strict` | Full parser; rejects any deviation from canonical syntax |
+| `Lenient` | Tolerant parser; accepts common LLM-generated syntactic patterns (e.g., trailing commas, minor whitespace inconsistencies) |
+| `Recovery` | Error-recovering parser; produces best-effort AST from malformed input |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
+### Verbosity Policy
+
+**Status:** *Pending concept design.*
+
+Controls the level of detail in generated code, error messages,
+documentation, and diagnostic output.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Concise` | Minimal output; short identifiers, compact formatting |
+| `Balanced` | Moderate verbosity; human-readable with sufficient context |
+| `Explicit` | Full qualification, elaborated error messages, comprehensive diagnostics |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
+### Style Policy
+
+**Status:** *Pending concept design.*
+
+Controls code formatting and stylistic conventions, ensuring
+consistent output from both human and LLM-generated code.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Canonical` | Enforces Orthon's canonical formatting rules |
+| `Flexible` | Accepts stylistic variation within defined bounds |
+| `LLMOptimized` | Prefers patterns that LLMs generate most predictably (e.g., explicit delimiters, consistent indentation, unambiguous grouping) |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
+### Toolchain Policy
+
+**Status:** *Pending concept design.*
+
+Controls which LLM Toolchain components are active and how they
+interact with the language layer and execution environment.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Minimal` | Schema Provider only |
+| `Standard` | Schema Provider + Code Completer + Static Analyser |
+| `Full` | All Toolchain components enabled |
+| `Offline` | No Toolchain components; no external LLM dependency |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
+### Error Policy
+
+**Status:** *Pending concept design.*
+
+Controls how errors are reported, formatted, and surfaced to the
+programmer or LLM.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Human` | Natural-language error messages with suggestions and context |
+| `Structured` | Machine-readable error codes and structured diagnostic data |
+| `LLM` | Errors formatted for LLM consumption — structured context with actionable repair hints |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
+### Inference Policy
+
+**Status:** *Pending concept design.*
+
+Controls the depth and strategy of type and semantic inference
+performed by the compiler and toolchain.
+
+| Possible Values | Description |
+|-----------------|-------------|
+| `Local` | Inference limited to single expressions or statements |
+| `Function` | Full function-body inference |
+| `Global` | Cross-function and cross-module inference |
+| `LLMAssisted` | Inference augmented by LLM-based semantic analysis for ambiguous or context-dependent cases |
+
+*Specific values will be formalised when the corresponding language
+concept is designed.*
+
 ## Extending the Catalogue
 
 New Policy types are added as new language concepts are designed. Each

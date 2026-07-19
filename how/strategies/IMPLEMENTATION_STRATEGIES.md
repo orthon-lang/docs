@@ -48,6 +48,12 @@ for the full catalogue.
 | **Evaluation Policy** | *Pending* | Lazy Defaults, Eager |
 | **Lifetime Policy** | *Pending* | ReferenceCounting, GarbageCollected, Manual, RegionBased |
 | **Concurrency Policy** | *Pending* | ThreadPool, WorkStealing, EventLoop, None |
+| **Syntax Policy** | *Pending* | Strict, Lenient, Recovery |
+| **Verbosity Policy** | *Pending* | Concise, Balanced, Explicit |
+| **Style Policy** | *Pending* | Canonical, Flexible, LLMOptimized |
+| **Toolchain Policy** | `concepts/LLM_NATIVE_TOOLCHAIN.md` | Minimal, Standard, Full, Offline |
+| **Error Policy** | *Pending* | Human, Structured, LLM |
+| **Inference Policy** | *Pending* | Local, Function, Global, LLMAssisted |
 
 ## Scope of the Pattern
 
@@ -64,10 +70,19 @@ applies, and maps each to its Policy type.
 | **Object representation** | Data model and structural contracts | *(future)* | Struct-of-fields, SOA, tagged unions, or pointer-based layout |
 | **Concurrency model** | Task and communication semantics | Concurrency Policy | Thread pool, work-stealing, event loop, or hardware dispatch |
 | **Error handling** | Result and error propagation model | *(future)* | Stack unwinding, error codes, or return-value branching |
+| **Syntax parsing** | Grammar and parser interface | Syntax Policy | Strict, lenient, or error-recovering parser |
+| **Verbosity** | Code, error, and diagnostic detail level | Verbosity Policy | Concise, balanced, or explicit output |
+| **Code style** | Formatting and stylistic conventions | Style Policy | Canonical, flexible, or LLM-optimised formatting |
+| **LLM toolchain** | Schema, completion, generation, analysis | Toolchain Policy | Minimal, standard, full, or offline toolchain |
+| **Error reporting** | Error format and diagnostic structure | Error Policy | Human, structured, or LLM-formatted errors |
+| **Type inference** | Inference depth and strategy | Inference Policy | Local, function, global, or LLM-assisted inference |
 
 > **Note:** Object Representation and Error Handling will be mapped
 > to dedicated Policy types when their corresponding language concepts
 > are designed. Until then, they remain implementation-level concerns.
+> Syntax, Verbosity, Style, Toolchain, Error, and Inference Policies
+> are currently *Pending concept design* — they are registered in the
+> catalogue but await formal concept design approval.
 
 ## Strategy Profiles
 
@@ -80,6 +95,8 @@ profile optimises for a different set of constraints.
   footprint, deterministic behaviour
 - [`HIGH_PERFORMANCE_STRATEGY.md`](./HIGH_PERFORMANCE_STRATEGY.md) —
   maximum throughput, parallel hardware
+- [`LLM_STRATEGY.md`](./LLM_STRATEGY.md) — maximum LLM assistance during
+  development; all toolchain components active
 
 New profiles can be added as implementation needs arise.
 
