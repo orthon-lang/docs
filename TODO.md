@@ -21,6 +21,33 @@
 - [ ] design Metaobjects concept (`docs/what/concepts/METAOBJECTS.md`)
 - [ ] design Span / Memory View concept (`docs/what/concepts/SPAN.md`)
 
+## Milestone 2 — Anti-pattern & Declarative Design Analysis
+
+Analysis of imperative crutches (anti-patterns from Python/Java) and
+projection of conclusions onto Orthon's design. Each topic has a file in
+`docs/notes/imperative-crutch-*.md`.
+
+- [ ] research: Collections & Loops — implications for Orthon collection API
+      (`docs/notes/imperative-crutch-collections-loops.md`)
+- [ ] research: Null handling — nullable types, safe navigation, Optional
+      (`docs/notes/imperative-crutch-null-handling.md`)
+- [ ] research: Resource management — RAII / defer / context managers
+      (`docs/notes/imperative-crutch-resource-management.md`)
+- [ ] research: Collection initialization — literal syntax, immutability defaults
+      (`docs/notes/imperative-crutch-collection-init.md`)
+- [ ] research: Type checking & casting — pattern matching, structural typing
+      (`docs/notes/imperative-crutch-type-casting.md`)
+- [ ] research: Date/time API — immutable types, thread-safety, formatters
+      (`docs/notes/imperative-crutch-datetime.md`)
+- [ ] research: Lazy sequences & generators — yield, lazy pipelines
+      (`docs/notes/imperative-crutch-lazy-sequences.md`)
+- [ ] research: Multi-key sorting — tuple ordering, composable comparators
+      (`docs/notes/imperative-crutch-sorting.md`)
+- [ ] research: Metaprogramming & reflection — compile-time vs runtime
+      (`docs/notes/imperative-crutch-metaprogramming.md`)
+- [ ] research: Serialization — auto-derive, validation, format-agnostic
+      (`docs/notes/imperative-crutch-serialization.md`)
+
 ## Milestone 3 — Cross-cutting Review
 
 - [ ] investigate Interaction Matrix format and finalise (`docs/notes/interaction-matrix-format.md`)

@@ -10,6 +10,8 @@ Orthon is a **programming language design project**. This repository contains *o
 
 The language is designed using the same SOLID engineering principles it encourages in its users: a small, orthogonal core with layered abstraction, explicit semantics, and implementation-independent evolution.
 
+> **⚠ Language Rule:** All project content, code snippets, comments, commit messages, and agent reasoning MUST be in English. See §10.9 for full enforcement.
+
 ---
 
 ## 2. Documentation Framework
@@ -69,18 +71,14 @@ Convention: **one file, one coherent topic**. Do not create a file titled "Misce
 
 ## 4. Language & Style
 
-### 4.1 English Only
-
-All documentation, code snippets, comments, commit messages, and agent reasoning MUST be written in **English**. This is a non-negotiable project rule.
-
-### 4.2 Tone
+### 4.1 Tone
 
 - **Precise** over poetic. Avoid metaphor where direct language suffices.
 - **Concise** over verbose. Prefer a short sentence to a long paragraph.
 - **Authoritative** over speculative. Design documents state decisions, not opinions.
 - **Consistent** terminology (see §6 Terminology).
 
-### 4.3 Code Examples
+### 4.2 Code Examples
 
 Every code example in documentation should:
 
@@ -89,7 +87,7 @@ Every code example in documentation should:
 3. Include **all canonical forms** when documenting a feature (see the *Show All Canonical Forms* principle in `what/DESIGN_PRINCIPLES.md`).
 4. Precede semantic explanation rather than follow it.
 
-### 4.4 File Structure
+### 4.3 File Structure
 
 ```
 docs/
@@ -157,7 +155,7 @@ docs/
 └── when/                     # WHEN — roadmap, milestones
 ```
 
-### 4.5 Document Naming Conventions
+### 4.4 Document Naming Conventions
 
 All files in `docs/` follow a consistent naming pattern:
 
@@ -188,9 +186,10 @@ When assigned a task in this project, follow this protocol:
 
 ### 5.1 Orient
 
-1. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/concepts/CORE_CONCEPTS.md` and `what/concepts/DATA_MODEL.md`. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
-2. **Check cross-references.** A design decision in one document may affect documents in other layers.
-3. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
+1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
+2. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/concepts/CORE_CONCEPTS.md` and `what/concepts/DATA_MODEL.md`. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
+3. **Check cross-references.** A design decision in one document may affect documents in other layers.
+4. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 
 ### 5.2 Design
 
@@ -202,14 +201,17 @@ When assigned a task in this project, follow this protocol:
 
 ### 5.3 Gate
 
-Before finalizing any new or modified design document, verify against the `how/gates/_language-design.md` checklist. If the gate does not exist yet or is empty, propose a gate entry for the decision.
+Before finalizing any new or modified design document:
+
+1. **Verify language compliance.** Scan every string of new or modified text. If any content is not in English, translate it before proceeding.
+2. **Verify against the `how/gates/_language-design.md`** checklist. If the gate does not exist yet or is empty, propose a gate entry for the decision.
 
 ### 5.4 Write
 
 1. Place the document in the correct `docs/` location.
 2. Follow the document's existing structure and heading style.
 3. Use Markdown (`*.md`).
-4. Write in English (see §4.1).
+4. Write in English (see §10.9).
 5. Use fenced code blocks with `orthon` as the language tag for Orthon code.
 6. Use `text` for non-Orthon structural diagrams.
 7. Keep table of contents in sync if the document uses one.
@@ -328,7 +330,7 @@ Before finalizing any document or proposal, verify against this checklist. For f
 - [ ] **Explicitness:** Are semantic changes syntactically visible?
 - [ ] **EDR:** Does this decision warrant an EDR in `docs/how/decision_records/`?
 - [ ] **All canonical forms:** Are all equivalent forms documented?
-- [ ] **English:** Is all content in English?
+- [ ] **English (MANDATORY):** Scan every string of text — headings, body, code comments, captions, table cells. Is every single one in English? If any non-English text exists, this check FAILS. Do not mark pass until all text is English.
 - [ ] **Terminology:** Are project terms used consistently with [`what/GLOSSARY.md`](what/GLOSSARY.md)?
 - [ ] **Gate:** Does the decision have a gate entry if needed?
 - [ ] **EDR:** Does this decision warrant an EDR in `docs/how/decision_records/`?
@@ -356,3 +358,12 @@ Agents operating in this repository must follow these rules:
    must use the `concepts/` prefix (e.g., `concepts/CORE_CONCEPTS.md`,
    not `CORE_CONCEPTS.md`), as these files reside in a subdirectory and
    bare filenames would not resolve.
+9. **English at all times.** All documentation, code snippets, comments, commit messages,
+   agent reasoning, and any generated text MUST be written in **English**. This is a
+   non-negotiable project rule.
+
+   **Enforcement:** Before creating or modifying any file, the agent MUST confirm that
+   every string of text to be written is in English. Any content found in another
+   language must be translated before writing. This rule takes precedence over the
+   user's request language — if the user writes in another language, the agent
+   translates the response to English.
