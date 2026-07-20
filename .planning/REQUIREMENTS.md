@@ -126,30 +126,30 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PROC-01 | Phase 1 | Pending |
-| PROC-02 | Phase 1 | Pending |
-| PROC-03 | Phase 1 | Pending |
-| PROC-04 | Phase 1 | Pending |
-| VISION-01 | Phase 1 | Pending |
-| VISION-02 | Phase 1 | Pending |
-| VISION-03 | Phase 1 | Pending |
-| DEBT-01 | Phase 2 | Pending |
-| DEBT-02 | Phase 2 | Pending |
-| DEBT-03 | Phase 2 | Pending |
-| DEBT-04 | Phase 2 | Pending |
-| DEBT-05 | Phase 2 | Pending |
-| DEBT-06 | Phase 2 | Pending |
-| DEBT-07 | Phase 2 | Pending |
-| DEBT-08 | Phase 2 | Pending |
-| DEBT-09 | Phase 2 | Pending |
-| DEBT-10 | Phase 2 | Pending |
-| DEBT-11 | Phase 2 | Pending |
-| DEBT-12 | Phase 2 | Pending |
-| DEBT-13 | Phase 2 | Pending |
-| DEBT-14 | Phase 2 | Pending |
-| DEBT-15 | Phase 2 | Pending |
-| DEBT-16 | Phase 2 | Pending |
-| DEBT-17 | Phase 2 | Pending |
+| PROC-01 | Phase 2 | Pending |
+| PROC-02 | Phase 2 | Pending |
+| PROC-03 | Phase 2 | Pending |
+| PROC-04 | Phase 2 | Pending |
+| VISION-01 | Phase 2 | Pending |
+| VISION-02 | Phase 2 | Pending |
+| VISION-03 | Phase 2 | Pending |
+| DEBT-01 | Phase 1 | Pending |
+| DEBT-02 | Phase 1 | Pending |
+| DEBT-03 | Phase 1 | Pending |
+| DEBT-04 | Phase 1 | Pending |
+| DEBT-05 | Phase 1 | Pending |
+| DEBT-06 | Phase 1 | Pending |
+| DEBT-07 | Phase 1 | Pending |
+| DEBT-08 | Phase 1 | Pending |
+| DEBT-09 | Phase 1 | Pending |
+| DEBT-10 | Phase 1 | Pending |
+| DEBT-11 | Phase 1 | Pending |
+| DEBT-12 | Phase 1 | Pending |
+| DEBT-13 | Phase 1 | Pending |
+| DEBT-14 | Phase 1 | Pending |
+| DEBT-15 | Phase 1 | Pending |
+| DEBT-16 | Phase 1 | Pending |
+| DEBT-17 | Phase 1 | Pending |
 | CONCEPT-01 | Phase 3 | Pending |
 | CONCEPT-02 | Phase 3 | Pending |
 | CONCEPT-03 | Phase 3 | Pending |
@@ -190,8 +190,8 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 - Unmapped: 0
 
 **Phase summary:**
-- Phase 1 — Foundations, Process & Vision: 7 requirements (PROC-01..04, VISION-01..03)
-- Phase 2 — Concerns Remediation: 17 requirements (DEBT-01..17)
+- Phase 1 — Concerns Remediation: 17 requirements (DEBT-01..17)
+- Phase 2 — Foundations, Process & Vision: 7 requirements (PROC-01..04, VISION-01..03)
 - Phase 3 — Language Inventory, Anti-Pattern Research & Concept Design Review: 24 requirements (CONCEPT-01..13, ANTIPAT-01..11)
 - Phase 4 — Cross-Cutting Review: 1 requirement (XCUT-01)
 - Phase 5 — Freeze & Naming: 8 requirements (NAME-01, FREEZE-01..07)
