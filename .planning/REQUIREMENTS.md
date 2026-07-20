@@ -38,6 +38,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (Milestones
 
 - [ ] **VISION-01**: Manifesto, Vision, and Zen reviewed against Working Backwards rationale
 - [ ] **VISION-02**: Criteria-based algorithm selection idea validated (`docs/notes/criteria-based-algorithm-selection.md`)
+- [ ] **VISION-03**: LLM-native language research completed — produces a written shortlist of concrete concepts/ideas to strengthen Orthon's LLM-native design, feeding Phase 3's concept design and prioritization work (`docs/notes/llm-native-concept-shortlist.md`)
 
 ### Milestone 1 — Language Inventory (13 concepts)
 
@@ -131,6 +132,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | PROC-04 | Phase 1 | Pending |
 | VISION-01 | Phase 1 | Pending |
 | VISION-02 | Phase 1 | Pending |
+| VISION-03 | Phase 1 | Pending |
 | DEBT-01 | Phase 2 | Pending |
 | DEBT-02 | Phase 2 | Pending |
 | DEBT-03 | Phase 2 | Pending |
@@ -183,12 +185,12 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | FREEZE-07 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 56 total
-- Mapped to phases: 56 (100%)
+- v1 requirements: 57 total
+- Mapped to phases: 57 (100%)
 - Unmapped: 0
 
 **Phase summary:**
-- Phase 1 — Foundations, Process & Vision: 6 requirements (PROC-01..04, VISION-01..02)
+- Phase 1 — Foundations, Process & Vision: 7 requirements (PROC-01..04, VISION-01..03)
 - Phase 2 — Concerns Remediation: 17 requirements (DEBT-01..17)
 - Phase 3 — Language Inventory, Anti-Pattern Research & Concept Design Review: 24 requirements (CONCEPT-01..13, ANTIPAT-01..11)
 - Phase 4 — Cross-Cutting Review: 1 requirement (XCUT-01)
@@ -197,3 +199,4 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 ---
 *Requirements defined: 2026-07-20*
 *Last updated: 2026-07-20 — Phase 2 broadened from "critical/high-severity blockers only" to all CONCERNS.md findings; added DEBT-11..17, 56/56 requirements mapped*
+*Last updated: 2026-07-20 — Added VISION-03 (LLM-native language research → Phase 3 concept shortlist), 57/57 requirements mapped*
