@@ -72,7 +72,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260720-cw4 | Move Naming from Phase 4 into Phase 5 | 2026-07-20 | b8c9cac | [260720-cw4-move-naming-from-phase-4-into-phase-5](./quick/260720-cw4-move-naming-from-phase-4-into-phase-5/) |
-| 260720-dla | Broaden Phase 2 scope to all CONCERNS.md items, not just critical/high blockers | 2026-07-20 | (pending) | [260720-dla-phase-2-concerns-remediation-success-cri](./quick/260720-dla-phase-2-concerns-remediation-success-cri/) |
+| 260720-dla | Broaden Phase 2 scope to all CONCERNS.md items, not just critical/high blockers | 2026-07-20 | bc9c749 | [260720-dla-phase-2-concerns-remediation-success-cri](./quick/260720-dla-phase-2-concerns-remediation-success-cri/) |
 
 ## Deferred Items
 
