@@ -77,11 +77,6 @@ the LLM expresses intent through declarative constructs, modifiers,
 and standard library calls; the compiler and Implementation Strategy
 handle optimization, allocation, and execution details.
 
-```
-sort(data)              # LLM says WHAT — sort the data
-# Not: which algorithm, which memory, which comparison strategy
-```
-
 ### Explicit semantics reduce hallucination
 
 Orthon's Explicit Semantics principle means every behavior-changing
@@ -93,11 +88,10 @@ What the LLM writes is exactly what the program does.
 
 The Execution Program model dissolves the gap between "write code"
 and "run code." An LLM can produce not just source code, but a
-fully-defined Execution Program — a self-contained, reproducible
-artifact that includes runtime, dependencies, permissions, and
-target environment. The LLM does not need to know about Docker,
-containers, or deployment pipelines. The language handles the
-boundary between code and environment.
+fully-defined program — a self-contained, reproducible artifact
+that includes everything needed to execute it. The language handles
+the boundary between code and environment; the LLM focuses on
+expressing intent.
 
 ### Extensibility without language changes
 
@@ -117,101 +111,23 @@ designed for an age where those problems matter.
 
 ## Execution Program
 
-Most languages treat **source code** as the primary artifact and the
-execution environment as external infrastructure — `venv`, Docker,
-Conda, Nix, or a virtual machine bolted on after the fact.
+Orthon believes a program should be fully defined — not just its source
+code, but the context required to execute it. Language version, runtime,
+dependencies, permissions, and resource requirements are part of the
+program's definition, not external infrastructure bolted on after the
+fact.
 
-Orthon inverts this. A program becomes **fully defined** only after it
-is enriched with its required execution context.
+This extends the Principle of Explicitness from syntax to execution. A
+program that declares what it needs is reproducible by construction,
+portable across environments without modification, and debuggable
+without guessing about its surroundings.
 
-The central abstraction is the **Execution Program** — a reproducible,
-content-addressed, canonical representation of everything needed to
-execute the program.
-
-### Pipeline
-
-```
-Program
-    │
-    ▼
-Execution Descriptor (manifest of requirements)
-    │
-    ▼
-Program Enricher
-    │
-    ▼
-Execution Program
-    │
-    ▼
-Execution Engine
-    │
-    ├── Interpreter
-    ├── REPL
-    ├── Notebook Kernel
-    ├── Test Runner
-    ├── Debugger
-    ├── JIT / AOT Compiler
-    ├── OCI Builder
-    ├── MicroVM Builder
-    └── WASM Builder
-```
-
-An interpreter and an OCI builder are the same kind of thing: both
-consume an Execution Program. They differ only in *how* they execute,
-not in *what* they execute.
-
-The language knows nothing about Docker, containers, or virtual
-machines. It knows only about an **Execution Descriptor** — an explicit
-declaration of language version, runtime, dependencies, strategy,
-platform, permissions, and resources. Concrete execution technologies
-are **Execution Engines**, selected through the Implementation Strategy
-or the developer's tooling choice.
-
-This approach extends the Semantic ISA into the deployment domain:
-the same Program, enriched by the same Descriptor, produces the same
-Execution Program anywhere — a developer workstation, a CI pipeline,
-a notebook kernel, or a production orchestrator. Reproducibility,
-portability, and isolation are no longer DevOps concerns. They are
-properties of the language architecture itself.
-
-### DevOps Transformation
-
-The Execution Program model reshapes how software is delivered, not
-just how it is written.
-
-**CI/CD becomes simpler.** A single pipeline produces one artifact type
-— the Execution Program — regardless of target. No more matrix builds,
-platform-specific branches, or conditional packaging logic. CI produces
-one thing; deployment chooses the engine.
-
-**Development-to-production parity is guaranteed by construction.**
-Because the same artifact runs in every environment, the class of bugs
-caused by "it worked on my machine" disappears. The artifact you
-debugged in the interpreter is the same artifact the OCI builder
-packages for production.
-
-**Deployment becomes a configuration choice, not a rebuild.**
-Switching from interpreted development to AOT-compiled production,
-from server deployment to edge deployment, or from standalone binary
-to OCI container — all become deployment-time engine selections on
-the same artifact. No recompilation, no new CI run, no risk of
-divergence.
-
-**Observability and resource governance are part of the descriptor.**
-The Execution Descriptor declares not just dependencies but also
-permissions, resource limits, and observability contracts. The
-Execution Engine enforces them. The platform does not need to guess
-what the program needs — the program declares it explicitly.
-
-**Microservices and monoliths are packaging choices, not architectural
-commitments.** The same Execution Program can be deployed as a
-standalone binary, a container, a serverless function, or a WASM
-module — without code changes. The architecture is in the code, not
-in the deployment topology.
-
-In short: Docker containerized the *environment*. Orthon containerizes
-the *program itself* — making every execution mode a first-class
-citizen and every deployment path a configuration option.
+The language defines the contract, not the mechanism. Different
+targets — development, testing, production — may fulfill the same
+contract differently. But the program remains the same artifact,
+regardless of where or how it runs. Portability is a property of how
+the program is defined, not a configuration problem for deployment
+pipelines to solve.
 
 ## Goal
 
