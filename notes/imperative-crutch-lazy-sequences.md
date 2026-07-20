@@ -26,4 +26,4 @@ interface — too much boilerplate for a simple idea.
   artificially block.
 - Generator composition — chaining without losing laziness.
 
-**See also:** concepts `GENERATORS.md`, `EXECUTION_IMAGE.md`, `EXECUTION_PROGRAM.md`
+**See also:** concepts `GENERATORS.md`, `EXECUTION_PROGRAM.md`

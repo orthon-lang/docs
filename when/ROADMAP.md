@@ -71,7 +71,7 @@ instead of placeholders.
 - Date-stamp/freshness metadata added to all concept and architecture documents
 - Fitness functions catalogue completed in `FITNESS_FUNCTIONS.md`
 - Documentation principles expanded beyond stub
-- All 22 concept documents audited against `_concept.md` 7-section template
+- All 22 concept documents audited against `_concept.md` 8-section template
 - Repository-wide cross-reference link audit
 - Glossary maintenance workflow and versioning/change-log policy documented
 
@@ -101,7 +101,7 @@ templates, methods) in place.
 
 **Process deliverables:**
 - `docs/how/concept-design-review.md` — complete DRAFT → Accepted transition process
-- Template-compliance audit checklist for the 7-section `_concept.md` template
+- Template-compliance audit checklist for the 8-section `_concept.md` template
 - All former `TODO.md` items migrated to tracked GSD requirements
 - LLM-native concept shortlist: `docs/notes/llm-native-concept-shortlist.md`
 

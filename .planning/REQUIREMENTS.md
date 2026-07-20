@@ -2,6 +2,7 @@
 
 **Defined:** 2026-07-20
 **Core Value:** A complete, self-consistent Orthon v0.1 specification — every concept accepted (no DRAFT), core architecture specs filled in, all cross-references valid, and a final review confirming the result coheres as a real language specification.
+**Ownership:** All requirements owned by **Solo Author** unless otherwise noted.
 
 ## v1 Requirements
 
@@ -12,7 +13,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (Milestones
 - [ ] **PROC-01**: Concept acceptance gate defined — documents the DRAFT → Accepted transition (owner, criteria, EDR linkage)
 - [ ] **PROC-02**: Concept Design Review process fully documented — checklist, review criteria, and accept/defer/reject outcomes (`docs/how/concept-design-review.md`)
 - [ ] **PROC-03**: Milestone/TODO tracking model defined for solo authorship — every TODO.md item converted into a tracked GSD requirement with explicit status
-- [ ] **PROC-04**: Template-compliance process defined for the 7-section concept template (`_concept.md`) — audit checklist or equivalent
+- [ ] **PROC-04**: Template-compliance process defined for the 8-section concept template (`_concept.md`) — audit checklist or equivalent
 
 ### Concerns Remediation (CONCERNS.md blockers & tech debt)
 
@@ -26,7 +27,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (Milestones
 - [ ] **DEBT-08**: EDR numbering gap (008-009) and TDR→EDR migration rationale documented
 - [ ] **DEBT-09**: `docs/how/architecture/FITNESS_FUNCTIONS.md` filled with a full fitness-functions catalogue
 - [ ] **DEBT-10**: `docs/how/DOCUMENTATION_PRINCIPLES.md` expanded beyond the current template stub
-- [ ] **DEBT-11**: Concept-document depth audited against the `_concept.md` 7-section template across all 22 concept files; under-developed drafts (`EQUALITY.md`, `FUNCTIONS.md`, `MUTABILITY.md`, `ALLOCATION.md`, etc.) either brought to template-compliant depth or flagged with an explicit remediation plan
+- [ ] **DEBT-11**: Concept-document depth audited against the `_concept.md` 8-section template across all 22 concept files; under-developed drafts (`EQUALITY.md`, `FUNCTIONS.md`, `MUTABILITY.md`, `ALLOCATION.md`, etc.) either brought to template-compliant depth or flagged with an explicit remediation plan
 - [ ] **DEBT-12**: Ownership and target-completion metadata assigned to every tracked TODO/requirement item, replacing unowned freeform checkboxes
 - [ ] **DEBT-13**: Cross-reference / "See also" link audit performed across the repository; broken or superseded links fixed, and a link-validation approach documented for future changes
 - [ ] **DEBT-14**: Template-compliance enforcement mechanism applied — audit run against all concept documents, gap list produced (beyond the checklist itself, which is PROC-04)

@@ -1,5 +1,7 @@
 # Analogies
 
+> **Last updated:** 2026-07-20
+
 > Architectural analogies that map Orthon concepts to familiar domains.
 > Each analogy illuminates one aspect of the architecture — not as a
 > decorative comparison, but as a reasoning tool that reveals constraints,

@@ -145,7 +145,7 @@
 | 70-90 lines (complete) | 11 | ERROR_HANDLING, GENERICS, OWNERSHIP, SPAN, METAOBJECTS |
 | 150+ lines (comprehensive) | 2 | CORE_CONCEPTS (151), EXECUTION_PROGRAM (502) |
 
-**Issue:** Concept template defined in `docs/how/templates/_concept.md` specifies uniform 7-section structure, but actual documents vary wildly (13–502 lines). No clear enforcement; some concepts deeply under-developed.
+**Issue:** Concept template defined in `docs/how/templates/_concept.md` specifies uniform 8-section structure, but actual documents vary wildly (13–502 lines). No clear enforcement; some concepts deeply under-developed.
 
 **Impact:**
 - Readers expect consistent depth; some concepts seem incomplete
@@ -322,14 +322,15 @@ Out of 91 markdown files, no systematic versioning or staleness detection.
 
 ### Template Compliance Not Enforced
 
-**Condition:** Concept documents have 7-section template defined in `_concept.md`:
+**Condition:** Concept documents have 8-section template defined in `_concept.md`:
 1. **Issue (Why)**
 2. **Principles**
-3. **Model (What)**
-4. **Default Strategy**
-5. **Alternative Strategies**
-6. **Open Questions**
-7. **Decision History**
+3. **Policy Footprint**
+4. **Model (What)**
+5. **Default Strategy**
+6. **Alternative Strategies**
+7. **Open Questions**
+8. **Decision History**
 
 **Reality:** No auditable way to confirm all concepts follow this structure. No checklist, no linter rule, no review gate.
 

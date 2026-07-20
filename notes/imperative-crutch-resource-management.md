@@ -24,4 +24,4 @@ misses `close()` in case of an exception, leading to resource leaks.
   it, not just "those who know."
 - Common pattern: acquire → use → guaranteed release.
 
-**See also:** concepts `OWNERSHIP.md`, `EXECUTION_IMAGE.md`
+**See also:** concepts `OWNERSHIP.md`, `EXECUTION_PROGRAM.md`

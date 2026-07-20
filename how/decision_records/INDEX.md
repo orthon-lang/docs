@@ -26,6 +26,13 @@
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
 
+## Gap Registry
+
+| Slot | Status | Rationale |
+|------|--------|-----------|
+| EDR-008 | Skipped | TDR-007 (ADR System) and TDR-008 (TDR System) are superseded by EDR-001 (the EDR system itself). The gap preserves the original TDR numbering so anyone mapping old TDR records to EDRs can see the correspondence: TDR-007 → superseded, TDR-008 → superseded. |
+| EDR-009 | Reserved | Reserved for future use if a decision needs to occupy the TDR-009 position in the mapping. Currently unfilled. |
+
 ---
 
 ## By Category
@@ -67,4 +74,4 @@
 
 ---
 
-*Last updated: 2026-07-18*
+*Last updated: 2026-07-20*

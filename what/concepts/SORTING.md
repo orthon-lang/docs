@@ -4,8 +4,8 @@
 > It was created during Milestone 1 (Language Inventory) as exploratory work.
 > It will be formally reviewed through the Concept Design Review
 > process (Milestone 2). A concept is registered only after
-> acceptance via EDR (Architecture category).
-
+> acceptance via EDR (Architecture category).>
+> **Last updated:** 2026-07-20
 ## Issue (Why)
 
 When sorting data multiple times by different keys, should the relative order of equal elements be preserved?

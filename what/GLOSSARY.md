@@ -483,6 +483,30 @@ The four guiding aphorisms of the language:
 
 ## How to Maintain This Glossary
 
+### Trigger Conditions
+
+A new glossary entry is required when:
+- A new concept document is created in `docs/what/concepts/`
+- An existing concept introduces a domain-specific term not already in GLOSSARY.md
+- An EDR introduces new terminology or redefines an existing term
+
+### Process
+
+1. **Identify** — when creating or modifying a concept document, identify any new terms that are not yet in GLOSSARY.md
+2. **Add** — insert the term in the correct alphabetical section with a definition, source link, and "See also" links to related terms
+3. **Cross-reference** — add a link from the source document's Affected Documents checklist to GLOSSARY.md
+4. **Verify** — ensure no term has conflicting definitions across documents (a term must mean the same thing everywhere)
+
+### Review Cadence
+
+At every **phase boundary** (before starting a new phase), verify that all new terms introduced during the completed phase are registered in GLOSSARY.md. This is part of the phase completion checklist.
+
+### Consistency Check
+
+If the same term appears in multiple documents, verify that all definitions are consistent. Inconsistent definitions must be reconciled before the phase is considered complete. The Glossary is the source of truth — if a source document disagrees, the source document must be corrected.
+
+### Rules
+
 1. **Add terms proactively.** When a new concept is introduced in any design document, add it here.
 2. **Keep definitions in sync.** If a term's meaning evolves, update this file and all source documents simultaneously.
 3. **Prefer cross-references over duplication.** The Glossary defines *what* a term means; source documents explain *why and how* it matters.

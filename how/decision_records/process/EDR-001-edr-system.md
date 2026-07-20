@@ -160,6 +160,35 @@ TDR-007 (ADR System) and TDR-008 (TDR System) are superseded by this record.
 - **Change the format:** propose an amendment EDR. The base template (`_edr.md`)
   is the canonical source; all category templates inherit from it.
 
+### TDR→EDR Migration
+
+The original project used numbered TDR (Tools Decision Record) records TDR-001
+through TDR-010. With the adoption of the unified EDR system:
+
+| TDR | Title | EDR Mapping |
+|-----|-------|-------------|
+| TDR-001 | Gate System | Migrated → EDR-002 |
+| TDR-002 | Validation Methods | Migrated → EDR-003 |
+| TDR-003 | Language Design Checklist | Migrated → EDR-004 |
+| TDR-004 | Fitness Functions | Migrated → EDR-005 |
+| TDR-005 | Policies & Strategies | Migrated → EDR-006 |
+| TDR-006 | Concept Design Review | Migrated → EDR-007 |
+| TDR-007 | ADR System | Superseded → EDR-001 (the EDR system itself) |
+| TDR-008 | TDR System | Superseded → EDR-001 (folded into unified system) |
+| TDR-009 | Layered Architecture | Migrated → EDR-010 |
+| TDR-010 | Process Inventory | Migrated → EDR-011 |
+
+**Why TDRs were abandoned:** The dual ADR+TDR system created an artificial
+boundary between "architecture" and "tools" decisions. In practice, engineering
+decisions span many dimensions (Quality, Security, Data, AI, etc.). The EDR
+system unifies all categories under a single sequential numbering scheme with
+a master INDEX.md.
+
+**How the mapping works:** TDR-NNN maps to EDR-NNN where a direct correspondence
+exists. TDR-007 and TDR-008 were not migrated because the EDR system (EDR-001)
+supersedes both — they do not have their own EDR slot. The gap at EDR-008/009
+preserves the original TDR numbering for cross-reference purposes.
+
 ### Compliance
 
 - Every new consequential engineering decision must be recorded as an EDR.

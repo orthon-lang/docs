@@ -1,5 +1,7 @@
 # Architecture
 
+> **Last updated:** 2026-07-20
+
 > Orthon is a programming language designed using the same engineering
 > principles it encourages developers to use when building software.
 > The language architecture follows the same principles — SOLID, separation

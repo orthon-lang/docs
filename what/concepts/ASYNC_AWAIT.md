@@ -5,6 +5,8 @@
 > It will be formally reviewed through the Concept Design Review
 > process (Milestone 2). A concept is registered only after
 > acceptance via EDR (Architecture category).
+>
+> **Last updated:** 2026-07-20
 
 ## Issue (Why)
 
