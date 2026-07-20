@@ -45,15 +45,19 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 ### Phase 2: Concerns Remediation
-**Goal**: The critical and high-severity blockers identified in CONCERNS.md — empty architecture specs and accumulated tech debt — are resolved, so later architecture-dependent work (Freeze, and any concept design that references parsing/type/name-resolution behavior) rests on real content instead of placeholders.
+**Goal**: Every finding in CONCERNS.md — not only the critical and high-severity blockers, but every tech-debt, governance, and maintenance item on its Summary Table — is resolved or has an explicit, documented remediation, so later architecture-dependent work (Freeze, and any concept design that references parsing/type/name-resolution behavior) rests on real content instead of placeholders, and no unresolved concern is silently carried past this phase.
 **Depends on**: Phase 1
-**Requirements**: DEBT-01, DEBT-02, DEBT-03, DEBT-04, DEBT-05, DEBT-06, DEBT-07, DEBT-08, DEBT-09, DEBT-10
+**Requirements**: DEBT-01, DEBT-02, DEBT-03, DEBT-04, DEBT-05, DEBT-06, DEBT-07, DEBT-08, DEBT-09, DEBT-10, DEBT-11, DEBT-12, DEBT-13, DEBT-14, DEBT-15, DEBT-16, DEBT-17
 **Success Criteria** (what must be TRUE):
   1. `docs/how/architecture/IR.md`, `PARSER.md`, `TYPE_SYSTEM.md`, and `NAME_RESOLUTION.md` are each filled with a real design (intermediate representation format, parsing/grammar strategy, type inference/checking rules, and scoping/symbol-resolution rules respectively) — none remain at 0 lines.
   2. `docs/how/templates/_adr.md` is archived or removed, and no live document references it as the current template.
   3. Zero references to the superseded `EXECUTION_IMAGE.md` remain in active documents (e.g., `docs/notes/imperative-crutch-lazy-sequences.md`, `imperative-crutch-resource-management.md`); all such cross-references point to `EXECUTION_PROGRAM.md`, and `EXECUTION_IMAGE.md` itself is archived.
   4. Concept and architecture documents carry date-stamp/freshness metadata (e.g., a `last_updated` field), addressing the "only 2 files have date stamps" finding.
   5. The EDR-008/009 numbering gap and TDR→EDR migration are documented in `how/decision_records/INDEX.md` (or EDR-001); `docs/how/architecture/FITNESS_FUNCTIONS.md` contains a full fitness-functions catalogue (not just 2 examples); `docs/how/DOCUMENTATION_PRINCIPLES.md` is expanded beyond its current template stub.
+  6. All 22 concept documents have been audited against the `_concept.md` 7-section template; the under-developed 25-35 line drafts (`EQUALITY.md`, `FUNCTIONS.md`, `MUTABILITY.md`, `ALLOCATION.md`) are either brought to compliant depth or carry an explicit, tracked remediation plan, and the audit results (a produced gap list) demonstrate the template-compliance enforcement mechanism is actually applied, not just defined.
+  7. Every tracked TODO/requirement item has an assigned owner and target-completion metadata, replacing unowned freeform checkboxes — resolving the "unclear milestone ownership" finding.
+  8. A repository-wide cross-reference / "See also" link audit has been performed, all broken or superseded links found are fixed, and a link-validation approach for future changes is documented.
+  9. A glossary maintenance workflow (how/when new terms get registered in `GLOSSARY.md`) and a versioning/change-log policy for large monolithic documents (`EXECUTION_PROGRAM.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, `DESIGN_PRINCIPLES.md`, `AGENTS.md`) are both documented, and a documentation growth / information-architecture plan exists for scaling `what/concepts/` and future stdlib/tooling directories.
 **Plans**: TBD
 
 ### Phase 3: Language Inventory, Anti-Pattern Research & Concept Design Review

@@ -26,6 +26,13 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (Milestones
 - [ ] **DEBT-08**: EDR numbering gap (008-009) and TDR→EDR migration rationale documented
 - [ ] **DEBT-09**: `docs/how/architecture/FITNESS_FUNCTIONS.md` filled with a full fitness-functions catalogue
 - [ ] **DEBT-10**: `docs/how/DOCUMENTATION_PRINCIPLES.md` expanded beyond the current template stub
+- [ ] **DEBT-11**: Concept-document depth audited against the `_concept.md` 7-section template across all 22 concept files; under-developed drafts (`EQUALITY.md`, `FUNCTIONS.md`, `MUTABILITY.md`, `ALLOCATION.md`, etc.) either brought to template-compliant depth or flagged with an explicit remediation plan
+- [ ] **DEBT-12**: Ownership and target-completion metadata assigned to every tracked TODO/requirement item, replacing unowned freeform checkboxes
+- [ ] **DEBT-13**: Cross-reference / "See also" link audit performed across the repository; broken or superseded links fixed, and a link-validation approach documented for future changes
+- [ ] **DEBT-14**: Template-compliance enforcement mechanism applied — audit run against all concept documents, gap list produced (beyond the checklist itself, which is PROC-04)
+- [ ] **DEBT-15**: Glossary maintenance workflow documented — process for registering new terms in `GLOSSARY.md` when concepts are created or updated
+- [ ] **DEBT-16**: Versioning / change-log policy documented for large monolithic documents (`EXECUTION_PROGRAM.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, `DESIGN_PRINCIPLES.md`, `AGENTS.md`)
+- [ ] **DEBT-17**: Documentation growth / information-architecture plan documented for scaling `what/concepts/` and future stdlib/tooling directories
 
 ### Milestone 0 — Vision
 
@@ -134,6 +141,13 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | DEBT-08 | Phase 2 | Pending |
 | DEBT-09 | Phase 2 | Pending |
 | DEBT-10 | Phase 2 | Pending |
+| DEBT-11 | Phase 2 | Pending |
+| DEBT-12 | Phase 2 | Pending |
+| DEBT-13 | Phase 2 | Pending |
+| DEBT-14 | Phase 2 | Pending |
+| DEBT-15 | Phase 2 | Pending |
+| DEBT-16 | Phase 2 | Pending |
+| DEBT-17 | Phase 2 | Pending |
 | CONCEPT-01 | Phase 3 | Pending |
 | CONCEPT-02 | Phase 3 | Pending |
 | CONCEPT-03 | Phase 3 | Pending |
@@ -169,17 +183,17 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | FREEZE-07 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 49 total
-- Mapped to phases: 49 (100%)
+- v1 requirements: 56 total
+- Mapped to phases: 56 (100%)
 - Unmapped: 0
 
 **Phase summary:**
 - Phase 1 — Foundations, Process & Vision: 6 requirements (PROC-01..04, VISION-01..02)
-- Phase 2 — Concerns Remediation: 10 requirements (DEBT-01..10)
+- Phase 2 — Concerns Remediation: 17 requirements (DEBT-01..17)
 - Phase 3 — Language Inventory, Anti-Pattern Research & Concept Design Review: 24 requirements (CONCEPT-01..13, ANTIPAT-01..11)
 - Phase 4 — Cross-Cutting Review: 1 requirement (XCUT-01)
 - Phase 5 — Freeze & Naming: 8 requirements (NAME-01, FREEZE-01..07)
 
 ---
 *Requirements defined: 2026-07-20*
-*Last updated: 2026-07-20 after roadmap creation — traceability populated, 49/49 requirements mapped*
+*Last updated: 2026-07-20 — Phase 2 broadened from "critical/high-severity blockers only" to all CONCERNS.md findings; added DEBT-11..17, 56/56 requirements mapped*
