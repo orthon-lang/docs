@@ -56,6 +56,34 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 
 - [ ] verify whether the name «Orthon» fits the language being developed, or whether a more suitable name should be chosen
 
+## Milestone 7 — Freeze
+
+- [ ] resolve or defer all validation issues with documented rationale
+- [ ] verify specification is self-consistent and complete
+- [ ] tag version (e.g., Orthon 0.1 Specification)
+- [ ] draft whitepaper(s) — revisit `docs/notes/whitepaper-strategy.md` and commission whitepapers
+- [ ] define launch / announcement strategy (audience, channels, timing)
+
+## Milestone 8 — Standard Library & FFI (post-Freeze)
+
+- [ ] design standard library architecture — collections, I/O, formatting
+- [ ] design FFI & interoperability — C ABI, embedding API
+- [ ] implement LLM Toolchain — Schema Provider, Code Completer, Code Generator, Static Analyser
+- [ ] write standard library whitepaper if stdlib design introduces novel concepts
+
+## Milestone 9 — Build System & Tooling (post-Freeze)
+
+- [ ] design build system & package manager
+- [ ] design developer tooling — formatter, linter, LSP (Language Server Protocol)
+- [ ] evaluate whether build system whitepaper would benefit early adopters
+
+## Milestone 10 — Implementation (separate repo)
+
+- [ ] spin up compiler implementation repository
+- [ ] implement core compiler
+- [ ] implement runtime library
+- [ ] publish launch whitepaper(s) alongside initial release
+
 ## Orthon for LLM
 
 - [x] design: LLM_GENERABILITY_GATE — 7th gate for Decision Validation

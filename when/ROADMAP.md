@@ -268,7 +268,10 @@ issues resolved, consistency confirmed).
 - Specification is self-consistent and complete
 - Version is tagged (e.g., Orthon 0.1 Specification)
 
-**Deliverable:** Frozen specification — `SPEC.md` at release tag.
+**Deliverables:**
+- Frozen specification — `SPEC.md` at release tag.
+- `docs/notes/whitepaper-strategy.md` — whitepaper plan finalised;
+  candidate topics, target audiences, and publication timeline defined.
 
 **Dependencies:** Milestone 6 (all validation feedback incorporated).
 
@@ -311,6 +314,7 @@ language specification).
 |---|------|-------------|
 | 10.1 | Compiler | Compiler implementation |
 | 10.2 | Runtime | Runtime library |
+| 10.3 | Whitepapers | Publish launch whitepaper(s) alongside initial release |
 
 **Dependencies:** Milestones 0–9 (implementation should not begin until
 the language is sufficiently specified and tooling is designed).
@@ -327,6 +331,7 @@ milestone.
 |----------|---------|
 | `ARCHITECTURE.md` | Layered architecture definition |
 | `FITNESS_FUNCTIONS.md` | Architectural fitness functions — measurable checks guarding against design decay |
+| `whitepaper-strategy.md` (notes) | Whitepaper publication plan — timing, topics, and audience per milestone |
 | `IMPLEMENTATION_STRATEGIES.md` | Strategy model: Default, Embedded, High-Performance |
 | `DEFAULT_STRATEGY.md` | Default implementation strategy profile |
 | `EMBEDDED_STRATEGY.md` | Embedded implementation strategy profile |
