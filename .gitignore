@@ -25,5 +25,6 @@ __pycache__/
 
 # Planning / AI artifacts (local working state, not part of the design)
 .claude/
-.planning/
-notes/
+
+# .planning/
+# notes/
