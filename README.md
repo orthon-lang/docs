@@ -6,10 +6,11 @@ orthogonal core, explicit semantics, and implementation-independent
 evolution.
 
 At its architectural heart is the **Execution Program / Execution Engine**
-separation — a paradigm shift on par with Docker's decoupling of
-applications from operating systems. Docker made the *environment*
-portable; Orthon makes the *program's semantic meaning* portable,
-decoupling it from the execution strategy entirely.
+separation. Docker decoupled applications from operating systems, making
+the *environment* portable. Orthon applies a similar decoupling — separating
+a program's semantic meaning from its execution strategy, so the same
+program can be interpreted, compiled, containerized, or deployed to WASM
+without modification.
 
 Interpreters, AOT compilers, OCI builders, and WASM builders are all
 equal citizens consuming the same intermediate artifact. You write
@@ -19,9 +20,9 @@ deployment time: interpretation in development, AOT compilation in
 production, OCI packaging for delivery, WASM for the edge — all from
 the same artifact, without rebuilding.
 
-This is not just a new way to compile programs. It redefines how
-software is built, shipped, and operated — collapsing the boundary
-between development and DevOps.
+This collapses the traditional boundary between development and
+deployment: the artifact you debug in an interpreter is the same
+artifact an OCI builder packages for production.
 
 Every consequential design choice is recorded as an **Engineering Decision
 Record (EDR)** — documented with context, rationale, and alternatives
