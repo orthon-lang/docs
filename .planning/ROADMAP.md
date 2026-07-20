@@ -62,14 +62,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 ### Phase 3: Language Inventory, Anti-Pattern Research & Concept Design Review
-**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches and Phase 1's LLM-native concept shortlist (`docs/notes/llm-native-concept-shortlist.md`) — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/what/concepts/`.
+**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches and Phase 2's LLM-native concept shortlist (`docs/notes/llm-native-concept-shortlist.md`) — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/what/concepts/`.
 **Depends on**: Phase 2 (requires the acceptance gate and review process from PROC-01/02)
 **Requirements**: CONCEPT-01, CONCEPT-02, CONCEPT-03, CONCEPT-04, CONCEPT-05, CONCEPT-06, CONCEPT-07, CONCEPT-08, CONCEPT-09, CONCEPT-10, CONCEPT-11, CONCEPT-12, CONCEPT-13, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10, ANTIPAT-11
 **Success Criteria** (what must be TRUE):
   1. All 13 concept documents in scope (`PATTERN_MATCHING.md`, `ERROR_HANDLING.md`, `OWNERSHIP.md`, `GENERICS.md`, `ASYNC_AWAIT.md`, `OBJECT_INITIALIZATION.md`, `CONCURRENCY.md`, `LITERATE_PROGRAMMING.md`, `SORTING.md`, `UNPACKING.md`, `GENERATORS.md`, `METAOBJECTS.md`, `SPAN.md`) contain real content in all 7 template sections (Issue, Principles, Model, Default Strategy, Alternative Strategies, Open Questions, Decision History) — none remain thin stubs.
   2. All 10 `docs/notes/imperative-crutch-*.md` research topics are completed with documented findings and explicit implications for Orthon's concept designs, and those implications are reflected in the relevant concept documents (e.g., sorting research reflected in `SORTING.md`, null-handling research reflected in `ERROR_HANDLING.md` / `CORE_CONCEPTS.md`).
   3. Zero `⚠️ DRAFT` headers remain across all 22 files in `docs/what/concepts/`; every file has an explicit Accepted, Deferred, or Rejected status.
-  4. Every Accepted concept has a corresponding EDR in `how/decision_records/architecture/` recording the acceptance rationale, satisfying the Concept Design Review gate defined in Phase 1.
+  4. Every Accepted concept has a corresponding EDR in `how/decision_records/architecture/` recording the acceptance rationale, satisfying the Concept Design Review gate defined in Phase 2.
 **Plans**: TBD
 
 ### Phase 4: Cross-Cutting Review
