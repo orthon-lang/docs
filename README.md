@@ -1,23 +1,22 @@
 # Orthon
 
-**Orthon** is a programming language designed using the same engineering
-principles it encourages in its users — SOLID architecture, a small
-orthogonal core, explicit semantics, and implementation-independent
-evolution.
+**Orthon** is an LLM-native programming language that applies the principles
+of software engineering to the design of the language itself: a small
+orthogonal core, explicit semantics, and a strict separation between
+**what a program means** and **how it is realized**.
 
-At its architectural heart is the **Execution Program / Execution Engine**
-separation. Docker decoupled applications from operating systems, making
-the *environment* portable. Orthon applies a similar decoupling — separating
+A program is a platform-independent semantic artifact. Execution —
+interpretation, compilation, containerization — is an interchangeable
+implementation detail, making portability, reproducibility, and delivery
+language-level properties rather than pipeline problems. This decoupling
+is realized through the **Execution Program / Execution Engine** separation:
+Docker decoupled applications from operating systems, making the
+*environment* portable; Orthon applies a similar decoupling — separating
 a program's semantic meaning from its execution strategy, so the same
-program can be interpreted, compiled, containerized, or deployed to WASM
-without modification.
+program can be interpreted, compiled, or containerized without modification.
 
-Interpreters, AOT compilers, OCI builders, and WASM builders are all
-equal citizens consuming the same intermediate artifact. You write
-Orthon once and produce a single **Execution Program** — an executable
-program environment, not a binary. You choose the execution mode at
-deployment time: interpretation in development, AOT compilation in
-production, OCI packaging for delivery, WASM for the edge — all from
+You write Orthon once and produce a single **Execution Program** — an executable program environment, not a binary. You choose the execution mode at deployment time: interpretation in development, AOT compilation 
+in production, OCI packaging for delivery, WASM for the edge — all from
 the same artifact, without rebuilding.
 
 This collapses the traditional boundary between development and

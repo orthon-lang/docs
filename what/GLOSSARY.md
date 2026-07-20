@@ -465,6 +465,22 @@ Equivalent concepts should be expressed in equivalent ways. Once a user learns a
 
 ---
 
+## W
+
+### WASM (WebAssembly)
+
+A binary instruction format for stack-based virtual machines, designed
+as a portable compilation target. In Orthon, WASM is one of several
+execution targets — alongside interpreters, AOT compilers, and OCI
+builders — that consumes the same Execution Program artifact without
+modification, following the Execution Program / Execution Engine
+separation.
+
+- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Engine, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
+- **See also:** [Execution Engine](#execution-engine), [Execution Program](#execution-program)
+
+---
+
 ## Z
 
 ### Zen of Orthon
