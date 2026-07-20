@@ -144,7 +144,6 @@ docs/
 │   │   ├── knowledge/        #   Knowledge-category EDRs
 │   │   ├── collaboration/    #   Collaboration-category EDRs
 │   │   └── product/          #   Product-category EDRs
-│   ├── tdr/                  #   Superseded TDR records
 │   ├── gates/
 │   │   ├── DECISION_VALIDATION.md
 │   │   └── _language-design.md
