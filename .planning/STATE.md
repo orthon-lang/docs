@@ -23,7 +23,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 1 of 5 (Foundations, Process & Vision)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-07-20 — Roadmap created from REQUIREMENTS.md; 49/49 v1 requirements mapped across 5 phases
+Last activity: 2026-07-20 - Completed quick task 260720-cw4: Move Naming from Phase 4 into Phase 5
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -66,6 +66,12 @@ None yet.
 - Phase 1 must complete before Phase 3 can run the Concept Design Review gate (ANTIPAT-11) — PROC-01/02 define the acceptance criteria that review depends on.
 - Phase 2's DEBT-01..04 (IR/Parser/TypeSystem/NameResolution specs) must land before Phase 5 (Freeze) validates architectural completeness — see CONCERNS.md "Empty Placeholder Files" (Critical severity).
 - 18 of 22 concept documents are currently DRAFT with no prior acceptance process — Phase 3 carries the bulk of the project's content-authoring work (24 of 49 requirements).
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260720-cw4 | Move Naming from Phase 4 into Phase 5 | 2026-07-20 | b8c9cac | [260720-cw4-move-naming-from-phase-4-into-phase-5](./quick/260720-cw4-move-naming-from-phase-4-into-phase-5/) |
 
 ## Deferred Items
 
