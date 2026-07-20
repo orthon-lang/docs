@@ -159,7 +159,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | ANTIPAT-10 | Phase 3 | Pending |
 | ANTIPAT-11 | Phase 3 | Pending |
 | XCUT-01 | Phase 4 | Pending |
-| NAME-01 | Phase 4 | Pending |
+| NAME-01 | Phase 5 | Pending |
 | FREEZE-01 | Phase 5 | Pending |
 | FREEZE-02 | Phase 5 | Pending |
 | FREEZE-03 | Phase 5 | Pending |
@@ -177,8 +177,8 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 - Phase 1 — Foundations, Process & Vision: 6 requirements (PROC-01..04, VISION-01..02)
 - Phase 2 — Concerns Remediation: 10 requirements (DEBT-01..10)
 - Phase 3 — Language Inventory, Anti-Pattern Research & Concept Design Review: 24 requirements (CONCEPT-01..13, ANTIPAT-01..11)
-- Phase 4 — Cross-Cutting Review & Naming: 2 requirements (XCUT-01, NAME-01)
-- Phase 5 — Freeze: 7 requirements (FREEZE-01..07)
+- Phase 4 — Cross-Cutting Review: 1 requirement (XCUT-01)
+- Phase 5 — Freeze & Naming: 8 requirements (NAME-01, FREEZE-01..07)
 
 ---
 *Requirements defined: 2026-07-20*
