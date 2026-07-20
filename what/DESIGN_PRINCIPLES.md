@@ -1,5 +1,12 @@
 # Language Design Principles
 
+These design principles serve the project's goals defined in
+[`GOALS.md`](../why/GOALS.md). Each principle exists to advance one or
+more of those goals. When a principle is ambiguous or conflicts with
+another, the resolution is guided by the goals it serves.
+
+---
+
 ```
 Core Philosophy
 ├── Data First

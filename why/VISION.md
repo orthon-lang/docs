@@ -129,7 +129,17 @@ regardless of where or how it runs. Portability is a property of how
 the program is defined, not a configuration problem for deployment
 pipelines to solve.
 
-## Goal
+## Goals
 
-Keep the language stable for decades while allowing implementations
-to continuously improve without breaking existing programs.
+The vision above defines six concrete goals, documented in
+[`GOALS.md`](GOALS.md) with criteria and non-goals:
+
+1. **Architectural Integrity** — the language itself is a SOLID system.
+2. **Inherited Wisdom** — keep Python/Java's strengths, fix their flaws.
+3. **Comfortable by Construction** — reading is easier than writing;
+   Principle of Least Astonishment.
+4. **LLM Readiness** — the same properties that help humans help LLMs.
+5. **Execution Integrity** — programs are fully-defined, portable
+   artifacts.
+6. **Long-term Stability** — stable for decades; implementations
+   improve without breaking existing programs.

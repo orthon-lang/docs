@@ -50,6 +50,7 @@ This repository contains the language design documentation — the *why*,
 |---|---|
 | [Manifesto](why/MANIFESTO.md) | The core beliefs Orthon is built on |
 | [Vision](why/VISION.md) | The five pillars — architectural design, human-centric comfort, LLM era readiness, the Execution Program model, and its DevOps transformation |
+| [Goals](why/GOALS.md) | Concrete aims derived from the vision — what Orthon aims to achieve and what it explicitly does not |
 | [Working Backwards](why/WORKING_BACKWARDS.md) | Why Orthon exists — derived from the programmer's perspective |
 | [Design Philosophy](how/PHILOSOPHY.md) | How design decisions flow from vision to implementation |
 | [Architecture](how/architecture/ARCHITECTURE.md) | The layered design — Language Core, Execution Environment, LLM Toolchain |

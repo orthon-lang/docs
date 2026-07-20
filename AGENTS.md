@@ -20,7 +20,7 @@ All documentation follows the **Why → How → What** (Golden Circle) framework
 
 | Layer | Question | Documents |
 |-------|----------|-----------|
-| **Why** | Why does Orthon exist? What do we believe? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md` |
+| **Why** | Why does Orthon exist? What do we believe? What are we trying to achieve? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md` |
 | **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
 | **What** | What is Orthon concretely? | `what/concepts/CORE_CONCEPTS.md`, `what/concepts/DATA_MODEL.md`, future syntax and type specs |
 
@@ -33,6 +33,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | File | Layer | Purpose |
 |------|-------|---------|
 | `why/VISION.md` | Why | Core philosophy, inspiration from Python/Java, Principle of Least Astonishment, orthogonality |
+| `why/GOALS.md` | Why | Concrete aims derived from the vision — six goals with criteria and non-goals |
 | `why/MANIFESTO.md` | Why | Explicit principles — consistency over legacy, minimal core, composition over exceptions |
 | `why/ZEN.md` | Why | Aphorisms capturing the language's spirit |
 | `what/DESIGN_PRINCIPLES.md` | How | Orthogonality, simplicity, explicitness, consistency, execution model principles |
@@ -96,6 +97,7 @@ docs/
 ├── LICENSE
 ├── why/                      # WHY — purpose, vision, philosophy
 │   ├── VISION.md
+│   ├── GOALS.md
 │   ├── MANIFESTO.md
 │   └── ZEN.md
 ├── what/                     # WHAT — language design & reference

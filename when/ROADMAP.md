@@ -57,7 +57,7 @@ and the process infrastructure for making design decisions.
 
 | Area | Deliverables | Status |
 |------|-------------|--------|
-| **Vision & Philosophy** | `VISION.md`, `MANIFESTO.md`, `ZEN.md` | 🔄 In Progress |
+| **Vision & Philosophy** | `VISION.md`, `MANIFESTO.md`, `ZEN.md`, [`GOALS.md`](../why/GOALS.md) | 🔄 In Progress |
 | **Design Method** | `WORKING_BACKWARDS.md` | 🔄 In Progress |
 | **Design Principles** | `DESIGN_PRINCIPLES.md` | 🔄 In Progress |
 -| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
@@ -65,7 +65,7 @@ and the process infrastructure for making design decisions.
 | **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template | 🔄 In Progress |
 | **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy | 🔄 In Progress |
 
-**Exit criteria:** Vision, Goals, Non-goals, Target Audience, Use Cases,
+**Exit criteria:** [Vision](../why/VISION.md), [Goals](../why/GOALS.md), Non-goals, Target Audience, Use Cases,
 and Design Principles are documented and agreed. Decision-making
 infrastructure (gates, templates, methods) is in place.
 
