@@ -35,13 +35,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### Phase 1: Foundations, Process & Vision
 **Goal**: A documented, self-imposed process exists for accepting concepts and tracking work, and the foundational Why-layer documents have been critically reviewed — so that Milestone 1-2 content work (Phase 3) has a defined gate to pass through instead of stalling on undefined process, per CONCERNS.md's "No Acceptance Gate for DRAFT Concepts" and "Concept Design Review Process Undefined" findings.
 **Depends on**: Nothing (first phase)
-**Requirements**: PROC-01, PROC-02, PROC-03, PROC-04, VISION-01, VISION-02
+**Requirements**: PROC-01, PROC-02, PROC-03, PROC-04, VISION-01, VISION-02, VISION-03
 **Success Criteria** (what must be TRUE):
   1. `docs/how/concept-design-review.md` documents a complete DRAFT → Accepted transition process — owner, acceptance criteria, and EDR linkage — and is no longer a stub.
   2. Every line item from the former `TODO.md` milestone breakdown (Milestones 0-7) is represented as a tracked GSD requirement with an explicit status, replacing freeform TODO checkboxes as the tracking model for solo authorship.
   3. A template-compliance audit checklist for the 7-section `_concept.md` template exists and is referenced from the Concept Design Review process doc, so Phase 3's review gate has a concrete checklist to apply.
   4. `why/MANIFESTO.md`, `why/VISION.md`, and `why/ZEN.md` each show evidence of review against `why/WORKING_BACKWARDS.md` rationale (a review note, EDR, or committed edits resulting from the review).
   5. `docs/notes/criteria-based-algorithm-selection.md` carries an explicit validation verdict (accepted / revised / rejected) rather than remaining an open research question.
+  6. A dedicated research pass into what makes a programming language LLM-native/LLM-generable — informed by `why/VISION.md`'s "Designed for the LLM Era" pillar, the LLM Generability Gate (`how/gates/_language-design.md`, `how/decision_records/architecture/EDR-011-llm-generability-gate.md`), and the existing `docs/notes/llm-generability-gate.md` / `docs/notes/language-llm-comparison.md` analyses — produces a written shortlist of concrete candidate concepts, design patterns, or process refinements worth exploring to strengthen Orthon's LLM-native design, at `docs/notes/llm-native-concept-shortlist.md`. This shortlist is a direct input to Phase 3's concept design and prioritization work across the 13 outstanding language concepts (CONCEPT-01..13).
 **Plans**: TBD
 
 ### Phase 2: Concerns Remediation
@@ -61,7 +62,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 ### Phase 3: Language Inventory, Anti-Pattern Research & Concept Design Review
-**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/what/concepts/`.
+**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches and Phase 1's LLM-native concept shortlist (`docs/notes/llm-native-concept-shortlist.md`) — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/what/concepts/`.
 **Depends on**: Phase 1 (requires the acceptance gate and review process from PROC-01/02)
 **Requirements**: CONCEPT-01, CONCEPT-02, CONCEPT-03, CONCEPT-04, CONCEPT-05, CONCEPT-06, CONCEPT-07, CONCEPT-08, CONCEPT-09, CONCEPT-10, CONCEPT-11, CONCEPT-12, CONCEPT-13, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10, ANTIPAT-11
 **Success Criteria** (what must be TRUE):
