@@ -116,13 +116,70 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 
 ## Traceability
 
-To be populated during roadmap creation (`/gsd-new-project` roadmap step).
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| PROC-01 | Phase 1 | Pending |
+| PROC-02 | Phase 1 | Pending |
+| PROC-03 | Phase 1 | Pending |
+| PROC-04 | Phase 1 | Pending |
+| VISION-01 | Phase 1 | Pending |
+| VISION-02 | Phase 1 | Pending |
+| DEBT-01 | Phase 2 | Pending |
+| DEBT-02 | Phase 2 | Pending |
+| DEBT-03 | Phase 2 | Pending |
+| DEBT-04 | Phase 2 | Pending |
+| DEBT-05 | Phase 2 | Pending |
+| DEBT-06 | Phase 2 | Pending |
+| DEBT-07 | Phase 2 | Pending |
+| DEBT-08 | Phase 2 | Pending |
+| DEBT-09 | Phase 2 | Pending |
+| DEBT-10 | Phase 2 | Pending |
+| CONCEPT-01 | Phase 3 | Pending |
+| CONCEPT-02 | Phase 3 | Pending |
+| CONCEPT-03 | Phase 3 | Pending |
+| CONCEPT-04 | Phase 3 | Pending |
+| CONCEPT-05 | Phase 3 | Pending |
+| CONCEPT-06 | Phase 3 | Pending |
+| CONCEPT-07 | Phase 3 | Pending |
+| CONCEPT-08 | Phase 3 | Pending |
+| CONCEPT-09 | Phase 3 | Pending |
+| CONCEPT-10 | Phase 3 | Pending |
+| CONCEPT-11 | Phase 3 | Pending |
+| CONCEPT-12 | Phase 3 | Pending |
+| CONCEPT-13 | Phase 3 | Pending |
+| ANTIPAT-01 | Phase 3 | Pending |
+| ANTIPAT-02 | Phase 3 | Pending |
+| ANTIPAT-03 | Phase 3 | Pending |
+| ANTIPAT-04 | Phase 3 | Pending |
+| ANTIPAT-05 | Phase 3 | Pending |
+| ANTIPAT-06 | Phase 3 | Pending |
+| ANTIPAT-07 | Phase 3 | Pending |
+| ANTIPAT-08 | Phase 3 | Pending |
+| ANTIPAT-09 | Phase 3 | Pending |
+| ANTIPAT-10 | Phase 3 | Pending |
+| ANTIPAT-11 | Phase 3 | Pending |
+| XCUT-01 | Phase 4 | Pending |
+| NAME-01 | Phase 4 | Pending |
+| FREEZE-01 | Phase 5 | Pending |
+| FREEZE-02 | Phase 5 | Pending |
+| FREEZE-03 | Phase 5 | Pending |
+| FREEZE-04 | Phase 5 | Pending |
+| FREEZE-05 | Phase 5 | Pending |
+| FREEZE-06 | Phase 5 | Pending |
+| FREEZE-07 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 49 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 49 ⚠️ (expected until roadmap phase runs)
+- Mapped to phases: 49 (100%)
+- Unmapped: 0
+
+**Phase summary:**
+- Phase 1 — Foundations, Process & Vision: 6 requirements (PROC-01..04, VISION-01..02)
+- Phase 2 — Concerns Remediation: 10 requirements (DEBT-01..10)
+- Phase 3 — Language Inventory, Anti-Pattern Research & Concept Design Review: 24 requirements (CONCEPT-01..13, ANTIPAT-01..11)
+- Phase 4 — Cross-Cutting Review & Naming: 2 requirements (XCUT-01, NAME-01)
+- Phase 5 — Freeze: 7 requirements (FREEZE-01..07)
 
 ---
 *Requirements defined: 2026-07-20*
-*Last updated: 2026-07-20 after initial definition*
+*Last updated: 2026-07-20 after roadmap creation — traceability populated, 49/49 requirements mapped*
