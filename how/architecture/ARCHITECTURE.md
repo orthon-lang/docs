@@ -22,13 +22,18 @@ Orthon is structured as a layered architecture with a clear separation
 between language definition and implementation.
 
 ``` mermaid
-flowchart TD
-    UC["User code"]
+flowchart LR
+    subgraph UC["User code"]
+    end
 
     subgraph LANG["Language"]
         CL["Core Language"]
         SX["Syntax"]
         SL["Standard Library"]
+    end
+
+    subgraph LLM["LLM Toolchain"]
+        LLM_LBL["Schema · Completion ·<br/>Generation · Analysis"]
     end
 
     subgraph STRAT["Implementation Strategy"]
@@ -42,17 +47,19 @@ flowchart TD
         P["Platform"]
     end
 
-    subgraph LLM["LLM Toolchain"]
-        LLM_LBL["Schema · Completion ·<br/>Generation · Analysis"]
-    end
+    LANG ~~~ LLM
 
     UC --> LANG
+    UC -.-> LLM
     LANG --> STRAT
     STRAT --> EXEC
     LANG -.-> LLM
     STRAT -.-> LLM
     EXEC -.-> LLM
     LLM -.-> UC
+
+    UC ~~~ STRAT
+    UC ~~~ EXEC
 ```
 
 ## Layers
@@ -158,23 +165,26 @@ This is a different axis from the implementation stack (Language →
 Strategy → Execution). The pyramid describes the *semantic composition
 hierarchy* within the Language Layer itself.
 
-```
-Applications
-    │         ▲
-    ▼         │
-Frameworks ──┘
-    │         ▲
-    ▼         │
-Standard Library ──┘
-    │              ▲
-    ▼              │
-Language Patterns ──┘
-    │              ▲
-    ▼              │
-Primitive Operations ──┘
-    │                   ▲
-    ▼                   │
-Data Model ─────────────┘
+``` mermaid
+flowchart TD
+    APP["Applications"]
+    FW["Frameworks"]
+    SL["Standard Library"]
+    LP["Language Patterns"]
+    PO["Primitive Operations"]
+    DM["Data Model"]
+
+    APP -->|depends on| FW
+    FW -->|depends on| SL
+    SL -->|depends on| LP
+    LP -->|depends on| PO
+    PO -->|depends on| DM
+
+    DM -.->|foundation for| PO
+    PO -.->|foundation for| LP
+    LP -.->|foundation for| SL
+    SL -.->|foundation for| FW
+    FW -.->|foundation for| APP
 ```
 
 ### Dependency Flow
@@ -328,7 +338,7 @@ the Language and Execution layers, providing bidirectional interfaces
 that LLM-based tools consume and produce.
 
 ``` mermaid
-flowchart TD
+flowchart LR
     LANG["Language Layer"]
     STRAT["Implementation Strategy"]
     EXEC["Execution Environment"]
