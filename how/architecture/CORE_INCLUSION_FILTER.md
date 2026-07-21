@@ -145,6 +145,13 @@ Decision Validation gates (`DECISION_VALIDATION.md`).
 | `ARCHITECTURAL_INTEGRITY_GATE` | The filter's layer assignment ensures the proposal fits within the Semantic Dependency Architecture. |
 | `USER_VALUE_GATE` | Even if the filter assigns a feature to Level 3 (Library), the User Value gate still applies — a library feature must earn its place too. |
 
+> **Note:** The filter assigns a feature to a layer, but all layers
+> proceed through the same validation gates. This is inconsistent:
+> Level 0 (Data Model) and Level 3 (Standard Library) have
+> fundamentally different bars, yet share the same procedure.
+> A future refinement should define layer-specific validation
+> procedures that branch after the filter's decision tree.
+
 See also:
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) § Semantic Dependency Architecture — the 6-level pyramid
 - [`DESIGN_PRINCIPLES.md`](../DESIGN_PRINCIPLES.md) § Minimal Core — Core Change Criterion
