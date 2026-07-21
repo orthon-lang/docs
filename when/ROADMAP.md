@@ -89,7 +89,7 @@ Design Review gate so subsequent Epic work has a defined acceptance procedure.
 |------|-------------|--------|
 | **Vision & Philosophy** | `VISION.md`, `MANIFESTO.md`, `ZEN.md`, `GOALS.md` | 🔄 In Progress |
 | **Design Method** | `WORKING_BACKWARDS.md` | 🔄 In Progress |
-| **Design Principles** | `DESIGN_PRINCIPLES.md` | 🔄 In Progress |
+| **Design Principles** | `../how/DESIGN_PRINCIPLES.md` | 🔄 In Progress |
 | **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
 | **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein | 🔄 In Progress |
 | **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template | 🔄 In Progress |

@@ -29,7 +29,7 @@ What problem or tension prompted this decision?
 
 Describe the forces at play: technical constraints, philosophical principles,
 trade-offs, conflicting requirements. Include references to relevant project
-documents (VISION.md, MANIFESTO.md, DESIGN_PRINCIPLES.md, etc.).
+documents (VISION.md, MANIFESTO.md, ../DESIGN_PRINCIPLES.md, etc.).
 
 > *Anchor the context — why does this decision matter?*
 

@@ -39,7 +39,7 @@ through the Concept Design Review process.
    [`../../why/MANIFESTO.md`](../../why/MANIFESTO.md) § Minimal Core.
 2. **Orthogonality** — Data and Data Modifiers combine freely. Any Data
    can be viewed through any Modifier without special cases. See
-   [`../../what/DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md)
+   [`../../DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md)
    § Orthogonality.
 3. **Explicitness** — Representation changes are visible in the syntax.
    The programmer explicitly declares intent; the compiler optimises.
@@ -149,7 +149,7 @@ A Sequence can be:
 #### Canonical Forms
 
 Three equivalent ways to produce a Sequence (the *Show All Canonical
-Forms* principle — see [`DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md)):
+Forms* principle — see [`DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md)):
 
 Readable syntax:
 ```

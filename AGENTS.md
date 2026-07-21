@@ -21,7 +21,7 @@ All documentation follows the **Why → How → What** (Golden Circle) framework
 | Layer | Question | Documents |
 |-------|----------|-----------|
 | **Why** | Why does Orthon exist? What do we believe? What are we trying to achieve? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md` |
-| **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
+| **How** | How is Orthon designed and structured? | `how/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
 | **What** | What is Orthon concretely? | `what/CORE_CONCEPTS.md` (accepted concept registry — currently empty), `how/concepts/research/` (in-progress research) |
 | **How** | How are concepts designed? | `how/concepts/research/` (research inbox), `how/concepts/README.md` (pipeline) |
 
@@ -37,7 +37,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `why/GOALS.md` | Why | Concrete aims derived from the vision — six goals with criteria and non-goals |
 | `why/MANIFESTO.md` | Why | Explicit principles — consistency over legacy, minimal core, composition over exceptions |
 | `why/ZEN.md` | Why | Aphorisms capturing the language's spirit |
-| `what/DESIGN_PRINCIPLES.md` | How | Orthogonality, simplicity, explicitness, consistency, execution model principles |
+| `how/DESIGN_PRINCIPLES.md` | How | Orthogonality, simplicity, explicitness, consistency, execution model principles |
 | `how/architecture/ARCHITECTURE.md` | How | Layered architecture — Core Language → Syntax → Standard Library → Implementation Strategy (with Policies) |
 | `how/architecture/FITNESS_FUNCTIONS.md` | How | Architectural fitness functions — catalogue of measurable checks guarding against design decay |
 | `how/strategies/IMPLEMENTATION_STRATEGIES.md` | How | Strategy = named set of Policies; declarative profiles and aspect mapping |
@@ -90,7 +90,7 @@ Every code example in documentation should:
 
 1. Be syntactically valid Orthon (or clearly marked as pseudocode).
 2. Demonstrate exactly one concept.
-3. Include **all canonical forms** when documenting a feature (see the *Show All Canonical Forms* principle in `what/DESIGN_PRINCIPLES.md`).
+3. Include **all canonical forms** when documenting a feature (see the *Show All Canonical Forms* principle in `how/DESIGN_PRINCIPLES.md`).
 4. Precede semantic explanation rather than follow it.
 
 ### 4.3 File Structure
@@ -107,11 +107,11 @@ docs/
 │   └── ZEN.md
 ├── what/                     # WHAT — language design & reference
 │   ├── CORE_CONCEPTS.md      # Accepted concept registry (currently empty; see how/concepts/research/)
-│   ├── DESIGN_PRINCIPLES.md
 │   ├── GLOSSARY.md
 │   └── concepts/             # Accepted Orthon concept drafts (see README.md)
 │       └── README.md
 ├── how/                      # HOW — implementation & process
+│   ├── DESIGN_PRINCIPLES.md  # 27 design rules organized in 3 groups
 │   ├── concepts/             # Concept design pipeline
 │   │   ├── README.md
 │   │   └── research/         # Concept research inbox (raw analyses)
@@ -195,7 +195,7 @@ When assigned a task in this project, follow this protocol:
 ### 5.1 Orient
 
 1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
-2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
+2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `how/DESIGN_PRINCIPLES.md`.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
 4. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 
@@ -332,7 +332,7 @@ For proposals that warrant formal peer review, use the template at [`docs/how/te
 
 Before finalizing any document or proposal, verify against this checklist. For formal peer reviews, use the full template at [`docs/how/templates/_design-review.md`](../how/templates/_design-review.md).
 
-- [ ] **Consistency:** Does this align with `why/MANIFESTO.md` and `what/DESIGN_PRINCIPLES.md`?
+- [ ] **Consistency:** Does this align with `why/MANIFESTO.md` and `how/DESIGN_PRINCIPLES.md`?
 - [ ] **Orthogonality:** Does this combine freely with existing constructs?
 - [ ] **Minimality:** Is this adding a new concept when composition would suffice?
 - [ ] **Explicitness:** Are semantic changes syntactically visible?

@@ -496,7 +496,7 @@ Language Design Gate process.*
 
 - [ ] `FOUNDATIONAL_ABSTRACTIONS.md`
 - [x] `DATA_MODEL.md`
-- [x] `DESIGN_PRINCIPLES.md`
+- [x] `../DESIGN_PRINCIPLES.md`
 - [x] `VISION.md`
 - [ ] `IMPLEMENTATION_STRATEGIES.md`
 - [ ] `IMPLEMENTATION_POLICIES.md`

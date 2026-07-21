@@ -216,7 +216,7 @@ which goal(s) it serves. This creates a traceable chain from vision to
 decision:
 
 ```
-VISION.md → GOALS.md → DESIGN_PRINCIPLES.md → EDR → Language Specification
+VISION.md → GOALS.md → ../how/DESIGN_PRINCIPLES.md → EDR → Language Specification
     ↑                                                    ↑
     └──── why ────────────── how ────────────── what ────┘
 ```

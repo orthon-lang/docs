@@ -26,7 +26,7 @@ Is the proposal consistent with the project's core beliefs?
 | Aligned with `../../why/VISION.md` | | | | |
 | Aligned with `../../why/MANIFESTO.md` | | | | |
 | Aligned with `../../why/ZEN.md` | | | | |
-| Aligned with `../../what/DESIGN_PRINCIPLES.md` | | | | |
+| Aligned with `../DESIGN_PRINCIPLES.md` | | | | |
 
 ---
 

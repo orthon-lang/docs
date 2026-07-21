@@ -25,7 +25,7 @@
 What design tension prompted this architectural decision?
 
 Describe the forces: technical constraints, philosophical principles,
-trade-offs, conflicting requirements. Reference VISION.md, DESIGN_PRINCIPLES.md,
+trade-offs, conflicting requirements. Reference VISION.md, ../DESIGN_PRINCIPLES.md,
 or ARCHITECTURE.md as appropriate.
 
 ---

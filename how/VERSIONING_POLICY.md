@@ -11,7 +11,7 @@ This policy applies to large monolithic documents in the Orthon specification:
 | Execution Program | `docs/how/concepts/research/EXECUTION_PROGRAM.md` |
 | Glossary | `docs/what/GLOSSARY.md` |
 | Architecture | `docs/how/architecture/ARCHITECTURE.md` |
-| Design Principles | `docs/what/DESIGN_PRINCIPLES.md` |
+| Design Principles | `docs/how/DESIGN_PRINCIPLES.md` |
 | Agent Guide | `docs/AGENTS.md` |
 
 ## Change-Log Format

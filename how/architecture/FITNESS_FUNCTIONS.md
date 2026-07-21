@@ -15,7 +15,7 @@ concept is approved.
 
 ## Concept Stability
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Transparency principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Transparency principle
 
 A concept that requires more than one substantive semantic change
 after its initial Gate approval triggers an architectural review.
@@ -43,7 +43,7 @@ modifications in multiple layers? If yes, layer boundary is breached.
 
 ## Composition Surface
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Orthogonality principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle
 
 The number of documented canonical forms for a concept must not
 decrease across revisions — composition should expand, not contract.
@@ -55,7 +55,7 @@ Negative diff → composition decay.
 
 ## Data First
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Data First principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Data First principle
 
 Every new concept must operate on Data as the primary abstraction.
 No concept may introduce behavior without a Data representation.
@@ -69,7 +69,7 @@ explicitly justified.
 
 ## Orthogonality
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Orthogonality principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle
 
 No two concepts overlap in responsibility. The composability matrix
 must have no forbidden pairs — every pair of concepts must compose
@@ -83,7 +83,7 @@ a forbidden pair, triggering an architectural review.
 
 ## Explicitness
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Explicitness / Explicit Semantics principles
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Explicitness / Explicit Semantics principles
 
 Semantic changes must be syntactically visible. No hidden conversions,
 implicit side-effects, or invisible ownership transfers.
@@ -96,7 +96,7 @@ Hidden semantics → fitness failure.
 
 ## Minimal Core
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Minimal Core principle; [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md)
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Minimal Core principle; [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md)
 
 Core Language changes must be justified against composition alternatives.
 A new core concept must demonstrate that it cannot be expressed through
@@ -110,7 +110,7 @@ If the justification is absent or weak, the proposal is rejected.
 
 ## Named Before Symbolic
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Named Before Symbolic principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Named Before Symbolic principle
 
 Every symbolic operator must have an equivalent named function.
 
@@ -175,7 +175,7 @@ at the next phase boundary.
 
 ## Deterministic Behavior
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Deterministic Behavior principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Deterministic Behavior principle
 
 The same source code must produce the same observable behavior across
 optimization levels and implementations.
@@ -188,7 +188,7 @@ If behavior differs, the concept or strategy violates determinism.
 
 ## Representation Symmetry
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Representation Symmetry principle
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Representation Symmetry principle
 
 Reversible transformations of representations must use symmetric syntax
 (prefix to create, postfix to restore).
@@ -201,7 +201,7 @@ transformations are flagged.
 
 ## Traceability
 
-**Source:** [DESIGN_PRINCIPLES.md](../../what/DESIGN_PRINCIPLES.md) — Transparency principle; [\_language-design.md](../gates/_language-design.md) — Traceability criterion
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Transparency principle; [\_language-design.md](../gates/_language-design.md) — Traceability criterion
 
 Every design decision must be traceable from origin through alternatives
 to final decision, recorded in an EDR or gate entry.

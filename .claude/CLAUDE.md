@@ -246,7 +246,7 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 - `WORKING_BACKWARDS.md` — Programmer-perspective rationale for why Orthon exists
 - `ZEN.md` — Aphorisms capturing the language spirit
 
-### Layer 2: Core Principles (`what/DESIGN_PRINCIPLES.md` + `why/MANIFESTO.md`)
+### Layer 2: Core Principles (`how/DESIGN_PRINCIPLES.md` + `why/MANIFESTO.md`)
 
 - **DESIGN_PRINCIPLES.md:** Three groups of rules (Core Philosophy, Language Consistency, Execution Model)
 - **MANIFESTO.md:** Ten foundational agreements (consistency over legacy, minimal core, composition over exceptions, etc.)
@@ -381,7 +381,7 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 
 ## Cross-Cutting Concerns
 
-- `what/DESIGN_PRINCIPLES.md` — checks consistency principle adherence
+- `how/DESIGN_PRINCIPLES.md` — checks consistency principle adherence
 - `how/gates/_language-design.md` — checklist item for representation symmetry
 - EDRs reference DESIGN_PRINCIPLES they satisfy, creating traceability
 - `what/GLOSSARY.md` — single source of truth for all defined terms

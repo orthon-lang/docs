@@ -20,7 +20,7 @@ Describe the real-world problem that motivates this concept. Why is it necessary
 
 Which principles must not be violated?
 
-Reference `DESIGN_PRINCIPLES.md` and other relevant documents. List the constraints that every implementation of this concept must satisfy.
+Reference `../DESIGN_PRINCIPLES.md` and other relevant documents. List the constraints that every implementation of this concept must satisfy.
 
 ## Policy Footprint
 
@@ -70,7 +70,7 @@ References to ADRs, logs of rejected approaches, and key trade-offs that were ac
 
 - [ ] `what/CORE_CONCEPTS.md`
 - [ ] `DATA_MODEL.md`
-- [ ] `DESIGN_PRINCIPLES.md`
+- [ ] `../DESIGN_PRINCIPLES.md`
 - [ ] `GLOSSARY.md`
 - [ ] `IMPLEMENTATION_STRATEGIES.md`
 - [ ] `IMPLEMENTATION_POLICIES.md`

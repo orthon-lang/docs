@@ -77,7 +77,7 @@ end, listing all documents that may need updating when the concept changes:
 
 - [ ] `CORE_CONCEPTS.md`
 - [ ] `DATA_MODEL.md`
-- [ ] `DESIGN_PRINCIPLES.md`
+- [ ] `./DESIGN_PRINCIPLES.md`
 - [ ] `GLOSSARY.md`
 - [ ] `IMPLEMENTATION_STRATEGIES.md`
 - [ ] `IMPLEMENTATION_POLICIES.md`
@@ -110,7 +110,7 @@ before abstract*.
 
 When documenting operators that have both symbolic and named forms,
 present the named form first (or at least at the same level of
-prominence). This reinforces the [Named Before Symbolic](../what/DESIGN_PRINCIPLES.md) design principle
+prominence). This reinforces the [Named Before Symbolic](./DESIGN_PRINCIPLES.md) design principle
 and makes the documentation more accessible to readers who may not
 be familiar with symbolic operators.
 

@@ -19,7 +19,7 @@ Each layer answers its own question and passes the result to the next:
 | Layer | Question | Result | Document |
 |---|---|---|---|
 | Vision | *Why does the language exist?* | Direction, top-level values | [`docs/why/VISION.md`](../why/VISION.md) |
-| Core Principles | *What rules do we follow?* | Concrete criteria for every decision | [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md), [`docs/what/DESIGN_PRINCIPLES.md`](../what/DESIGN_PRINCIPLES.md) |
+| Core Principles | *What rules do we follow?* | Concrete criteria for every decision | [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md), [`docs/how/DESIGN_PRINCIPLES.md`](./DESIGN_PRINCIPLES.md) |
 | Decision Validation | *Does the proposal pass all independent validation gates?* | Multi-perspective assessment of the proposal | [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
 | Language Design Gate | *Does the solution satisfy the principles?* | Approval or rejection of the concept | [`docs/how/gates/_language-design.md`](gates/_language-design.md) |
 | Concept | *What are we introducing?* | Formal semantic definition | [`docs/how/concepts/research/`](../concepts/research/) |
@@ -55,7 +55,7 @@ language decision must satisfy.
 ## Layer 2: Core Principles
 
 **Files:** [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md),
-[`docs/what/DESIGN_PRINCIPLES.md`](../what/DESIGN_PRINCIPLES.md)
+[`docs/how/DESIGN_PRINCIPLES.md`](./DESIGN_PRINCIPLES.md)
 
 Principles translate Vision into concrete, verifiable rules. This is the
 gateway between *why* and *what*: abstract values become criteria that can

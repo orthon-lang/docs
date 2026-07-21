@@ -360,7 +360,7 @@ This principle applies to:
   reject it.
 
 The Principle of Parsimony is defined formally in
-[`../../what/DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md).
+[`../DESIGN_PRINCIPLES.md`](../DESIGN_PRINCIPLES.md).
 
 ---
 

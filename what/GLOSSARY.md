@@ -27,7 +27,7 @@ strategy.
 
 One of the equivalent syntactic ways to express a language construct. All canonical forms of a feature must be documented together (see *Show All Canonical Forms* principle).
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Documentation Principle
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Documentation Principle
 - **See also:** [Operator Equivalence](#operator-equivalence)
 
 ### Core Language
@@ -37,7 +37,7 @@ independent of any particular implementation. The Core defines *what
 programs mean*, not *how they execute*. It specifies the interfaces
 that every Implementation Strategy must fulfill.
 
-- **Source:** `../how/architecture/ARCHITECTURE.md` § Core Language, `DESIGN_PRINCIPLES.md` § Minimal Core
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Core Language, `../how/DESIGN_PRINCIPLES.md` § Minimal Core
 - **See also:** [Architecture](#architecture), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)
 
 ---
@@ -86,7 +86,7 @@ Variables, functions, types, classes, and modules follow the same declaration pr
 
 The same source code must produce identical observable behavior across optimization levels and implementations. Only performance characteristics may differ.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Deterministic Behavior
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Deterministic Behavior
 - **See also:** [Explicit Semantics](#explicit-semantics), [Semantics Before Optimization](#semantics-before-optimization)
 
 ---
@@ -165,7 +165,7 @@ Execution Program
 
 Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Explicit Optimization
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Optimization
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
 
 ### Execution Program
@@ -200,14 +200,14 @@ Execution Program
 
 Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Explicit Optimization
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Optimization
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
 
 ### Explicit Semantics
 
 Whenever an operation changes the meaning, lifetime, ownership, or behavior of data, it must be expressed explicitly in the syntax. No hidden conversions or implicit semantic changes.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Explicit Semantics
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Semantics
 - **See also:** [Deterministic Behavior](#deterministic-behavior)
 
 ---
@@ -242,7 +242,7 @@ one must not change program semantics.
 
 The programmer describes *what* should happen; the compiler decides *how* to implement it efficiently.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Intent Over Implementation
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
 
 ### Program Enricher
@@ -290,7 +290,7 @@ The set of cross-cutting design rules that ensure uniform behaviour across Ortho
 - **Deterministic Behavior** — Same source, same observable behaviour (see [Deterministic Behavior](#deterministic-behavior)).
 - **Stable Mental Model** — Programmers reason about language semantics, not compiler internals.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Language Consistency
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Language Consistency
 
 ### Language Server Protocol (LSP)
 
@@ -346,7 +346,7 @@ Execution layers with bidirectional interfaces.
 
 Complex language features should emerge from composition of simple primitives rather than from introducing new keywords or execution models. The language is *grown*, not *invented*.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Minimal Core, `../why/MANIFESTO.md` § Minimal core, maximum expressiveness
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Minimal Core, `../why/MANIFESTO.md` § Minimal core, maximum expressiveness
 - **See also:** [Orthogonality](#orthogonality)
 
 ---
@@ -359,7 +359,7 @@ Every symbolic operator must have an equivalent named function. Symbols improve 
 
 Example: `&x` and `ref(x)` are equivalent.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Named Before Symbolic
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Operator Equivalence](#operator-equivalence)
 
 ---
@@ -375,14 +375,14 @@ Every language operator has an equivalent named function. Operators are syntacti
 x->         == sequence(x)
 ```
 
-- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
+- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Operators and Named Functions, `../how/DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Named Before Symbolic](#named-before-symbolic)
 
 ### Orthogonality
 
 Each language construct solves exactly one problem and combines freely with other constructs. No special cases, no context-dependent syntax, no conflicting rules. What you learn in one part of the language transfers directly to every other part.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Orthogonality, `../why/VISION.md` § Comfortable by Design, `../why/ZEN.md`, `../why/MANIFESTO.md`
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Orthogonality, `../why/VISION.md` § Comfortable by Design, `../why/ZEN.md`, `../why/MANIFESTO.md`
 - **See also:** [Minimal Core](#minimal-core), [Uniformity](#uniformity)
 
 ---
@@ -450,7 +450,7 @@ ref&     → Value
 pack*    → Values
 ```
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Representation Symmetry
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Representation Symmetry
 - **See also:** [Explicit Semantics](#explicit-semantics), [Named Before Symbolic](#named-before-symbolic)
 
 ---
@@ -473,7 +473,7 @@ Standard Library (3), Frameworks (4), Applications (5).
 
 Language semantics are independent of optimization. A correct Orthon program must produce the same observable behavior regardless of optimization level.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Semantics Before Optimization
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Semantics Before Optimization
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Optimization](#explicit-optimization)
 
 ### Sequence
@@ -500,7 +500,7 @@ pass/fail conditions, and scope of examination.
 
 Programmers should reason about language semantics, not compiler internals. Users should never need to understand implementation details to predict program behaviour.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Stable Mental Model
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Stable Mental Model
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Semantics](#explicit-semantics)
 
 ### Standard Library
@@ -518,7 +518,7 @@ The layer that defines public abstractions exposed by the language. It specifies
 
 Equivalent concepts should be expressed in equivalent ways. Once a user learns a language pattern, the same pattern applies consistently throughout the language.
 
-- **Source:** `DESIGN_PRINCIPLES.md` § Uniformity
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Uniformity
 - **See also:** [Orthogonality](#orthogonality)
 
 ---
