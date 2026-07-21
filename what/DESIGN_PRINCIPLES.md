@@ -12,6 +12,7 @@ Core Philosophy
 ├── Data First
 ├── Intent Over Implementation
 ├── Orthogonality
+├── Semantic Purity
 ├── Simplicity
 ├── Explicitness
 ├── Consistency
@@ -65,6 +66,22 @@ behavior should emerge from combining simple, orthogonal building
 blocks.
 
 
+## Semantic Purity
+
+Each symbol or syntactic construct has exactly one meaning, independent of context.
+
+```
+.   user-defined properties
+@   metadata
+*   pack/unpack
+()  call
+[]  indexing
+{}  mapping/literal
+```
+
+No exceptions. A symbol must never change its meaning depending on surrounding tokens or syntactic position.
+
+
 ## Simplicity
 
 A language should be simple to learn, read, and reason about.
@@ -98,6 +115,25 @@ Equivalent concepts should be expressed in equivalent ways.
 
 Once a user learns a language pattern, the same pattern should apply
 consistently throughout the language.
+
+All invocations use the same syntax, regardless of what is being invoked:
+
+```
+fn()
+method()
+context()
+decorator()
+```
+
+All system-introspection access uses the same syntax:
+
+```
+obj@type
+obj@name
+obj@module
+```
+
+No construct gets its own special calling convention. No concept introduces a new access pattern that already exists under a different name.
 
 
 ## Explicit Semantics
