@@ -2,6 +2,33 @@
 
 > All items owned by **Solo Author** unless otherwise noted.
 
+> **⚠ Urgent:** These items address systemic pipeline throughput gaps identified in
+> `docs/notes/pipeline-throughput-gaps.md`. They should be prioritised before
+> milestone work to unblock the design pipeline.
+
+## Pipeline & Process Gaps
+
+- [ ] **GAP-01:** Run ONE concept through the full pipeline — take `EQUALITY.md` or `DATA_MODEL.md`, push through a 3-step process (Problem → Principle Check → Examples), accept into `CORE_CONCEPTS.md`
+  - **Owner:** Solo author
+  - **Target:** Now
+  - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #1
+- [ ] **GAP-02:** Collapse the 11-stage concept design review to a 5-step pipeline suitable for solo authorship; reserve full gate mechanism for retroactive refinement
+  - **Owner:** Solo author
+  - **Target:** After GAP-01
+  - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #2, § Minimal Pipeline
+- [ ] **GAP-03:** Create `DECISION_PROCESS.md` — one-page decision authority extracted from `AGENTS.md` and `concept-design-review.md`; update `README.md` and `AGENTS.md` to reference it
+  - **Owner:** Solo author
+  - **Target:** After GAP-02
+  - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #3
+- [ ] **GAP-04:** Add throughput fitness functions to `FITNESS_FUNCTIONS.md` — minimum: concepts-in-flight, oldest open proposal age
+  - **Owner:** Solo author
+  - **Target:** After GAP-03
+  - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #4
+- [ ] **GAP-05:** The next EDR must be a language design decision (not meta-process) — reorient the EDR system to its stated purpose
+  - **Owner:** Solo author
+  - **Target:** Next EDR
+  - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #5
+
 ## Milestone 0 — Vision
 
 - [ ] review Manifesto (`docs/why/MANIFESTO.md`), Vision (`docs/why/VISION.md`), Zen (`docs/why/ZEN.md`) using Working Backwards rationale (`docs/why/WORKING_BACKWARDS.md`)
