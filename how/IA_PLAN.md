@@ -62,7 +62,7 @@ listing all files with brief descriptions:
 
 | File | Description |
 |------|-------------|
-| CORE_CONCEPTS.md | Core language abstractions: Data and Data Modifiers |
+| FOUNDATIONAL_ABSTRACTIONS.md | Foundational abstractions hypothesis: Data and Data Modifiers |
 | DATA_MODEL.md | Formal data model: types and representations |
 | ... | ... |
 ```

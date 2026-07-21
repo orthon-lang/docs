@@ -22,7 +22,7 @@ files_modified:
   - docs/how/concepts/research/MUTABILITY.md
   - docs/how/concepts/research/ALLOCATION.md
   - docs/how/concepts/research/DATA_MODEL.md
-  - docs/how/concepts/research/CORE_CONCEPTS.md
+  - docs/how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md
   - docs/how/concepts/research/OWNERSHIP.md
   - docs/how/concepts/research/ERROR_HANDLING.md
   - docs/how/concepts/research/GENERICS.md
@@ -141,7 +141,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
 @docs/what/DESIGN_PRINCIPLES.md
 @docs/how/concepts/research/EQUALITY.md
 @docs/how/concepts/research/ALLOCATION.md
-@docs/how/concepts/research/CORE_CONCEPTS.md
+@docs/how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md
 @docs/what/GLOSSARY.md
 @docs/when/ROADMAP.md
 @docs/AGENTS.md
@@ -205,7 +205,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     - Specify type system invariants: soundness (no runtime type errors for well-typed programs), completeness (all valid programs are typeable), principal types (every expression has a unique most-general type)
     - Define interface contracts: what the type checker guarantees to downstream consumers (IR generation, strategy selection)
     - Document key design decisions: Hindley-Milner-based inference as the default (proven, predictable), structural typing over nominal (aligns with Data-first philosophy), explicit type annotations required at module boundaries
-    - Document relationship to CORE_CONCEPTS.md (Data representations map to types), NAME_RESOLUTION.md (types reference resolved symbols), IR.md (typed IR nodes)
+    - Document relationship to FOUNDATIONAL_ABSTRACTIONS.md (Data representations map to types), NAME_RESOLUTION.md (types reference resolved symbols), IR.md (typed IR nodes)
     - Add date-stamp metadata
     - Structure: ## Overview, ## Role in Architecture, ## Type System Invariants, ## Interface Contracts, ## Key Design Decisions, ## Relationships, ## Open Questions
 
@@ -278,7 +278,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     2. Add a new § documenting the Policy Footprint section requirement: each concept must declare which Policy Types it involves and how
     3. Add principle: "Affected Documents Checklist" — every concept must include the affected-documents checklist from the template
     4. Add principle: "Date-Stamp Requirement" — every concept and architecture document must carry a `> **Last updated:** YYYY-MM-DD` metadata line
-    5. Add principle: "All Canonical Forms" (preserve existing, expand with examples from CORE_CONCEPTS.md)
+    5. Add principle: "All Canonical Forms" (preserve existing, expand with examples from FOUNDATIONAL_ABSTRACTIONS.md)
     6. Add principle: "Model Before Implementation" — code examples precede semantic explanation
     7. Restructure: ## Document Status, ## Section Structure (8-section list), ## Writing Principles (subsections per principle)
     8. Add date-stamp metadata
@@ -357,7 +357,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     docs/how/architecture/PARSER.md
     docs/how/architecture/TYPE_SYSTEM.md
     docs/how/architecture/NAME_RESOLUTION.md
-    docs/how/concepts/research/CORE_CONCEPTS.md
+    docs/how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md
     docs/how/concepts/research/DATA_MODEL.md
     docs/how/concepts/research/ALLOCATION.md
     docs/how/concepts/research/OWNERSHIP.md
@@ -399,7 +399,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     The 4 empty files should now have content from Wave A — add the date-stamp as part of their content structure.
   </action>
   <verify>
-    <automated>for f in docs/how/architecture/ARCHITECTURE.md docs/how/architecture/FITNESS_FUNCTIONS.md docs/how/architecture/IR.md docs/how/architecture/PARSER.md docs/how/architecture/TYPE_SYSTEM.md docs/how/architecture/NAME_RESOLUTION.md docs/how/concepts/research/CORE_CONCEPTS.md docs/how/concepts/research/DATA_MODEL.md docs/how/concepts/research/ALLOCATION.md docs/how/concepts/research/OWNERSHIP.md docs/how/concepts/research/MUTABILITY.md docs/how/concepts/research/EQUALITY.md docs/how/concepts/research/FUNCTIONS.md docs/how/concepts/research/ASYNC_AWAIT.md docs/how/concepts/research/CONCURRENCY.md docs/how/concepts/research/GENERATORS.md docs/how/concepts/research/ERROR_HANDLING.md docs/how/concepts/research/PATTERN_MATCHING.md docs/how/concepts/research/GENERICS.md docs/how/concepts/research/OBJECT_INITIALIZATION.md docs/how/concepts/research/EXECUTION_PROGRAM.md docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md docs/how/concepts/research/LITERATE_PROGRAMMING.md docs/how/concepts/research/METAOBJECTS.md docs/how/concepts/research/SPAN.md docs/how/concepts/research/UNPACKING.md docs/how/concepts/research/SORTING.md; do grep -q 'Last updated' "$f" || echo "MISSING: $f"; done</automated>
+    <automated>for f in docs/how/architecture/ARCHITECTURE.md docs/how/architecture/FITNESS_FUNCTIONS.md docs/how/architecture/IR.md docs/how/architecture/PARSER.md docs/how/architecture/TYPE_SYSTEM.md docs/how/architecture/NAME_RESOLUTION.md docs/how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md docs/how/concepts/research/DATA_MODEL.md docs/how/concepts/research/ALLOCATION.md docs/how/concepts/research/OWNERSHIP.md docs/how/concepts/research/MUTABILITY.md docs/how/concepts/research/EQUALITY.md docs/how/concepts/research/FUNCTIONS.md docs/how/concepts/research/ASYNC_AWAIT.md docs/how/concepts/research/CONCURRENCY.md docs/how/concepts/research/GENERATORS.md docs/how/concepts/research/ERROR_HANDLING.md docs/how/concepts/research/PATTERN_MATCHING.md docs/how/concepts/research/GENERICS.md docs/how/concepts/research/OBJECT_INITIALIZATION.md docs/how/concepts/research/EXECUTION_PROGRAM.md docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md docs/how/concepts/research/LITERATE_PROGRAMMING.md docs/how/concepts/research/METAOBJECTS.md docs/how/concepts/research/SPAN.md docs/how/concepts/research/UNPACKING.md docs/how/concepts/research/SORTING.md; do grep -q 'Last updated' "$f" || echo "MISSING: $f"; done</automated>
   </verify>
   <done>
     All concept and architecture documents carry a `> **Last updated:**` metadata line. No MISSING output from the verify command.
@@ -449,7 +449,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     docs/how/concepts/research/MUTABILITY.md
     docs/how/concepts/research/ALLOCATION.md
     docs/how/concepts/research/DATA_MODEL.md
-    docs/how/concepts/research/CORE_CONCEPTS.md
+    docs/how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md
     docs/how/concepts/research/OWNERSHIP.md
     docs/how/concepts/research/ERROR_HANDLING.md
     docs/how/concepts/research/GENERICS.md

@@ -144,8 +144,8 @@ This describes *what* is introduced, not *how* it is implemented.
 
 Concept documents include:
 
-- [`CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) — Data and Data
-  Modifiers as the fundamental entities
+- [`FOUNDATIONAL_ABSTRACTIONS.md`](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md) — Data and Data
+  Modifiers (research hypothesis)
 - [`DATA_MODEL.md`](../concepts/research/DATA_MODEL.md) — Value, Tuple,
   Reference, Sequence, Set, Option, Result
 - [`FUNCTIONS.md`](../concepts/research/FUNCTIONS.md) — function model
@@ -219,7 +219,7 @@ with existing concepts (functions, types)? Verdict: approved.
 
 ### 4. Concept
 
-[`CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) records:
+[`FOUNDATIONAL_ABSTRACTIONS.md`](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md) records:
 
 > A Data Modifier transforms data into another representation. Each
 > modifier expresses intent, while the compiler selects the most efficient

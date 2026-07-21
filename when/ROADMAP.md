@@ -139,8 +139,8 @@ checklist before being accepted.
 > set of gates: `ARCHITECTURAL_INTEGRITY_GATE`, `USER_VALUE_GATE`,
 > `LLM_GENERABILITY_GATE`.
 
-> **Existing partial concept docs** (`CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
-> `concepts/EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
+> **Existing partial concept docs** (`FOUNDATIONAL_ABSTRACTIONS.md`, `DATA_MODEL.md`,
+> `EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
 > formally reviewed through this Epic's process. A concept is
 > registered only after acceptance via EDR (Architecture category).
 

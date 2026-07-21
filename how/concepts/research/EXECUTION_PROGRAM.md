@@ -494,7 +494,7 @@ Language Design Gate process.*
 
 ### Affected Documents
 
-- [ ] `CORE_CONCEPTS.md`
+- [ ] `FOUNDATIONAL_ABSTRACTIONS.md`
 - [x] `DATA_MODEL.md`
 - [x] `DESIGN_PRINCIPLES.md`
 - [x] `VISION.md`
