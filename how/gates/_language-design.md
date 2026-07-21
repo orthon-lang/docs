@@ -7,6 +7,23 @@
 
 ## Criteria
 
+- [ ] **Semantic layer classification** — to which layer of the
+      Semantic Dependency Architecture does this concept belong?
+      • Level 0 (Data Model): what exists — Data, Data Modifiers,
+        Representations
+      • Level 1 (Primitive Operations): atomic, non-decomposable
+        operations on data
+      • Level 2 (Language Patterns): compositions of Level 0–1
+        constructs — no new semantics (composition formula required)
+      • Level 3+ (Standard Library, Frameworks, Applications):
+        built on patterns and primitives, no special language
+        machinery
+      If the proposal claims Level 1, the proponent must justify why
+      the operation cannot be decomposed into simpler operations.
+      If the proposal claims Level 2, the composition formula must
+      be shown.
+      (see `ARCHITECTURE.md` § Semantic Dependency Architecture,
+      `EDR-012`)
 - [ ] **Vision alignment** — does this solve a real problem justified
       by the project's Vision?
 - [ ] **Problem-first** — is the problem clearly stated before the
@@ -76,3 +93,4 @@
 | Date | Concept | Verdict | Rationale |
 |------|---------|---------|-----------|
 | 2026-07-19 | LLM_GENERABILITY_GATE | Added as 7th gate criterion | EDR-011 — LLM-native pillar requires explicit LLM generability validation for every language construct |
+| 2026-07-21 | SEMANTIC_LAYER_CLASSIFICATION | Added as 1st gate criterion | EDR-012 — every concept must be classified into a Semantic Dependency Architecture level |

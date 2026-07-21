@@ -147,6 +147,112 @@ I/O that the Strategy relies on.
 **Platform** — the underlying system: operating system, virtual machine,
 WebAssembly runtime, or bare metal.
 
+## Semantic Dependency Architecture
+
+The Language Layer has internal structure that governs how language
+features depend on each other. This structure is defined by a
+**Semantic Dependency Architecture** — a 6-level hierarchy where
+each level depends only on levels below it, never the reverse.
+
+This is a different axis from the implementation stack (Language →
+Strategy → Execution). The pyramid describes the *semantic composition
+hierarchy* within the Language Layer itself.
+
+```
+Applications
+    │         ▲
+    ▼         │
+Frameworks ──┘
+    │         ▲
+    ▼         │
+Standard Library ──┘
+    │              ▲
+    ▼              │
+Language Patterns ──┘
+    │              ▲
+    ▼              │
+Primitive Operations ──┘
+    │                   ▲
+    ▼                   │
+Data Model ─────────────┘
+```
+
+### Dependency Flow
+
+The central invariant: **each level depends only on levels below it.**
+No level may reference or rely on constructs from a level above it.
+This creates a natural Dependency Inversion — the language enforces
+that abstractions depend on primitives, not the other way around.
+
+| Level | Name | Description | Examples |
+|-------|------|-------------|---------|
+| 5 | **Applications** | User programs composed from frameworks and libraries | End-user software |
+| 4 | **Frameworks** | Reusable structural patterns built on libraries | ORM, HTTP, GUI, Async Runtime, Actor System |
+| 3 | **Standard Library** | Higher-level abstractions built on language patterns | `transaction()`, `retry()`, `memoize()`, `cache()`, `parallel()`, `pipeline()` |
+| 2 | **Language Patterns** | Compositions of primitive operations that add convenience but no new semantics | `context`, `decorator`, `property`, pattern matching, `async`/`await`, generators |
+| 1 | **Primitive Operations** | Atomic operations on data — cannot be decomposed into simpler operations | variables, functions, call `()`, pack/unpack `*`, attribute access `.`, metadata `@`, condition, loop, closure, exceptions |
+| 0 | **Data Model** | What exists in the language — the semantic foundation | Data, Data Modifiers, Representations |
+
+### Relationship to the Implementation Stack
+
+The Semantic Dependency Architecture and the Implementation Stack are
+**orthogonal** axes. The pyramid describes the internal structure of
+the Language Layer — how features relate to each other by composition.
+The Implementation Stack describes how the Language Layer is realised
+at runtime. A Primitive Operation (Level 1) and a Language Pattern
+(Level 2) both pass through the same Implementation Strategy and
+Execution Environment layers.
+
+``` mermaid
+flowchart TD
+    subgraph LANG["Language Layer"]
+        direction TB
+        APP["Applications"]
+        FW["Frameworks"]
+        SL["Standard Library"]
+        LP["Language Patterns"]
+        PO["Primitive Operations"]
+        DM["Data Model"]
+        APP --> FW --> SL --> LP --> PO --> DM
+    end
+
+    subgraph STACK["Implementation Stack"]
+        IS["Implementation Strategy"]
+        EE["Execution Environment"]
+    end
+
+    LANG --> IS --> EE
+```
+
+### Design Implication
+
+Every new language feature must be classified into exactly one level of
+this pyramid. The classification determines:
+
+- **Level 0 (Data Model):** What exists as a semantic primitive. Changes
+  require an Architecture-category EDR.
+- **Level 1 (Primitive Operations):** Atomic language operations. Adding
+  a new primitive requires an Architecture-category EDR and justification
+  that the operation cannot be decomposed.
+- **Level 2 (Language Patterns):** Compositions of Level 0–1 constructs.
+  These add convenience, not new semantics. Pattern proposals must show
+  the composition formula (which primitives compose to produce the
+  pattern).
+- **Level 3+ (Library, Frameworks, Applications):** Built on patterns
+  and primitives. No special language machinery required — standard
+  development lifecycle applies.
+
+This classification is enforced through the Language Design Gate (see
+[`_language-design.md`](../gates/_language-design.md)) and verified by
+the architectural fitness functions (see [`FITNESS_FUNCTIONS.md`](./FITNESS_FUNCTIONS.md)).
+
+### Related Documents
+
+- [`CORE_CONCEPTS.md`](../../what/concepts/CORE_CONCEPTS.md) — Data Model (Level 0)
+- [`DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md) § Minimal Core — Primitive Operations as Semantic ISA
+- [`MANIFESTO.md`](../../why/MANIFESTO.md) — Composition over exceptions, Minimal core
+- [`_language-design.md`](../gates/_language-design.md) — Gate checklist with layer classification
+
 ## Design Principles
 
 Architecture follows SOLID. See

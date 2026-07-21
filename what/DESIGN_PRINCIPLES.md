@@ -262,6 +262,40 @@ The Core is not "assembly for the machine." It is a **Semantic ISA** —
 a semantic instruction set for the programmer. The compiler translates
 this semantics into concrete implementation.
 
+### Semantic Dependency Hierarchy
+
+The language enforces a strict **Dependency Flow** rule: each level in
+the Semantic Dependency Architecture depends only on levels below it.
+This is formalised as a 6-level pyramid in the architecture document:
+
+```
+Applications     ─── depends on ─── Frameworks
+Frameworks       ─── depends on ─── Standard Library
+Standard Library ─── depends on ─── Language Patterns
+Language Patterns ─── depends on ─── Primitive Operations
+Primitive Operations ─── depends on ─── Data Model
+```
+
+- **Level 0 (Data Model):** What exists — Data, Data Modifiers,
+  Representations.
+- **Level 1 (Primitive Operations):** Atomic language operations
+  — variables, functions, call, pack/unpack, attribute access,
+  metadata access, condition, loop, closure, exceptions.
+- **Level 2 (Language Patterns):** Compositions of Level 0–1
+  constructs — `context`, `decorator`, `property`, pattern
+  matching, `async`/`await`, generators.
+- **Level 3+:** Standard Library, Frameworks, Applications —
+  increasingly higher abstractions built on the layers below.
+
+This hierarchy ensures orthogonality is maintained by construction:
+no Language Pattern can introduce a dependency on a Framework,
+and no Primitive Operation can depend on a Language Pattern.
+
+For the full architecture, see
+[`ARCHITECTURE.md`](../how/architecture/ARCHITECTURE.md) § Semantic Dependency Architecture.
+
+**Related:**
+
 ## Justified Solutions
 
 Every problem deserves its own tool.

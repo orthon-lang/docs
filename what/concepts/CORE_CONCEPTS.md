@@ -15,6 +15,18 @@ Orthon consists of two fundamental concepts:
 
 Every language construct is built from these two concepts.
 
+These concepts form **Level 0 (Data Model)** of the Semantic Dependency
+Architecture — the foundation upon which Primitive Operations,
+Language Patterns, and higher layers are built. See
+[`ARCHITECTURE.md`](../../how/architecture/ARCHITECTURE.md) § Semantic
+Dependency Architecture for the full hierarchy.
+
+These concepts form **Level 0 (Data Model)** of the Semantic Dependency
+Architecture — the foundation upon which Primitive Operations,
+Language Patterns, and higher layers are built. See
+[`ARCHITECTURE.md`](../../how/architecture/ARCHITECTURE.md) § Semantic
+Dependency Architecture for the full hierarchy.
+
 ## Data
 
 Data is the primary abstraction.

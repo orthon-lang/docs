@@ -22,6 +22,7 @@
 | EDR-007 | Process | [Concept Design Review](process/EDR-007-concept-design-review.md) | Accepted | 2026-07-18 | TDR-006 |
 | EDR-010 | Architecture | [Layered Architecture](architecture/EDR-010-layered-architecture.md) | Accepted | 2026-07-18 | TDR-009 |
 | EDR-011 | Process | [Process Inventory](process/EDR-011-process-inventory.md) | Accepted | 2026-07-18 | TDR-010 |
+| EDR-012 | Architecture | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -41,6 +42,7 @@
 | ID | Title | Status | Date |
 |----|-------|--------|------|
 | EDR-010 | [Layered Architecture](architecture/EDR-010-layered-architecture.md) | Accepted | 2026-07-18 |
+| EDR-012 | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -67,7 +69,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 9 |
+| Accepted | 10 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |

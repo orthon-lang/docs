@@ -46,6 +46,19 @@ that every Implementation Strategy must fulfill.
 
 ### Data
 
+### Dependency Flow
+
+The central invariant of the Semantic Dependency Architecture: each
+semantic layer depends only on layers below it; no layer may reference
+or rely on constructs from a layer above it. This creates a natural
+Dependency Inversion at the language level, enforced architecturally
+rather than by convention.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Language Pattern](#language-pattern), [Primitive Operation](#primitive-operation), [Semantic Layer](#semantic-layer)
+
+### Data
+
 The primary abstraction in Orthon. Values viewed without imposed semantic meaning — the raw material that modifiers transform.
 
 ```
@@ -247,6 +260,28 @@ resolvers. Externally it is a single step — the boundary between
 
 ## L
 
+### Language Design Gate
+
+A quality checklist that every language design proposal must satisfy
+before entering formal specification. Operationalises the Decision
+Validation gates into a review form.
+
+- **Source:** `../how/gates/_language-design.md`
+- **See also:** [Decision Validation](#decision-validation), [Validation Gate](#validation-gate)
+
+### Language Pattern
+
+A construct in the Semantic Dependency Architecture (Level 2) that
+composes Primitive Operations (Level 1) and Data Model (Level 0)
+constructs to provide convenience without adding new semantics. A
+Language Pattern can be fully expressed as a composition formula
+showing which lower-level constructs produce it. Examples:
+`context` = closure + callable + try/catch + defer;
+`decorator` = callable + closure + metadata.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Dependency Flow](#dependency-flow), [Primitive Operation](#primitive-operation), [Semantic Layer](#semantic-layer)
+
 ### Language Consistency Principles
 
 The set of cross-cutting design rules that ensure uniform behaviour across Orthon:
@@ -354,6 +389,17 @@ Each language construct solves exactly one problem and combines freely with othe
 
 ## P
 
+### Primitive Operation
+
+An atomic language operation in the Semantic Dependency Architecture
+(Level 1) that cannot be decomposed into simpler operations. Primitive
+Operations define the minimal set of actions on data. Examples:
+variables, functions, call `()`, pack/unpack `*`, attribute access `.`,
+metadata access `@`, condition, loop, closure, exceptions.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Dependency Flow](#dependency-flow), [Language Pattern](#language-pattern), [Semantic Layer](#semantic-layer)
+
 ### Policy
 
 A declarative constraint or preference within a single domain-specific
@@ -410,6 +456,18 @@ pack*    → Values
 ---
 
 ## S
+
+### Semantic Layer
+
+A level in the Semantic Dependency Architecture hierarchy. Each
+Semantic Layer has a defined responsibility, a set of allowed
+constructs, and a dependency rule: it may only reference constructs
+from lower layers (never from higher layers). The six layers are:
+Data Model (0), Primitive Operations (1), Language Patterns (2),
+Standard Library (3), Frameworks (4), Applications (5).
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Dependency Flow](#dependency-flow), [Language Pattern](#language-pattern), [Primitive Operation](#primitive-operation)
 
 ### Semantics Before Optimization
 

@@ -55,6 +55,14 @@ Orthon is designed around a small set of orthogonal concepts:
 - Language features are extensible.
 - Readability comes from consistency rather than convention.
 
+These principles are formalised in the **Semantic Dependency Architecture**
+(see [`ARCHITECTURE.md`](../how/architecture/ARCHITECTURE.md) § Semantic
+Dependency Architecture): a 6-level pyramid where each level depends only
+on levels below it. This ensures that composition is not just a design
+goal but an architecturally enforced invariant — every Language Pattern
+is demonstrably a composition of Primitive Operations, and every
+Library construct is built on Patterns alone.
+
 ## Scope
 
 This manifesto defines the philosophy of the language.
