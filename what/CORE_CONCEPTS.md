@@ -9,7 +9,9 @@
 > **Status:** No concepts have been accepted yet. Active research and
 > design proposals are in [`how/concepts/research/`](../how/concepts/research/).
 > See [`how/concepts/README.md`](../how/concepts/README.md) for the concept
-> pipeline.
+> pipeline. Concepts are processed through the Decision Pipeline
+> ([`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md))
+> before entering Concept Design Review.
 >
 > **Last updated:** 2026-07-21
 

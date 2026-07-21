@@ -2,8 +2,37 @@
 
 Orthon follows a sequential design process: every language concept travels
 from the fundamental *why* to a concrete implementation. This document
-describes the flow of Orthon's design philosophy — the five layers through
-which any language decision passes.
+describes the flow of Orthon's design philosophy.
+
+## Overview
+
+Language design follows an **11-level engineering hierarchy**, grouped into
+**8 implementation phases** in M1 of the roadmap. Each level answers a
+specific question and gates the next.
+
+```
+Level  0: Vision              ─┐
+Level  1: Design Principles    ─┤  Phase 1 — Foundation
+                                │
+Level  2: Semantic Model       ─┤  Phase 2 — Semantic Model
+                                │
+Level  3: Language Architecture─┤  Phase 1 — Foundation (existing ARCHITECTURE.md)
+                                │
+Level  4: Primitive Blocks     ─┤  Phase 3 — Primitive Blocks
+                                │
+Level  5: Derived Features     ─┤
+Level  6: Library Boundary     ─┤  Phase 4 — Derived Features & Decision Pipeline
+                                │
+Level  7: Syntax Design        ─┤  Phase 5 — Syntax Design
+                                │
+Level  8: Execution Model      ─┤
+Level  9: Optimization Model   ─┤  Phase 7 — Execution & Optimization Model
+                                │
+Level 10: Evolution Model      ─┤  Phase 8 — Evolution Model & Freeze
+```
+
+Within each level, decisions pass through the established **5-layer
+validation flow** (Vision → Principles → Gates → Concept → Strategy):
 
 ```mermaid
 flowchart TD
@@ -14,16 +43,18 @@ flowchart TD
     C --> S[Default Strategy]
 ```
 
-Each layer answers its own question and passes the result to the next:
+Each layer answers its own question:
 
 | Layer | Question | Result | Document |
 |---|---|---|---|
 | Vision | *Why does the language exist?* | Direction, top-level values | [`docs/why/VISION.md`](../why/VISION.md) |
 | Core Principles | *What rules do we follow?* | Concrete criteria for every decision | [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md), [`docs/how/DESIGN_PRINCIPLES.md`](./DESIGN_PRINCIPLES.md) |
-| Decision Validation | *Does the proposal pass all independent validation gates?* | Multi-perspective assessment of the proposal | [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
-| Language Design Gate | *Does the solution satisfy the principles?* | Approval or rejection of the concept | [`docs/how/gates/_language-design.md`](gates/_language-design.md) |
+| Decision Validation | *Does the proposal pass all independent validation gates?* | Multi-perspective assessment | [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
+| Language Design Gate | *Does the solution satisfy the principles?* | Approval or rejection | [`docs/how/gates/_language-design.md`](gates/_language-design.md) |
 | Concept | *What are we introducing?* | Formal semantic definition | [`docs/how/concepts/research/`](../concepts/research/) |
 | Default Strategy | *How is it implemented by default?* | Concrete implementation plan | [`docs/how/strategies/DEFAULT_STRATEGY.md`](strategies/DEFAULT_STRATEGY.md) |
+
+**See also:** [`ROADMAP.md`](../when/ROADMAP.md) for the complete 8-phase M1 pipeline.
 
 ---
 

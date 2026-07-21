@@ -70,6 +70,17 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/decision_records/INDEX.md` | Meta | Unified EDR journal — master index of all decisions |
 | `how/gates/_language-design.md` | Meta | Quality gate checklist for language design decisions |
 | `how/gates/DECISION_VALIDATION.md` | How | Six independent validation gates for language design decisions |
+| `how/process/DECISION_PROCESS.md` | How | One-page decision authority — who decides what, using which criteria |
+| `how/process/DECISION_PIPELINE.md` | How | 10-question pipeline — pre-filter before detailed concept design |
+| `what/SEMANTIC_MODEL.md` | What | Unified semantic model — identity, ownership, mutation, evaluation, visibility, lifetime |
+| `what/PRIMITIVE_BLOCKS.md` | What | Minimal orthogonal primitive blocks — all features decompose to these |
+| `what/LIBRARY_BOUNDARY.md` | What | Language vs. standard library vs. external classification |
+| `what/SYNTAX.md` | What | Complete syntax reference — derived from semantics |
+| `what/CROSS_CUTTING.md` | What | Interaction matrix — pair-wise concept interaction analysis |
+| `what/CONFLICT_REGISTRY.md` | What | Concept-boundary conflict tracking and resolution |
+| `what/EXECUTION_MODEL.md` | What | Execution semantics — what the language guarantees about execution |
+| `what/OPTIMIZATION_MODEL.md` | What | Semantics vs. optimisation boundary |
+| `how/EVOLUTION_MODEL.md` | How | Versioning, deprecation, experimental features, feature gates |
 
 Convention: **one file, one coherent topic**. Do not create a file titled "Miscellaneous" or "Various."
 
@@ -108,10 +119,22 @@ docs/
 ├── what/                     # WHAT — language design & reference
 │   ├── CORE_CONCEPTS.md      # Accepted concept registry (currently empty; see how/concepts/research/)
 │   ├── GLOSSARY.md
+│   ├── SEMANTIC_MODEL.md     # Unified semantic model (Phase 2)
+│   ├── PRIMITIVE_BLOCKS.md   # Minimal orthogonal primitive blocks (Phase 3)
+│   ├── LIBRARY_BOUNDARY.md   # Language vs stdlib vs external (Phase 4)
+│   ├── SYNTAX.md             # Complete syntax reference (Phase 5)
+│   ├── CROSS_CUTTING.md      # Interaction matrix (Phase 6)
+│   ├── CONFLICT_REGISTRY.md  # Concept-boundary conflicts (Phase 6)
+│   ├── EXECUTION_MODEL.md    # Execution semantics (Phase 7)
+│   ├── OPTIMIZATION_MODEL.md # Semantics vs optimisation (Phase 7)
 │   └── concepts/             # Accepted Orthon concept drafts (see README.md)
 │       └── README.md
 ├── how/                      # HOW — implementation & process
 │   ├── DESIGN_PRINCIPLES.md  # 27 design rules organized in 3 groups
+│   ├── process/              # Design process documents
+│   │   ├── DECISION_PROCESS.md   # One-page decision authority (Phase 1)
+│   │   └── DECISION_PIPELINE.md  # 10-question feature pipeline (Phase 4)
+│   ├── EVOLUTION_MODEL.md    # Versioning, deprecation, feature gates (Phase 8)
 │   ├── concepts/             # Concept design pipeline
 │   │   ├── README.md
 │   │   └── research/         # Concept research inbox (raw analyses)
@@ -197,7 +220,8 @@ When assigned a task in this project, follow this protocol:
 1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
 2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `how/DESIGN_PRINCIPLES.md`.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
-4. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
+4. **Run the Decision Pipeline** (`how/process/DECISION_PIPELINE.md`) before designing any new feature — 10 questions determine whether the feature should exist and at what level.
+5. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 
 ### 5.2 Design
 
@@ -245,6 +269,12 @@ Key terms every agent must know:
 ---
 
 ## 7. Design Decision Protocol
+
+Every design decision follows the **Decision Process** defined in
+[`how/process/DECISION_PROCESS.md`](how/process/DECISION_PROCESS.md).
+Before detailed design, run through the **Decision Pipeline** in
+[`how/process/DECISION_PIPELINE.md`](how/process/DECISION_PIPELINE.md)
+to determine whether the feature should exist and at what level.
 
 Substantive design decisions must be recorded. Use one of these mechanisms, ordered by increasing formality:
 

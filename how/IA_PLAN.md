@@ -41,9 +41,19 @@ is to reduce scanning time, not to achieve perfect taxonomy.
 
 | Directory | Purpose | When |
 |-----------|---------|------|
-| `docs/what/stdlib/` | Standard Library specifications | Post-Freeze (Milestone 8) |
-| `docs/what/tooling/` | Build system and developer tooling specs | Post-Freeze (Milestone 9) |
-| `docs/what/llm/` | LLM toolchain specifications (Schema Provider, Code Completer, Code Generator, Static Analyser) | Post-Freeze (Milestone 8) |
+| `docs/what/stdlib/` | Standard Library specifications | Post-Freeze (Milestone 2) |
+| `docs/what/tooling/` | Build system and developer tooling specs | Post-Freeze (Milestone 3) |
+| `docs/what/llm/` | LLM toolchain specifications (Schema Provider, Code Completer, Code Generator, Static Analyser) | Post-Freeze (Milestone 2) |
+
+## Current Structure
+
+As of M1 (8-phase pipeline), the following directories are active:
+
+| Directory | Contents |
+|-----------|----------|
+| `docs/how/process/` | Process documents — `DECISION_PROCESS.md`, `DECISION_PIPELINE.md` |
+| `docs/what/` | Language specification-in-progress — `SEMANTIC_MODEL.md`, `PRIMITIVE_BLOCKS.md`, `LIBRARY_BOUNDARY.md`, `SYNTAX.md`, `CROSS_CUTTING.md`, `CONFLICT_REGISTRY.md`, `EXECUTION_MODEL.md`, `OPTIMIZATION_MODEL.md` |
+| `docs/how/EVOLUTION_MODEL.md` | Evolution model (at `how/` level, as it governs process) |
 
 ## File Naming
 

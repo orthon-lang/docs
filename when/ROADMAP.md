@@ -24,193 +24,427 @@ M1 — Orthon Language Spec (v0.1)
 ```
 
 **Key principle: Design before implement.** M1 (Orthon Language Spec) covers
-language design only — Epic 1 through Epic 5. M2–M4 (stdlib, tooling,
+language design only — Phase 1 through Phase 8. M2–M4 (stdlib, tooling,
 implementation) begin after the language specification is frozen.
 
 ---
 
 ## M1 — Orthon Language Spec (v0.1) ⬜
 
-**Goal:** Deliver a frozen, self-consistent v0.1 language specification — from
-establishing the design foundation and process infrastructure (Vision), through
-inventorying and designing every language concept, to cross-cutting review,
-consistency validation, and final freeze.
+**Goal:** Deliver a frozen, self-consistent v0.1 language specification —
+designed through a rigorous architectural pipeline: from vision and principles,
+through semantic model and primitive blocks, to derived features, syntax,
+cross-cutting verification, execution model, and final freeze.
 
-M1 is structured as five sequential Epics, mapped to the phased workflow in
-`.planning/ROADMAP.md`:
+M1 follows the **11-level engineering design hierarchy**: each level produces
+concrete artifacts and gates before the next begins.
 
 ```
-Epic 1 — Concerns Remediation
+Phase 1 — Foundation
     │
     ▼
-Epic 2 — Foundations, Process & Vision
+Phase 2 — Semantic Model
     │
     ▼
-Epic 3 — Language Inventory & Concept Design Review
+Phase 3 — Primitive Blocks
     │
     ▼
-Epic 4 — Cross-Cutting Review
+Phase 4 — Derived Features & Decision Pipeline
     │
-    ▼
-Epic 5 — Freeze & Naming
+    ├──────────────────┐
+    ▼                  ▼
+Phase 5 — Syntax   Phase 6 — Cross-Cutting
+    │                  │
+    └────────┬─────────┘
+             ▼
+    Phase 7 — Execution & Optimization Model
+             │
+             ▼
+    Phase 8 — Evolution Model & Freeze
 ```
 
 **Dependencies:** Nothing (initial milestone).
 
 ---
 
-### Epic 1: Concerns Remediation ⬜
+### Phase 1: Foundation ⬜
 
-**Goal:** Resolve every finding in `.planning/codebase/CONCERNS.md` — architecture
-gaps, tech debt, governance issues — so later Epic work rests on solid foundations
-instead of placeholders.
+**Goal:** Fix architecture stubs, consolidate Vision into one coherent block,
+lock Design Principles as the constitutional level. Establish process
+infrastructure so subsequent phases have a defined acceptance procedure.
 
-**Deliverables:**
-- Architecture specs filled: `IR.md`, `PARSER.md`, `TYPE_SYSTEM.md`, `NAME_RESOLUTION.md`
-- Template cleanup: `_adr.md` archived, `EXECUTION_IMAGE.md` archived
-- Date-stamp/freshness metadata added to all concept and architecture documents
-- Fitness functions catalogue completed in `FITNESS_FUNCTIONS.md`
-- Documentation principles expanded beyond stub
-- All 22 concept documents audited against `_concept.md` 8-section template
-- Repository-wide cross-reference link audit
-- Glossary maintenance workflow and versioning/change-log policy documented
+**Steps:**
 
----
+1. **Remediate concerns** — resolve architecture gaps, tech debt, governance
+   issues from current codebase audit:
+   - Fill `IR.md`, `PARSER.md`, `TYPE_SYSTEM.md`, `NAME_RESOLUTION.md` stubs
+   - Archive stale templates (`_adr.md`, `EXECUTION_IMAGE.md`)
+   - Date-stamp/freshness metadata on all concept and architecture documents
+   - Complete `FITNESS_FUNCTIONS.md` catalogue
+   - Expand documentation principles beyond stub
+   - Repository-wide cross-reference link audit
+   - Document Glossary maintenance workflow
 
-### Epic 2: Foundations, Process & Vision ⬜
+2. **Consolidate Vision** — produce a compact canonical `VISION.md` structured as:
+   **Vision · Mission · Non-goals · Target Audience · Success Criteria**
+   Keep existing docs (`GOALS.md`, `MANIFESTO.md`, `ZEN.md`, `WORKING_BACKWARDS.md`)
+   as reference expansions.
 
-**Goal:** Define the language's purpose, philosophy, design principles, and the
-process infrastructure for making design decisions. Establish the Concept
-Design Review gate so subsequent Epic work has a defined acceptance procedure.
+3. **Lock Design Principles** — `DESIGN_PRINCIPLES.md` declared **closed for
+   modification** (changes only via EDR). Every subsequent design decision
+   references specific principles.
+
+4. **Process infrastructure:**
+   - `DECISION_PROCESS.md` — one-page decision authority (from GAP-03)
+   - Collapse 11-step Concept Design Review → 5-step pipeline for solo author
+   - Add throughput fitness functions to `FITNESS_FUNCTIONS.md`
 
 **Vision & Philosophy deliverables:**
 
 | Area | Deliverables | Status |
 |------|-------------|--------|
-| **Vision & Philosophy** | `VISION.md`, `MANIFESTO.md`, `ZEN.md`, `GOALS.md` | 🔄 In Progress |
+| **Vision & Philosophy** | `VISION.md` (consolidated), `MANIFESTO.md`, `ZEN.md`, `GOALS.md` | 🔄 In Progress |
 | **Design Method** | `WORKING_BACKWARDS.md` | 🔄 In Progress |
-| **Design Principles** | `../how/DESIGN_PRINCIPLES.md` | 🔄 In Progress |
+| **Design Principles** | `DESIGN_PRINCIPLES.md` — locked as constitution | 🔄 In Progress |
 | **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
 | **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein | 🔄 In Progress |
 | **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template | 🔄 In Progress |
 | **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy | 🔄 In Progress |
 
-**Exit criteria:** Vision, Goals, Non-goals, Target Audience, Use Cases,
-and Design Principles documented. Decision-making infrastructure (gates,
-templates, methods) in place.
+**New artifacts:**
+- `VISION.md` — consolidated (Vision · Mission · Non-goals · Audience · Success Criteria)
+- `how/process/DECISION_PROCESS.md` — one-page decision authority
+- `FITNESS_FUNCTIONS.md` — completed catalogue + throughput functions
 
-**Process deliverables:**
-- `docs/how/concept-design-review.md` — complete DRAFT → Accepted transition process
-- Template-compliance audit checklist for the 8-section `_concept.md` template
-- All former `TODO.md` items migrated to tracked GSD requirements
-- LLM-native concept shortlist: `docs/notes/llm-native-concept-shortlist.md`
+**Exit criteria:**
+- [ ] All concerns remediated or explicitly deferred
+- [ ] Vision consolidated and approved
+- [ ] Design Principles declared closed; change requires EDR
+- [ ] Decision process documented and referenced from `AGENTS.md`
+- [ ] All former `TODO.md` items migrated to tracked GSD requirements
 
 ---
 
-### Epic 3: Language Inventory & Concept Design Review ⬜
+### Phase 2: Semantic Model ⬜
 
-**Goal:** Produce a complete inventory of all language concepts and Policy types,
-then design each concept through a rigorous, uniform review process — informed
-by anti-pattern research and the LLM-native shortlist from Epic 2.
+**Goal:** Define *what a program means* at the foundational level — identity,
+ownership, mutation, evaluation, visibility, lifetime — as a single unified
+model. This is the most expensive part of language design; changing it later
+is extremely costly.
 
-**Language Inventory deliverables:**
-- `LANGUAGE_INVENTORY.md` — categorised list of all concepts with descriptions
-  and dependency relationships.
-  • Includes **LLM Toolchain components**: Schema Provider, Code Completer,
-    Code Generator, Static Analyser, Documentation Generator, Refactor/Migration Tool.
-  • Includes **LLM-related Policy Types**: Toolchain Policy, Error Policy,
-    Inference Policy.
-- `IMPLEMENTATION_POLICIES.md` (updated) — initial Policy Type catalogue
-  with preliminary concept associations.
-- `PROCESS_INVENTORY.md` — process-lens catalogue of all tools, methods,
-  and approaches used in the design process.
+**Steps:**
 
-**Concept Design Review procedure:**
-Each concept goes through the
-[Concept Design Review](../how/concept-design-review.md) procedure —
-an 11-step process (Problem → Use Cases → Necessity → Sufficiency →
-Alternatives → Principles Check → Interactions → Rationale →
-Examples → Open Questions → ADR) — passes **all 7 Decision Validation gates**
-(including `LLM_GENERABILITY_GATE`) and satisfies the `_language-design.md`
-checklist before being accepted.
+1. **Inventory existing semantic research:**
+   - `DATA_MODEL.md` — types, representations (Value, Tuple, Reference, etc.)
+   - `OWNERSHIP.md` — ownership semantics
+   - `MUTABILITY.md` — mutation model
+   - `ALLOCATION.md` — memory allocation
+   - `EQUALITY.md` — equality semantics
+   - `FOUNDATIONAL_ABSTRACTIONS.md` — Data + Data Modifiers hypothesis
+
+2. **Create `SEMANTIC_MODEL.md`:**
+   Define each semantic dimension as a coherent whole:
+   - **Identity** — What does it mean for two values to be "the same"?
+   - **Ownership** — Who owns data? Linear, shared, borrowed?
+   - **Mutation** — When and how do values change? Are data immutable by default?
+   - **Evaluation** — When are expressions evaluated? Eager, lazy, mixed?
+   - **Visibility** — What is visible where? Scoping rules, modules, privacy.
+   - **Lifetime** — How long do values live? Stack, heap, arena, GC.
+
+3. **Validate semantic model consistency:**
+   - Check cross-dimension conflicts (e.g., ownership × mutation, evaluation × lifetime)
+   - Check against all Design Principles
+   - Write EDR accepting the Semantic Model
+
+**New artifacts:**
+- `what/SEMANTIC_MODEL.md` — unified semantic model
+- EDR for Semantic Model acceptance
+
+**Exit criteria:**
+- [ ] All 6 semantic dimensions defined and internally consistent
+- [ ] No contradictions with Design Principles
+- [ ] Semantic Model EDR accepted
+
+**Dependencies:** Phase 1 (Vision, Principles locked).
+
+---
+
+### Phase 3: Primitive Blocks ⬜
+
+**Goal:** Identify the minimal orthogonal set of primitive building blocks.
+Every derived feature must decompose into these. If a feature cannot be
+decomposed, the primitive set is incomplete.
+
+**Steps:**
+
+1. **Analyse minimum viable set — starting hypothesis:**
+   - `identifier` — named reference to a value
+   - `literal` — inline value notation
+   - `assignment` — bind value to name
+   - `function` — parameterized computation
+   - `call` — invoke a function
+   - `attribute access` — access member of a composite value
+   - `scope` — lexical boundary
+   - `reference` — indirection to a value
+   - `pack` — combine values into a composite
+   - `unpack` — decompose a composite
+   - `operator definition` — user-definable operator semantics
+
+2. **Check for gaps:**
+   - Each primitive must be orthogonal (no overlap, free composition)
+   - Each primitive must be semantically justified (answers to Semantic Model)
+   - Does any derived feature require a primitive not in the list?
+
+3. **Create `PRIMITIVE_BLOCKS.md`:**
+   - Full specification of each primitive
+   - Composition rules (how primitives combine)
+   - Verification: every concept research doc decomposes to primitives
+
+4. **Write EDR accepting the Primitive Blocks set**
+
+**New artifacts:**
+- `what/PRIMITIVE_BLOCKS.md`
+- EDR for Primitive Blocks acceptance
+
+**Exit criteria:**
+- [ ] All primitives are orthogonal (no overlap)
+- [ ] Each primitive maps to Semantic Model
+- [ ] Every known derived feature decomposes onto primitives
+- [ ] Set is minimal — removing any primitive makes some feature inexpressible
+
+**Dependencies:** Phase 2 (Semantic Model defines what primitives mean).
+
+---
+
+### Phase 4: Derived Features & Decision Pipeline ⬜
+
+**Goal:** Design every language feature through a rigorous pipeline — each one
+decomposed to primitives, run through the 10-question Decision Pipeline,
+classified as language/stdlib/external, and accepted via EDR.
+
+**Steps:**
+
+1. **Define the Decision Pipeline:**
+   ```
+   1. What problem are we solving?
+   2. Is this a language problem or a library problem?
+   3. Can it be solved with existing primitives?
+   4. Does it violate any Design Principle?
+   5. Does it add new semantics (vs. syntactic sugar)?
+   6. Can it be expressed through composition?
+   7. Can it be syntactic sugar over existing primitives?
+   8. Is this an optimisation, not semantics?
+   9. Does it affect backward compatibility?
+   10. Is it worth adding at all?
+   ```
+
+2. **Create `DECISION_PIPELINE.md`** — the canonical decision flow.
+
+3. **Classify and design all concepts:**
+   For each concept in `how/concepts/research/`:
+   - Run through Decision Pipeline
+   - Decompose to Primitive Blocks (from Phase 3)
+   - Classify: **Language** | **Standard Library** | **External Library**
+   - If "Language": produce full concept design per Concept Design Review
+   - Write EDR accepting the concept
+   - Move accepted draft to `what/concepts/`
+
+4. **Concepts in scope:**
+   | Priority | Concepts |
+   |----------|----------|
+   | **Core** | `FUNCTIONS.md`, `ERROR_HANDLING.md`, `GENERICS.md`, `PATTERN_MATCHING.md`, `OWNERSHIP.md` |
+   | **Control** | `ASYNC_AWAIT.md`, `CONCURRENCY.md`, `GENERATORS.md` |
+   | **Data** | `SORTING.md`, `UNPACKING.md`, `OBJECT_INITIALIZATION.md`, `SPAN.md` |
+   | **Meta** | `METAOBJECTS.md`, `LITERATE_PROGRAMMING.md`, `LLM_NATIVE_TOOLCHAIN.md` |
+   | **Anti-pattern** | 10 `imperative-crutch-*.md` files (inform design) |
+
+5. **Create `LIBRARY_BOUNDARY.md`:**
+   - For each feature classified as "Standard Library": document boundary rationale
+   - For "External Library": note as explicitly out of scope for M1
+   - Canonical reference for language vs. stdlib vs. external
 
 > **LLM Toolchain components** (Schema Provider, Code Completer, etc.)
-> go through Concept Design Review as a **parallel track** with a lighter
-> set of gates: `ARCHITECTURAL_INTEGRITY_GATE`, `USER_VALUE_GATE`,
-> `LLM_GENERABILITY_GATE`.
+> go through a parallel track with lighter gates:
+> `ARCHITECTURAL_INTEGRITY_GATE`, `USER_VALUE_GATE`, `LLM_GENERABILITY_GATE`.
 
 > **Existing partial concept docs** (`FOUNDATIONAL_ABSTRACTIONS.md`, `DATA_MODEL.md`,
 > `EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
-> formally reviewed through this Epic's process. A concept is
+> formally reviewed through this Phase's process. A concept is
 > registered only after acceptance via EDR (Architecture category).
 
-> **Note on interactions (Step 7):** At this stage, Step 7 only
-> **identifies which existing concepts** the new concept interacts with.
-> The detailed pair-wise interaction analysis is deferred to
-> Epic 4 (Cross-Cutting Review), when the full set of accepted
-> concepts is available for systematic analysis.
+> **Note on interactions:** This Phase only **identifies which concepts**
+> each new concept interacts with. The detailed pair-wise interaction
+> analysis is deferred to Phase 6 (Cross-Cutting), when the full set
+> of accepted concepts is available.
 
-**Anti-pattern research:** Complete 10 `docs/how/concepts/research/imperative-crutch-*.md` topics,
-each documenting findings and explicit implications for Orthon's concept designs.
+**New artifacts:**
+- `how/process/DECISION_PIPELINE.md` — the 10-question pipeline
+- `what/LIBRARY_BOUNDARY.md` — language vs stdlib vs external classification
+- Per accepted concept: `what/concepts/{NAME}.md` + EDR
 
-**Deliverables:** 13 completed concept documents, 10 anti-pattern research notes,
-one EDR per accepted concept.
+**Exit criteria:**
+- [ ] Decision Pipeline defined and applied to every feature
+- [ ] Each feature decomposed to Primitive Blocks
+- [ ] Each feature classified (Language / StdLib / External)
+- [ ] All accepted concepts have EDRs
+- [ ] Anti-pattern research completed and informs design
 
-**Concepts in scope:** `PATTERN_MATCHING.md`, `ERROR_HANDLING.md`,
-`OWNERSHIP.md`, `GENERICS.md`, `ASYNC_AWAIT.md`, `OBJECT_INITIALIZATION.md`,
-`CONCURRENCY.md`, `LITERATE_PROGRAMMING.md`, `SORTING.md`, `UNPACKING.md`,
-`GENERATORS.md`, `METAOBJECTS.md`, `SPAN.md`.
-
-**Dependencies:** Epic 2 (requires the acceptance gate and review process).
+**Dependencies:** Phase 3 (Primitive Blocks must exist to decompose into).
 
 ---
 
-### Epic 4: Cross-Cutting Review ⬜
+### Phase 5: Syntax Design ⬜
 
-**Goal:** Verify that all accepted concepts work together without conflicts,
-and finalise the Interaction Matrix format for documenting concept interactions.
+**Goal:** Design syntax as the *external interface* of the semantic model —
+not as an independent creative exercise. Syntax is derived from semantics,
+not the reverse.
 
-After each concept has been reviewed individually (Epic 3), their interactions
-are examined as a whole system. This is where contradictions at concept
-boundaries are typically discovered.
+**Steps:**
 
-| Pair Type | Example |
-|-----------|---------|
-| Generator × Context Manager | Resource lifetime across suspension points |
-| Pattern Matching × Types | Exhaustiveness with nominal vs structural types |
-| Modules × Visibility | Cross-module access control |
-| Annotations × Reflection | Metadata discovery at runtime |
-| Blocks × Closures | Variable capture and scope boundaries |
-| Coroutine × Error Handling | Exception propagation across async boundaries |
+1. **Establish syntax principles:**
+   - One concept → one syntax
+   - One symbol → one meaning (context-independent)
+   - No significant whitespace
+   - Named forms preferred over symbolic (when ambiguity risk)
+   - Syntax is derived from semantics, not vice versa
 
-**Deliverable:** Interaction matrix document + conflict registry.
+2. **Produce syntax for each accepted Language concept:**
+   - All canonical forms documented together (per AGENTS.md §4.2)
+   - Syntax must be consistent across all concepts
+
+3. **Validate syntax:**
+   - No ambiguous parses
+   - No context-dependent syntax
+   - LLM generability check
+   - Readability check — can a human predict the syntax from semantics alone?
+
+4. **Create `SYNTAX.md` and update `PARSER.md`**
 
 **Primary gates applied:** `ARCHITECTURAL_INTEGRITY_GATE`,
 `LOGICAL_CONSISTENCY_GATE`.
 
-**Dependencies:** Epic 3 (concepts must be individually designed before
-their interactions can be assessed).
+**New artifacts:**
+- `what/SYNTAX.md` — complete syntax reference
+- `how/architecture/PARSER.md` — updated with concrete grammar
 
-> **Input from Epic 3:** Each concept's Interactions section identifies which
-> other concepts it interacts with. This Epic receives that list of affected
-> pairs and performs the full pair-wise interaction analysis, resolving
-> conflicts at concept boundaries.
+**Exit criteria:**
+- [ ] Every language concept has defined syntax
+- [ ] No ambiguous or context-dependent syntax
+- [ ] LLM generability gate passed for all syntax
+- [ ] Syntax consistent across all concepts
 
-> **Note on format:** The exact format of the interaction matrix requires
-> separate investigation (see `docs/notes/interaction-matrix-format.md`).
-> The current approach uses per-concept "Interactions" sections
-> (Epic 3) that feed into a consolidated matrix in this Epic.
+**Dependencies:** Phase 4 (concepts must be accepted before syntax is designed).
 
 ---
 
-### Epic 5: Freeze & Naming ⬜
+### Phase 6: Cross-Cutting Review ⬜
 
-**Goal:** From a consistent, cross-cutting-verified concept set, produce the
-canonical specification, validate it in practice, and freeze Orthon v0.1.
-This Epic consolidates four sequential phases: Consistency Review → Language
-Specification → Validation → Freeze, plus the naming decision.
+**Goal:** Verify that all accepted concepts work together without conflicts.
+Produce the Interaction Matrix and resolve all concept-boundary conflicts.
 
-**Step 5.1 — Consistency Review:**
+**Steps:**
+
+1. **Build Interaction Matrix — key pairs to investigate:**
+
+   | Pair | Risk |
+   |------|------|
+   | Generator × Error Handling | Resource lifetime across suspension points |
+   | Pattern Matching × Types | Exhaustiveness with nominal vs structural |
+   | Modules × Visibility | Cross-module access control |
+   | Blocks × Closures | Variable capture and scope boundaries |
+   | Async/Await × Error Handling | Exception propagation across async |
+   | Ownership × Mutation | Shared mutation semantics |
+   | Generics × Pattern Matching | Type parameter destructuring |
+
+2. **Create `CROSS_CUTTING.md`** — full pair-wise interaction matrix
+
+3. **Create `CONFLICT_REGISTRY.md`** — open conflicts and resolutions
+
+4. **Resolve all conflicts before Phase 8**
+
+**Primary gates applied:** `ARCHITECTURAL_INTEGRITY_GATE`,
+`LOGICAL_CONSISTENCY_GATE`.
+
+**New artifacts:**
+- `what/CROSS_CUTTING.md` — interaction matrix
+- `what/CONFLICT_REGISTRY.md` — conflicts and resolutions
+
+**Exit criteria:**
+- [ ] All concept pairs analysed
+- [ ] All conflicts resolved or documented with EDR deferral rationale
+- [ ] No unresolvable contradictions
+
+**Dependencies:** Phase 4 (all concepts designed).
+
+> **Input from Phase 4:** Each concept's Interactions section identifies which
+> other concepts it interacts with. This Phase receives that list of affected
+> pairs and performs the full pair-wise analysis.
+
+> **Note on format:** The exact format of the interaction matrix requires
+> separate investigation (see `docs/notes/interaction-matrix-format.md`).
+
+---
+
+### Phase 7: Execution & Optimization Model ⬜
+
+**Goal:** Define the boundary between language semantics and implementation.
+Document what is guaranteed by the language vs. what is an optimisation choice.
+
+**Steps:**
+
+1. **Create `EXECUTION_MODEL.md`:**
+   - Define execution semantics — what the language guarantees about *how*
+     a program executes
+   - Execution Program as the semantics/execution boundary (see
+     [`EXECUTION_PROGRAM.md`](../how/concepts/research/EXECUTION_PROGRAM.md))
+   - Supported execution targets: Interpreter, AOT, JIT, LLVM, WASM, Container
+
+2. **Create `OPTIMIZATION_MODEL.md`:**
+   - Catalogue optimisations by category:
+     | Category | Examples | Classification |
+     |----------|----------|----------------|
+     | Inlining | Function inlining | Optimisation |
+     | Constant folding | Compile-time evaluation | Optimisation |
+     | Escape analysis | Stack vs heap allocation | Optimisation |
+     | Dead code elimination | Unused code removal | Optimisation |
+     | Evaluation order | Expression sequencing | **Semantics** |
+     | Memory layout | Struct field ordering | Depends on strategy |
+
+3. **Reconcile with Implementation Strategies:**
+   - Ensure `DEFAULT_STRATEGY.md`, `EMBEDDED_STRATEGY.md`,
+     `HIGH_PERFORMANCE_STRATEGY.md`, `LLM_STRATEGY.md` are consistent
+   - The "Semantics Before Optimization" principle now has a concrete reference
+
+**Primary gates applied:** `IMPLEMENTATION_INDEPENDENCE_GATE`,
+`LONG_TERM_MAINTAINABILITY_GATE`.
+
+**New artifacts:**
+- `what/EXECUTION_MODEL.md`
+- `what/OPTIMIZATION_MODEL.md`
+
+**Exit criteria:**
+- [ ] Semantics vs. Optimisation boundary is explicit and unambiguous
+- [ ] Every optimisation is classified
+- [ ] All Implementation Strategies consistent with the model
+- [ ] Execution Program concept formalised via EDR
+
+**Dependencies:** Phase 6 (stable concept set), Phase 2 (Semantic Model).
+
+---
+
+### Phase 8: Evolution Model & Freeze ⬜
+
+**Goal:** Define how the language evolves over time, then freeze v0.1.
+
+**Step 8.1 — Evolution Model:**
+
+- Versioning scheme (SemVer for language? Date-based?)
+- Deprecation policy — how features are deprecated, removal timeline
+- Experimental mechanism — opt-in, feature gates
+- Breaking change policy — what constitutes breaking, migration path requirement
+- Create `how/EVOLUTION_MODEL.md`
+
+**Step 8.2 — Consistency Review:**
 Review the language as a whole for uniformity, minimality, and absence of
 special cases.
 
@@ -218,71 +452,62 @@ special cases.
 - No special cases — context-dependent behaviour is eliminated
 - Naming uniformity — consistent naming conventions
 - Operator uniformity — consistent operator semantics
-- Minimality — no concept duplicates another's responsibility
-- No redundancy — unnecessary capabilities removed
-
-> **Distinction from Epic 3:** Epic 3 (Steps 4 and 6) checks *internal*
-> minimality — is each individual concept as lean as it can be? This step
-> checks *global* minimality — does the language as a whole have redundant,
-> overlapping, or unnecessary concepts? The same feature that appears
-> justified in isolation may be removed here because another concept already
-> covers its responsibility.
->
-> *This is where approximately half of "interesting" features are removed.*
+- **Global minimality** — no concept duplicates another's responsibility.
+  This is distinct from Phase 4's *internal* minimality (is each individual
+  concept lean?). This checks *global* minimality — does the language as a
+  whole have redundant, overlapping concepts?
+  > *This is where approximately half of "interesting" features are removed.*
 
 **Primary gates applied:** `CONCEPTUAL_SIMPLICITY_GATE`,
 `LONG_TERM_MAINTAINABILITY_GATE`.
 
-**Dependencies:** Epic 4 (cross-cutting issues resolved before consistency
-is locked).
-
-**Step 5.2 — Language Specification:**
-Produce the canonical language specification document. The specification no
-longer discusses alternatives or design rationale — it fixes the language.
-
-Each section contains:
-- Description • Syntax • Semantics • Constraints • Examples • Links to ADRs
+**Step 8.3 — Language Specification:**
+Produce the canonical specification. No alternatives or rationale — it fixes
+the language. Each section contains:
+- Description • Syntax • Semantics • Constraints • Examples • Links to EDRs
 
 **Deliverables:**
-- `SPEC.md` — canonical language specification.
-- `SCHEMA.md` — machine-readable language schema (grammar, types, stdlib
-  contracts) in a format consumable by the LLM Toolchain.
+- `SPEC.md` — canonical language specification
+- `SCHEMA.md` — machine-readable language schema (grammar, types, contracts)
+  consumable by the LLM Toolchain
 
-**Dependencies:** Epic 3–4 (all concepts designed, cross-cutting issues
-resolved, consistency confirmed).
-
-**Step 5.3 — Validation:**
+**Step 8.4 — Validation:**
 Test the language design in practice before freezing.
 
 - Write reference examples and real programs
 - Implement known algorithms to find ergonomic issues
-- Rewrite libraries to identify gaps
 - **LLM generation tests** — validate that LLMs can generate correct Orthon
   code for each concept
-- **Schema round-trip tests** — verify that the schema → generation →
-  validation cycle works end-to-end
+- **Schema round-trip tests** — verify schema → generation → validation cycle
 - Document ambiguities and friction points
-- Produce new ADRs for issues discovered
+- Produce new EDRs for issues discovered
 
-**Dependencies:** Step 5.2 (specification needed to validate against).
-
-**Step 5.4 — Freeze:**
+**Step 8.5 — Freeze:**
 Freeze the first version of the language specification.
 
-- All validation issues resolved or deferred with documented rationale
-- A documented decision (EDR or equivalent) confirms "Orthon" as the final
-  project name, or names a replacement with rationale
+- All validation issues resolved or deferred with documented EDR rationale
+- A documented decision (EDR) confirms the final project name or alternative
 - Specification is self-consistent and complete
-- Version is tagged (e.g., Orthon 0.1 Specification)
-- A link-check of all cross-references across the repository reports zero
-  dangling references
+- Version tagged (Orthon v0.1 Specification)
+- Full link audit — zero dangling cross-references across the entire repository
 
-**Deliverables:**
-- Frozen specification — `SPEC.md` at release tag.
-- `docs/notes/whitepaper-strategy.md` — whitepaper plan finalised; candidate
-  topics, target audiences, and publication timeline defined.
+**New artifacts:**
+- `how/EVOLUTION_MODEL.md` — versioning, deprecation, experimental, feature gates
+- `SPEC.md` — canonical frozen specification
+- `SCHEMA.md` — machine-readable schema
+- `docs/notes/whitepaper-strategy.md` — whitepaper plan finalised
 
-**Dependencies:** Step 5.3 (all validation feedback incorporated).
+**Exit criteria:**
+- [ ] Evolution model documented and approved via EDR
+- [ ] Global consistency review passed
+- [ ] Validation programs written and reviewed
+- [ ] LLM generation tests passed
+- [ ] Zero dangling cross-references
+- [ ] Specification frozen and tagged
+
+**Dependencies:** Phase 7 (Execution Model part of frozen spec),
+Phase 6 (cross-cutting issues resolved), Phase 5 (syntax resolved),
+Phase 4 (concepts designed).
 
 ---
 
@@ -360,7 +585,7 @@ milestone.
   complete before the next begins (unless explicitly scoped otherwise).
 - **Design before implement.** M1 (language design) precedes M2–M4 (stdlib,
   tooling, implementation).
-- **ADRs as you go.** Architecture Decision Records are created alongside
-  concept design decisions in Epic 3, not deferred.
+- **ADRs as you go (EDRs).** Engineering Decision Records are created alongside
+  concept design decisions in Phase 4, not deferred.
 - **Docs drive, code follows.** This repository contains *only* design
   documentation. The compiler and runtime live in a separate repository.

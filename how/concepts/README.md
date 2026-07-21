@@ -11,9 +11,11 @@ This directory contains the design process for Orthon language concepts.
 ## Pipeline
 
 1. **Research** → file in `research/` documents analysis from other languages
-2. **Concept Design Review** → formal review process (see [`concept-design-review.md`](../concept-design-review.md))
-3. **Acceptance** → EDR (Architecture category) + draft in `what/concepts/`
-4. **Specification** → entry in `what/CORE_CONCEPTS.md`
+2. **Decision Pipeline** → 10-question pre-filter (see [`DECISION_PIPELINE.md`](../process/DECISION_PIPELINE.md))
+3. **Primitive Decomposition** → verify concept decomposes to Primitive Blocks
+4. **Concept Design Review** → formal review process (see [`concept-design-review.md`](../concept-design-review.md))
+5. **Acceptance** → EDR (Architecture category) + draft in `what/concepts/`
+6. **Specification** → entry in `what/CORE_CONCEPTS.md`
 
 ## Adding Research
 

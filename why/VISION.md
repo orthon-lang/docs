@@ -1,5 +1,41 @@
 # Vision
 
+> **Canonical block.** This document is the single source of truth for
+> Orthon's vision. Expanded discussions follow below.
+
+```
+Vision
+    A programming language engineered like software — architected with
+    SOLID principles, orthogonal by construction, and designed for both
+    humans and LLMs as first-class users.
+
+Mission
+    Provide minimal, orthogonal, explicit semantics that compose freely.
+    The language defines contracts; implementations fulfill them.
+    Programs are fully-defined artifacts, not just source code.
+
+Non-goals
+    • Be another C syntax
+    • Be the fastest language
+    • Replace C++
+    • Novelty for its own sake
+    • Backward compatibility with any existing language
+    • REPL-first or notebook-first interaction
+
+Target Audience
+    • LLMs — as first-class code generators
+    • Library authors — who value stable semantics and composable abstractions
+    • System programmers — who need explicit control without ceremony
+    • Teams — who need decade-stable language foundations
+
+Success Criteria
+    • Stable semantics — programs from v1.0 run correctly on v10.0
+    • Small core — all features decompose to a minimal primitive set
+    • Predictable evolution — extensions through libraries, not core changes
+    • LLM generability — LLMs can reliably produce correct Orthon code
+    • Execution portability — same program runs identically in any conforming Engine
+```
+
 ## Language Designed Like Software
 
 The language should be architected like well-designed software.
