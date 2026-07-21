@@ -38,11 +38,15 @@
       Are there special cases or context-dependent behavior?
 - [ ] **Minimality** — can this be expressed through composition of
       existing concepts instead?
+      (See also: [`CORE_INCLUSION_FILTER.md`](../architecture/CORE_INCLUSION_FILTER.md) —
+      the procedural decision rule for core inclusion)
 - [ ] **Core stability** — does this proposal require changing the
       Core Language's semantics? If yes, explicitly justify why the
       new semantics cannot be expressed through composition of
       existing Core primitives, a new Standard Library contract, or
       a new Implementation Strategy.
+      (See also: [`CORE_INCLUSION_FILTER.md`](../architecture/CORE_INCLUSION_FILTER.md) —
+      apply the filter before concluding that core change is necessary)
 - [ ] **Least Astonishment** — does the behavior match what a competent
       programmer would intuitively expect?
 - [ ] **Explicitness** — are semantic changes syntactically visible?

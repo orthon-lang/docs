@@ -182,6 +182,17 @@ Both represent exactly the same semantics.
 
 ## Minimal Core
 
+Orthon follows a **RISC-like design philosophy** for its core: a
+minimal set of powerful, orthogonal primitives from which complex
+behaviour emerges through composition. Adding specialised constructs
+directly to the core — the "CISC approach" to language design —
+is actively resisted. The language earns its expressiveness through
+its Pattern and Library layers, not through core expansion.
+
+See [`CORE_INCLUSION_FILTER.md`](architecture/CORE_INCLUSION_FILTER.md)
+for the procedural decision rule that determines what belongs in the
+core versus what should be composed at a higher layer.
+
 The language must have a **minimal, but sufficient, core** that does not
 require change as new technologies, platforms, or optimisation techniques
 emerge.
