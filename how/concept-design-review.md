@@ -52,7 +52,7 @@ concepts that pass all gates and satisfy the checklist are accepted.
   the list of concepts to design, with brief descriptions and dependency
   relationships.
 - **Existing draft documents** — any preliminary concept notes (e.g.,
-  `CORE_CONCEPTS.md`, `DATA_MODEL.md`, `EQUALITY.md`) are treated as
+  `concepts/CORE_CONCEPTS.md`, `DATA_MODEL.md`, `EQUALITY.md`) are treated as
   input material, not as accepted designs.
 
 ---
@@ -211,7 +211,7 @@ the concrete review form that records the outcome of each gate check.
 
 The deliverables of a Concept Design Review are:
 
-1. **Concept document** in `docs/what/concepts/` — the formal semantic
+1. **Concept document** in `docs/how/concepts/research/` — the formal semantic
    definition of the concept (see the [`_concept.md`](templates/_concept.md)
    template for the required structure).
 2. **EDR** in `docs/how/decision_records/architecture/` — records the decision, rationale, and

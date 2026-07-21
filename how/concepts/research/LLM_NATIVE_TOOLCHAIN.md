@@ -223,8 +223,8 @@ specified in the active Implementation Strategy. For the LLM Strategy,
 this is `Toolchain Policy = Full` — all toolchain components are
 active and available.
 
-See [`LLM_STRATEGY.md`](../../how/strategies/LLM_STRATEGY.md)
-and [`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)
+See [`LLM_STRATEGY.md`](../../strategies/LLM_STRATEGY.md)
+and [`IMPLEMENTATION_POLICIES.md`](../../IMPLEMENTATION_POLICIES.md)
 § Toolchain Policy.
 
 ## Alternative Strategies
@@ -244,7 +244,7 @@ Possible Toolchain Policy values: `Minimal`, `Standard`, `Full`,
 `Offline`. Each represents a different point in the trade-off space
 between LLM capability and toolchain independence.
 
-See [`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)
+See [`IMPLEMENTATION_POLICIES.md`](../../IMPLEMENTATION_POLICIES.md)
 § Toolchain Policy for the full catalogue.
 
 ## Open Questions

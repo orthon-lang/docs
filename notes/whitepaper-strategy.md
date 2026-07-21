@@ -80,4 +80,4 @@ plan.
 
 - [ROADMAP.md](../when/ROADMAP.md) — milestone sequence
 - [VISION.md](../why/VISION.md) — architectural vision
-- [EXECUTION_PROGRAM.md](../what/concepts/EXECUTION_PROGRAM.md) — the Execution Program model
+- [EXECUTION_PROGRAM.md](../how/concepts/research/EXECUTION_PROGRAM.md) — the Execution Program model

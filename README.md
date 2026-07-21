@@ -53,10 +53,8 @@ This repository contains the language design documentation — the *why*,
 | [Working Backwards](why/WORKING_BACKWARDS.md) | Why Orthon exists — derived from the programmer's perspective |
 | [Design Philosophy](how/PHILOSOPHY.md) | How design decisions flow from vision to implementation |
 | [Architecture](how/architecture/ARCHITECTURE.md) | The layered design — Language Core, Execution Environment, LLM Toolchain |
-| [Execution Model](what/concepts/EXECUTION_PROGRAM.md) | How Orthon unifies interpreters, compilers, and builders under one Execution Program + Engine model |
-| [Core Concepts](what/concepts/CORE_CONCEPTS.md) | The fundamental building blocks — Data and Data Modifiers |
+| [Core Concepts](what/CORE_CONCEPTS.md) | Registry of accepted Orthon concepts — the foundation for the language spec |
 | [Decision Records](how/decision_records/INDEX.md) | Engineering Decision Records — every consequential design choice documented with rationale |
-| [LLM-Native Toolchain](what/concepts/LLM_NATIVE_TOOLCHAIN.md) | How Orthon is designed for LLM-assisted development — schema, generation, analysis, and feedback |
 
 ## For AI Agents
 

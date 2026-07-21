@@ -66,8 +66,8 @@ By default, allocation follows the **Allocation Policy** specified in
 the active Implementation Strategy. For the Default Strategy, this is
 `Arena` — region-based allocation with bulk deallocation.
 
-See [`DEFAULT_STRATEGY.md`](../../how/strategies/DEFAULT_STRATEGY.md)
-and [`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)
+See [`DEFAULT_STRATEGY.md`](../../strategies/DEFAULT_STRATEGY.md)
+and [`IMPLEMENTATION_POLICIES.md`](../../IMPLEMENTATION_POLICIES.md)
 § Allocation Policy.
 
 ## Alternative Strategies
@@ -85,7 +85,7 @@ Possible Policy values for allocation: `Heap`, `Arena`, `Linear`,
 `GC`, `Static`. Each represents a different point in the trade-off
 space between flexibility, performance, and determinism.
 
-See [`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)
+See [`IMPLEMENTATION_POLICIES.md`](../../IMPLEMENTATION_POLICIES.md)
 § Allocation Policy for the full catalogue.
 
 ## Open Questions

@@ -19,8 +19,8 @@ Links were checked by:
 
 | File | Old Link | New Link | Reason |
 |------|----------|----------|--------|
-| `docs/notes/imperative-crutch-lazy-sequences.md` | `EXECUTION_IMAGE.md` | Removed | Superseded by EXECUTION_PROGRAM.md |
-| `docs/notes/imperative-crutch-resource-management.md` | `EXECUTION_IMAGE.md` | `EXECUTION_PROGRAM.md` | Superseded concept |
+| `docs/how/concepts/research/imperative-crutch-lazy-sequences.md` | `EXECUTION_IMAGE.md` | Removed | Superseded by EXECUTION_PROGRAM.md |
+| `docs/how/concepts/research/imperative-crutch-resource-management.md` | `EXECUTION_IMAGE.md` | `EXECUTION_PROGRAM.md` | Superseded concept |
 
 ## Links Verified Correct
 

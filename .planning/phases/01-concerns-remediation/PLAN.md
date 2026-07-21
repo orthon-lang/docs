@@ -12,32 +12,32 @@ files_modified:
   - docs/how/architecture/FITNESS_FUNCTIONS.md
   - docs/how/DOCUMENTATION_PRINCIPLES.md
   - docs/how/templates/_adr.md
-  - docs/what/concepts/EXECUTION_IMAGE.md
-  - docs/notes/imperative-crutch-lazy-sequences.md
-  - docs/notes/imperative-crutch-resource-management.md
+  - docs/how/concepts/research/EXECUTION_IMAGE.md
+  - docs/how/concepts/research/imperative-crutch-lazy-sequences.md
+  - docs/how/concepts/research/imperative-crutch-resource-management.md
   - docs/how/decision_records/INDEX.md
   - docs/how/decision_records/process/EDR-001-edr-system.md
-  - docs/what/concepts/EQUALITY.md
-  - docs/what/concepts/FUNCTIONS.md
-  - docs/what/concepts/MUTABILITY.md
-  - docs/what/concepts/ALLOCATION.md
-  - docs/what/concepts/DATA_MODEL.md
-  - docs/what/concepts/CORE_CONCEPTS.md
-  - docs/what/concepts/OWNERSHIP.md
-  - docs/what/concepts/ERROR_HANDLING.md
-  - docs/what/concepts/GENERICS.md
-  - docs/what/concepts/SPAN.md
-  - docs/what/concepts/METAOBJECTS.md
-  - docs/what/concepts/EXECUTION_PROGRAM.md
-  - docs/what/concepts/GENERATORS.md
-  - docs/what/concepts/LLM_NATIVE_TOOLCHAIN.md
-  - docs/what/concepts/UNPACKING.md
-  - docs/what/concepts/ASYNC_AWAIT.md
-  - docs/what/concepts/SORTING.md
-  - docs/what/concepts/LITERATE_PROGRAMMING.md
-  - docs/what/concepts/PATTERN_MATCHING.md
-  - docs/what/concepts/CONCURRENCY.md
-  - docs/what/concepts/OBJECT_INITIALIZATION.md
+  - docs/how/concepts/research/EQUALITY.md
+  - docs/how/concepts/research/FUNCTIONS.md
+  - docs/how/concepts/research/MUTABILITY.md
+  - docs/how/concepts/research/ALLOCATION.md
+  - docs/how/concepts/research/DATA_MODEL.md
+  - docs/how/concepts/research/CORE_CONCEPTS.md
+  - docs/how/concepts/research/OWNERSHIP.md
+  - docs/how/concepts/research/ERROR_HANDLING.md
+  - docs/how/concepts/research/GENERICS.md
+  - docs/how/concepts/research/SPAN.md
+  - docs/how/concepts/research/METAOBJECTS.md
+  - docs/how/concepts/research/EXECUTION_PROGRAM.md
+  - docs/how/concepts/research/GENERATORS.md
+  - docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md
+  - docs/how/concepts/research/UNPACKING.md
+  - docs/how/concepts/research/ASYNC_AWAIT.md
+  - docs/how/concepts/research/SORTING.md
+  - docs/how/concepts/research/LITERATE_PROGRAMMING.md
+  - docs/how/concepts/research/PATTERN_MATCHING.md
+  - docs/how/concepts/research/CONCURRENCY.md
+  - docs/how/concepts/research/OBJECT_INITIALIZATION.md
   - docs/what/GLOSSARY.md
   - docs/when/ROADMAP.md
   - docs/.planning/ROADMAP.md
@@ -88,14 +88,14 @@ must_haves:
     - docs/how/DOCUMENTATION_PRINCIPLES.md (expanded, 8-sections)
     - .archived/templates/_adr.md (moved)
     - .archived/concepts/EXECUTION_IMAGE.md (moved)
-    - docs/notes/imperative-crutch-lazy-sequences.md (updated refs)
-    - docs/notes/imperative-crutch-resource-management.md (updated refs)
+    - docs/how/concepts/research/imperative-crutch-lazy-sequences.md (updated refs)
+    - docs/how/concepts/research/imperative-crutch-resource-management.md (updated refs)
     - docs/how/decision_records/INDEX.md (gap documented)
     - docs/how/decision_records/process/EDR-001-edr-system.md (gap documented)
-    - docs/what/concepts/EQUALITY.md (structurally complete draft)
-    - docs/what/concepts/FUNCTIONS.md (structurally complete draft)
-    - docs/what/concepts/MUTABILITY.md (structurally complete draft)
-    - docs/what/concepts/ALLOCATION.md (structurally complete draft)
+    - docs/how/concepts/research/EQUALITY.md (structurally complete draft)
+    - docs/how/concepts/research/FUNCTIONS.md (structurally complete draft)
+    - docs/how/concepts/research/MUTABILITY.md (structurally complete draft)
+    - docs/how/concepts/research/ALLOCATION.md (structurally complete draft)
     - Concept audit gap list (audit output file)
     - Ownership assignment in TODO.md
     - Link audit log
@@ -139,15 +139,15 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
 @docs/how/decision_records/process/EDR-001-edr-system.md
 @docs/how/decision_records/quality/EDR-005-fitness-functions.md
 @docs/what/DESIGN_PRINCIPLES.md
-@docs/what/concepts/EQUALITY.md
-@docs/what/concepts/ALLOCATION.md
-@docs/what/concepts/CORE_CONCEPTS.md
+@docs/how/concepts/research/EQUALITY.md
+@docs/how/concepts/research/ALLOCATION.md
+@docs/how/concepts/research/CORE_CONCEPTS.md
 @docs/what/GLOSSARY.md
 @docs/when/ROADMAP.md
 @docs/AGENTS.md
 @docs/TODO.md
-@docs/notes/imperative-crutch-lazy-sequences.md
-@docs/notes/imperative-crutch-resource-management.md
+@docs/how/concepts/research/imperative-crutch-lazy-sequences.md
+@docs/how/concepts/research/imperative-crutch-resource-management.md
 </context>
 
 <tasks>
@@ -326,22 +326,22 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
 <task type="auto">
   <name>Task B.2: Archive EXECUTION_IMAGE.md and update all cross-references</name>
   <files>
-    docs/what/concepts/EXECUTION_IMAGE.md
-    docs/notes/imperative-crutch-lazy-sequences.md
-    docs/notes/imperative-crutch-resource-management.md
+    docs/how/concepts/research/EXECUTION_IMAGE.md
+    docs/how/concepts/research/imperative-crutch-lazy-sequences.md
+    docs/how/concepts/research/imperative-crutch-resource-management.md
   </files>
   <action>
     Per DEBT-06: EXECUTION_IMAGE.md is SUPERSEDED by EXECUTION_PROGRAM.md but still referenced in two notes files.
 
     Actions:
     1. Create `.archived/concepts/` directory
-    2. Move `docs/what/concepts/EXECUTION_IMAGE.md` to `.archived/concepts/EXECUTION_IMAGE.md` — preserve the SUPERSEDED header and the note about it being replaced by EXECUTION_PROGRAM.md
-    3. Fix `docs/notes/imperative-crutch-lazy-sequences.md`: replace "See also: concepts `GENERATORS.md`, `EXECUTION_IMAGE.md`, `EXECUTION_PROGRAM.md`" with "See also: concepts `GENERATORS.md`, `EXECUTION_PROGRAM.md`"
-    4. Fix `docs/notes/imperative-crutch-resource-management.md`: replace "See also: concepts `OWNERSHIP.md`, `EXECUTION_IMAGE.md`" with "See also: concepts `OWNERSHIP.md`, `EXECUTION_PROGRAM.md`"
+    2. Move `docs/how/concepts/research/EXECUTION_IMAGE.md` to `.archived/concepts/EXECUTION_IMAGE.md` — preserve the SUPERSEDED header and the note about it being replaced by EXECUTION_PROGRAM.md
+    3. Fix `docs/how/concepts/research/imperative-crutch-lazy-sequences.md`: replace "See also: concepts `GENERATORS.md`, `EXECUTION_IMAGE.md`, `EXECUTION_PROGRAM.md`" with "See also: concepts `GENERATORS.md`, `EXECUTION_PROGRAM.md`"
+    4. Fix `docs/how/concepts/research/imperative-crutch-resource-management.md`: replace "See also: concepts `OWNERSHIP.md`, `EXECUTION_IMAGE.md`" with "See also: concepts `OWNERSHIP.md`, `EXECUTION_PROGRAM.md`"
     5. Grep entire docs/ tree for any other EXECUTION_IMAGE references outside .planning/ and .archived/ — fix any found
   </action>
   <verify>
-    <automated>test -f .archived/concepts/EXECUTION_IMAGE.md && ! grep -q 'EXECUTION_IMAGE' docs/notes/imperative-crutch-lazy-sequences.md && ! grep -q 'EXECUTION_IMAGE' docs/notes/imperative-crutch-resource-management.md</automated>
+    <automated>test -f .archived/concepts/EXECUTION_IMAGE.md && ! grep -q 'EXECUTION_IMAGE' docs/how/concepts/research/imperative-crutch-lazy-sequences.md && ! grep -q 'EXECUTION_IMAGE' docs/how/concepts/research/imperative-crutch-resource-management.md</automated>
   </verify>
   <done>
     EXECUTION_IMAGE.md moved to .archived/concepts/. Both notes files updated to reference EXECUTION_PROGRAM.md. No stale EXECUTION_IMAGE refs remain in active documents.
@@ -357,27 +357,27 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     docs/how/architecture/PARSER.md
     docs/how/architecture/TYPE_SYSTEM.md
     docs/how/architecture/NAME_RESOLUTION.md
-    docs/what/concepts/CORE_CONCEPTS.md
-    docs/what/concepts/DATA_MODEL.md
-    docs/what/concepts/ALLOCATION.md
-    docs/what/concepts/OWNERSHIP.md
-    docs/what/concepts/MUTABILITY.md
-    docs/what/concepts/EQUALITY.md
-    docs/what/concepts/FUNCTIONS.md
-    docs/what/concepts/ASYNC_AWAIT.md
-    docs/what/concepts/CONCURRENCY.md
-    docs/what/concepts/GENERATORS.md
-    docs/what/concepts/ERROR_HANDLING.md
-    docs/what/concepts/PATTERN_MATCHING.md
-    docs/what/concepts/GENERICS.md
-    docs/what/concepts/OBJECT_INITIALIZATION.md
-    docs/what/concepts/EXECUTION_PROGRAM.md
-    docs/what/concepts/LLM_NATIVE_TOOLCHAIN.md
-    docs/what/concepts/LITERATE_PROGRAMMING.md
-    docs/what/concepts/METAOBJECTS.md
-    docs/what/concepts/SPAN.md
-    docs/what/concepts/UNPACKING.md
-    docs/what/concepts/SORTING.md
+    docs/how/concepts/research/CORE_CONCEPTS.md
+    docs/how/concepts/research/DATA_MODEL.md
+    docs/how/concepts/research/ALLOCATION.md
+    docs/how/concepts/research/OWNERSHIP.md
+    docs/how/concepts/research/MUTABILITY.md
+    docs/how/concepts/research/EQUALITY.md
+    docs/how/concepts/research/FUNCTIONS.md
+    docs/how/concepts/research/ASYNC_AWAIT.md
+    docs/how/concepts/research/CONCURRENCY.md
+    docs/how/concepts/research/GENERATORS.md
+    docs/how/concepts/research/ERROR_HANDLING.md
+    docs/how/concepts/research/PATTERN_MATCHING.md
+    docs/how/concepts/research/GENERICS.md
+    docs/how/concepts/research/OBJECT_INITIALIZATION.md
+    docs/how/concepts/research/EXECUTION_PROGRAM.md
+    docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md
+    docs/how/concepts/research/LITERATE_PROGRAMMING.md
+    docs/how/concepts/research/METAOBJECTS.md
+    docs/how/concepts/research/SPAN.md
+    docs/how/concepts/research/UNPACKING.md
+    docs/how/concepts/research/SORTING.md
   </files>
   <action>
     Per DEBT-07: Add a `> **Last updated:** YYYY-MM-DD` metadata line to every concept and architecture document. Use `2026-07-20` as the date for all documents (this phase's planning date).
@@ -399,7 +399,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     The 4 empty files should now have content from Wave A — add the date-stamp as part of their content structure.
   </action>
   <verify>
-    <automated>for f in docs/how/architecture/ARCHITECTURE.md docs/how/architecture/FITNESS_FUNCTIONS.md docs/how/architecture/IR.md docs/how/architecture/PARSER.md docs/how/architecture/TYPE_SYSTEM.md docs/how/architecture/NAME_RESOLUTION.md docs/what/concepts/CORE_CONCEPTS.md docs/what/concepts/DATA_MODEL.md docs/what/concepts/ALLOCATION.md docs/what/concepts/OWNERSHIP.md docs/what/concepts/MUTABILITY.md docs/what/concepts/EQUALITY.md docs/what/concepts/FUNCTIONS.md docs/what/concepts/ASYNC_AWAIT.md docs/what/concepts/CONCURRENCY.md docs/what/concepts/GENERATORS.md docs/what/concepts/ERROR_HANDLING.md docs/what/concepts/PATTERN_MATCHING.md docs/what/concepts/GENERICS.md docs/what/concepts/OBJECT_INITIALIZATION.md docs/what/concepts/EXECUTION_PROGRAM.md docs/what/concepts/LLM_NATIVE_TOOLCHAIN.md docs/what/concepts/LITERATE_PROGRAMMING.md docs/what/concepts/METAOBJECTS.md docs/what/concepts/SPAN.md docs/what/concepts/UNPACKING.md docs/what/concepts/SORTING.md; do grep -q 'Last updated' "$f" || echo "MISSING: $f"; done</automated>
+    <automated>for f in docs/how/architecture/ARCHITECTURE.md docs/how/architecture/FITNESS_FUNCTIONS.md docs/how/architecture/IR.md docs/how/architecture/PARSER.md docs/how/architecture/TYPE_SYSTEM.md docs/how/architecture/NAME_RESOLUTION.md docs/how/concepts/research/CORE_CONCEPTS.md docs/how/concepts/research/DATA_MODEL.md docs/how/concepts/research/ALLOCATION.md docs/how/concepts/research/OWNERSHIP.md docs/how/concepts/research/MUTABILITY.md docs/how/concepts/research/EQUALITY.md docs/how/concepts/research/FUNCTIONS.md docs/how/concepts/research/ASYNC_AWAIT.md docs/how/concepts/research/CONCURRENCY.md docs/how/concepts/research/GENERATORS.md docs/how/concepts/research/ERROR_HANDLING.md docs/how/concepts/research/PATTERN_MATCHING.md docs/how/concepts/research/GENERICS.md docs/how/concepts/research/OBJECT_INITIALIZATION.md docs/how/concepts/research/EXECUTION_PROGRAM.md docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md docs/how/concepts/research/LITERATE_PROGRAMMING.md docs/how/concepts/research/METAOBJECTS.md docs/how/concepts/research/SPAN.md docs/how/concepts/research/UNPACKING.md docs/how/concepts/research/SORTING.md; do grep -q 'Last updated' "$f" || echo "MISSING: $f"; done</automated>
   </verify>
   <done>
     All concept and architecture documents carry a `> **Last updated:**` metadata line. No MISSING output from the verify command.
@@ -444,27 +444,27 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
 <task type="auto">
   <name>Task C.1: Audit all 22 concept docs against 8-section template and bring under-developed concepts to structural completion</name>
   <files>
-    docs/what/concepts/EQUALITY.md
-    docs/what/concepts/FUNCTIONS.md
-    docs/what/concepts/MUTABILITY.md
-    docs/what/concepts/ALLOCATION.md
-    docs/what/concepts/DATA_MODEL.md
-    docs/what/concepts/CORE_CONCEPTS.md
-    docs/what/concepts/OWNERSHIP.md
-    docs/what/concepts/ERROR_HANDLING.md
-    docs/what/concepts/GENERICS.md
-    docs/what/concepts/SPAN.md
-    docs/what/concepts/METAOBJECTS.md
-    docs/what/concepts/EXECUTION_PROGRAM.md
-    docs/what/concepts/GENERATORS.md
-    docs/what/concepts/LLM_NATIVE_TOOLCHAIN.md
-    docs/what/concepts/UNPACKING.md
-    docs/what/concepts/ASYNC_AWAIT.md
-    docs/what/concepts/SORTING.md
-    docs/what/concepts/LITERATE_PROGRAMMING.md
-    docs/what/concepts/PATTERN_MATCHING.md
-    docs/what/concepts/CONCURRENCY.md
-    docs/what/concepts/OBJECT_INITIALIZATION.md
+    docs/how/concepts/research/EQUALITY.md
+    docs/how/concepts/research/FUNCTIONS.md
+    docs/how/concepts/research/MUTABILITY.md
+    docs/how/concepts/research/ALLOCATION.md
+    docs/how/concepts/research/DATA_MODEL.md
+    docs/how/concepts/research/CORE_CONCEPTS.md
+    docs/how/concepts/research/OWNERSHIP.md
+    docs/how/concepts/research/ERROR_HANDLING.md
+    docs/how/concepts/research/GENERICS.md
+    docs/how/concepts/research/SPAN.md
+    docs/how/concepts/research/METAOBJECTS.md
+    docs/how/concepts/research/EXECUTION_PROGRAM.md
+    docs/how/concepts/research/GENERATORS.md
+    docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md
+    docs/how/concepts/research/UNPACKING.md
+    docs/how/concepts/research/ASYNC_AWAIT.md
+    docs/how/concepts/research/SORTING.md
+    docs/how/concepts/research/LITERATE_PROGRAMMING.md
+    docs/how/concepts/research/PATTERN_MATCHING.md
+    docs/how/concepts/research/CONCURRENCY.md
+    docs/how/concepts/research/OBJECT_INITIALIZATION.md
     docs/.planning/ROADMAP.md
     docs/.planning/codebase/CONCERNS.md
     docs/when/ROADMAP.md
@@ -499,7 +499,7 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
     For DATA_MODEL.md: fill all 8 sections. This was flagged as a 13-17 line stub. Issue: what is the formal data model (values, types, representations). Principles: Data First, Orthogonality, Simplicity. Policy Footprint: Representation Policy, Allocation Policy. Model: define the type hierarchy, primitive types, compound types, representation system. Default Strategy: value semantics by default. Alternative Strategies: reference semantics, packed representations. Open Questions: tagged unions, sum types, type aliases. Decision History: deferred to Phase 3.
   </action>
   <verify>
-    <automated>test -f docs/.planning/concept-audit-gaps.md && for f in EQUALITY FUNCTIONS MUTABILITY ALLOCATION DATA_MODEL; do grep -q '## Issue' "docs/what/concepts/${f}.md" || echo "MISSING Issue in $f"; grep -q '## Policy Footprint' "docs/what/concepts/${f}.md" || echo "MISSING Policy Footprint in $f"; grep -q '## Decision History' "docs/what/concepts/${f}.md" || echo "MISSING Decision History in $f"; done</automated>
+    <automated>test -f docs/.planning/concept-audit-gaps.md && for f in EQUALITY FUNCTIONS MUTABILITY ALLOCATION DATA_MODEL; do grep -q '## Issue' "docs/how/concepts/research/${f}.md" || echo "MISSING Issue in $f"; grep -q '## Policy Footprint' "docs/how/concepts/research/${f}.md" || echo "MISSING Policy Footprint in $f"; grep -q '## Decision History' "docs/how/concepts/research/${f}.md" || echo "MISSING Decision History in $f"; done</automated>
   </verify>
   <done>
     Concept audit gap list created at docs/.planning/concept-audit-gaps.md. All 5 under-developed concepts have all 8 template sections with draft content. All "7-section" errors corrected across the project.
@@ -612,8 +612,8 @@ Output: All 17 DEBT requirements satisfied; filled arch specs, cleaned-up templa
 
     Part 3 — Documentation growth/IA plan (DEBT-17):
     Create `docs/how/IA_PLAN.md` covering:
-    - Current state: 22 concept files under what/concepts/, projected to grow to 30-35 by Phase 3 completion
-    - Scaling strategy: keep what/concepts/ as flat directory; consider subdirectories only if >40 files
+    - Current state: 22 concept files under how/concepts/research/, projected to grow to 30-35 by Phase 3 completion
+    - Scaling strategy: keep how/concepts/research/ as flat directory; consider subdirectories only if >40 files
     - New top-level directories: future stdlib specs go in `docs/what/stdlib/`; future tooling specs in `docs/what/tooling/`; future LLM toolchain specs in `docs/what/llm/`
     - File naming: maintain UPPER_CASE.md convention for content documents
     - Cross-reference growth: as directory count grows, maintain a directory index file (INDEX.md) in each top-level directory listing all files with brief descriptions, pattern from how/decision_records/INDEX.md

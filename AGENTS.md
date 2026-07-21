@@ -22,7 +22,8 @@ All documentation follows the **Why → How → What** (Golden Circle) framework
 |-------|----------|-----------|
 | **Why** | Why does Orthon exist? What do we believe? What are we trying to achieve? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md` |
 | **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
-| **What** | What is Orthon concretely? | `what/concepts/CORE_CONCEPTS.md`, `what/concepts/DATA_MODEL.md`, future syntax and type specs |
+| **What** | What is Orthon concretely? | `what/CORE_CONCEPTS.md` (accepted concept registry), future syntax and type specs |
+| **How** | How are concepts designed? | `how/concepts/research/` (research inbox), `how/concepts/README.md` (pipeline) |
 
 An agent must **always** anchor new content to the correct layer. A "Why" argument must not be smuggled into a "What" document. If a new piece of documentation spans layers, split it or add cross-references.
 
@@ -48,13 +49,17 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/strategies/DEFAULT_STRATEGY.md` | How | Default implementation strategy |
 | `how/strategies/EMBEDDED_STRATEGY.md` | How | Strategy for embedded / resource-constrained targets |
 | `how/strategies/HIGH_PERFORMANCE_STRATEGY.md` | How | Strategy for performance-optimized targets |
-| `what/concepts/CORE_CONCEPTS.md` | What | Data and Data Modifiers — the two fundamental abstractions |
-| `what/concepts/DATA_MODEL.md` | What | Formal data model specification |
-| `what/concepts/EQUALITY.md` | What | Equality semantics and comparison model |
-| `what/concepts/ALLOCATION.md` | What | Memory allocation and lifetime model |
-| `what/concepts/OWNERSHIP.md` | What | Ownership and borrowing semantics |
-| `what/concepts/MUTABILITY.md` | What | Mutability model and immutable-by-default design |
-| `what/concepts/FUNCTIONS.md` | What | Function declarations, parameters, and closures |
+| `what/CORE_CONCEPTS.md` | What | Registry of accepted Orthon concepts (spec foundation) |
+| `what/concepts/README.md` | What | Describes the acceptance pipeline for concept drafts |
+| `how/concepts/README.md` | How | Concept design pipeline: research → design → spec |
+| `how/concepts/research/DATA_MODEL.md` | How | Concept research: formal data model analysis |
+| `how/concepts/research/EQUALITY.md` | How | Concept research: equality semantics |
+| `how/concepts/research/ALLOCATION.md` | How | Concept research: memory allocation model |
+| `how/concepts/research/OWNERSHIP.md` | How | Concept research: ownership model |
+| `how/concepts/research/MUTABILITY.md` | How | Concept research: mutability model |
+| `how/concepts/research/FUNCTIONS.md` | How | Concept research: function model |
+| `how/concepts/research/EXECUTION_PROGRAM.md` | How | Concept research: execution program model |
+| `how/concepts/research/` (additional files) | How | Concept research inbox (20+ draft analyses) |
 | `AGENTS.md` | Meta | This file — instructions for AI agents |
 | `what/GLOSSARY.md` | Meta | Unified terminology reference with cross-document links |
 | `how/templates/_edr.md` | Meta | EDR base template (fill-in form) |
@@ -101,17 +106,19 @@ docs/
 │   ├── MANIFESTO.md
 │   └── ZEN.md
 ├── what/                     # WHAT — language design & reference
+│   ├── CORE_CONCEPTS.md      # Accepted concept registry (spec foundation)
 │   ├── DESIGN_PRINCIPLES.md
 │   ├── GLOSSARY.md
-│   └── concepts/             # Core language concepts
-│       ├── CORE_CONCEPTS.md
-│       ├── DATA_MODEL.md
-│       ├── EQUALITY.md
-│       ├── ALLOCATION.md
-│       ├── OWNERSHIP.md
-│       ├── MUTABILITY.md
-│       └── FUNCTIONS.md
+│   └── concepts/             # Accepted Orthon concept drafts (see README.md)
+│       └── README.md
 ├── how/                      # HOW — implementation & process
+│   ├── concepts/             # Concept design pipeline
+│   │   ├── README.md
+│   │   └── research/         # Concept research inbox (raw analyses)
+│   │       ├── README.md
+│   │       ├── DATA_MODEL.md
+│   │       ├── FUNCTIONS.md
+│   │       └── ... (30+ research files)
 │   ├── IMPLEMENTATION_POLICIES.md
 │   ├── architecture/         # Compiler architecture
 │   │   ├── ARCHITECTURE.md
@@ -188,7 +195,7 @@ When assigned a task in this project, follow this protocol:
 ### 5.1 Orient
 
 1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
-2. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/concepts/CORE_CONCEPTS.md` and `what/concepts/DATA_MODEL.md`. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
+2. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/CORE_CONCEPTS.md` (accepted concepts) and `how/concepts/research/` (concept research). If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
 4. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 
@@ -358,7 +365,9 @@ Agents operating in this repository must follow these rules:
    Additionally, cross-references to documents under `what/concepts/`
    must use the `concepts/` prefix (e.g., `concepts/CORE_CONCEPTS.md`,
    not `CORE_CONCEPTS.md`), as these files reside in a subdirectory and
-   bare filenames would not resolve.
+   bare filenames would not resolve. The same rule applies to
+   `how/concepts/research/` — use the full relative path from the
+   source document.
 9. **English at all times.** All documentation, code snippets, comments, commit messages,
    agent reasoning, and any generated text MUST be written in **English**. This is a
    non-negotiable project rule.

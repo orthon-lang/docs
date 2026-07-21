@@ -54,11 +54,11 @@
 
 ### Superseded Concept Still Referenced
 
-**File:** `docs/what/concepts/EXECUTION_IMAGE.md`
+**File:** `docs/how/concepts/research/EXECUTION_IMAGE.md`
 
 **Issue:** Marked as SUPERSEDED (replaced by EXECUTION_PROGRAM.md), but still actively referenced in research notes:
-- `docs/notes/imperative-crutch-lazy-sequences.md` — "See also: concepts `GENERATORS.md`, `EXECUTION_IMAGE.md`, `EXECUTION_PROGRAM.md`"
-- `docs/notes/imperative-crutch-resource-management.md` — "See also: concepts `OWNERSHIP.md`, `EXECUTION_IMAGE.md`"
+- `docs/how/concepts/research/imperative-crutch-lazy-sequences.md` — "See also: concepts `GENERATORS.md`, `EXECUTION_IMAGE.md`, `EXECUTION_PROGRAM.md`"
+- `docs/how/concepts/research/imperative-crutch-resource-management.md` — "See also: concepts `OWNERSHIP.md`, `EXECUTION_IMAGE.md`"
 
 **Impact:**
 - Readers following cross-references land on superseded concept first
@@ -241,7 +241,7 @@ Out of 91 markdown files, no systematic versioning or staleness detection.
 ### Cross-Reference Network at Risk
 
 **Pattern identified:** Research notes reference concept documents, which reference research notes. Example:
-- `docs/notes/imperative-crutch-collections-loops.md` → "See also: concepts `GENERATORS.md`, `UNPACKING.md`, `SORTING.md`"
+- `docs/how/concepts/research/imperative-crutch-collections-loops.md` → "See also: concepts `GENERATORS.md`, `UNPACKING.md`, `SORTING.md`"
 - Concept docs themselves reference back to notes for examples
 
 **Risk:** If any concept is renamed, moved, or deleted, orphaned links will break silently (no validation tool apparent).
@@ -294,7 +294,7 @@ Out of 91 markdown files, no systematic versioning or staleness detection.
 
 | File | Size | Risk |
 |------|------|------|
-| `docs/what/concepts/EXECUTION_PROGRAM.md` | 502 lines | Conceptual core; likely to evolve; needs version tracking |
+| `docs/how/concepts/research/EXECUTION_PROGRAM.md` | 502 lines | Conceptual core; likely to evolve; needs version tracking |
 | `docs/what/GLOSSARY.md` | 489 lines | Central terminology; must stay in sync with concept docs |
 | `docs/how/architecture/ARCHITECTURE.md` | 385 lines | Architectural backbone; high coupling to multiple systems |
 | `docs/what/DESIGN_PRINCIPLES.md` | 390 lines | Policy document; deviations need careful review |
@@ -381,7 +381,7 @@ Out of 91 markdown files, no systematic versioning or staleness detection.
 **Concern:** No clear information architecture for organizing growth. Example:
 - Where do Milestone 1 concept design decisions live? (In concept files themselves? Or separate?)
 - How are Milestone 3-5 cross-cutting decisions stored? (New EDR categories needed?)
-- Will concepts continue to live in `what/concepts/` or migrate somewhere during freeze?
+- Will concepts continue to live in `how/concepts/research/` or migrate somewhere during freeze?
 
 **Impact:**
 - Risk of "docs/ as monolithic dump" pattern
@@ -389,7 +389,7 @@ Out of 91 markdown files, no systematic versioning or staleness detection.
 - Unclear ownership of new files
 
 **Fix Approach:**
-1. Document in AGENTS.md §3 Document Map: "Concepts created in Milestone 1 must be added to `what/concepts/` with EDR in `how/decision_records/architecture/`"
+1. Document in AGENTS.md §3 Document Map: "Concepts created in Milestone 1 must be added to `how/concepts/research/` with EDR in `how/decision_records/architecture/`"
 2. Define EDR category expansion plan if new categories (e.g., Data, Tooling) needed
 3. Consider versioned language specs (e.g., `specs/Orthon-0.1.md`, `specs/Orthon-0.2.md`) post-Freeze
 4. Create namespace strategy for future (e.g., `stdlib/`, `tooling/`) to avoid root-level bloat

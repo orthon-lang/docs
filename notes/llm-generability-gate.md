@@ -12,7 +12,7 @@ the ROADMAP requires adaptation.
 - `docs/why/VISION.md` § Designed for the LLM Era
 - `docs/how/gates/DECISION_VALIDATION.md` — 6 existing gates
 - `docs/how/gates/_language-design.md` — language design checklist
-- `docs/what/concepts/LLM_NATIVE_TOOLCHAIN.md` — draft concept
+- `docs/how/concepts/research/LLM_NATIVE_TOOLCHAIN.md` — draft concept
 - `docs/how/strategies/LLM_STRATEGY.md` — LLM Strategy policy profile
 - `docs/how/architecture/ARCHITECTURE.md` § LLM Toolchain
 - `docs/when/ROADMAP.md`

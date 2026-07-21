@@ -13,43 +13,43 @@
 
 ## Milestone 1 — Language Inventory
 
-- [ ] design Pattern Matching concept (`docs/what/concepts/PATTERN_MATCHING.md`)
+- [ ] research Pattern Matching concept (`docs/how/concepts/research/PATTERN_MATCHING.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Error Handling concept (`docs/what/concepts/ERROR_HANDLING.md`)
+- [ ] research Error Handling concept (`docs/how/concepts/research/ERROR_HANDLING.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Ownership concept (`docs/what/concepts/OWNERSHIP.md`)
+- [ ] research Ownership concept (`docs/how/concepts/research/OWNERSHIP.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Generics / Traits concept (`docs/what/concepts/GENERICS.md`)
+- [ ] research Generics / Traits concept (`docs/how/concepts/research/GENERICS.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Async/Await concept (`docs/what/concepts/ASYNC_AWAIT.md`)
+- [ ] research Async/Await concept (`docs/how/concepts/research/ASYNC_AWAIT.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Object Initialization concept (`docs/what/concepts/OBJECT_INITIALIZATION.md`)
+- [ ] research Object Initialization concept (`docs/how/concepts/research/OBJECT_INITIALIZATION.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Concurrency / Actors concept (`docs/what/concepts/CONCURRENCY.md`)
+- [ ] research Concurrency / Actors concept (`docs/how/concepts/research/CONCURRENCY.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Literate Programming concept (`docs/what/concepts/LITERATE_PROGRAMMING.md`)
+- [ ] research Literate Programming concept (`docs/how/concepts/research/LITERATE_PROGRAMMING.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Sorting Stability concept (`docs/what/concepts/SORTING.md`)
+- [ ] research Sorting Stability concept (`docs/how/concepts/research/SORTING.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Unpacking / Destructuring concept (`docs/what/concepts/UNPACKING.md`)
+- [ ] research Unpacking / Destructuring concept (`docs/how/concepts/research/UNPACKING.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Generators / Yield concept (`docs/what/concepts/GENERATORS.md`)
+- [ ] research Generators / Yield concept (`docs/how/concepts/research/GENERATORS.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Metaobjects concept (`docs/what/concepts/METAOBJECTS.md`)
+- [ ] research Metaobjects concept (`docs/how/concepts/research/METAOBJECTS.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-- [ ] design Span / Memory View concept (`docs/what/concepts/SPAN.md`)
+- [ ] research Span / Memory View concept (`docs/how/concepts/research/SPAN.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 
@@ -57,46 +57,46 @@
 
 Analysis of imperative crutches (anti-patterns from Python/Java) and
 projection of conclusions onto Orthon's design. Each topic has a file in
-`docs/notes/imperative-crutch-*.md`.
+`docs/how/concepts/research/imperative-crutch-*.md`.
 
 - [ ] research: Collections & Loops — implications for Orthon collection API
-      (`docs/notes/imperative-crutch-collections-loops.md`)
+      (`docs/how/concepts/research/imperative-crutch-collections-loops.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Null handling — nullable types, safe navigation, Optional
-      (`docs/notes/imperative-crutch-null-handling.md`)
+      (`docs/how/concepts/research/imperative-crutch-null-handling.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Resource management — RAII / defer / context managers
-      (`docs/notes/imperative-crutch-resource-management.md`)
+      (`docs/how/concepts/research/imperative-crutch-resource-management.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Collection initialization — literal syntax, immutability defaults
-      (`docs/notes/imperative-crutch-collection-init.md`)
+      (`docs/how/concepts/research/imperative-crutch-collection-init.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Type checking & casting — pattern matching, structural typing
-      (`docs/notes/imperative-crutch-type-casting.md`)
+      (`docs/how/concepts/research/imperative-crutch-type-casting.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Date/time API — immutable types, thread-safety, formatters
-      (`docs/notes/imperative-crutch-datetime.md`)
+      (`docs/how/concepts/research/imperative-crutch-datetime.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Lazy sequences & generators — yield, lazy pipelines
-      (`docs/notes/imperative-crutch-lazy-sequences.md`)
+      (`docs/how/concepts/research/imperative-crutch-lazy-sequences.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Multi-key sorting — tuple ordering, composable comparators
-      (`docs/notes/imperative-crutch-sorting.md`)
+      (`docs/how/concepts/research/imperative-crutch-sorting.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Metaprogramming & reflection — compile-time vs runtime
-      (`docs/notes/imperative-crutch-metaprogramming.md`)
+      (`docs/how/concepts/research/imperative-crutch-metaprogramming.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 - [ ] research: Serialization — auto-derive, validation, format-agnostic
-      (`docs/notes/imperative-crutch-serialization.md`)
+      (`docs/how/concepts/research/imperative-crutch-serialization.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
 

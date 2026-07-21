@@ -112,7 +112,7 @@ The minimal, stable set of language semantics...
 - Content organized by **Why → How → What** (Golden Circle) framework
 - "Why" layer: purpose, vision, philosophy — `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md`
 - "How" layer: design and implementation — `how/IMPLEMENTATION_POLICIES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`
-- "What" layer: concrete language spec — `what/CORE_CONCEPTS.md`, `what/concepts/` subdirectory
+- "What" layer: concrete language spec — `what/CORE_CONCEPTS.md`, `how/concepts/research/` subdirectory
 - "When" layer: roadmap and milestones — `when/ROADMAP.md`
 
 **Cross-layer validation:**

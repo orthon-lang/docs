@@ -132,7 +132,7 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 - Content organized by **Why → How → What** (Golden Circle) framework
 - "Why" layer: purpose, vision, philosophy — `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md`
 - "How" layer: design and implementation — `how/IMPLEMENTATION_POLICIES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`
-- "What" layer: concrete language spec — `what/CORE_CONCEPTS.md`, `what/concepts/` subdirectory
+- "What" layer: concrete language spec — `what/CORE_CONCEPTS.md` (accepted concept registry), `how/concepts/research/` (concept research)
 - "When" layer: roadmap and milestones — `when/ROADMAP.md`
 - An agent must always anchor new content to the correct layer
 - "Why" arguments must not be smuggled into "What" documents
@@ -267,9 +267,9 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 ### Layer 5: Concepts & Strategies
 
 - Purpose: Formal semantic definition of language features
-- Location: `what/concepts/{FEATURE_NAME}.md`
-- Pattern: Each concept starts as DRAFT, passes Concept Design Review, then becomes accepted via EDR (Architecture category)
-- Examples: `CORE_CONCEPTS.md`, `DATA_MODEL.md`, `FUNCTIONS.md`, `ERROR_HANDLING.md`
+- Location: `how/concepts/research/{FEATURE_NAME}.md` (research drafts)
+- Pattern: Each concept starts as research in `how/concepts/research/`, passes Concept Design Review, then becomes accepted via EDR (Architecture category) and moves to `what/concepts/`
+- Examples: `DATA_MODEL.md`, `FUNCTIONS.md`, `ERROR_HANDLING.md`
 - Purpose: Specify *how* language semantics are implemented for different execution environments
 - Location: `how/strategies/{STRATEGY_NAME}.md`
 - Pattern: Strategy = named set of Policies; Policies are declarative preferences (Allocation, Algorithm, Evaluation, Lifetime, Concurrency, etc.)
@@ -302,7 +302,7 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 - **Decision:** The choice made and why
 - **Consequences:** Positive and negative impacts
 - **Alternatives:** What was considered and why rejected
-- **Related Concepts:** Links to `what/concepts/` docs
+- **Related Concepts:** Links to `how/concepts/research/` docs
 - **Supersedes:** Links to prior EDRs this replaces
 
 ### Concepts
@@ -360,7 +360,7 @@ Orthon targets two audiences simultaneously: humans (via orthogonality, delibera
 ### Anti-Pattern: Why → What Smuggling
 
 - Philosophical rationale → `why/MANIFESTO.md` or `why/VISION.md`
-- Concrete specification → `what/concepts/` file
+- Concrete specification → `how/concepts/research/` file (research) or `what/concepts/` (accepted)
 - Link between them: Concept document says "See why/MANIFESTO.md §X for rationale"
 
 ### Anti-Pattern: Undocumented Design Decisions

@@ -248,7 +248,7 @@ the architectural fitness functions (see [`FITNESS_FUNCTIONS.md`](./FITNESS_FUNC
 
 ### Related Documents
 
-- [`CORE_CONCEPTS.md`](../../what/concepts/CORE_CONCEPTS.md) — Data Model (Level 0)
+- [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) — Data Model (Level 0)
 - [`DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md) § Minimal Core — Primitive Operations as Semantic ISA
 - [`MANIFESTO.md`](../../why/MANIFESTO.md) — Composition over exceptions, Minimal core
 - [`_language-design.md`](../gates/_language-design.md) — Gate checklist with layer classification
@@ -476,7 +476,7 @@ Both follow the same interface/implementation separation as all other
 Policies.
 
 The concept is detailed in
-[`EXECUTION_PROGRAM.md`](../../what/concepts/EXECUTION_PROGRAM.md).
+[`EXECUTION_PROGRAM.md`](../../how/concepts/research/EXECUTION_PROGRAM.md).
 
 ## Goal
 

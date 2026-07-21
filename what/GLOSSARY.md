@@ -66,14 +66,14 @@ The primary abstraction in Orthon. Values viewed without imposed semantic meanin
 tuple(1, 2, 3) → the same data, now explicitly a Tuple
 ```
 
-- **Source:** `concepts/CORE_CONCEPTS.md` § Data, `concepts/DATA_MODEL.md`
+- **Source:** `CORE_CONCEPTS.md` § Data, `concepts/DATA_MODEL.md`
 - **See also:** [Data Modifier](#data-modifier), [Representation](#representation)
 
 ### Data Modifier
 
 A construct that transforms data from one representation to another. Modifiers express programmer intent; the compiler determines the most efficient implementation.
 
-- **Source:** `concepts/CORE_CONCEPTS.md` § Data Modifiers
+- **Source:** `CORE_CONCEPTS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
 
 ### Declaration Model (Unified)
@@ -132,7 +132,7 @@ resources, and configuration. The Descriptor is explicitly declared
 and versioned alongside the Program — it is never inferred from
 filesystem layout or environment variables.
 
-- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Descriptor
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Descriptor
 - **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
 
 ### Execution Engine
@@ -158,7 +158,7 @@ Execution Program
     └── Remote Executor
 ```
 
-- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Engine
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine
 - **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
 
 ### Explicit Optimization
@@ -193,7 +193,7 @@ Execution Program
 └── Metadata
 ```
 
-- **Source:** `../what/concepts/EXECUTION_PROGRAM.md`, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md`, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
 - **See also:** [Execution Descriptor](#execution-descriptor), [Execution Engine](#execution-engine), [Program Enricher](#program-enricher)
 
 ### Explicit Optimization
@@ -253,7 +253,7 @@ dependency, runtime, strategy, platform, permission, and resource
 resolvers. Externally it is a single step — the boundary between
 "incomplete" and "fully-defined" program.
 
-- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Program Enricher
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Program Enricher
 - **See also:** [Execution Descriptor](#execution-descriptor), [Execution Program](#execution-program)
 
 ---
@@ -375,7 +375,7 @@ Every language operator has an equivalent named function. Operators are syntacti
 x->         == sequence(x)
 ```
 
-- **Source:** `concepts/CORE_CONCEPTS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
+- **Source:** `CORE_CONCEPTS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Named Before Symbolic](#named-before-symbolic)
 
 ### Orthogonality
@@ -435,7 +435,7 @@ A specific view of data. Orthon provides several fundamental representations:
 - **Option** — A value that may be absent.
 - **Result** — A value that may be an error.
 
-- **Source:** `concepts/CORE_CONCEPTS.md` § Fundamental Data Types
+- **Source:** `CORE_CONCEPTS.md` § Fundamental Data Types
 - **See also:** [Data](#data), [Data Modifier](#data-modifier)
 
 ### Representation Symmetry
@@ -480,7 +480,7 @@ Language semantics are independent of optimization. A correct Orthon program mus
 
 A fundamental type representing a sequence of values produced over time. Unlike traditional generators or streams, a Sequence describes *what the result is*, not *how it is produced*. It is a normal object: it can be returned, stored, passed, transformed, or consumed incrementally.
 
-- **Source:** `concepts/CORE_CONCEPTS.md` § Sequence
+- **Source:** `CORE_CONCEPTS.md` § Sequence
 - **See also:** [Representation](#representation)
 
 ---
@@ -534,7 +534,7 @@ builders — that consumes the same Execution Program artifact without
 modification, following the Execution Program / Execution Engine
 separation.
 
-- **Source:** `../what/concepts/EXECUTION_PROGRAM.md` § Execution Engine, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
 - **See also:** [Execution Engine](#execution-engine), [Execution Program](#execution-program)
 
 ---
@@ -560,7 +560,7 @@ The four guiding aphorisms of the language:
 ### Trigger Conditions
 
 A new glossary entry is required when:
-- A new concept document is created in `docs/what/concepts/`
+- A new concept document is created in `docs/how/concepts/research/`
 - An existing concept introduces a domain-specific term not already in GLOSSARY.md
 - An EDR introduces new terminology or redefines an existing term
 

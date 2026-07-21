@@ -8,7 +8,7 @@ This policy applies to large monolithic documents in the Orthon specification:
 
 | Document | Path |
 |----------|------|
-| Execution Program | `docs/what/concepts/EXECUTION_PROGRAM.md` |
+| Execution Program | `docs/how/concepts/research/EXECUTION_PROGRAM.md` |
 | Glossary | `docs/what/GLOSSARY.md` |
 | Architecture | `docs/how/architecture/ARCHITECTURE.md` |
 | Design Principles | `docs/what/DESIGN_PRINCIPLES.md` |

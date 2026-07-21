@@ -322,8 +322,8 @@ Each strategy file specifies Policy values for: Allocation, Algorithm, Evaluatio
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **CORE_CONCEPTS.md** | `what/concepts/CORE_CONCEPTS.md` | Data and Data Modifiers (foundational) |
-| **DATA_MODEL.md** | `what/concepts/DATA_MODEL.md` | Formal data model specification |
+| **CORE_CONCEPTS.md** | `how/concepts/research/CORE_CONCEPTS.md` | Data and Data Modifiers (foundational) |
+| **DATA_MODEL.md** | `how/concepts/research/DATA_MODEL.md` | Formal data model specification |
 | **GLOSSARY.md** | `what/GLOSSARY.md` | Ubiquitous language and terminology |
 
 ### Decision Records
@@ -397,12 +397,12 @@ Examples:
 
 ### Concept Documents
 
-**Files:** `{CONCEPT_NAME}.md` inside `what/concepts/`
+**Files:** `{CONCEPT_NAME}.md` inside `how/concepts/research/`
 
 Examples:
-- `what/concepts/CORE_CONCEPTS.md`
-- `what/concepts/DATA_MODEL.md`
-- `what/concepts/ERROR_HANDLING.md`
+- `how/concepts/research/CORE_CONCEPTS.md`
+- `how/concepts/research/DATA_MODEL.md`
+- `how/concepts/research/ERROR_HANDLING.md`
 
 **Rule:** One concept per file; name is the concept's primary identifier
 
@@ -419,7 +419,7 @@ Examples:
 
 ### New Language Concept
 
-**Location:** `what/concepts/{CONCEPT_NAME}.md` (new file)
+**Location:** `how/concepts/research/{CONCEPT_NAME}.md` (new file)
 
 **Process:**
 1. Create concept file from template `how/templates/_concept.md`
@@ -441,7 +441,7 @@ Examples:
 
 **Process:**
 1. Add Policy type and possible values to `how/IMPLEMENTATION_POLICIES.md`
-2. Link to related concepts in `what/concepts/`
+2. Link to related concepts in `how/concepts/research/`
 3. Update each strategy file (`DEFAULT_STRATEGY.md`, `EMBEDDED_STRATEGY.md`, etc.) to specify values for this new Policy
 4. If consequential → create EDR in `how/decision_records/process/`
 
@@ -467,9 +467,9 @@ Examples:
 
 **Process:**
 1. Analyze which layer/component needs documentation
-2. Determine if this belongs in `how/architecture/` (compiler/runtime) or `what/concepts/` (language feature)
+2. Determine if this belongs in `how/architecture/` (compiler/runtime) or `how/concepts/research/` (language feature)
 3. If `how/architecture/`: Document component's responsibility, interfaces, dependency relationships
-4. Link to related concepts in `what/concepts/`
+4. Link to related concepts in `how/concepts/research/`
 5. Link to strategy files showing how each strategy implements this component
 6. If consequential architectural decision → create EDR in `how/decision_records/architecture/`
 
@@ -486,7 +486,7 @@ Examples:
    - `how/templates/_edr-process.md` (Process category)
 4. Fill in: Context, Decision, Rationale, Consequences, Alternatives, Related Concepts, Supersedes
 5. Update `how/decision_records/INDEX.md` to add entry to master table
-6. Add link to decision record in relevant content documents (e.g., if EDR-042 describes concept X, link from `what/concepts/X.md`)
+6. Add link to decision record in relevant content documents (e.g., if EDR-042 describes concept X, link from `how/concepts/research/X.md`)
 
 ### New Research Note
 

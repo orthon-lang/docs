@@ -1,12 +1,12 @@
 # Core Concepts
 
-> **⚠️ DRAFT — This document is a preliminary draft.**
-> It was created during Milestone 0 (Foundation) as exploratory work.
-> It will be formally reviewed through the Concept Design Review
-> process (Milestone 2). A concept is registered only after
-> acceptance via EDR (Architecture category).
+> **📋 REGISTRY — Accepted Orthon Concepts.**
+> This document lists concepts that have passed the Concept Design Review
+> and been accepted via EDR (Architecture category). Only crystallized
+> Orthon-specific specifications belong here — research and draft analyses
+> live in `how/concepts/research/`.
 >
-> **Last updated:** 2026-07-20
+> **Last updated:** 2026-07-21
 
 Orthon consists of two fundamental concepts:
 

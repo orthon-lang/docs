@@ -75,7 +75,7 @@ For example: code review checklist item, gate entry, automated lint rule, or doc
 - [ ] `ZEN.md`
 - [ ] `ARCHITECTURE.md`
 - [ ] `DESIGN_PRINCIPLES.md`
-- [ ] `CORE_CONCEPTS.md`
+- [ ] `what/CORE_CONCEPTS.md`
 - [ ] `DATA_MODEL.md`
 - [ ] `IMPLEMENTATION_STRATEGIES.md`
 - [ ] `IMPLEMENTATION_POLICIES.md`

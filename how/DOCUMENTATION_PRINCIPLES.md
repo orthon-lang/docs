@@ -17,7 +17,7 @@ Deprecated documents are retained for historical reference only.
 
 ## Section Structure (8-Section Concept Template)
 
-All concept documents in `docs/what/concepts/` follow a uniform template
+All concept research documents in `docs/how/concepts/research/` follow a uniform template
 defined in `docs/how/templates/_concept.md`.
 
 Every concept must include these sections **in order**:
@@ -45,7 +45,7 @@ When documenting a language feature, always present **all** canonical
 ways to use it, not just the most common one.
 
 If a feature has multiple equivalent forms, they should be shown together
-in the same section. Example from [CORE_CONCEPTS.md](../what/concepts/CORE_CONCEPTS.md):
+in the same section. Example from [CORE_CONCEPTS.md](../what/CORE_CONCEPTS.md):
 
 ```orthon
 emit value          # emit a single value from a generator
@@ -118,7 +118,7 @@ be familiar with symbolic operators.
 
 | Document Type | Location | Template |
 |---|---|---|
-| Concept | `docs/what/concepts/` | `docs/how/templates/_concept.md` |
+| Concept research | `docs/how/concepts/research/` | `docs/how/templates/_concept.md` |
 | EDR | `docs/how/decision_records/{category}/` | `docs/how/templates/_edr*.md` |
 | Strategy | `docs/how/strategies/` | Free-form |
 | Architecture | `docs/how/architecture/` | Free-form |

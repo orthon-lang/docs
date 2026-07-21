@@ -139,7 +139,7 @@ checklist before being accepted.
 > set of gates: `ARCHITECTURAL_INTEGRITY_GATE`, `USER_VALUE_GATE`,
 > `LLM_GENERABILITY_GATE`.
 
-> **Existing partial concept docs** (`concepts/CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
+> **Existing partial concept docs** (`CORE_CONCEPTS.md`, `concepts/DATA_MODEL.md`,
 > `concepts/EQUALITY.md`, etc.) are considered **drafts / examples**. They will be
 > formally reviewed through this Epic's process. A concept is
 > registered only after acceptance via EDR (Architecture category).
@@ -150,7 +150,7 @@ checklist before being accepted.
 > Epic 4 (Cross-Cutting Review), when the full set of accepted
 > concepts is available for systematic analysis.
 
-**Anti-pattern research:** Complete 10 `docs/notes/imperative-crutch-*.md` topics,
+**Anti-pattern research:** Complete 10 `docs/how/concepts/research/imperative-crutch-*.md` topics,
 each documenting findings and explicit implications for Orthon's concept designs.
 
 **Deliverables:** 13 completed concept documents, 10 anti-pattern research notes,

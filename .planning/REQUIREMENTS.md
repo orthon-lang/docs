@@ -33,7 +33,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (Milestones
 - [ ] **DEBT-14**: Template-compliance enforcement mechanism applied — audit run against all concept documents, gap list produced (beyond the checklist itself, which is PROC-04)
 - [ ] **DEBT-15**: Glossary maintenance workflow documented — process for registering new terms in `GLOSSARY.md` when concepts are created or updated
 - [ ] **DEBT-16**: Versioning / change-log policy documented for large monolithic documents (`EXECUTION_PROGRAM.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, `DESIGN_PRINCIPLES.md`, `AGENTS.md`)
-- [ ] **DEBT-17**: Documentation growth / information-architecture plan documented for scaling `what/concepts/` and future stdlib/tooling directories
+- [ ] **DEBT-17**: Documentation growth / information-architecture plan documented for scaling `how/concepts/research/` and future stdlib/tooling directories
 
 ### Milestone 0 — Vision
 

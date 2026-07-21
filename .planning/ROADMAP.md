@@ -39,13 +39,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Success Criteria** (what must be TRUE):
   1. `docs/how/architecture/IR.md`, `PARSER.md`, `TYPE_SYSTEM.md`, and `NAME_RESOLUTION.md` are each filled with a real design (intermediate representation format, parsing/grammar strategy, type inference/checking rules, and scoping/symbol-resolution rules respectively) — none remain at 0 lines.
   2. `docs/how/templates/_adr.md` is archived or removed, and no live document references it as the current template.
-  3. Zero references to the superseded `EXECUTION_IMAGE.md` remain in active documents (e.g., `docs/notes/imperative-crutch-lazy-sequences.md`, `imperative-crutch-resource-management.md`); all such cross-references point to `EXECUTION_PROGRAM.md`, and `EXECUTION_IMAGE.md` itself is archived.
+  3. Zero references to the superseded `EXECUTION_IMAGE.md` remain in active documents (e.g., `docs/how/concepts/research/imperative-crutch-lazy-sequences.md`, `imperative-crutch-resource-management.md`); all such cross-references point to `EXECUTION_PROGRAM.md`, and `EXECUTION_IMAGE.md` itself is archived.
   4. Concept and architecture documents carry date-stamp/freshness metadata (e.g., a `last_updated` field), addressing the "only 2 files have date stamps" finding.
   5. The EDR-008/009 numbering gap and TDR→EDR migration are documented in `how/decision_records/INDEX.md` (or EDR-001); `docs/how/architecture/FITNESS_FUNCTIONS.md` contains a full fitness-functions catalogue (not just 2 examples); `docs/how/DOCUMENTATION_PRINCIPLES.md` is expanded beyond its current template stub.
   6. All 22 concept documents have been audited against the `_concept.md` 8-section template; the under-developed 25-35 line drafts (`EQUALITY.md`, `FUNCTIONS.md`, `MUTABILITY.md`, `ALLOCATION.md`) are either brought to compliant depth or carry an explicit, tracked remediation plan, and the audit results (a produced gap list) demonstrate the template-compliance enforcement mechanism is actually applied, not just defined.
   7. Every tracked TODO/requirement item has an assigned owner and target-completion metadata, replacing unowned freeform checkboxes — resolving the "unclear milestone ownership" finding.
   8. A repository-wide cross-reference / "See also" link audit has been performed, all broken or superseded links found are fixed, and a link-validation approach for future changes is documented.
-  9. A glossary maintenance workflow (how/when new terms get registered in `GLOSSARY.md`) and a versioning/change-log policy for large monolithic documents (`EXECUTION_PROGRAM.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, `DESIGN_PRINCIPLES.md`, `AGENTS.md`) are both documented, and a documentation growth / information-architecture plan exists for scaling `what/concepts/` and future stdlib/tooling directories.
+  9. A glossary maintenance workflow (how/when new terms get registered in `GLOSSARY.md`) and a versioning/change-log policy for large monolithic documents (`EXECUTION_PROGRAM.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, `DESIGN_PRINCIPLES.md`, `AGENTS.md`) are both documented, and a documentation growth / information-architecture plan exists for scaling `how/concepts/research/` and future stdlib/tooling directories.
 **Plans**: TBD
 
 ### Phase 2: Foundations, Process & Vision
@@ -62,13 +62,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 ### Phase 3: Language Inventory, Anti-Pattern Research & Concept Design Review
-**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches and Phase 2's LLM-native concept shortlist (`docs/notes/llm-native-concept-shortlist.md`) — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/what/concepts/`.
+**Goal**: Every outstanding language concept is fully designed — informed by anti-pattern research into imperative crutches and Phase 2's LLM-native concept shortlist (`docs/notes/llm-native-concept-shortlist.md`) — and every concept document in the repository has passed a formal Concept Design Review, leaving zero `DRAFT` headers in `docs/how/concepts/research/`.
 **Depends on**: Phase 2 (requires the acceptance gate and review process from PROC-01/02)
 **Requirements**: CONCEPT-01, CONCEPT-02, CONCEPT-03, CONCEPT-04, CONCEPT-05, CONCEPT-06, CONCEPT-07, CONCEPT-08, CONCEPT-09, CONCEPT-10, CONCEPT-11, CONCEPT-12, CONCEPT-13, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10, ANTIPAT-11
 **Success Criteria** (what must be TRUE):
   1. All 13 concept documents in scope (`PATTERN_MATCHING.md`, `ERROR_HANDLING.md`, `OWNERSHIP.md`, `GENERICS.md`, `ASYNC_AWAIT.md`, `OBJECT_INITIALIZATION.md`, `CONCURRENCY.md`, `LITERATE_PROGRAMMING.md`, `SORTING.md`, `UNPACKING.md`, `GENERATORS.md`, `METAOBJECTS.md`, `SPAN.md`) contain real content in all 8 template sections (Issue, Principles, Policy Footprint, Model, Default Strategy, Alternative Strategies, Open Questions, Decision History) — none remain thin stubs.
-  2. All 10 `docs/notes/imperative-crutch-*.md` research topics are completed with documented findings and explicit implications for Orthon's concept designs, and those implications are reflected in the relevant concept documents (e.g., sorting research reflected in `SORTING.md`, null-handling research reflected in `ERROR_HANDLING.md` / `CORE_CONCEPTS.md`).
-  3. Zero `⚠️ DRAFT` headers remain across all 22 files in `docs/what/concepts/`; every file has an explicit Accepted, Deferred, or Rejected status.
+  2. All 10 `docs/how/concepts/research/imperative-crutch-*.md` research topics are completed with documented findings and explicit implications for Orthon's concept designs, and those implications are reflected in the relevant concept documents (e.g., sorting research reflected in `SORTING.md`, null-handling research reflected in `ERROR_HANDLING.md` / `CORE_CONCEPTS.md`).
+  3. Zero `⚠️ DRAFT` headers remain across all 22 files in `docs/how/concepts/research/`; every file has an explicit Accepted, Deferred, or Rejected status.
   4. Every Accepted concept has a corresponding EDR in `how/decision_records/architecture/` recording the acceptance rationale, satisfying the Concept Design Review gate defined in Phase 2.
 **Plans**: TBD
 

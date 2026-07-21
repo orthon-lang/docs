@@ -47,9 +47,9 @@
 
 ### Wave B (Cleanup & Metadata)
 - `.archived/templates/_adr.md` — moved from `docs/how/templates/`
-- `.archived/concepts/EXECUTION_IMAGE.md` — moved from `docs/what/concepts/`
-- `docs/notes/imperative-crutch-lazy-sequences.md` — EXECUTION_IMAGE ref removed
-- `docs/notes/imperative-crutch-resource-management.md` — EXECUTION_IMAGE → EXECUTION_PROGRAM
+- `.archived/concepts/EXECUTION_IMAGE.md` — moved from `docs/how/concepts/research/`
+- `docs/how/concepts/research/imperative-crutch-lazy-sequences.md` — EXECUTION_IMAGE ref removed
+- `docs/how/concepts/research/imperative-crutch-resource-management.md` — EXECUTION_IMAGE → EXECUTION_PROGRAM
 - `docs/how/decision_records/INDEX.md` — Gap Registry added, date stamp updated
 - `docs/how/decision_records/process/EDR-001-edr-system.md` — TDR→EDR migration table added
 - All 22 concept docs + 5 architecture docs — date-stamp metadata added
@@ -65,8 +65,8 @@
 - `docs/what/GLOSSARY.md` — maintenance workflow expanded
 - `docs/how/VERSIONING_POLICY.md` — created
 - `docs/how/IA_PLAN.md` — created
-- `docs/what/concepts/EQUALITY.md` — structurally complete draft
-- `docs/what/concepts/FUNCTIONS.md` — structurally complete draft
-- `docs/what/concepts/MUTABILITY.md` — structurally complete draft
-- `docs/what/concepts/ALLOCATION.md` — structurally complete draft
-- `docs/what/concepts/DATA_MODEL.md` — structurally complete draft
+- `docs/how/concepts/research/EQUALITY.md` — structurally complete draft
+- `docs/how/concepts/research/FUNCTIONS.md` — structurally complete draft
+- `docs/how/concepts/research/MUTABILITY.md` — structurally complete draft
+- `docs/how/concepts/research/ALLOCATION.md` — structurally complete draft
+- `docs/how/concepts/research/DATA_MODEL.md` — structurally complete draft

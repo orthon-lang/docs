@@ -143,9 +143,9 @@ The documentation is organized into **five major components**, each with a disti
 
 ### Layer 5: Concepts & Strategies
 
-**Concepts** (`what/concepts/`):
+**Concepts** (`how/concepts/research/`):
 - Purpose: Formal semantic definition of language features
-- Location: `what/concepts/{FEATURE_NAME}.md`
+- Location: `how/concepts/research/{FEATURE_NAME}.md`
 - Pattern: Each concept starts as DRAFT, passes Concept Design Review, then becomes accepted via EDR (Architecture category)
 - Examples: `CORE_CONCEPTS.md`, `DATA_MODEL.md`, `FUNCTIONS.md`, `ERROR_HANDLING.md`
 
@@ -179,7 +179,7 @@ The documentation is organized into **five major components**, each with a disti
    - Final checklist before acceptance
    - Determines Policy footprint, semantic spec requirements
    
-5. **Concept Document** (`what/concepts/{FEATURE}.md`)
+5. **Concept Document** (`how/concepts/research/{FEATURE}.md`)
    - Formal semantic definition
    - Starts as DRAFT
    
@@ -210,7 +210,7 @@ The documentation is organized into **five major components**, each with a disti
   - Justification in `why/VISION.md` or `why/GOALS.md`
   - Principles it satisfies (`what/DESIGN_PRINCIPLES.md`)
   - Alternatives considered
-  - Related concepts (forward references to `what/concepts/`)
+  - Related concepts (forward references to `how/concepts/research/`)
   
 **Strategy Mapping:**
 - Each Implementation Strategy in `how/strategies/` references:
@@ -233,7 +233,7 @@ The documentation is organized into **five major components**, each with a disti
 - **Decision:** The choice made and why
 - **Consequences:** Positive and negative impacts
 - **Alternatives:** What was considered and why rejected
-- **Related Concepts:** Links to `what/concepts/` docs
+- **Related Concepts:** Links to `how/concepts/research/` docs
 - **Supersedes:** Links to prior EDRs this replaces
 
 **Categories:** Architecture, Process, Quality, Technology, Tooling, Delivery, Operations, Security, Governance, Data, AI, Documentation, Knowledge, Collaboration, Product
@@ -262,7 +262,7 @@ The documentation is organized into **five major components**, each with a disti
 - **Policy Footprint:** Which Implementation Policies it affects
 - **Gates:** Validation against Language Design Gate checklist
 
-**Location:** `what/concepts/{CONCEPT_NAME}.md`
+**Location:** `how/concepts/research/{CONCEPT_NAME}.md`
 
 **Linking:** Each concept references:
 - Vision/Goals it serves
@@ -346,13 +346,13 @@ Strategy (named set of Policies)
 
 **What happens:** A Why-level argument (philosophical belief) gets embedded in a What-level document (concrete specification)
 
-Example: Writing "Orthon rejects null because we believe in explicit semantics" in `what/concepts/CORE_CONCEPTS.md`
+Example: Writing "Orthon rejects null because we believe in explicit semantics" in `how/concepts/research/CORE_CONCEPTS.md`
 
 **Why it's wrong:** Conflates layers. The philosophical rationale belongs in Why layer; the specification belongs in What layer. Mixing confuses future readers about whether the design is optional or mandatory.
 
 **Do this instead:** 
 - Philosophical rationale → `why/MANIFESTO.md` or `why/VISION.md`
-- Concrete specification → `what/concepts/` file
+- Concrete specification → `how/concepts/research/` file
 - Link between them: Concept document says "See why/MANIFESTO.md §X for rationale"
 
 ### Anti-Pattern: Undocumented Design Decisions
@@ -370,9 +370,9 @@ Example: A policy about whether to use reference counting is mentioned in a Slac
 
 ### Anti-Pattern: Isolated Concept Design
 
-**What happens:** A new language concept is designed and documented in `what/concepts/` without connecting to Design Principles, validation gates, or implementation strategy
+**What happens:** A new language concept is designed and documented in `how/concepts/research/` without connecting to Design Principles, validation gates, or implementation strategy
 
-Example: A new `Option` type is defined in `what/concepts/` but nowhere does it explain how it satisfies DESIGN_PRINCIPLES, which gates validated it, or how implementation strategies handle it
+Example: A new `Option` type is defined in `how/concepts/research/` but nowhere does it explain how it satisfies DESIGN_PRINCIPLES, which gates validated it, or how implementation strategies handle it
 
 **Why it's wrong:** Readers cannot trace concept back to vision or forward to implementation. The concept appears arbitrary rather than well-founded.
 

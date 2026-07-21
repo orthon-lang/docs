@@ -302,7 +302,7 @@ schemas mean LLMs always query the correct language version.
 
 ## References
 
-- [`LLM_NATIVE_TOOLCHAIN.md`](../what/concepts/LLM_NATIVE_TOOLCHAIN.md) — concept design
-- [`LLM_STRATEGY.md`](../how/strategies/LLM_STRATEGY.md) — strategy profile
-- [`ARCHITECTURE.md`](../how/architecture/ARCHITECTURE.md) § LLM Toolchain
-- [`IMPLEMENTATION_POLICIES.md`](../how/IMPLEMENTATION_POLICIES.md) — Toolchain, Syntax, Verbosity, Style, Error, Inference Policies
+- [`LLM_NATIVE_TOOLCHAIN.md`](./LLM_NATIVE_TOOLCHAIN.md) — concept design
+- [`LLM_STRATEGY.md`](../../strategies/LLM_STRATEGY.md) — strategy profile
+- [`ARCHITECTURE.md`](../../architecture/ARCHITECTURE.md) § LLM Toolchain
+- [`IMPLEMENTATION_POLICIES.md`](../../IMPLEMENTATION_POLICIES.md) — Toolchain, Syntax, Verbosity, Style, Error, Inference Policies

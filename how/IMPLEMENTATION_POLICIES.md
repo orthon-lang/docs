@@ -54,7 +54,7 @@ type is added when its first corresponding concept is designed (see
 
 ### Allocation Policy
 
-**Related Concepts:** [`concepts/ALLOCATION.md`](../what/concepts/ALLOCATION.md) *(+ pending validation)*
+**Related Concepts:** [`concepts/ALLOCATION.md`](../concepts/research/ALLOCATION.md) *(+ pending validation)*
 
 Controls memory acquisition and deallocation strategy.
 
@@ -233,7 +233,7 @@ New Policy types are added as new language concepts are designed. Each
 new Policy must:
 
 1. Have at least one corresponding language concept (documented in
-   `docs/what/concepts/`).
+   `docs/how/concepts/research/`).
 2. Pass the [`IMPLEMENTATION_INDEPENDENCE_GATE`](gates/DECISION_VALIDATION.md#gate-catalogue):
    the concept must be definable without reference to the Policy.
 3. Define declarative values — not procedures.

@@ -65,15 +65,15 @@ None — no pending todos matched Phase 1 scope.
 - `docs/how/architecture/FITNESS_FUNCTIONS.md` — currently sparse (3 functions)
 - `docs/how/DOCUMENTATION_PRINCIPLES.md` — currently ~25 line stub
 - `docs/how/templates/_adr.md` — deprecated, to be archived
-- `docs/what/concepts/EXECUTION_IMAGE.md` — superseded, refs to update
-- `docs/notes/imperative-crutch-lazy-sequences.md` — contains stale EXECUTION_IMAGE ref
-- `docs/notes/imperative-crutch-resource-management.md` — contains stale EXECUTION_IMAGE ref
+- `docs/how/concepts/research/EXECUTION_IMAGE.md` — superseded, refs to update
+- `docs/how/concepts/research/imperative-crutch-lazy-sequences.md` — contains stale EXECUTION_IMAGE ref
+- `docs/how/concepts/research/imperative-crutch-resource-management.md` — contains stale EXECUTION_IMAGE ref
 - `docs/how/decision_records/INDEX.md` — EDR gap documentation target
 - `docs/how/decision_records/process/EDR-001-edr-system.md` — EDR gap documentation target
-- `docs/what/concepts/EQUALITY.md` — under-developed concept
-- `docs/what/concepts/FUNCTIONS.md` — under-developed concept
-- `docs/what/concepts/MUTABILITY.md` — under-developed concept
-- `docs/what/concepts/ALLOCATION.md` — under-developed concept
+- `docs/how/concepts/research/EQUALITY.md` — under-developed concept
+- `docs/how/concepts/research/FUNCTIONS.md` — under-developed concept
+- `docs/how/concepts/research/MUTABILITY.md` — under-developed concept
+- `docs/how/concepts/research/ALLOCATION.md` — under-developed concept
 - `docs/what/GLOSSARY.md` — glossary maintenance workflow target
 - All concept files — date-stamp addition target
 - `docs/.planning/ROADMAP.md` — fix "7-section" → "8-section" references

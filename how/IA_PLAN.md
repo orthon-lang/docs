@@ -6,7 +6,7 @@
 
 | Directory | File Count | Description |
 |-----------|------------|-------------|
-| `docs/what/concepts/` | 22 | Language concept documents |
+| `docs/how/concepts/research/` | 30+ | Concept research analyses (drafts) |
 | `docs/how/architecture/` | 6 | Architecture specifications |
 | `docs/how/strategies/` | 4 | Implementation strategies |
 | `docs/how/decision_records/` | 15 categories | Engineering Decision Records |
@@ -15,22 +15,23 @@
 
 ## Scaling Strategy
 
-### Short-Term (Phase 3 completion, ~30-35 concept files)
+### Short-Term (Phase 3 completion, ~30-35 research files)
 
-Keep `docs/what/concepts/` as a flat directory. A flat structure is
+Keep `docs/how/concepts/research/` as a flat directory. A flat structure is
 navigable up to ~40 files and avoids the complexity of nested subdirectories.
 At 30-35 files, the single directory is still scannable.
 
-### Medium-Term (Post-Freeze, ~50+ files)
+### Medium-Term (Post-Freeze, ~15-20 accepted concepts in what/concepts/)
 
-If `what/concepts/` exceeds 40 files, consider subdirectories by category:
+If `what/concepts/` exceeds 20 files, consider subdirectories by category
+for accepted concepts only. Research stays flat in `how/concepts/research/`:
 
 ```
 what/concepts/
-├── core/           # Core language concepts (CORE_CONCEPTS, DATA_MODEL, etc.)
-├── control/        # Control flow concepts (FUNCTIONS, PATTERN_MATCHING, etc.)
-├── data/           # Data-related concepts (ALLOCATION, OWNERSHIP, etc.)
-└── meta/           # Meta-programming concepts (METAOBJECTS, LLM_TOOLCHAIN, etc.)
+├── core/           # Core language concepts
+├── control/        # Control flow concepts
+├── data/           # Data-related concepts
+└── meta/           # Meta-programming concepts
 ```
 
 Subdirectory organization should be decided by usage patterns — the goal

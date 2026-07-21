@@ -109,7 +109,7 @@
 - Structured review form for substantive design changes
 
 **Concept Design Review process:**
-- All concept documents in `docs/what/concepts/` follow uniform template from `how/templates/_concept.md`
+- All concept documents in `docs/how/concepts/research/` follow uniform template from `how/templates/_concept.md`
 - Concepts created as DRAFT during Milestone 0/1
 - Formal review occurs during Milestone 2 through Concept Design Review process
 - Concept registration requires acceptance via EDR (Architecture category)

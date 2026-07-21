@@ -1,6 +1,6 @@
 # Concept Template — Language Concept Document
 
-> Use this template for every concept document in `docs/what/concepts/`.
+> Use this template for every concept document in `docs/how/concepts/research/`.
 > Each concept describes one orthogonal language construct — its motivation,
 > constraints, design, and implementation strategies.
 >
@@ -68,7 +68,7 @@ References to ADRs, logs of rejected approaches, and key trade-offs that were ac
 
 ### Affected Documents
 
-- [ ] `CORE_CONCEPTS.md`
+- [ ] `what/CORE_CONCEPTS.md`
 - [ ] `DATA_MODEL.md`
 - [ ] `DESIGN_PRINCIPLES.md`
 - [ ] `GLOSSARY.md`

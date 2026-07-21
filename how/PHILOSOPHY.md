@@ -22,7 +22,7 @@ Each layer answers its own question and passes the result to the next:
 | Core Principles | *What rules do we follow?* | Concrete criteria for every decision | [`docs/why/MANIFESTO.md`](../why/MANIFESTO.md), [`docs/what/DESIGN_PRINCIPLES.md`](../what/DESIGN_PRINCIPLES.md) |
 | Decision Validation | *Does the proposal pass all independent validation gates?* | Multi-perspective assessment of the proposal | [`docs/how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
 | Language Design Gate | *Does the solution satisfy the principles?* | Approval or rejection of the concept | [`docs/how/gates/_language-design.md`](gates/_language-design.md) |
-| Concept | *What are we introducing?* | Formal semantic definition | [`docs/what/concepts/`](../what/concepts/) |
+| Concept | *What are we introducing?* | Formal semantic definition | [`docs/how/concepts/research/`](../concepts/research/) |
 | Default Strategy | *How is it implemented by default?* | Concrete implementation plan | [`docs/how/strategies/DEFAULT_STRATEGY.md`](strategies/DEFAULT_STRATEGY.md) |
 
 ---
@@ -137,23 +137,23 @@ Questions the Gate answers:
 
 ## Layer 4: Concept
 
-**Files:** [`docs/what/concepts/`](../what/concepts/)
+**Files:** [`docs/how/concepts/research/`](../concepts/research/)
 
 At this layer, an approved idea becomes a precise semantic definition.
 This describes *what* is introduced, not *how* it is implemented.
 
 Concept documents include:
 
-- [`CORE_CONCEPTS.md`](../what/concepts/CORE_CONCEPTS.md) — Data and Data
+- [`CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) — Data and Data
   Modifiers as the fundamental entities
-- [`DATA_MODEL.md`](../what/concepts/DATA_MODEL.md) — Value, Tuple,
+- [`DATA_MODEL.md`](../concepts/research/DATA_MODEL.md) — Value, Tuple,
   Reference, Sequence, Set, Option, Result
-- [`FUNCTIONS.md`](../what/concepts/FUNCTIONS.md) — function model
-- [`OWNERSHIP.md`](../what/concepts/OWNERSHIP.md) — ownership model
-- [`MUTABILITY.md`](../what/concepts/MUTABILITY.md) — mutability
-- [`ALLOCATION.md`](../what/concepts/ALLOCATION.md) — allocation
-- [`EQUALITY.md`](../what/concepts/EQUALITY.md) — equality
-- [`EXECUTION_PROGRAM.md`](../what/concepts/EXECUTION_PROGRAM.md) — execution
+- [`FUNCTIONS.md`](../concepts/research/FUNCTIONS.md) — function model
+- [`OWNERSHIP.md`](../concepts/research/OWNERSHIP.md) — ownership model
+- [`MUTABILITY.md`](../concepts/research/MUTABILITY.md) — mutability
+- [`ALLOCATION.md`](../concepts/research/ALLOCATION.md) — allocation
+- [`EQUALITY.md`](../concepts/research/EQUALITY.md) — equality
+- [`EXECUTION_PROGRAM.md`](../concepts/research/EXECUTION_PROGRAM.md) — execution
   model: Program, Execution Descriptor, Program Enricher, Execution Program,
   Execution Engines
 
@@ -219,7 +219,7 @@ with existing concepts (functions, types)? Verdict: approved.
 
 ### 4. Concept
 
-[`CORE_CONCEPTS.md`](../what/concepts/CORE_CONCEPTS.md) records:
+[`CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) records:
 
 > A Data Modifier transforms data into another representation. Each
 > modifier expresses intent, while the compiler selects the most efficient
