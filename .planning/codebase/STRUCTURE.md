@@ -23,7 +23,7 @@
 │   ├── GLOSSARY.md                        # Ubiquitous language — term definitions
 │   ├── ROADMAP.md                         # Delivery timeline and feature phases
 │   └── concepts/                          # Core language concepts (25+ files)
-│       ├── CORE_CONCEPTS.md               # Data and Data Modifiers (foundational)
+│       ├── CORE_CONCEPTS.md               # Concept registry (placeholder — content moved to FOUNDATIONAL_ABSTRACTIONS.md)
 │       ├── DATA_MODEL.md                  # Formal data model specification
 │       ├── ALLOCATION.md                  # Memory allocation and lifetime
 │       ├── OWNERSHIP.md                   # Ownership and borrowing semantics
@@ -322,7 +322,7 @@ Each strategy file specifies Policy values for: Allocation, Algorithm, Evaluatio
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **CORE_CONCEPTS.md** | `how/concepts/research/CORE_CONCEPTS.md` | Data and Data Modifiers (foundational) |
+| **FOUNDATIONAL_ABSTRACTIONS.md** | `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` | Data, Data Modifiers, Sequence/emit, Operators (foundational) |
 | **DATA_MODEL.md** | `how/concepts/research/DATA_MODEL.md` | Formal data model specification |
 | **GLOSSARY.md** | `what/GLOSSARY.md` | Ubiquitous language and terminology |
 
@@ -357,7 +357,7 @@ Each strategy file specifies Policy values for: Allocation, Algorithm, Evaluatio
 
 Examples:
 - `VISION.md` — content file (not `_vision.md` or `Vision.md`)
-- `CORE_CONCEPTS.md` — one topic per file (not "CONCEPTS_AND_FEATURES.md")
+- `FOUNDATIONAL_ABSTRACTIONS.md` — one topic per file (not "CONCEPTS_AND_FEATURES.md")
 - `IMPLEMENTATION_POLICIES.md` — specific topic (not "POLICIES_AND_STUFF.md")
 
 **Rule:** If you're tempted to name a file "MISCELLANEOUS" or "VARIOUS", split it into multiple focused files
@@ -400,7 +400,7 @@ Examples:
 **Files:** `{CONCEPT_NAME}.md` inside `how/concepts/research/`
 
 Examples:
-- `how/concepts/research/CORE_CONCEPTS.md`
+- `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md`
 - `how/concepts/research/DATA_MODEL.md`
 - `how/concepts/research/ERROR_HANDLING.md`
 

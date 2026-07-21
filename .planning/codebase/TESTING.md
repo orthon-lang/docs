@@ -174,7 +174,7 @@
   > **Rationale:** [Why this choice]
   > **Alternatives considered:** [What was rejected and why]
   ```
-- Examples from codebase (CORE_CONCEPTS.md, etc.)
+- Examples from codebase (FOUNDATIONAL_ABSTRACTIONS.md, etc.)
 
 ## Template Enforcement
 

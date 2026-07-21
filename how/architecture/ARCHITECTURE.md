@@ -258,7 +258,8 @@ the architectural fitness functions (see [`FITNESS_FUNCTIONS.md`](./FITNESS_FUNC
 
 ### Related Documents
 
-- [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) — Data Model (Level 0)
+- [`FOUNDATIONAL_ABSTRACTIONS.md`](../../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md) — Foundational abstractions hypothesis (Level 0)
+- [`DATA_MODEL.md`](../../how/concepts/research/DATA_MODEL.md) — Data Model research
 - [`DESIGN_PRINCIPLES.md`](../../what/DESIGN_PRINCIPLES.md) § Minimal Core — Primitive Operations as Semantic ISA
 - [`MANIFESTO.md`](../../why/MANIFESTO.md) — Composition over exceptions, Minimal core
 - [`_language-design.md`](../gates/_language-design.md) — Gate checklist with layer classification

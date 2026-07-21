@@ -22,7 +22,7 @@ All documentation follows the **Why → How → What** (Golden Circle) framework
 |-------|----------|-----------|
 | **Why** | Why does Orthon exist? What do we believe? What are we trying to achieve? | `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md` |
 | **How** | How is Orthon designed and structured? | `what/DESIGN_PRINCIPLES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`, `how/IMPLEMENTATION_POLICIES.md` |
-| **What** | What is Orthon concretely? | `what/CORE_CONCEPTS.md` (accepted concept registry), future syntax and type specs |
+| **What** | What is Orthon concretely? | `what/CORE_CONCEPTS.md` (accepted concept registry — currently empty), `how/concepts/research/` (in-progress research) |
 | **How** | How are concepts designed? | `how/concepts/research/` (research inbox), `how/concepts/README.md` (pipeline) |
 
 An agent must **always** anchor new content to the correct layer. A "Why" argument must not be smuggled into a "What" document. If a new piece of documentation spans layers, split it or add cross-references.
@@ -49,7 +49,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/strategies/DEFAULT_STRATEGY.md` | How | Default implementation strategy |
 | `how/strategies/EMBEDDED_STRATEGY.md` | How | Strategy for embedded / resource-constrained targets |
 | `how/strategies/HIGH_PERFORMANCE_STRATEGY.md` | How | Strategy for performance-optimized targets |
-| `what/CORE_CONCEPTS.md` | What | Registry of accepted Orthon concepts (spec foundation) |
+| `what/CORE_CONCEPTS.md` | What | Registry of accepted Orthon concepts — currently empty (see `how/concepts/research/` for in-progress research) |
 | `what/concepts/README.md` | What | Describes the acceptance pipeline for concept drafts |
 | `how/concepts/README.md` | How | Concept design pipeline: research → design → spec |
 | `how/concepts/research/DATA_MODEL.md` | How | Concept research: formal data model analysis |
@@ -106,7 +106,7 @@ docs/
 │   ├── MANIFESTO.md
 │   └── ZEN.md
 ├── what/                     # WHAT — language design & reference
-│   ├── CORE_CONCEPTS.md      # Accepted concept registry (spec foundation)
+│   ├── CORE_CONCEPTS.md      # Accepted concept registry (currently empty; see how/concepts/research/)
 │   ├── DESIGN_PRINCIPLES.md
 │   ├── GLOSSARY.md
 │   └── concepts/             # Accepted Orthon concept drafts (see README.md)
@@ -195,7 +195,7 @@ When assigned a task in this project, follow this protocol:
 ### 5.1 Orient
 
 1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
-2. **Read the relevant layer first.** If the task is about a concrete feature, start with `what/CORE_CONCEPTS.md` (accepted concepts) and `how/concepts/research/` (concept research). If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
+2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `what/DESIGN_PRINCIPLES.md`.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
 4. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
 

@@ -45,7 +45,7 @@ When documenting a language feature, always present **all** canonical
 ways to use it, not just the most common one.
 
 If a feature has multiple equivalent forms, they should be shown together
-in the same section. Example from [CORE_CONCEPTS.md](../what/CORE_CONCEPTS.md):
+in the same section. Example from [FOUNDATIONAL_ABSTRACTIONS.md](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md):
 
 ```orthon
 emit value          # emit a single value from a generator

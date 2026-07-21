@@ -6,7 +6,7 @@
 
 **Files:**
 - Content documents: `UPPER_CASE.md` — one file, one coherent topic
-  - Examples: `VISION.md`, `CORE_CONCEPTS.md`, `DESIGN_PRINCIPLES.md`, `GLOSSARY.md`
+  - Examples: `VISION.md`, `FOUNDATIONAL_ABSTRACTIONS.md`, `DESIGN_PRINCIPLES.md`, `GLOSSARY.md`
   - Location: Content files live inside their layer directory (`why/`, `what/`, `how/`, `when/`)
   
 - Template files: `_kebab-case.md` with underscore prefix inside `how/templates/`
@@ -69,7 +69,7 @@
   - Review milestone (e.g., "Milestone 2")
   - Acceptance criteria (e.g., "acceptance via EDR")
   
-Example from `CORE_CONCEPTS.md`:
+Example from `FOUNDATIONAL_ABSTRACTIONS.md`:
 ```
 > **⚠️ DRAFT — This document is a preliminary draft.**
 > It was created during Milestone 0 (Foundation) as exploratory work.
@@ -112,7 +112,7 @@ The minimal, stable set of language semantics...
 - Content organized by **Why → How → What** (Golden Circle) framework
 - "Why" layer: purpose, vision, philosophy — `why/VISION.md`, `why/MANIFESTO.md`, `why/ZEN.md`, `why/GOALS.md`
 - "How" layer: design and implementation — `how/IMPLEMENTATION_POLICIES.md`, `how/architecture/ARCHITECTURE.md`, `how/strategies/IMPLEMENTATION_STRATEGIES.md`
-- "What" layer: concrete language spec — `what/CORE_CONCEPTS.md`, `how/concepts/research/` subdirectory
+- "What" layer: concrete language spec — `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md`, `how/concepts/research/` subdirectory
 - "When" layer: roadmap and milestones — `when/ROADMAP.md`
 
 **Cross-layer validation:**
@@ -127,7 +127,7 @@ The minimal, stable set of language semantics...
   ```markdown
   ### Affected Documents
   
-  - [ ] `CORE_CONCEPTS.md`
+  - [ ] `FOUNDATIONAL_ABSTRACTIONS.md`
   - [ ] `DATA_MODEL.md`
   - [ ] `DESIGN_PRINCIPLES.md`
   - [ ] `GLOSSARY.md`
@@ -178,7 +178,7 @@ The minimal, stable set of language semantics...
 **Canonicality requirement:**
 - When documenting a language feature, present **all canonical forms**, not just the most common
 - All equivalent syntactic forms shown together in same section
-- Example from CORE_CONCEPTS.md: `emit value`, `return sequence(value)`, `return value ->` are shown as equivalent
+- Example from FOUNDATIONAL_ABSTRACTIONS.md: `emit value`, `return sequence(value)`, `return value ->` are shown as equivalent
 
 **Model/Semantics first:**
 - Code examples precede semantic explanation (not the reverse)

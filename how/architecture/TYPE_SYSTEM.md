@@ -46,7 +46,7 @@ The Type System operates between the name resolver and IR construction stages:
 | [IR.md](IR.md) | Type checker produces typed IR nodes for code generation |
 | [PARSER.md](PARSER.md) | Type checker operates on the resolved AST produced by the parser + name resolver pipeline |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Type system is part of the Core Language layer |
-| [CORE_CONCEPTS.md](../what/CORE_CONCEPTS.md) | Data representations map to types in the type system |
+| [DATA_MODEL.md](../how/concepts/research/DATA_MODEL.md) | Data representations map to types in the type system |
 
 ## Open Questions
 

@@ -52,7 +52,7 @@ concepts that pass all gates and satisfy the checklist are accepted.
   the list of concepts to design, with brief descriptions and dependency
   relationships.
 - **Existing draft documents** — any preliminary concept notes (e.g.,
-  `concepts/CORE_CONCEPTS.md`, `DATA_MODEL.md`, `EQUALITY.md`) are treated as
+  `concepts/FOUNDATIONAL_ABSTRACTIONS.md`, `DATA_MODEL.md`, `EQUALITY.md`) are treated as
   input material, not as accepted designs.
 
 ---

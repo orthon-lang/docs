@@ -66,14 +66,14 @@ The primary abstraction in Orthon. Values viewed without imposed semantic meanin
 tuple(1, 2, 3) → the same data, now explicitly a Tuple
 ```
 
-- **Source:** `CORE_CONCEPTS.md` § Data, `concepts/DATA_MODEL.md`
+- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data, `how/concepts/research/DATA_MODEL.md`
 - **See also:** [Data Modifier](#data-modifier), [Representation](#representation)
 
 ### Data Modifier
 
 A construct that transforms data from one representation to another. Modifiers express programmer intent; the compiler determines the most efficient implementation.
 
-- **Source:** `CORE_CONCEPTS.md` § Data Modifiers
+- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
 
 ### Declaration Model (Unified)
@@ -375,7 +375,7 @@ Every language operator has an equivalent named function. Operators are syntacti
 x->         == sequence(x)
 ```
 
-- **Source:** `CORE_CONCEPTS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
+- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Operators and Named Functions, `DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Named Before Symbolic](#named-before-symbolic)
 
 ### Orthogonality
@@ -435,7 +435,7 @@ A specific view of data. Orthon provides several fundamental representations:
 - **Option** — A value that may be absent.
 - **Result** — A value that may be an error.
 
-- **Source:** `CORE_CONCEPTS.md` § Fundamental Data Types
+- **Source:** `how/concepts/research/DATA_MODEL.md` § Model (What)
 - **See also:** [Data](#data), [Data Modifier](#data-modifier)
 
 ### Representation Symmetry
@@ -480,7 +480,7 @@ Language semantics are independent of optimization. A correct Orthon program mus
 
 A fundamental type representing a sequence of values produced over time. Unlike traditional generators or streams, a Sequence describes *what the result is*, not *how it is produced*. It is a normal object: it can be returned, stored, passed, transformed, or consumed incrementally.
 
-- **Source:** `CORE_CONCEPTS.md` § Sequence
+- **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
 
 ---

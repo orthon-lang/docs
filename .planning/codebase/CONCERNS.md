@@ -78,7 +78,7 @@
 
 **Files:** 18 out of 22 concept documents marked `⚠️ DRAFT`
 
-**Drafts:** `CORE_CONCEPTS.md`, `DATA_MODEL.md`, `EQUALITY.md`, `ALLOCATION.md`, `MUTABILITY.md`, `EXECUTION_PROGRAM.md`, `GENERATORS.md`, `ERROR_HANDLING.md`, `LLM_NATIVE_TOOLCHAIN.md`, `GENERICS.md`, `FUNCTIONS.md`, `SPAN.md`, `UNPACKING.md`, `ASYNC_AWAIT.md`, `SORTING.md`, `OWNERSHIP.md`, `LITERATE_PROGRAMMING.md`, `METAOBJECTS.md`
+**Drafts:** `FOUNDATIONAL_ABSTRACTIONS.md`, `DATA_MODEL.md`, `EQUALITY.md`, `ALLOCATION.md`, `MUTABILITY.md`, `EXECUTION_PROGRAM.md`, `GENERATORS.md`, `ERROR_HANDLING.md`, `LLM_NATIVE_TOOLCHAIN.md`, `GENERICS.md`, `FUNCTIONS.md`, `SPAN.md`, `UNPACKING.md`, `ASYNC_AWAIT.md`, `SORTING.md`, `OWNERSHIP.md`, `LITERATE_PROGRAMMING.md`, `METAOBJECTS.md`
 
 **Issue:** All concepts are marked as preliminary drafts "created during Milestone 0 (Foundation)". No clear process documented for:
 - Transitioning from DRAFT to stable/accepted

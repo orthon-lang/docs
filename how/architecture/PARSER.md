@@ -48,7 +48,7 @@ Per [ARCHITECTURE.md](ARCHITECTURE.md), the Parser is part of the Syntax layer. 
 | [TYPE_SYSTEM.md](TYPE_SYSTEM.md) | Parser AST is consumed after name resolution for type checking |
 | [IR.md](IR.md) | Parser AST is the raw material from which typed IR is constructed |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Parser is the Syntax layer component |
-| Core Language concepts | Parser syntax conforms to [Core Concepts](../what/CORE_CONCEPTS.md) semantics |
+| Core Language concepts | Parser syntax conforms to Core Language semantics (see [FOUNDATIONAL_ABSTRACTIONS.md](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md) and [DATA_MODEL.md](../how/concepts/research/DATA_MODEL.md)) |
 
 ## Open Questions
 

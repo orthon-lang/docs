@@ -147,7 +147,7 @@ The documentation is organized into **five major components**, each with a disti
 - Purpose: Formal semantic definition of language features
 - Location: `how/concepts/research/{FEATURE_NAME}.md`
 - Pattern: Each concept starts as DRAFT, passes Concept Design Review, then becomes accepted via EDR (Architecture category)
-- Examples: `CORE_CONCEPTS.md`, `DATA_MODEL.md`, `FUNCTIONS.md`, `ERROR_HANDLING.md`
+- Examples: `FOUNDATIONAL_ABSTRACTIONS.md`, `DATA_MODEL.md`, `FUNCTIONS.md`, `ERROR_HANDLING.md`
 
 **Implementation Strategies** (`how/strategies/`):
 - Purpose: Specify *how* language semantics are implemented for different execution environments
@@ -346,7 +346,7 @@ Strategy (named set of Policies)
 
 **What happens:** A Why-level argument (philosophical belief) gets embedded in a What-level document (concrete specification)
 
-Example: Writing "Orthon rejects null because we believe in explicit semantics" in `how/concepts/research/CORE_CONCEPTS.md`
+Example: Writing "Orthon rejects null because we believe in explicit semantics" in `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md`
 
 **Why it's wrong:** Conflates layers. The philosophical rationale belongs in Why layer; the specification belongs in What layer. Mixing confuses future readers about whether the design is optional or mandatory.
 
