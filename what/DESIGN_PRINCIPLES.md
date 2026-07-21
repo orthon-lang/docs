@@ -20,7 +20,6 @@ Core Philosophy
 ├── Declarative With Static Guarantees
 ├── Named Before Symbolic
 ├── Minimal Core
-├── Software Design Principles
 ├── Justified Solutions
 ├── Transparency
 ├── Principle of Parsimony
@@ -34,6 +33,11 @@ Execution Model
 ├── Semantics Before Optimization
 ├── Explicit Optimization
 ├── Correctness Before Performance
+
+Software Design Principles
+├── SOLID
+├── DRY (Don't Repeat Yourself)
+├── POLA (Principle of Least Astonishment)
 ```
 
 # Core Philosophy
@@ -222,22 +226,6 @@ The Core is not "assembly for the machine." It is a **Semantic ISA** —
 a semantic instruction set for the programmer. The compiler translates
 this semantics into concrete implementation.
 
-## Software Design Principles
-
-The same SOLID principles that guide good software engineering also guide the design of Orthon itself.
-
--   **Single Responsibility** — Core, Standard Library, and
-    Implementation Strategy each have one responsibility.
--   **Open/Closed** — The Core Language is closed for modification;
-    behavior is extended through the Standard Library (new contracts)
-    and Implementation Strategies (new realisations).
--   **Liskov Substitution** — Different implementation strategies are interchangeable without changing program semantics.
--   **Interface Segregation** — Programs depend on a minimal, coherent language interface.
--   **Dependency Inversion** — High-level code depends on language abstractions, not runtime implementation details.
-
-This architecture makes the language maintainable, evolvable, and implementation-independent.
-
-
 ## Justified Solutions
 
 Every problem deserves its own tool.
@@ -382,6 +370,58 @@ the programmer rather than silently applied by the language.
 Correctness always takes precedence over performance.
 
 Performance improvements are valuable only when they preserve clarity, determinism, and the defined semantics of the language.
+
+---
+
+# Software Design Principles
+
+## SOLID
+
+The same SOLID principles that guide good software engineering also guide the design of Orthon itself.
+
+-   **Single Responsibility** — Core, Standard Library, and
+    Implementation Strategy each have one responsibility.
+-   **Open/Closed** — The Core Language is closed for modification;
+    behavior is extended through the Standard Library (new contracts)
+    and Implementation Strategies (new realisations).
+-   **Liskov Substitution** — Different implementation strategies are interchangeable without changing program semantics.
+-   **Interface Segregation** — Programs depend on a minimal, coherent language interface.
+-   **Dependency Inversion** — High-level code depends on language abstractions, not runtime implementation details.
+
+This architecture makes the language maintainable, evolvable, and implementation-independent.
+
+## DRY (Don't Repeat Yourself)
+
+No construct should exist twice.
+
+If a concept can be expressed through a single mechanism, the language
+must provide exactly one way to express it. Duplicate mechanisms for
+the same concept introduce unnecessary cognitive load, violate
+orthogonality, and create confusion about which form to use.
+
+For example, Python provides both `*args` and `**kwargs` to express
+variable-positional and variable-keyword arguments — two distinct
+syntactic mechanisms for the same underlying idea: variable-argument
+functions. In Orthon, `*` is universal: a single operator handles all
+variable-argument patterns, eliminating the redundancy.
+
+A language that violates DRY forces its users to violate it too.
+
+## POLA (Principle of Least Astonishment)
+
+An operator always means the same thing.
+
+If `*` packs values into a sequence, it always packs — never unpacks.
+If a different operator unpacks, it always unpacks. The meaning of an
+operator must not depend on syntactic context or surrounding tokens.
+
+Context-dependent role reversal — where the same symbol means opposite
+things depending on where it appears — violates the Principle of Least
+Astonishment. The programmer should never need to check context to
+determine what an operator does.
+
+POLA follows from **Consistency** and **Uniformity**: once a user learns
+what `*` means, that meaning is preserved everywhere.
 
 ---
 
