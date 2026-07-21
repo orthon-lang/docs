@@ -1,12 +1,19 @@
 ---
-gsd_state_version: '1.0'
+gsd_state_version: 1.0
+milestone: v0.1
+milestone_name: milestone
+current_phase: 1.1
+current_phase_name: Foundation Completion
 status: planning
+stopped_at: Roadmap restructured to match when/ROADMAP.md's 8-phase pipeline. Phase 1 (Concerns Remediation) confirmed complete. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
+last_updated: "2026-07-21T21:30:00.000Z"
+last_activity: 2026-07-21
+last_activity_desc: Roadmap restructured — old 5-phase structure replaced with the 8-phase pipeline (+ inserted Phase 1.1) from when/ROADMAP.md; STATE.md corrected to reflect Phase 1 as actually complete.
 progress:
-  total_phases: 5
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_phases: 9
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
 ---
 
 # Project State
@@ -16,20 +23,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-20)
 
 **Core value:** A complete, self-consistent Orthon v0.1 specification — every concept accepted (no DRAFT), core architecture specs (IR, Parser, Type System, Name Resolution) filled in, all cross-references valid, and a final review confirming the result coheres as a real language specification.
-**Current focus:** Phase 1 — Concerns Remediation
+**Current focus:** Phase 1.1 — Foundation Completion
 
 ## Current Position
 
-Phase: 1 of 5 (Concerns Remediation)
+Phase: 1.1 of 9 (Foundation Completion) — Phase 1 (Concerns Remediation) complete
 Plan: 0 of TBD in current phase
-Status: Context gathered
-Last activity: 2026-07-20 - Phase 1 context gathered (assumptions mode). Ready to run `/gsd-plan-phase 1`.
+Status: Not yet discussed/planned
+Last activity: 2026-07-21 - Roadmap restructured to the 8-phase pipeline; Phase 1 confirmed complete; Phase 1.1 is next.
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 11%
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 0
 - Average duration: - min
 - Total execution time: 0 hours
@@ -41,6 +49,7 @@ Progress: [░░░░░░░░░░] 0%
 | - | - | - | - |
 
 **Recent Trend:**
+
 - Last 5 plans: -
 - Trend: -
 
@@ -54,8 +63,9 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - Roadmap: GSD roadmap scoped to Milestones 0-7 only (through Freeze); Milestones 8-10 and LLM Toolchain implementation deferred to v2.
-- Roadmap: CONCERNS.md blockers/tech-debt regrouped into a dedicated Concerns Remediation phase; per the 2026-07-20 swap decision, resequenced as Phase 1, run before Phase 2 (Foundations/Process), so tech-debt leftovers are cleared before investing in process/vision work; Phase 2 now depends on Phase 1 completing first, and both still precede the main concept-design work in Phase 3.
-- Roadmap: ANTIPAT-11 (Concept Design Review of all 22 concepts) folded into Phase 3 as its capstone success criterion rather than a standalone phase, since it's the direct gate outcome of the concept design work in that same phase, not an independent deliverable.
+- Roadmap: CONCERNS.md blockers/tech-debt regrouped into a dedicated Concerns Remediation phase (Phase 1) — now complete.
+- Roadmap (2026-07-21): GSD roadmap restructured to mirror `when/ROADMAP.md`'s 8-phase architectural design pipeline (adopted 2026-07-21, commit `3ec6c8a`). Old Phase 2 (Foundations/Process/Vision) became inserted Phase 1.1 (Foundation Completion). Old Phase 3 (Language Inventory, Anti-Pattern Research & Concept Design Review) was split three ways: Phase 2 (Semantic Model), Phase 3 (Primitive Blocks), Phase 4 (Derived Features & Decision Pipeline). Two new phases were added that didn't exist before: Phase 5 (Syntax Design) and Phase 7 (Execution & Optimization Model). Old Phase 4 (Cross-Cutting Review) became Phase 6; old Phase 5 (Freeze & Naming) became Phase 8 (Evolution Model & Freeze). See ROADMAP.md's Overview note and REQUIREMENTS.md's 2026-07-21 changelog entry for the full requirement-ID remapping.
+- Roadmap: former ANTIPAT-11 (Concept Design Review of all 22 concepts) retired in favor of DERIV-03 in Phase 4, same intent (zero DRAFT headers, all EDR-accepted), cleaner ID scheme under the new phase split.
 
 ### Pending Todos
 
@@ -63,9 +73,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 2 must complete before Phase 3 can run the Concept Design Review gate (ANTIPAT-11) — PROC-01/02 define the acceptance criteria that review depends on.
-- Phase 1 DEBT-01..04 (IR/Parser/TypeSystem/NameResolution specs) must land before Phase 5 (Freeze) validates architectural completeness — see CONCERNS.md "Empty Placeholder Files" (Critical severity).
-- 18 of 22 concept documents are currently DRAFT with no prior acceptance process — Phase 3 carries the bulk of the project's content-authoring work (24 of 49 requirements).
+- Phase 1.1 must complete (Design Principles locked, Vision consolidated, Decision Process finalized) before Phase 2 (Semantic Model) begins — Phase 2 explicitly depends on Phase 1.1.
+- Phase 2 (Semantic Model) and Phase 3 (Primitive Blocks) must both complete before Phase 4 (Derived Features) can decompose any concept — this is a stricter gate than the old roadmap's single "Phase 3" catch-all.
+- 18 of 22 concept documents are currently DRAFT with no prior acceptance process — Phase 4 carries the bulk of the project's content-authoring work (26 of 66 requirements).
+- The 8-phase pipeline's own target artifacts (`SEMANTIC_MODEL.md`, `PRIMITIVE_BLOCKS.md`, `SYNTAX.md`, etc.) already exist on disk but are DRAFT placeholders only — no actual design content yet; don't mistake their existence for progress.
 
 ### Quick Tasks Completed
 
@@ -75,6 +86,10 @@ None yet.
 | 260720-dla | Broaden Phase 2 scope to all CONCERNS.md items, not just critical/high blockers | 2026-07-20 | bc9c749 | [260720-dla-phase-2-concerns-remediation-success-cri](./quick/260720-dla-phase-2-concerns-remediation-success-cri/) |
 | 260720-e24 | Add LLM-native language research step to Phase 1, feeding a concept/idea shortlist into Phase 3 | 2026-07-20 | fc700df | [260720-e24-add-llm-native-language-research-step-to](./quick/260720-e24-add-llm-native-language-research-step-to/) |
 | 260720-el7 | Swap Phase 1 and Phase 2 in ROADMAP.md — Concerns Remediation (leftovers) becomes Phase 1, Foundations/Process/Vision becomes Phase 2 | 2026-07-20 | ea1d988 | [260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c](./quick/260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c/) |
+
+### Roadmap Evolution
+
+- 2026-07-21: Full roadmap restructure — replaced old 5-phase structure with the 8-phase pipeline (+ inserted Phase 1.1) from `when/ROADMAP.md`, via `/gsd-phase` (phase.remove ×4, phase.insert ×1, phase.add ×7). Phase 1 preserved unchanged (already complete). See Decisions above for the full old→new phase mapping.
 
 ## Deferred Items
 
@@ -89,6 +104,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-20
-Stopped at: Phase 1 context gathered (assumptions mode). Ready to run `/gsd-plan-phase 1`.
-Resume file: .planning/phases/01-concerns-remediation/01-CONTEXT.md
+Last session: 2026-07-21
+Stopped at: Roadmap restructured to the 8-phase pipeline; Phase 1 confirmed complete. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
+Resume file: .planning/phases/01-concerns-remediation/01-01-SUMMARY.md (Phase 1 complete); no context/plan yet for Phase 1.1
