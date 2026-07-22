@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 1.1 of 9 (Foundation Completion) — Phase 1 (Concerns Remediation) complete
 Plan: 0 of TBD in current phase
 Status: Not yet discussed/planned
-Last activity: 2026-07-21 - Roadmap restructured to the 8-phase pipeline; Phase 1 confirmed complete; Phase 1.1 is next.
+Last activity: 2026-07-22 - Completed quick task 260722-rge: Add concepts from Java-to-Zig comparison table to research/
 
 Progress: [█░░░░░░░░░] 11%
 
@@ -88,6 +88,7 @@ None yet.
 | 260720-el7 | Swap Phase 1 and Phase 2 in ROADMAP.md — Concerns Remediation (leftovers) becomes Phase 1, Foundations/Process/Vision becomes Phase 2 | 2026-07-20 | ea1d988 | [260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c](./quick/260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c/) |
 | 260722-q8g | Add CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md concept research (dataclass + stateless mixin + structural Protocol as a per-problem composition recipe) | 2026-07-22 | c523c3a | [260722-q8g-class-composition-concept](./quick/260722-q8g-class-composition-concept/) |
 | 260722-r2m | Add OPEN_CLASSES.md and SINGLETON_CLASS.md DRAFT concept research (monkey patching and the eigenclass/method_missing, closing the last two Java-to-Ruby comparison table gaps) | 2026-07-22 | 7ac2ab3, 1149ff5 | [260722-r2m-add-concepts-from-java-to-ruby-compariso](./quick/260722-r2m-add-concepts-from-java-to-ruby-compariso/) |
+| 260722-rge | Add COMPILE_TIME_EXECUTION.md DRAFT concept research (Zig's unified `comptime` mechanism — generics, duck-typed polymorphism, reflection, and metaprogramming collapsed into one compile-time execution model — closing the sole Java-to-Zig comparison table gap) | 2026-07-22 | 837f0a9 | [260722-rge-add-concepts-from-java-to-zig-comparison](./quick/260722-rge-add-concepts-from-java-to-zig-comparison/) |
 
 ### Roadmap Evolution
 
