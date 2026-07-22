@@ -102,6 +102,37 @@ class User(val name: String) extends Loggable with Timestamped {
 }
 ```
 
+### Orthon sketch: explicit `compose:` block
+
+Ruby's `include` reads as an implicit side-effecting statement buried in the class body. An alternative surface syntax makes composition a declared, visible block — separate from any (optional) inheritance clause — so the two relationships never blur:
+
+```
+class User
+    compose:
+        Logging
+        Serializable
+        Cacheable
+```
+
+The distinction this syntax makes explicit:
+
+- **Inheritance (`extends`, if Orthon has it at all) → "is-a"** — the type participates in a nominal hierarchy.
+- **`compose:` → "has the capability of"** — the type gains behaviour fragments with no hierarchy relationship implied.
+
+```
+Animal
+   |
+   +-- Bird
+
+Bird
+    compose:
+        Flyable
+        Serializable
+        Comparable
+```
+
+`Bird` *is an* `Animal` (inheritance, if permitted), but *has the capability of* `Flyable`, `Serializable`, and `Comparable` (composition) — the two axes stay visually and semantically distinct at the declaration site, rather than being expressed with the same keyword (Ruby's `include` and Java's `implements` both read as "this type has a relationship" without distinguishing kind).
+
 ## Implications for Orthon
 
 1. **Merge with trait model** — Orthon's trait system (see [`TRAITS.md`](TRAITS.md)) can subsume mixins if traits support default method implementations and associated state. A mixin is then a trait that provides concrete behaviour (methods + optional fields) rather than an abstract contract. This avoids a separate language construct.
@@ -117,3 +148,4 @@ class User(val name: String) extends Loggable with Timestamped {
 - Does the evolution model allow adding a method to a published mixin without breaking existing implementations?
 - Should mixins be parametrisable (generic mixins that take type parameters)?
 - Can a mixin declare abstract methods that the mixing type must provide — making it a "template method" pattern?
+- Should composition use a dedicated declarative block (e.g. `compose:`) distinct from any inheritance clause, so "is-a" and "has the capability of" are never expressed through the same keyword (see the `compose:` sketch above)?
