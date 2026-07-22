@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 1.1 of 9 (Foundation Completion) — Phase 1 (Concerns Remediation) complete
 Plan: 0 of TBD in current phase
 Status: Not yet discussed/planned
-Last activity: 2026-07-22 - Completed quick task 260722-rge: Add concepts from Java-to-Zig comparison table to research/
+Last activity: 2026-07-22 - Completed quick task 260722-rcc: Add concepts from Java-to-TypeScript comparison table to research/
 
 Progress: [█░░░░░░░░░] 11%
 
@@ -89,6 +89,7 @@ None yet.
 | 260722-q8g | Add CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md concept research (dataclass + stateless mixin + structural Protocol as a per-problem composition recipe) | 2026-07-22 | c523c3a | [260722-q8g-class-composition-concept](./quick/260722-q8g-class-composition-concept/) |
 | 260722-r2m | Add OPEN_CLASSES.md and SINGLETON_CLASS.md DRAFT concept research (monkey patching and the eigenclass/method_missing, closing the last two Java-to-Ruby comparison table gaps) | 2026-07-22 | 7ac2ab3, 1149ff5 | [260722-r2m-add-concepts-from-java-to-ruby-compariso](./quick/260722-r2m-add-concepts-from-java-to-ruby-compariso/) |
 | 260722-rge | Add COMPILE_TIME_EXECUTION.md DRAFT concept research (Zig's unified `comptime` mechanism — generics, duck-typed polymorphism, reflection, and metaprogramming collapsed into one compile-time execution model — closing the sole Java-to-Zig comparison table gap) | 2026-07-22 | 837f0a9 | [260722-rge-add-concepts-from-java-to-zig-comparison](./quick/260722-rge-add-concepts-from-java-to-zig-comparison/) |
+| 260722-rcc | Add UNION_INTERSECTION_TYPES.md, LITERAL_TYPES.md, and TYPE_LEVEL_COMPUTATION.md DRAFT concept research (structural union/intersection combinators, value-as-type literals, and the bundled conditional/mapped/template-literal/keyof/typeof/infer type-computation cluster — closing the three genuine gaps in the Java-to-TypeScript comparison table) | 2026-07-22 | ecf6c28, cfcb206, 8152d41 | [260722-rcc-add-concepts-from-java-to-typescript-com](./quick/260722-rcc-add-concepts-from-java-to-typescript-com/) |
 
 ### Roadmap Evolution
 
