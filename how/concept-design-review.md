@@ -1,6 +1,6 @@
 # Concept Design Review
 
-> The 11-step procedure for designing and validating each language
+> The 12-step procedure for designing and validating each language
 > concept during Milestone 2 of the design process.
 >
 > **Applies to:** [ROADMAP](../when/ROADMAP.md) § Milestone 2
@@ -15,13 +15,13 @@
 
 The Concept Design Review is the core design workflow of the Orthon
 project. Each concept identified in the Language Inventory (Milestone 1)
-undergoes a uniform 11-step procedure that ensures the design is:
+undergoes a uniform 12-step procedure that ensures the design is:
 
 - **Problem-driven** — starts from a real programmer need, not a
   technically interesting idea.
 - **Principle-compliant** — verified against the Manifesto and Design
   Principles.
-- **Validated** — passes all six Decision Validation gates before
+- **Validated** — passes all seven Decision Validation gates before
   acceptance.
 - **Traceable** — every decision is recorded with rationale,
   alternatives considered, and an Engineering Decision Record.
@@ -35,12 +35,12 @@ govern language design decisions. They serve distinct roles:
 
 | Artifact | Role | Answers | Applied |
 |----------|------|---------|---------|
-| **11-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
-| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 11-step output |
+| **12-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
+| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 12-step output |
 | **Language Design Gate** (`_language-design.md`) | **Checklist** — what to verify concretely | *Did we check everything?* | Operationalises the gates into a review form |
 
-**The flow:** The 11-step procedure produces a concept design. That design
-is then evaluated through the six Decision Validation gates. The
+**The flow:** The 12-step procedure produces a concept design. That design
+is then evaluated through the seven Decision Validation gates. The
 `_language-design.md` checklist records the outcome of each check. Only
 concepts that pass all gates and satisfy the checklist are accepted.
 
@@ -57,9 +57,9 @@ concepts that pass all gates and satisfy the checklist are accepted.
 
 ---
 
-## 11-Step Procedure
+## 12-Step Procedure
 
-Each concept goes through the following 11 steps in order. Every step
+Each concept goes through the following 12 steps in order. Every step
 maps to one or more validation gates or checklist criteria, as shown in
 the third column.
 
@@ -75,7 +75,8 @@ the third column.
 | 8 | **Rationale** | Why was this specific option chosen? Why were others rejected? | [`_language-design.md`](gates/_language-design.md) § Traceability |
 | 9 | **Examples** | Minimal, typical, edge case, and incorrect usage examples | Comprehension check (no gate) |
 | 10 | **Open Questions** | What remains unresolved? | `LONG_TERM_MAINTAINABILITY_GATE` |
-| 11 | **EDR** | If a decision is made, it is formalised as an Engineering Decision Record (Architecture category) | [`_language-design.md`](gates/_language-design.md) § Decision journal |
+| 11 | **Complexity Assessment** | Assess implementation burden, novelty, perception cost, error cost, and coupling risk | `CONCEPTUAL_SIMPLICITY_GATE` · `LONG_TERM_MAINTAINABILITY_GATE` |
+| 12 | **EDR** | If a decision is made, it is formalised as an Engineering Decision Record (Architecture category) | [`_language-design.md`](gates/_language-design.md) § Decision journal |
 
 ### Step Details
 
@@ -173,7 +174,26 @@ work. If there are no open questions, state that explicitly.
 **Output:** A list of open questions with owner (if assigned) and
 target milestone for resolution.
 
-#### 11. EDR (Architecture)
+#### 11. Complexity Assessment
+
+Evaluate the concept across five dimensions to surface implementation
+and adoption risk before formalising the decision.
+
+| Dimension | Rating (Low / Medium / High) | Guidance |
+|-----------|------------------------------|----------|
+| **Novelty** | | Are there direct analogs in Python, Rust, Java, or other mainstream languages? Low = well-established pattern; High = unprecedented |
+| **Perception complexity** | | Strive for Python-level density. A typical use should fit 1–2 lines (e.g., `[x*2 for x in lst]`, `with open(f) as f: ...`). Count lines/characters for the minimal example. |
+| **Implementation complexity** | | Does this require new AST nodes, IR passes, type system extensions? Low = syntactic sugar over existing primitives; High = core architecture change |
+| **Error cost** | | When used incorrectly, is the mistake caught at compile time (Low), causes a runtime crash with clear message (Medium), or produces silent data corruption (High)? |
+| **Feature coupling risk** | | Does this concept demand supporting concepts? Low = stands alone (e.g., `const`); High = opens a dependency chain (generics → traits → HKT) |
+
+**Output:** A 5-row assessment table with ratings and brief justification.
+
+**Reference:** [`_language-design.md`](gates/_language-design.md) § Minimality,
+`CONCEPTUAL_SIMPLICITY_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` in
+[`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md).
+
+#### 12. EDR (Architecture)
 
 Formalise the decision as an Engineering Decision Record using the
 [EDR Architecture template](templates/_edr-architecture.md). The EDR captures
@@ -185,7 +205,7 @@ the context, decision, consequences, and links to the concept document.
 
 ## Validation
 
-After the 11-step procedure is complete, the concept design must be
+After the 12-step procedure is complete, the concept design must be
 validated through all 7 Decision Validation gates defined in
 [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — see that
 document for the gate catalogue with criteria tables and gate selection
