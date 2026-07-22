@@ -45,6 +45,11 @@ The language provides **compile-time metaprogramming** through a combination of 
 4. **Compile-time reflection** — read-only access to type structure at compile time.
 
 ```
+// Derive — automatic trait implementation generation
+@derive(Show, Eq, Clone)
+type Point(x: Int, y: Int)
+// Compiler generates: Show, Eq, and Clone implementations
+
 // Annotation-driven serialisation
 @json
 struct Person

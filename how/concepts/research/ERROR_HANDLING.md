@@ -39,18 +39,26 @@ The core problem: **errors should be visible in the function contract** and **ha
 Error handling uses a **monadic type** `Result<T, E>` where `T` is the success type and `E` is the error type. Functions return `Result`; the caller must handle it.
 
 ```
-func divide(a: Int, b: Int) -> Result<Int, DivisionError>
+fun divide(a: Int, b: Int) -> Result<Int, DivisionError>
     if b == 0 then Error(DivisionError.DivisionByZero)
     else Ok(a / b)
 
-// Short-circuit propagation:
-let result = divide(x, y)?  // unwraps Ok or early-returns Error
+fun read_config(path: String) -> Result<Config, IOError>
+    data = fs.read_file(path)?   # ? propagates error upward
+    parse_config(data)           # automatically wrapped in Ok
+
+# Short-circuit propagation:
+let result = divide(x, y)?      # unwraps Ok or early-returns Error
+
+# Recovery with fallback:
+config = read_config("app.toml").or_else(|e| default_config())
 ```
 
 Key features:
 - `?` operator for short-circuit propagation (visible in code).
 - Pattern matching for exhaustive error handling.
 - Combinators: `map`, `and_then`, `or_else`, `unwrap_or`, `unwrap_or_else`.
+- **`.or_else(fallback)`** — recovery combinator. If `Result` is `Error`, calls the fallback function and returns its result. Makes error chains as flat as `try/catch` without hidden control flow.
 - No unchecked exceptions — all fallibility is declared.
 
 ## Default Strategy

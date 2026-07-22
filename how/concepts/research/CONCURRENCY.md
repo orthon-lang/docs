@@ -41,6 +41,7 @@ The root cause: **shared mutable state** accessed without coordination. Locking 
 Concurrency follows the **Actor Model** (Erlang-style) and **CSP** (Go-style). Computation is organised into isolated actors that communicate through typed channels.
 
 ```
+# Actor syntax (Erlang-style message handling)
 actor Counter:
     var count: Int = 0
     
@@ -50,9 +51,23 @@ actor Counter:
     handle GetCount(sender: Chan<Int>):
         sender.send(count)
 
-// Spawn an actor
+# Spawn an actor
 let counter = spawn(Counter())
 counter.send(Increment)
+
+# Alternative: method-call actor syntax (Python-style)
+actor Counter:
+    var count = 0
+
+    fun increment()
+        count += 1
+
+    fun get() -> Int
+        count
+
+counter = spawn Counter()
+counter.increment()             # async call, non-blocking
+print(await counter.get())     # await retrieves the result
 ```
 
 Key features:
@@ -64,7 +79,9 @@ Key features:
 
 ## Default Strategy
 
-Actor model with typed channels and a supervision tree. Each actor owns its heap; garbage collection is per-actor (generational). No shared-memory primitives in the default strategy.
+Actor model with method-call syntax (functions on actors become async message sends). Typed channels for streaming data. Supervision tree for failure handling. Each actor owns its heap; garbage collection is per-actor (generational). No shared-memory primitives in the default strategy.
+
+The compiler guarantees that an actor's mutable state is never accessed from outside the actor. The `shared` keyword (see `COPY_ON_WRITE.md`) is marked as `!Send` and `!Sync`, preventing `shared` values from crossing actor boundaries unsafely.
 
 ## Alternative Strategies
 

@@ -1,0 +1,164 @@
+# Developer Tooling
+
+> **⚠️ DRAFT — This document is a preliminary draft.**
+> It was created as exploratory research material for the Concept Design Review
+> process (Milestone 2). A concept is registered only after
+> acceptance via EDR (Architecture category).
+>
+> **Last updated:** 2026-07-22
+>
+> **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
+> to language-wide agreement and will be specified in Phase 5 (Syntax).
+
+## Issue (Why)
+
+What developer tools must a language provide out of the box for a productive development experience?
+
+Languages ship with wildly varying tooling:
+- **Go** — `gofmt`, `go vet`, `go test`, `go build`, built-in formatter and linter. No third-party tools needed for basic workflow.
+- **Rust** — `cargo` with built-in formatter (`rustfmt`), linter (`clippy`), test runner, documentation generator, package registry (crates.io).
+- **Python** — no built-in tooling. Rely on `pip`/`poetry`, `black`/`ruff`, `pytest` — all third-party, configuration-heavy.
+- **JavaScript** — fragmented ecosystem: npm/yarn/pnpm, eslint/prettier/biome, jest/vitest. High cognitive overhead choosing and configuring tools.
+
+The core problem: **tooling fragmentation wastes developer time on configuration instead of solving problems**. A language that ships with a complete, opinionated toolchain eliminates this overhead entirely.
+
+## Principles
+
+1. **Batteries included** — Package manager, formatter, linter, test runner, and build tool are part of the language distribution. No third-party tools required for standard workflows.
+2. **Zero-config by default** — Tools work without configuration files. Configuration is additive, not mandatory.
+3. **One package registry** — A single, unified package registry (`wvy`) — no namespace fragmentation.
+4. **Script and binary modes** — Scripts run instantly (interpreted / JIT). The same code compiles to a standalone binary with no changes.
+5. **REPL with IDE-level intelligence** — REPL provides autocomplete, type hints, and documentation lookup — not just a bare read-eval-print loop.
+6. **LLM-native** — The toolchain exposes machine-readable language schemas so LLMs can generate correct code by contract, not by pattern-matching.
+
+## Policy Footprint
+
+| Policy Type | Role in the concept |
+|---|---|
+| Toolchain Policy | Defines the set of tools included in the language distribution |
+| Package Resolution Policy | Governs how packages are resolved, cached, and updated |
+| Build Policy | Controls compilation modes (interpreted, JIT, AOT) |
+| Formatting Policy | Determines canonical code style (opinionated, no options) |
+
+## Model (What)
+
+The language ships with a complete toolchain under the `wvy` command (or a single entry point):
+
+```bash
+# Package management
+wvy init                    # create a new project
+wvy add serde               # add dependency
+wvy build                   # build project
+wvy run                     # run project
+
+# Quality tools
+wvy fmt                     # format code (opinionated, no config)
+wvy lint                    # static analysis
+wvy test                    # run tests
+
+# Compilation
+wvy build --release         # compile to native binary
+wvy script run.orthon       # run a single script
+
+# REPL
+wvy repl                    # interactive REPL with autocomplete
+```
+
+### Package manager (`wvy`)
+
+```orthon
+# The package manifest (auto-generated, editable)
+# wvy.toml
+[package]
+name = "my-app"
+version = "0.1.0"
+
+[dependencies]
+serde = "1.0"
+http = "2.3"
+
+# Usage in code
+import serde
+import http
+```
+
+Key features:
+- **Single registry** — one authoritative package source (like crates.io or pkg.go.dev).
+- **Semantic versioning** — dependency resolution uses semver ranges.
+- **Lock file** — deterministic builds via `wvy.lock` (auto-generated).
+- **No build script DSL** — build configuration is minimal. Complex builds use the language itself.
+
+### Formatter (`wvy fmt`)
+
+- **Opinionated** — no configuration options. One true style (like `gofmt`).
+- **No debates** — formatting is not a topic for code review. It's automatic and uniform.
+- **Edits in place** by default with `--check` flag for CI.
+
+### Linter (`wvy lint`)
+
+- **Rule set** — curated set of lint rules (like `clippy`). No configuration needed.
+- **Fix suggestions** — auto-fix where possible (unused imports, redundant patterns).
+- **Gradual strictness** — new projects get all rules. Legacy code can opt out per-rule.
+
+### Test runner (`wvy test`)
+
+- **Built-in** — no external test framework required.
+- **Discovery** — tests are discovered by convention (files ending in `_test.orthon`, functions annotated with `@test`).
+- **Coverage** — built-in coverage reporting (`wvy test --coverage`).
+
+### REPL (`wvy repl`)
+
+- **Autocomplete** — tab completion for all visible symbols.
+- **Type hints** — shows inferred types as you type.
+- **Documentation** — `?name` shows doc for `name`.
+- **History** — persistent history across sessions.
+
+### Script mode
+
+```orthon
+# hello.orthon — runs as a script, no project needed
+print("Hello, World!")
+
+# Terminal
+# $ wvy run hello.orthon
+# Hello, World!
+
+# Or compile to binary:
+# $ wvy build hello.orthon --output hello
+# $ ./hello
+# Hello, World!
+```
+
+## Default Strategy
+
+The toolchain is bundled with the language compiler. `wvy` is the single entry point for all operations. The formatter has zero configuration options. The linter has a single `--strict` flag. The package manager uses the official registry.
+
+## Alternative Strategies
+
+| Strategy | Description |
+|---|---|
+| Ecosystem-only (Python, JS) | No built-in tools. Third-party ecosystem provides alternatives. Maximum choice, maximum fragmentation. |
+| Minimal tooling (C, C++) | Compiler only. Build systems (CMake, Make) and package managers (vcpkg, Conan) are external. |
+| Hybrid (Rust `cargo`) | Built-in package manager + build tool. Formatter and linter are separate installs but from the same organisation. |
+| SDK bundling (Go) | Built-in `gofmt`, `go vet`, `go test`. Package manager is built-in but registry is decentralised. |
+
+## Open Questions
+
+1. Should `wvy` support workspaces (monorepos with multiple packages)?
+2. Should the formatter support a minimal configuration file for edge cases (line width, indent style)?
+3. How to handle private package registries (enterprise use case)?
+4. Should the REPL support multi-line editing and notebook-style output?
+5. Should the test runner support property-based testing (QuickCheck style) natively?
+
+## Decision History
+
+*To be filled during Concept Design Review (Milestone 2).*
+
+---
+
+### Affected Documents
+
+- [ ] `what/LIBRARY_BOUNDARY.md`
+- [ ] `how/IMPLEMENTATION_POLICIES.md`
+- [ ] `how/strategies/DEFAULT_STRATEGY.md`
+- [ ] Other: `how/concepts/research/LLM_NATIVE_TOOLCHAIN.md`

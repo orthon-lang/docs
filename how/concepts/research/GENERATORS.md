@@ -43,16 +43,25 @@ The core problem: **a function should be able to suspend and resume, yielding va
 A generator is a function that uses `yield` to produce values one at a time. The function's state is automatically saved between yields. The caller consumes values lazily.
 
 ```
-func fibonacci() -> Generator<Int>
-    var a = 0, b = 1
+# Generator function with yield
+fun fib() -> Iterator<Int>
+    a, b = 0, 1
     loop:
         yield a
-        (a, b) = (b, a + b)
+        a, b = b, a + b
 
-// Usage
-for f in fibonacci():
+# Usage with for loop
+for f in fib():
     print(f)
     if f > 100 then break
+
+# Generator expressions (comprehensions)
+numbers = (x * x for x in 1..10 if x % 2 == 0)
+# Produces: 4, 16, 36, 64, 100
+
+# Combinator chains on iterators
+fib().take(10).filter(|n| n > 5).collect()
+# Returns: [8, 13, 21, 34]
 ```
 
 Key features:
@@ -60,7 +69,9 @@ Key features:
 - **Automatic state machine** — local variables persist across yields.
 - **Iteration integration** — generators are consumed with `for` syntax.
 - **Send values back** — optional `yield expr` where `expr` receives a value from the caller.
-- **Generator expressions** — inline generator syntax: `(x * 2 for x in list if x > 0)`.
+- **Generator expressions** — inline generator syntax: `(x * x for x in 1..10 if x % 2 == 0)`.
+- **Iterator combinators** — `.take(n)`, `.filter(pred)`, `.map(fn)`, `.collect()` — compose lazy transformations without intermediate allocations.
+- **Exhaustion** — iterators are single-use (consumed after iteration). The compiler prevents reuse.
 
 ## Default Strategy
 
