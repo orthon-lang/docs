@@ -24,6 +24,7 @@ Core Philosophy
 ├── Justified Solutions
 ├── Transparency
 ├── Principle of Parsimony
+├── Idempotent Generation
 
 Language Consistency
 ├── Representation Symmetry
@@ -373,6 +374,44 @@ merit, the most parsimonious explanation and solution should be adopted.
 
 > *Entia non sunt multiplicanda praeter necessitatem.*
 > (Entities must not be multiplied beyond necessity.)
+
+
+## Idempotent Generation
+
+The language and standard library are designed so that the same
+specification (expressed as a prompt, schema, or code fragment)
+produces semantically equivalent code across repeated generations.
+
+This principle serves the LLM-native development paradigm: when an LLM
+generates the same function twice, the result must be semantically
+equivalent — same preconditions, postconditions, observable behaviour,
+and type structure. Cosmetic variation (variable names, comments,
+formatting) is acceptable; semantic variation is not.
+
+### Enforcement
+
+1. **No hidden global state affecting semantics** — implicit mutable
+   global state, process-wide singletons, and ambient authority are
+   prohibited or require explicit declaration.
+
+2. **Deterministic iteration** — built-in collections iterate in a
+   documented, stable order. Non-deterministic iteration requires
+   explicit opt-in.
+
+3. **Explicit time and randomness** — time- and entropy-dependent
+   functions receive their source explicitly (clock, RNG), not from
+   ambient state.
+
+4. **Import-order independence** — module initialisation order does
+   not affect runtime semantics. Module-level side effects are
+   prohibited.
+
+5. **Canonical compilation** — the same source always produces the
+   same compiled output. No build-timestamp, hostname, or path
+   dependencies in the binary output.
+
+See [`IDEMPOTENT_GENERATION.md`](concepts/research/IDEMPOTENT_GENERATION.md)
+for the full research concept.
 
 ---
 

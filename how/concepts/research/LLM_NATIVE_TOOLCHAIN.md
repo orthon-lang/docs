@@ -194,6 +194,60 @@ the Schema Provider and Static Analyser, it can:
 - Refactor across API boundaries
 - Generate migration scripts for language version changes
 
+**Compiler Introspection API**
+Provides a queryable runtime interface to the compiler's internal
+knowledge — the same information an IDE or LSP server exposes, but
+structured for machine (LLM) consumption. This gives an LLM the
+ability to reason about a program without executing it:
+
+- **Type queries** — Given an expression or code position, return
+  the inferred type. Supports partial programs with typed holes
+  (see [`TYPED_HOLES.md`](TYPED_HOLES.md)).
+- **Autocompletion candidates** — Given scope and cursor position,
+  return the list of valid completions with types and documentation.
+  Identical to the IDE's completion engine, exposed as a structured
+  API.
+- **Trait/interface resolution** — Given a type and a required
+  capability (trait, interface, protocol), list all implementations
+  available in scope.
+- **Scope inspection** — Given a code position, enumerate all visible
+  symbols (local variables, module imports, globals) with their types.
+- **Diagnostic queries** — Return all compiler diagnostics (errors,
+  warnings, notes, hole diagnostics) for a given code fragment, with
+  machine-readable error codes and repair hints.
+- **Symbol documentation** — Given a symbol name, return its
+  documentation, signature, source location, and annotations.
+
+The Introspection API is stateless and deterministic: identical inputs
+always produce identical results. It operates on the compiler's
+internal representation without requiring compilation to machine code.
+
+```json
+// Example: type query request
+POST /introspect/type
+{
+    "source": "fn sqrt(x: Float) -> Float\n    x * x",
+    "position": {"line": 1, "column": 5}
+}
+
+// Response
+{
+    "type": "Float",
+    "context": "x : Float",
+    "hole_eligible": false
+}
+```
+
+The Introspection API is distinct from the Schema Provider:
+
+| Aspect | Schema Provider | Introspection API |
+|--------|-----------------|-------------------|
+| **Scope** | Language-wide, static | Program-specific, contextual |
+| **Input** | Language version + strategy | Source code + position |
+| **Output** | Grammar, types, stdlib schema | Types, completions, diagnostics |
+| **State** | Stateless, deterministic | Stateless, deterministic |
+| **Consumer** | Any LLM tool | Interactive LLM agents |
+
 ### Schema Format Requirements
 
 The Schema Provider's output must satisfy:
@@ -210,11 +264,11 @@ The Schema Provider's output must satisfy:
 The Toolchain supports three interaction modes, governed by the
 **Toolchain Policy**:
 
-| Mode | Schema Provider | Code Completer | Code Generator | Static Analyser | Docs Gen | Refactor |
-|------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Minimal** | ✓ | — | — | — | — | — |
-| **Standard** | ✓ | ✓ | — | ✓ | — | — |
-| **Full** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Mode | Schema Provider | Code Completer | Code Generator | Static Analyser | Docs Gen | Refactor | Introspection API |
+|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Minimal** | ✓ | — | — | — | — | — | — |
+| **Standard** | ✓ | ✓ | — | ✓ | — | — | ✓ |
+| **Full** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ## Default Strategy
 

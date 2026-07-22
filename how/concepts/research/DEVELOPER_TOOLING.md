@@ -113,6 +113,39 @@ Key features:
 - **Documentation** — `?name` shows doc for `name`.
 - **History** — persistent history across sessions.
 
+### Interactive REPL with Hot Reload
+
+The REPL supports an **interactive development mode** where code changes are applied to a running program without restarting:
+
+```bash
+wvy repl --hot-reload app.orthon
+```
+
+Behaviour:
+
+1. **Session persistence** — The REPL session state (variable bindings, type environment, loaded modules) is preserved across code edits. Changing a function redefines it in the live session; dependent values may need manual re-evaluation.
+
+2. **Hot reload boundaries** — Code is organised into hot-reloadable units (functions, types, module-level definitions). A hot reload replaces a unit atomically. State that crosses a reload boundary (e.g., an in-memory cache populated by a now-replaced initialisation function) is the programmer's responsibility to manage.
+
+3. **REPL as notebook** — The REPL supports multi-line editing, embedded output (tables, charts from data), and cell-by-cell execution — similar to a Jupyter notebook but in a terminal. Output is rendered inline with ANSI formatting or rich terminal protocols.
+
+4. **Interactive type inspection** — `:type <expr>` shows the type of any expression. `:docs <name>` shows documentation. `:holes` lists all unfilled typed holes in the current session (see [`TYPED_HOLES.md`](TYPED_HOLES.md)).
+
+5. **LLM integration** — The REPL exposes an API endpoint for LLMs to inspect and modify the session state. An LLM can query current bindings, execute expressions, and observe results — all within the same session.
+
+```orthon
+# REPL session example:
+> x = 42
+> :type x
+Int
+> fn greet(name) = "Hello, {name}!"
+> greet("World")
+"Hello, World!"
+> # (edit greet to return "Hi, {name}!" in editor)
+> greet("World")       # hot-reloaded
+"Hi, World!"
+```
+
 ### Script mode
 
 ```orthon
