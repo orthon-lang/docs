@@ -9,25 +9,8 @@ analysis. Research (from any language) lives in `how/concepts/research/`.
 
 ## Pipeline
 
-```
-how/concepts/research/    ─┐
-                           ├──► Decision Pipeline (10 questions)
-Semantic Model ────────────┤         │
-Primitive Blocks ──────────┘         ▼
-                          Primitive Decomposition Check
-                                    │
-                                    ▼
-                          Concept Design Review
-                                    │
-                                    ▼
-                          EDR acceptance
-                                    │
-                                    ▼
-                          what/concepts/{NAME}.md
-                                    │
-                                    ▼
-                          what/CORE_CONCEPTS.md (registry)
-```
+See [`how/CONCEPT_PIPELINE.md`](../../how/CONCEPT_PIPELINE.md) for the
+full 11-stage lifecycle from research inbox to registry entry.
 
 ## Current Status
 

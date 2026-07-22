@@ -132,25 +132,11 @@ languages solve this?"* rather than *"how does Orthon solve this?"*
 
 ### 2. Decision Pipeline (10-Question Pre-Filter)
 
-**Location:** `how/process/DECISION_PIPELINE.md`
-**Documents:** [`how/process/DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md),
-[`how/process/DECISION_PROCESS.md`](process/DECISION_PROCESS.md)
+**Documents:** [`how/process/DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md) (10-question pre-filter),
+[`how/process/DECISION_PROCESS.md`](process/DECISION_PROCESS.md) (decision authority)
 
-10 sequential questions that determine whether a concept should exist
-as a language feature at all:
-
-```
-Q1.  What problem are we solving?
-Q2.  Is this a language problem or a library problem?
-Q3.  Can it be solved with existing primitives?
-Q4.  Does it violate any Design Principle?
-Q5.  Does it add new semantics (vs. syntactic sugar)?
-Q6.  Can it be expressed through composition?
-Q7.  Can it be syntactic sugar over existing primitives?
-Q8.  Is this an optimisation, not semantics?
-Q9.  Does it affect backward compatibility?
-Q10. Is it worth adding at all?
-```
+10 sequential questions determine whether a concept should exist
+as a language feature. See [`DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md) for the full list.
 
 **Exit paths:**
 - **REJECT** — library problem, exists in primitives, violates principle
@@ -200,21 +186,9 @@ composition formula. See EDR-012 for the full classification rule.
 
 **Document:** [`how/concept-design-review.md`](concept-design-review.md)
 
-The core design workflow. Each concept undergoes 11 steps in order:
-
-| # | Step | What It Produces | Maps To |
-|---|------|------------------|---------|
-| 1 | **Problem** | Clear problem statement in user terms | USER_VALUE_GATE |
-| 2 | **Use Cases** | Concrete scenarios with inputs/outputs | USER_VALUE_GATE |
-| 3 | **Necessity** | Verdict: essential / valuable / marginal | CONCEPTUAL_SIMPLICITY_GATE |
-| 4 | **Sufficiency** | Verdict: atomic / could be split / overgrown | CONCEPTUAL_SIMPLICITY_GATE |
-| 5 | **Alternatives** | Table of alternatives with pros/cons/rejection | LONG_TERM_MAINTAINABILITY_GATE |
-| 6 | **Principles Check** | Per-principle pass/fail table | LOGICAL_CONSISTENCY_GATE |
-| 7 | **Interactions** | Per-concept interaction descriptions | ARCHITECTURAL_INTEGRITY_GATE |
-| 8 | **Rationale** | Narrative of why chosen over alternatives | Traceability |
-| 9 | **Examples** | Minimal / typical / edge / incorrect | Comprehension |
-| 10 | **Open Questions** | List of unresolved items | LONG_TERM_MAINTAINABILITY_GATE |
-| 11 | **EDR** | Formal Engineering Decision Record | Decision journal |
+The core design workflow. Each concept undergoes 11 steps in order —
+see [`concept-design-review.md`](concept-design-review.md) for the full
+procedure with step descriptions and gate mappings.
 
 **Step 7 (Interactions)** directly feeds into the interaction matrix
 (consolidated in `what/CROSS_CUTTING.md` during M1 Phase 6).
@@ -231,19 +205,9 @@ validation gates. Each gate produces a binary verdict (pass / fail) or
 a conditional flag. Any **fail** or unresolved **flag** means the
 concept must be revised.
 
-| Gate | Core Question | Method |
-|------|---------------|--------|
-| `USER_VALUE_GATE` | Does this solve a real problem? | Working Backwards |
-| `LOGICAL_CONSISTENCY_GATE` | Is it internally consistent? | Socratic Method |
-| `CONCEPTUAL_SIMPLICITY_GATE` | Is it as simple as it can be? | Scientific Method |
-| `ARCHITECTURAL_INTEGRITY_GATE` | Does it fit the architecture? | Logical Analysis |
-| `IMPLEMENTATION_INDEPENDENCE_GATE` | Can it be strategy-agnostic? | TRIZ |
-| `LONG_TERM_MAINTAINABILITY_GATE` | Will it age well? | Einstein's Method |
-| `LLM_GENERABILITY_GATE` | Can an LLM generate correct code? | Empirical Analysis |
-
-**Gate selection** varies by decision type — a syntax change requires
-fewer gates than a new construct (see `DECISION_VALIDATION.md` § Gate
-Selection for the full matrix).
+See [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) for the gate
+catalogue with criteria tables, and § Gate Selection for the matrix of
+which gates apply to which decision type.
 
 ---
 
@@ -256,17 +220,8 @@ concrete yes/no checks. Every criterion must be satisfied before the
 concept enters specification. The Decision Journal at the end records
 each verdict with date, concept, verdict, and rationale.
 
-**Key criteria (abridged):**
-- Semantic layer classification
-- Vision alignment & problem-first
-- Principle compliance & orthogonality
-- Minimality & core stability
-- Least Astonishment & explicitness
-- Named equivalence & all canonical forms
-- LLM generability
-- Impact & interaction analysis
-- Policy footprint
-- Traceability & evolution strategy
+See [`_language-design.md`](gates/_language-design.md) for the full
+checklist.
 
 ---
 
@@ -374,25 +329,26 @@ postponed to a later milestone (recorded in `when/ROADMAP.md`).
 
 ## Cross-Reference Summary
 
-| Stage | Document | Location |
-|-------|----------|----------|
-| 1 — Research Inbox | Research README | [`how/concepts/research/README.md`](concepts/research/README.md) |
-| 2 — Decision Pipeline | 10-question pre-filter | [`how/process/DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md) |
-| 2 — Decision Process | Authority & who decides | [`how/process/DECISION_PROCESS.md`](process/DECISION_PROCESS.md) |
-| 3 — Primitive Decomposition | Primitive blocks | [`what/PRIMITIVE_BLOCKS.md`](../what/PRIMITIVE_BLOCKS.md) |
-| 3 — Semantic Model | Semantic foundation | [`what/SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) |
-| 4 — Layer Classification | 1st gate criterion | [`how/gates/_language-design.md`](gates/_language-design.md) |
-| 5 — Concept Design Review | 11-step procedure | [`how/concept-design-review.md`](concept-design-review.md) |
-| 6 — Validation Gates | 6+1 gates | [`how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
-| 7 — Language Design Gate | 19-criteria checklist | [`how/gates/_language-design.md`](gates/_language-design.md) |
-| 8 — EDR (Architecture) | Decision record template | [`how/templates/_edr-architecture.md`](templates/_edr-architecture.md) |
-| 8 — EDR Index | Master journal | [`how/decision_records/INDEX.md`](decision_records/INDEX.md) |
-| 9 — Accepted Concept Draft | Accepted concepts README | [`what/concepts/README.md`](../what/concepts/README.md) |
-| 10 — Cross-Cutting | Interaction matrix | [`what/CROSS_CUTTING.md`](../what/CROSS_CUTTING.md) |
-| 10 — Conflict Registry | Conflict tracking | [`what/CONFLICT_REGISTRY.md`](../what/CONFLICT_REGISTRY.md) |
-| 10 — Matrix Format | Interaction format note | [`notes/interaction-matrix-format.md`](../notes/interaction-matrix-format.md) |
-| 11 — Registry | Final concept registry | [`what/CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) |
-| — Concept Template | Design document template | [`how/templates/_concept.md`](templates/_concept.md) |
-| — Core Inclusion Filter | Core vs. stdlib decision rule | [`how/architecture/CORE_INCLUSION_FILTER.md`](architecture/CORE_INCLUSION_FILTER.md) |
-| — Process Inventory | Process tool catalogue | [`PROCESS_INVENTORY.md`](PROCESS_INVENTORY.md) |
-| — Roadmap | Milestone phases | [`when/ROADMAP.md`](../when/ROADMAP.md) |
+Every stage links to its owning document inline above. For a complete
+document map of the project, see [`AGENTS.md`](../AGENTS.md) §3.
+
+**Key pipeline anchors:**
+| Stage | Document |
+|-------|----------|
+| Research Inbox | [`how/concepts/research/README.md`](concepts/research/README.md) |
+| Decision Pipeline | [`how/process/DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md) |
+| Primitive Decomposition | [`what/PRIMITIVE_BLOCKS.md`](../what/PRIMITIVE_BLOCKS.md) |
+| Layer Classification | [`how/gates/_language-design.md`](gates/_language-design.md) §1 |
+| Concept Design Review | [`how/concept-design-review.md`](concept-design-review.md) |
+| Validation Gates | [`how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) |
+| Language Design Gate | [`how/gates/_language-design.md`](gates/_language-design.md) |
+| EDR (Architecture) | [`how/templates/_edr-architecture.md`](templates/_edr-architecture.md) |
+| EDR Index | [`how/decision_records/INDEX.md`](decision_records/INDEX.md) |
+| Accepted Concepts | [`what/concepts/README.md`](../what/concepts/README.md) |
+| Cross-Cutting | [`what/CROSS_CUTTING.md`](../what/CROSS_CUTTING.md) |
+| Registry | [`what/CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) |
+| — | — |
+| Concept Template | [`how/templates/_concept.md`](templates/_concept.md) |
+| Core Inclusion Filter | [`how/architecture/CORE_INCLUSION_FILTER.md`](architecture/CORE_INCLUSION_FILTER.md) |
+| Process Inventory | [`PROCESS_INVENTORY.md`](PROCESS_INVENTORY.md) |
+| Roadmap | [`when/ROADMAP.md`](../when/ROADMAP.md) |

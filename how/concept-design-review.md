@@ -186,17 +186,10 @@ the context, decision, consequences, and links to the concept document.
 ## Validation
 
 After the 11-step procedure is complete, the concept design must be
-validated through all six Decision Validation gates defined in
-[`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md):
-
-| Gate | What It Checks |
-|------|----------------|
-| `USER_VALUE_GATE` | Does this solve a real problem for the programmer? |
-| `LOGICAL_CONSISTENCY_GATE` | Is the proposal internally consistent? |
-| `CONCEPTUAL_SIMPLICITY_GATE` | Is it as simple as it can be? |
-| `ARCHITECTURAL_INTEGRITY_GATE` | Does it fit within the layered architecture? |
-| `IMPLEMENTATION_INDEPENDENCE_GATE` | Can it be defined strategy-agnostically? |
-| `LONG_TERM_MAINTAINABILITY_GATE` | Will this decision age well? |
+validated through all 7 Decision Validation gates defined in
+[`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — see that
+document for the gate catalogue with criteria tables and gate selection
+matrix.
 
 Each gate produces a binary verdict (pass / fail) or a conditional flag.
 A proposal with any **fail** or unresolved **flag** must be revised
