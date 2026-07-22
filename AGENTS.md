@@ -407,3 +407,25 @@ Agents operating in this repository must follow these rules:
    language must be translated before writing. This rule takes precedence over the
    user's request language — if the user writes in another language, the agent
    translates the response to English.
+10. **Commit message prefixes.** Every commit message MUST use a conventional prefix
+    to indicate the type of change. Use one of:
+
+    | Prefix | When to use |
+    |--------|-------------|
+    | `docs:` | Documentation-only changes (concept docs, spec, research) |
+    | `feat:` | New language feature or concept |
+    | `fix:`  | Correction of an error in existing documentation |
+    | `chore:` | Maintenance tasks (templates, config, tooling) |
+    | `refactor:` | Restructuring without semantic change |
+    | `meta:` | Changes to agent instructions or process docs |
+
+    **Format:** `prefix: short description`
+
+    ```
+    docs: add gradual typing concept research document
+    chore: update EDR template with new fields
+    ```
+
+    The body may contain additional detail after a blank line. Multiple
+    changes in the same commit should share the same prefix; if they do
+    not, prefer separate commits.
