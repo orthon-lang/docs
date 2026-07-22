@@ -86,6 +86,7 @@ None yet.
 | 260720-dla | Broaden Phase 2 scope to all CONCERNS.md items, not just critical/high blockers | 2026-07-20 | bc9c749 | [260720-dla-phase-2-concerns-remediation-success-cri](./quick/260720-dla-phase-2-concerns-remediation-success-cri/) |
 | 260720-e24 | Add LLM-native language research step to Phase 1, feeding a concept/idea shortlist into Phase 3 | 2026-07-20 | fc700df | [260720-e24-add-llm-native-language-research-step-to](./quick/260720-e24-add-llm-native-language-research-step-to/) |
 | 260720-el7 | Swap Phase 1 and Phase 2 in ROADMAP.md — Concerns Remediation (leftovers) becomes Phase 1, Foundations/Process/Vision becomes Phase 2 | 2026-07-20 | ea1d988 | [260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c](./quick/260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c/) |
+| 260722-q8g | Add CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md concept research (dataclass + stateless mixin + structural Protocol as a per-problem composition recipe) | 2026-07-22 | c523c3a | [260722-q8g-class-composition-concept](./quick/260722-q8g-class-composition-concept/) |
 
 ### Roadmap Evolution
 
