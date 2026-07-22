@@ -6,9 +6,9 @@ current_phase: 1.1
 current_phase_name: Foundation Completion
 status: planning
 stopped_at: Roadmap restructured to match when/ROADMAP.md's 8-phase pipeline. Phase 1 (Concerns Remediation) confirmed complete. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
-last_updated: "2026-07-21T21:30:00.000Z"
-last_activity: 2026-07-21
-last_activity_desc: Roadmap restructured — old 5-phase structure replaced with the 8-phase pipeline (+ inserted Phase 1.1) from when/ROADMAP.md; STATE.md corrected to reflect Phase 1 as actually complete.
+last_updated: "2026-07-22T16:39:40.297Z"
+last_activity: 2026-07-22
+last_activity_desc: Quick task 260722-r2m — added OPEN_CLASSES.md and SINGLETON_CLASS.md DRAFT concept research files.
 progress:
   total_phases: 9
   completed_phases: 1
@@ -87,6 +87,7 @@ None yet.
 | 260720-e24 | Add LLM-native language research step to Phase 1, feeding a concept/idea shortlist into Phase 3 | 2026-07-20 | fc700df | [260720-e24-add-llm-native-language-research-step-to](./quick/260720-e24-add-llm-native-language-research-step-to/) |
 | 260720-el7 | Swap Phase 1 and Phase 2 in ROADMAP.md — Concerns Remediation (leftovers) becomes Phase 1, Foundations/Process/Vision becomes Phase 2 | 2026-07-20 | ea1d988 | [260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c](./quick/260720-el7-swap-phase-1-and-phase-2-in-roadmap-md-c/) |
 | 260722-q8g | Add CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md concept research (dataclass + stateless mixin + structural Protocol as a per-problem composition recipe) | 2026-07-22 | c523c3a | [260722-q8g-class-composition-concept](./quick/260722-q8g-class-composition-concept/) |
+| 260722-r2m | Add OPEN_CLASSES.md and SINGLETON_CLASS.md DRAFT concept research (monkey patching and the eigenclass/method_missing, closing the last two Java-to-Ruby comparison table gaps) | 2026-07-22 | 7ac2ab3, 1149ff5 | [260722-r2m-add-concepts-from-java-to-ruby-compariso](./quick/260722-r2m-add-concepts-from-java-to-ruby-compariso/) |
 
 ### Roadmap Evolution
 
