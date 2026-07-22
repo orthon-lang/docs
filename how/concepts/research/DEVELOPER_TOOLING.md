@@ -44,6 +44,37 @@ Key differences:
 
 The Orthon approach follows Go's model: source-based distribution with a single authoritative registry (`wvy` registry, like crates.io) providing discovery and checksums. No central artifact repository for binaries — the source IS the artifact. This eliminates the publish-build-sign-upload cycle and makes releasing a new version as simple as pushing a Git tag.
 
+### Toolchain Unification: Fragmented vs Unbundled vs Built-in
+
+A deeper dimension affecting developer experience is **how the toolchain is packaged**: are build, test, format, lint, and publish separate installs or one unified command?
+
+| Approach | Languages | Key Characteristics |
+|---|---|---|
+| **Fragmented** | Java (Maven/Gradle + JUnit + Checkstyle + SpotBugs + ...), Python (pip/poetry + pytest + black + ruff + ...), JavaScript (npm + jest + eslint + prettier + ...) | Each tool is a separate install, often with its own configuration file and version. High setup overhead. Tool version drift causes CI failures. Configuration fragmentation (XML, YAML, TOML, JSON for different tools). |
+| **Unbundled but official** | Rust (`cargo` build/test/doc + `rustfmt` + `clippy`) | Build, test, and doc are built into `cargo`. Formatter and linter are separate installs (`rustup component add`) but maintained by the same organisation and integrate with `cargo` seamlessly. No configuration needed for basic use. |
+| **Fully built-in** | Go (`go build/test/fmt/vet`), Orthon (`wvy`) | Every tool is part of the language distribution. Single binary, single command, zero configuration. No third-party downloads needed for the standard development workflow. |
+
+The Java→Rust evolution is illustrative:
+
+| Aspect | Java (Maven/Gradle ecosystem) | Rust (Cargo ecosystem) | Orthon Goal |
+|---|---|---|---|
+| **Build tool** | Third-party (Maven/Gradle) — XML/Groovy/Kotlin DSL config | Built into `cargo` — `Cargo.toml` is declarative, minimal | Built into `wvy` — fully declarative, zero-config |
+| **Test runner** | JUnit, TestNG — separate dependency, separate config | `cargo test` — built-in, zero-config | `wvy test` — built-in |
+| **Formatter** | Checkstyle (Java), Spotless — third-party, config-heavy | `cargo fmt` — `rustfmt`, zero-config | `wvy fmt` — zero-config, opinionated |
+| **Linter** | SpotBugs, PMD, Error Prone — third-party, rule config | `cargo clippy` — maintained by Rust team, ready-made rule set | `wvy lint` — curated rule set, no config |
+| **Documentation** | Javadoc — built into JDK but separate build step | `cargo doc` — built-in, generates docs from doc comments | `wvy doc` — built-in |
+| **Package registry** | Maven Central — single registry, signed artifacts | crates.io — single registry, source-based | `wvy` registry — single registry, source-based |
+| **Learning curve** | High: must learn build tool DSL + plugin configuration | Low: `cargo new`, `cargo build`, `cargo test` — three commands | Minimal: `wvy init`, `wvy build`, `wvy test` |
+
+The key insight: **a unified toolchain eliminates an entire class of configuration problems**. Java developers spend substantial time on Maven/Gradle configuration, plugin version management, and build debugging. Rust and Go developers spend almost none — the toolchain just works.
+
+Implications for Orthon:
+
+1. **Single entry point** — `wvy` is the only command developers need to know. Subcommands are discoverable via `wvy help`.
+2. **Zero configuration for standard workflows** — `wvy build` works without a config file. Configuration is additive for non-standard needs.
+3. **No plugin system** — Tools are part of the `wvy` binary, not plugins. Avoids the version drift and compatibility issues of plugin-based systems.
+4. **LLM-friendly** — A single tool with predictable commands is easier for LLMs to generate correctly than a fragmented ecosystem of independently versioned tools.
+
 ## Principles
 
 1. **Batteries included** — Package manager, formatter, linter, test runner, and build tool are part of the language distribution. No third-party tools required for standard workflows.
