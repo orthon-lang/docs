@@ -88,6 +88,48 @@ Key features:
 | While loop | `while (cond)` | `while cond:` | `while condition` |
 | Skip/filter/take | Manual inside loop | `itertools.islice` | Sequence operations |
 
+### Functional Iteration vs. Simple Loops: Java Stream API vs. Go
+
+A notable design divergence exists between Java's approach to collection processing and Go's:
+
+**Java (Stream API)** — collections can be processed through fluent chains of functional operations:
+
+```java
+List<String> result = items.stream()
+    .filter(item -> item.isValid())
+    .map(item -> item.getName())
+    .sorted()
+    .collect(Collectors.toList());
+```
+
+This is composable and declarative, but introduces: a parallel Stream API with its own intermediate/terminal operation taxonomy, lambda syntax, method references, collectors, and specialised primitives (`IntStream`, `LongStream`). The API surface is large, and the pipeline model (lazy intermediate operations, eager terminal operations) is a concept the programmer must learn separately from loops.
+
+**Go** — collection processing uses simple `for range` loops with explicit conditions:
+
+```go
+var result []string
+for _, item := range items {
+    if item.IsValid() {
+        result = append(result, item.Name())
+    }
+}
+sort.Strings(result)
+```
+
+No Stream API, no `map`/`filter`/`reduce` on collections. Go trades functional expressiveness for simplicity: there is exactly one way to iterate (`for range`), no hidden allocation costs, and no intermediate operation taxonomy to learn. The cost is verbosity — every transformation is explicit, and common patterns (filter-map-sort) require manual composition.
+
+| Aspect | Java Stream API | Go for-range | Orthon (proposed) |
+|---|---|---|---|
+| **Filtering** | `.filter(pred)` | `if cond { ... }` in loop | Sequence `.filter()` |
+| **Mapping** | `.map(fn)` | Manual append in loop | Sequence `.map()` |
+| **Sorting** | `.sorted()` | `sort.Slice()` after loop | Sequence `.sort()` |
+| **Chaining** | `.filter().map().sorted()` | Sequential loops or temp vars | `.filter().map().sort()` |
+| **Learning cost** | High: stream taxonomy | Low: one loop construct | Low: sequence operations on iterables |
+| **Allocation model** | Pipeline (lazy, fused) | Explicit per loop | Lazy sequence transformations |
+| **LLM predictability** | 🟡 Medium (many API variants) | 🟢 High (one pattern) | 🟢 High (designed for LLMs) |
+
+The Orthon approach uses sequence operations (`.filter()`, `.map()`, `.sort()`, etc.) that compose like Java Stream API but are simpler (no terminal/intermediate distinction, no parallel stream taxonomy) and are guaranteed lazy by default, like iterators. The `for item in sequence` loop is the only way to *consume* a sequence; transformations happen *before* the loop, not inside it.
+
 ## Default Strategy
 
 For-each is the only loop construct. Sequences support a rich set of lazy transformation operations (`.filter()`, `.map()`, `.take()`, `.skip()`, `.enumerate()`, `.zip()`, etc.) that compose before the loop. The compiler optimizes chain operations into fused loops where possible.

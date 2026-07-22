@@ -17,10 +17,32 @@ What developer tools must a language provide out of the box for a productive dev
 Languages ship with wildly varying tooling:
 - **Go** — `gofmt`, `go vet`, `go test`, `go build`, built-in formatter and linter. No third-party tools needed for basic workflow.
 - **Rust** — `cargo` with built-in formatter (`rustfmt`), linter (`clippy`), test runner, documentation generator, package registry (crates.io).
+- **Java** — Maven/Gradle with centralised artifact repositories (Maven Central). Build configuration is XML/Groovy/Kotlin DSL. Dependency resolution downloads artifacts from central servers. Plugins for formatting, linting, and testing are third-party.
 - **Python** — no built-in tooling. Rely on `pip`/`poetry`, `black`/`ruff`, `pytest` — all third-party, configuration-heavy.
 - **JavaScript** — fragmented ecosystem: npm/yarn/pnpm, eslint/prettier/biome, jest/vitest. High cognitive overhead choosing and configuring tools.
 
 The core problem: **tooling fragmentation wastes developer time on configuration instead of solving problems**. A language that ships with a complete, opinionated toolchain eliminates this overhead entirely.
+
+### Package Management Models: Central Repositories vs. Source-Based
+
+Two fundamentally different approaches to package management exist:
+
+1. **Central artifact repositories (Java's Maven Central, C#'s NuGet, Rust's crates.io)** — packages are published as versioned artifacts (JARs, DLLs, crate files) to a central registry. The build tool downloads artifacts from the registry. The registry is the authoritative source; the source code may live elsewhere or be inaccessible. Maven Central is the canonical example: artifacts are published via a rigorous process (staging, signing, verification). This provides reproducibility and security (signed artifacts) but introduces publishing friction and centralised control.
+
+2. **Source-based distribution (Go's `go mod`, Node's npm)** — dependencies are fetched directly from version control repositories (GitHub, GitLab, etc.) and built from source. There is no central artifact repository for binaries. Go's approach is the most radical: the `go.mod` file lists module paths and versions; `go mod download` fetches the source from the module's repository. The source IS the artifact. This eliminates the publish step entirely — pushing a tag to a Git repository makes a new version available — but shifts trust from a central registry to each source repository independently.
+
+Key differences:
+
+| Aspect | Central Repositories (Maven/Gradle) | Source-Based (Go mod) |
+|---|---|---|
+| **Publish step** | Required: build, sign, upload artifact | None: push tag to Git |
+| **Trust model** | Centralised: registry verifies publishers | Decentralised: trust per-repository |
+| **Reproducibility** | High: artifact is immutable once published | Medium: depends on tag stability and Git history |
+| **Supply chain** | Signed artifacts, checksums, verified by registry | Checksums in `go.sum`, no signing requirement |
+| **Offline builds** | Cached artifacts | Cached source, needs build toolchain |
+| **Build from source** | Optional (source JARs available) | Required (dependencies are always built) |
+
+The Orthon approach follows Go's model: source-based distribution with a single authoritative registry (`wvy` registry, like crates.io) providing discovery and checksums. No central artifact repository for binaries — the source IS the artifact. This eliminates the publish-build-sign-upload cycle and makes releasing a new version as simple as pushing a Git tag.
 
 ## Principles
 
