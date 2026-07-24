@@ -50,7 +50,7 @@ act BankAccount:
 
     int balance = 0
 
-    handle deposit(amount):
+    proc deposit(amount):
         balance += amount
 ```
 
@@ -100,19 +100,22 @@ intention**.
 
 ---
 
-### `handle`
+### `proc` Inside `act`
 
-`handle` is chosen deliberately.
+Inside an `act`, `proc` is used — not a separate `handle` keyword.
 
 ```orthon
-handle deposit(amount):
+proc deposit(amount):
 ```
 
-does not mean "execute now". It means:
+The meaning comes from the enclosing `act` context and the caller's choice of
+operator (`<-` vs `.`):
 
-> "I know how to process this message."
+- `ba.deposit(10)` — direct invocation (as with any `class`)
+- `ba <- deposit(10)` — delegate via mailbox
 
-This aligns with Erlang / Akka:
+The same `proc` declaration serves both: `act` changes the *calling semantics*,
+not the declaration syntax.
 
 ```
 message
@@ -121,7 +124,7 @@ message
 mailbox
     |
     v
-handler
+proc execution
 ```
 
 ---
@@ -190,7 +193,7 @@ enter
 
 create actor
 create mailbox
-start handler
+start mailbox processor
 
 ---
 
@@ -260,8 +263,8 @@ It disappears as a separate concept.
 
 | Concept    | Mechanism                         |
 | ---------- | --------------------------------- |
-| Coroutine  | suspend / resume                  |
-| Act        | mailbox / receive / handle / next |
+| Coroutine  | suspend / resume               |
+| Act        | mailbox / receive / proc / next |
 
 Coroutine is an **execution mechanism**.
 
@@ -301,10 +304,10 @@ delegates from the same caller preserve order (FIFO mailbox).
 
 ### 2. Error Propagation
 
-What happens when a handler throws?
+What happens when a `proc` inside an `act` throws?
 
 ```orthon
-handle withdraw(amount):
+proc withdraw(amount):
     if balance < amount:
         throw InsufficientFunds
 ```
@@ -342,11 +345,11 @@ unsynchronised access to the delegate channel? See
 
 ### 5. Composition with `emit`
 
-An `act` handler could `emit` intermediate results:
+An `act` proc could `emit` intermediate results:
 
 ```orthon
 act Worker:
-    handle process(items):
+    proc process(items):
         for item in items:
             emit transform(item)
         return summary
@@ -380,4 +383,4 @@ If this hypothesis holds, Orthon gains a single unified mechanism for:
 Rather than adding "yet another async" model, it changes the fundamental
 unit of execution: **from function to autonomous object that owns state and
 accepts intentions**. This aligns naturally with the emerging `emit`,
-`delegate`, `handle`, and `with` semantics already under consideration.
+`delegate`, `proc`, and `with` semantics already under consideration.
