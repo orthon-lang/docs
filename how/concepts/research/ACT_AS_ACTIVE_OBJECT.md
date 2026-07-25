@@ -7,6 +7,12 @@
 >
 > **Last updated:** 2026-07-25
 >
+> **⚠️ SUPERSEDED by `DELEGATE.md` (2026-07-26).**
+> The `act`-as-active-object hypothesis has been replaced. Actor is no longer
+> a language concept. Delegated execution (`delegate`) provides the same
+> semantics without introducing `act` as a language-level construct.
+> See `DELEGATE.md` for the current hypothesis.
+>
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
 > to language-wide agreement and will be specified in Phase 5 (Syntax).
 

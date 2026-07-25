@@ -8,6 +8,12 @@
 >
 > **Last updated:** 2026-07-26
 >
+> **⚠️ SUPERSEDED by `DELEGATE.md` (2026-07-26).**
+> The `act`-at-function-level hypothesis has been replaced. Delegated execution
+> (`delegate`) provides uniform semantics for all callable entities — functions,
+> methods, objects, and lambdas — without special-casing `act` at any level.
+> See `DELEGATE.md` for the current hypothesis.
+>
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
 > to language-wide agreement and will be specified in Phase 5 (Syntax).
 

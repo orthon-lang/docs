@@ -7,6 +7,12 @@
 >
 > **Last updated:** 2026-07-22
 >
+> **⚠️ SUPERSEDED by `DELEGATE.md` (2026-07-26).**
+> Actor has been removed from language concepts. Delegated execution (`delegate`)
+> replaces `act`/`actor` as the language surface. Actor becomes a runtime
+> implementation detail, not a language primitive. See `DELEGATE.md` for the
+> current hypothesis.
+>
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
 > to language-wide agreement and will be specified in Phase 5 (Syntax).
 
