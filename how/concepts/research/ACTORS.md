@@ -133,28 +133,101 @@ The compiler checks that actor fields are only accessible through capabilities t
 
 | Policy Type | Role in the concept |
 |---|---|
-| Concurrency Model Policy | Selects between actors, channels, or shared memory |
-| Isolation Policy | Governs whether isolation is compile-time (Swift/Pony) or runtime (Erlang) |
-| Reentrancy Policy | Determines whether actors are reentrant during `await` points |
+| Concurrency Model Policy | Selects between `act`-based isolation, channels, or shared memory |
+| Isolation Policy | Governs whether isolation is compile-time (`act` modifier) or runtime (Erlang) |
+| Reentrancy Policy | Determines whether `act` methods are reentrant during `await` points |
+| Dispatch Policy | Determines whether `act` method calls use message-passing (`<-`) or direct invocation |
 | Failure Policy | Governs actor lifecycle — restart, stop, escalate |
 
-## Implications for Orthon
+## Hypothesis for Orthon: `act` modifier on `class`, not a separate `actor` type
 
-1. **Actors as the concurrency primitive** — If Orthon follows Swift's model, `actor` could be a built-in type (like `struct` or `class`). This makes concurrent programming safer by default — the compiler enforces isolation.
+After research review, Orthon's concurrency model is **not** a separate `actor` type. Instead, it uses an `act` modifier on `class`:
 
-2. **Compiler-enforced isolation** — A key advantage of the actor model over Java's `synchronized`: the compiler can verify that actor state is not accessed from outside the actor. This eliminates an entire class of concurrency bugs.
+```
+class Counter
+    private act value = 0
 
-3. **Integration with async/await** — Actors naturally pair with async/await (see [`ASYNC_AWAIT.md`](ASYNC_AWAIT.md)): method calls on actors are asynchronous, and `await` suspends until the actor processes the call.
+    act increment()
+        value += 1
 
-4. **Value types and actors** — If Orthon uses value semantics by default (see [`VALUE_SEMANTICS.md`](VALUE_SEMANTICS.md)), passing values between actors is naturally safe: the value is copied, so there is no shared state. Reference types passed between actors would need `Sendable`-like compiler checking.
+    func describe() -> String
+        return "a counter"
+```
 
-5. **Comparison with structured concurrency** — [`CONCURRENCY.md`](CONCURRENCY.md) covers structured concurrency and channels. Actors complement this: structured concurrency manages task lifetimes; actors manage state isolation. They solve different sub-problems.
+### Key design decisions
+
+1. **One reference type:** `class` is the only reference type. No separate `actor` keyword. The `act` modifier adds optional compile-time isolation to any `class`.
+
+2. **Opt-in, per-field and per-method:** Only `act`-marked fields are isolated. Only `act`-marked methods can access them. Non-`act` methods are synchronous and pay no isolation overhead.
+
+3. **Zero-cost by construction:** If a `class` has no `act` fields, no mailbox is created. No message loop exists. The class behaves as a plain reference type with no concurrency overhead.
+
+4. **Explicit delegation via `<-` operator:** `act` methods cannot be called with the `.` operator (compile error). They must use the delegation operator `<-`:
+
+    ```
+    counter.increment()          // COMPILE ERROR: act method
+    counter <- increment()       // OK: message send via mailbox
+    ```
+
+    This makes every concurrent dispatch syntactically visible at the call site.
+
+5. **Integration with async/await:** The `<-` operator pairs with `await` for suspension:
+    ```
+    await (counter <- compute(x))
+    ```
+
+6. **Value types pass safely:** `struct` values passed as arguments to `act` methods are copied, eliminating shared-state concerns. `class` references passed to `act` methods require `Sendable`-like compiler checking.
+
+7. **No class inheritance:** Classes derive only from `object`. Behaviour reuse through trait conformance, not inheritance chains. This eliminates the fragile base class problem.
+
+### Comparison with Swift
+
+| Aspect | Swift | Orthon (hypothesis) |
+|--------|-------|---------------------|
+| Keyword | `actor` | `class` + `act` modifier |
+| Default isolation | All methods isolated | Only `act`-marked methods |
+| Opt-out | `nonisolated` | Not needed (non-`act` = non-isolated) |
+| Call syntax | `await actor.method()` | `target <- method()` |
+| Zero-cost | Always allocates mailbox | Only if `act` fields exist |
+
+### Comparison with Erlang
+
+| Aspect | Erlang | Orthon (hypothesis) |
+|--------|--------|---------------------|
+| Isolation | Process-level (separate heap) | Field-level (`act` fields) |
+| State sharing | None (copy everything) | Value types copy; ref types checked |
+| Mailbox | Always (per process) | Only if `act` fields exist |
+| Supervision | Built-in (supervision trees) | Open question |
+
+### Comparison with Pony
+
+| Aspect | Pony | Orthon (hypothesis) |
+|--------|------|---------------------|
+| Mechanism | Reference capabilities | `act` modifier |
+| Enforced by | Type system | Modifier + compiler checks |
+| Flexibility | Six capabilities | One modifier, binary |
+| Learning curve | Steep | Shallow |
 
 ## Open Questions
 
-1. Should Orthon have a built-in `actor` type, or should actors be a library (like Akka for JVM)?
-2. If built-in, should actor isolation be enforced at compile time (Swift model) or runtime (Erlang model)?
-3. How does actor isolation interact with Orthon's ownership/memory model (see [`OWNERSHIP.md`](OWNERSHIP.md))?
-4. Should Orthon support `MainActor`-like global actors for thread-affine operations (UI, file I/O)?
-5. Should actors support supervision (Erlang model) or rely on the enclosing structured concurrency scope for error handling?
-6. How does reentrancy work? Swift actors are reentrant during `await` points; Erlang actors are always reentrant. What model fits Orthon?
+1. **Reentrancy:** Are `act` methods reentrant during `await` points inside them? Swift is reentrant; Erlang is always reentrant. What model fits Orthon?
+
+2. **Sendable:** How does the compiler verify that a `class` reference passed to an `act` method does not create shared mutable state outside the actor? Does Orthon need a `Sendable`-like constraint?
+
+3. **`<-` semantics:** Does `target <- method()` block the caller until completion? Return a future/handle? Require `await`? What is the return type of a `<-` expression?
+
+4. **Error handling:** If an `act` method panics/fails, does the enclosing actor die? Restart? Escalate to a supervisor?
+
+5. **`act` on `struct`?** Could `act` theoretically apply to `struct` methods for thread-local isolation without heap allocation?
+
+6. **`MainActor`-like global actors:** Should Orthon support thread-affine execution (UI updates, filesystem I/O) through a special `act` context?
+
+7. **Reentrancy and invariants:** If an `act` method awaits and another `act` method enters, the isolation guarantee still holds (one at a time) but intermediate state is visible. Does this break invariants?
+
+## See also
+
+- [`CLASS_WITH_ACT.md`](CLASS_WITH_ACT.md) — the class + `act` hypothesis document
+- [`STRUCT_AS_VALUE_TYPE.md`](STRUCT_AS_VALUE_TYPE.md) — the struct value type hypothesis
+- [`ASYNC_AWAIT.md`](ASYNC_AWAIT.md) — async/await integration
+- [`CONCURRENCY.md`](CONCURRENCY.md) — structured concurrency and channels
+- [`OWNERSHIP.md`](OWNERSHIP.md) — ownership model interaction
