@@ -10,7 +10,7 @@ Orthon is a **programming language design project**. This repository contains *o
 
 The language is designed using the same SOLID engineering principles it encourages in its users: a small, orthogonal core with layered abstraction, explicit semantics, and implementation-independent evolution.
 
-> **⚠ Language Rule:** All project content, code snippets, comments, commit messages, and agent reasoning MUST be in English. See §10.9 for full enforcement.
+> **⚠ Language Rule:** All file content (documents, code snippets, comments, commit messages) MUST be in English. Chat responses to the user may be in the user's language. See §10.9 for full enforcement.
 
 ---
 
@@ -217,7 +217,7 @@ When assigned a task in this project, follow this protocol:
 
 ### 5.1 Orient
 
-1. **Assert language.** Before any other step, assert: *"All content I produce will be in English."* If the user's request is in another language, silently translate your output. The project language is English (§10.9).
+1. **Assert language.** Before any other step, assert: *"All file content I produce will be in English."* Chat responses to the user may match the user's language. The project language is English (§10.9).
 2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `how/DESIGN_PRINCIPLES.md`.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
 4. **Run the Decision Pipeline** (`how/process/DECISION_PIPELINE.md`) before designing any new feature — 10 questions determine whether the feature should exist and at what level.
@@ -398,15 +398,15 @@ Agents operating in this repository must follow these rules:
    bare filenames would not resolve. The same rule applies to
    `how/concepts/research/` — use the full relative path from the
    source document.
-9. **English at all times.** All documentation, code snippets, comments, commit messages,
-   agent reasoning, and any generated text MUST be written in **English**. This is a
-   non-negotiable project rule.
+9. **English in files.** All documentation, code snippets, comments, commit messages,
+   and any text written to files MUST be in **English**. This is a non-negotiable
+   project rule. Chat responses to the user (including explanations, clarifications,
+   and suggestions) may be in the user's language.
 
    **Enforcement:** Before creating or modifying any file, the agent MUST confirm that
    every string of text to be written is in English. Any content found in another
-   language must be translated before writing. This rule takes precedence over the
-   user's request language — if the user writes in another language, the agent
-   translates the response to English.
+   language must be translated before writing. Chat responses are exempt from this
+   check — the agent may answer in the language the user wrote in.
 10. **Commit message prefixes.** Every commit message MUST use a conventional prefix
     to indicate the type of change. Use one of:
 
