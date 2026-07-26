@@ -352,7 +352,77 @@ binding may change" (`var`) and "this operation changes its receiver"
 
 > When are expressions evaluated? Eager, lazy, mixed?
 
-<!-- To be filled during Phase 2 -->
+**Model.** Orthon is **expression-oriented**: every control flow
+construct produces a value, and there is no statement/expression split
+in the grammar. This directly implements Semantic Invariant 4.
+
+```
+status = if age >= 18 then "adult" else "minor"
+
+greeting = {
+    prefix = "Hello"
+    name = load_name()
+    "$prefix, $name!"      # last expression in the block is its value
+}
+```
+
+- **`if`, `when`, `try`, and blocks are all expressions.** A block's
+  value is its last expression. Because `if` is already an expression, a
+  separate ternary operator is redundant and is not part of the core.
+- **Compiler-enforced exhaustiveness.** Since every branch of an `if`/
+  `when`/`try` must produce a value of a consistent type, a missing
+  branch is a compile-time type error — not a runtime null or an
+  unreachable-code surprise.
+- **Explicit discard.** When an expression's value is intentionally
+  unused, that intent must be visible: `_ = expr`. Silently dropping a
+  value is not permitted to happen invisibly.
+- **Definite assignment analysis.** Every binding must be assigned on
+  every path before it is read; the compiler statically verifies this
+  (shared with [Mutation](#mutation)'s `val`/`var` model and
+  `DECLARATION_BY_ASSIGNMENT.md`'s declaration-by-first-assignment
+  rule).
+
+**Eager by default; laziness is explicit.** Expressions evaluate
+immediately at the point they are reached, in program order. Function
+arguments are evaluated before the call executes. Deferred computation
+requires an explicit marker (a `sec` keyword or equivalent — concrete
+syntax deferred to Phase 5); there is no implicit laziness anywhere in
+the default evaluation model.
+
+**Defined evaluation order.** Sub-expressions evaluate left-to-right.
+This is a semantic commitment, not an optimization detail: per
+`DESIGN_PRINCIPLES.md` § Deterministic Behavior, the same source must
+produce the same observable order of side effects regardless of
+Implementation Strategy or optimization level.
+
+**Side-effect visibility within expressions.** Because expressions can
+appear nested arbitrarily deeply (an `if` inside a function argument
+inside another `if`), the left-to-right evaluation order above is what
+makes side effects predictable: a reader can determine the order in
+which any two sub-expressions' side effects occur purely from their
+syntactic position, without knowing anything about the compiler.
+
+**No statement/expression grammar split.** Side-effecting constructs
+(assignments, calls returning nothing meaningful) still produce a value
+— the `Unit` value — when they appear in expression position. This keeps
+the grammar uniform: nothing in Orthon is "only" a statement.
+
+**Sequence production via `emit`.** Producing a sequence of intermediate
+results (what other languages call a generator) uses `emit`, not
+`yield`. `yield` was considered and **rejected**: in Python, `yield`
+conflates too many responsibilities (suspension point, value production,
+two-way communication via `.send()`), which conflicts with Semantic
+Purity (`DESIGN_PRINCIPLES.md` § Semantic Purity — one symbol, one
+meaning). `emit` is scoped to exactly one responsibility: producing the
+next value of a [Sequence](GLOSSARY.md#sequence). A Sequence
+describes *what* the result is, not *how* it is produced, and remains an
+ordinary value — it can be returned, stored, passed, transformed, or
+consumed incrementally like any other value, consistent with
+`FOUNDATIONAL_ABSTRACTIONS.md`'s canonical-forms treatment (`emit value`,
+`return sequence(value)`, and `return value ->` as equivalent forms).
+
+**Source:** `how/concepts/research/essential/EXPRESSION_ORIENTED_LANGUAGE.md`,
+`how/concepts/research/important/DECLARATION_BY_ASSIGNMENT.md`
 
 ### Visibility
 
