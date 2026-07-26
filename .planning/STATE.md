@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 1.1 of 9 (Foundation Completion) — Phase 1 (Concerns Remediation) complete
 Plan: 0 of TBD in current phase
 Status: Not yet discussed/planned
-Last activity: 2026-07-22 - Fast task: added Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>)
+Last activity: 2026-07-26 - Completed quick task 260726-s31: Rewrite REQUIREMENTS.md Phase 2/3/4 sections to match actual concept inventory
 
 Progress: [█░░░░░░░░░] 11%
 
@@ -90,6 +90,7 @@ None yet.
 | 260722-rcc | Add UNION_INTERSECTION_TYPES.md, LITERAL_TYPES.md, and TYPE_LEVEL_COMPUTATION.md DRAFT concept research (structural union/intersection combinators, value-as-type literals, and the bundled conditional/mapped/template-literal/keyof/typeof/infer type-computation cluster — closing the three genuine gaps in the Java-to-TypeScript comparison table) | 2026-07-22 | ecf6c28, cfcb206, 8152d41 | [260722-rcc-add-concepts-from-java-to-typescript-com](./quick/260722-rcc-add-concepts-from-java-to-typescript-com/) |
 | 9 | Add Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>) | 2026-07-22 | f8b6045 | — |
 | 260726-s6t | Move CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md from important/ to essential/ tier and repair the three cross-references broken by the move | 2026-07-26 | bf0f10a, 83c47c0 | [260726-s6t-move-context-parameters-md-and-represent](./quick/260726-s6t-move-context-parameters-md-and-represent/) |
+| 260726-s31 | Rewrite REQUIREMENTS.md Phase 2/3/4 sections to match actual concept inventory — SEM-01..03/PRIM-01..03 now name their 10 real essential-tier source files each, CONCEPT-01..13 (stale 13-item list) replaced with 4 tier-scaled requirements (CONCEPT-ESS-01/IMP-01/DEFER-01/REJECT-01), Traceability/Coverage corrected (a pre-existing 79-vs-66 miscount was also fixed), and caveat notes added to SEED-001 and the research README | 2026-07-26 | b99f075, 5978d7a, 8c2ee5d | [260726-s31-rewrite-requirements-md-phase-2-3-4-sect](./quick/260726-s31-rewrite-requirements-md-phase-2-3-4-sect/) |
 
 ### Roadmap Evolution
 
