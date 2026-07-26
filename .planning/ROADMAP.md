@@ -93,7 +93,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: SEM-01, SEM-02, SEM-03
 **Success Criteria** (what must be TRUE):
 
-  1. `what/SEMANTIC_MODEL.md` defines all 6 semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) as a coherent whole, informed by existing research (`DATA_MODEL.md`, `OWNERSHIP.md`, `MUTABILITY.md`, `ALLOCATION.md`, `EQUALITY.md`, `FOUNDATIONAL_ABSTRACTIONS.md`) — the document is no longer a placeholder.
+  1. `what/SEMANTIC_MODEL.md` defines all 6 semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) as a coherent whole, synthesizing the 10 essential-tier source files identified as Semantic-Model raw material (`DATA_MODEL.md`, `OWNERSHIP.md`, `OWNERSHIP_METAPROPERTY.md`, `OWNERSHIP_TRANSFER_OPERATOR.md`, `MUTABILITY.md`, `VALUE_SEMANTICS.md`, `IDENTITY_BASED_SAFETY.md`, `VISIBILITY_AND_ENCAPSULATION.md`, `SCOPED_RESOURCE_LIFECYCLE.md`, `EXPRESSION_ORIENTED_LANGUAGE.md` — see `.planning/notes/2026-07-26-tier-vs-phase-mapping.md`) — the document is no longer a placeholder.
   2. Cross-dimension conflicts are checked and resolved (e.g., ownership × mutation, evaluation × lifetime), and the model is validated against every Design Principle with no contradictions found.
   3. An EDR (Architecture category) accepts the Semantic Model.
 
@@ -108,8 +108,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: PRIM-01, PRIM-02, PRIM-03
 **Success Criteria** (what must be TRUE):
 
-  1. `what/PRIMITIVE_BLOCKS.md` fully specifies the minimal candidate set (identifier, literal, assignment, function, call, attribute access, scope, reference, pack, unpack, operator definition) plus composition rules, each primitive orthogonal (no overlap) and mapped to the Semantic Model.
-  2. Every concept research doc in `how/concepts/research/` is verified to decompose onto the primitive set; the set is confirmed minimal — removing any primitive makes some known feature inexpressible.
+  1. `what/PRIMITIVE_BLOCKS.md` fully specifies the minimal candidate set (identifier, literal, assignment, function, call, attribute access, scope, reference, pack, unpack, operator definition) plus composition rules, synthesizing the 10 essential-tier source files identified as Primitive-Block raw material (`FOUNDATIONAL_ABSTRACTIONS.md`, `EXCLUSIVE_DECLARATIONS.md`, `STRUCT_AS_VALUE_TYPE.md`, `CLASS_WITH_ACT.md`, `ACT_AS_FUNCTION.md`, `FUNCTIONS.md`, `FINAL_BY_DEFAULT.md`, `NAMESPACES.md`, `DELEGATE.md`, `COMPOSITION_OVER_INHERITANCE.md` — see `.planning/notes/2026-07-26-tier-vs-phase-mapping.md`), each primitive orthogonal (no overlap) and mapped to the Semantic Model.
+  2. Every concept research doc across all tiers (`how/concepts/research/{essential,important,deferrable,reject}/`, ~132 files) is verified to decompose onto the primitive set; the set is confirmed minimal — removing any primitive makes some known feature inexpressible.
   3. An EDR (Architecture category) accepts the Primitive Blocks set.
 
 **Plans**: TBD
@@ -120,10 +120,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Goal**: Every outstanding language concept is fully designed — run through the 10-question Decision Pipeline (`how/process/DECISION_PIPELINE.md`), decomposed onto Primitive Blocks, classified as Language/Standard Library/External, and accepted via EDR — informed by anti-pattern research into imperative crutches and Phase 1.1's LLM-native concept shortlist. Zero `DRAFT` headers remain in `how/concepts/research/` when this phase completes.
 **Depends on**: Phase 3 (Primitive Blocks must exist to decompose into)
-**Requirements**: DERIV-01, DERIV-02, DERIV-03, CONCEPT-01, CONCEPT-02, CONCEPT-03, CONCEPT-04, CONCEPT-05, CONCEPT-06, CONCEPT-07, CONCEPT-08, CONCEPT-09, CONCEPT-10, CONCEPT-11, CONCEPT-12, CONCEPT-13, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10
+**Requirements**: DERIV-01, DERIV-02, DERIV-03, CONCEPT-ESS-01, CONCEPT-IMP-01, CONCEPT-DEFER-01, CONCEPT-REJECT-01, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10
 **Success Criteria** (what must be TRUE):
 
-  1. `how/process/DECISION_PIPELINE.md` (the 10-question pipeline) is finalized and applied to every one of the 13 outstanding concepts (`PATTERN_MATCHING.md`, `ERROR_HANDLING.md`, `OWNERSHIP.md`, `GENERICS.md`, `ASYNC_AWAIT.md`, `OBJECT_INITIALIZATION.md`, `CONCURRENCY.md`, `LITERATE_PROGRAMMING.md`, `SORTING.md`, `UNPACKING.md`, `GENERATORS.md`, `METAOBJECTS.md`, `SPAN.md`).
+  1. `how/process/DECISION_PIPELINE.md` (the 10-question pipeline) is finalized and applied, essential-tier first per `SEED-001`'s sequencing, to the real ~112-file Phase 4 input: the 22 essential-tier concepts not already consumed by Phase 2/3 (`CONCEPT-ESS-01`), all important-tier concepts (`CONCEPT-IMP-01`, ~36 files), all deferrable-tier concepts explicitly deferred to v0.2/v0.3 with documented rationale (`CONCEPT-DEFER-01`, ~54 files), and the 4 principle-contradicting concepts evaluated for formal rejection via EDR (`CONCEPT-REJECT-01`) — replacing the prior hardcoded 13-concept list scoped when `how/concepts/research/` held ~22 files total; see `.planning/notes/2026-07-26-tier-vs-phase-mapping.md` and `.planning/REQUIREMENTS.md`'s Phase 4 section for the full file-to-requirement mapping.
   2. All 10 `docs/how/concepts/research/imperative-crutch-*.md` research topics are completed with documented findings, and those implications are reflected in the relevant concept designs.
   3. `what/LIBRARY_BOUNDARY.md` documents the language-vs-stdlib-vs-external classification rationale for every feature classified as Standard Library or External.
   4. Every feature classified "Language" has a corresponding EDR (Architecture category) and moves to `what/concepts/`; zero `⚠️ DRAFT` headers remain across `how/concepts/research/`.
