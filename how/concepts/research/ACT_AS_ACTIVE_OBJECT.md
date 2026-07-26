@@ -390,3 +390,13 @@ Rather than adding "yet another async" model, it changes the fundamental
 unit of execution: **from function to autonomous object that owns state and
 accepts intentions**. This aligns naturally with the emerging `emit`,
 `delegate`, `proc`, and `with` semantics already under consideration.
+
+---
+
+## See Also
+
+- [`ACTORS.md`](ACTORS.md) — original actor survey (superseded)
+- [`DELEGATE.md`](DELEGATE.md) — current hypothesis
+- [`OWNERSHIP.md`](OWNERSHIP.md) — ownership model
+- [`EMIT_AS_INTERMEDIATE_RESULT.md`](EMIT_AS_INTERMEDIATE_RESULT.md) — emit/delegate interaction
+- [../../../notes/actor-implementation-taxonomy.md](../../../notes/actor-implementation-taxonomy.md) — taxonomy of 12 actor implementation approaches

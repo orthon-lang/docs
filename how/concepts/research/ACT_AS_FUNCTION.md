@@ -336,3 +336,10 @@ None yet — this is an exploratory hypothesis. No decisions have been made.
 - [ ] `how/DESIGN_PRINCIPLES.md`
 - [ ] `how/IMPLEMENTATION_STRATEGIES.md`
 - [ ] `how/IMPLEMENTATION_POLICIES.md`
+
+## See Also
+
+- [`ACTORS.md`](ACTORS.md) — original actor survey (superseded)
+- [`DELEGATE.md`](DELEGATE.md) — current hypothesis
+- [`ACT_AS_ACTIVE_OBJECT.md`](ACT_AS_ACTIVE_OBJECT.md) — type-level `act` hypothesis (superseded)
+- [../../../notes/actor-implementation-taxonomy.md](../../../notes/actor-implementation-taxonomy.md) — taxonomy of 12 actor implementation approaches

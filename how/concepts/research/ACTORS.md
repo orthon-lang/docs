@@ -237,3 +237,4 @@ class Counter
 - [`ASYNC_AWAIT.md`](ASYNC_AWAIT.md) — async/await integration
 - [`CONCURRENCY.md`](CONCURRENCY.md) — structured concurrency and channels
 - [`OWNERSHIP.md`](OWNERSHIP.md) — ownership model interaction
+- [../../../notes/actor-implementation-taxonomy.md](../../../notes/actor-implementation-taxonomy.md) — taxonomy of 12 actor implementation approaches across languages and frameworks
