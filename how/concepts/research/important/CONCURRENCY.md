@@ -7,6 +7,13 @@
 > acceptance via EDR (Architecture category).
 >
 > **Last updated:** 2026-07-20
+>
+> **⚠️ SUPERSEDED by `DELEGATE.md` (2026-07-26).**
+> The actor model has been removed from the language surface. Delegated
+> execution (`delegate`) replaces `actor`/`act` as the language primitive.
+> Actor-style concurrency becomes a runtime implementation detail of the
+> `delegate` execution policy, not a distinct language feature. See
+> [`DELEGATE.md`](../essential/DELEGATE.md) for the current hypothesis.
 
 ## Issue (Why)
 

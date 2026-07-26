@@ -93,6 +93,15 @@ Stackless generators (state machine). One-way by default (yield only, no receive
 3. Should generators support `return value` to signal final value (Python's `StopIteration.value`)?
 4. Can generators be composed with async/await? (Async generators.)
 
+## Related Documents
+
+| Document | Relationship |
+|----------|-------------|
+| [`ITERATOR_PROTOCOL.md`](../essential/ITERATOR_PROTOCOL.md) | Defines the `Iterator[T]` trait and combinator chains that consume generator output. Generators implement this trait |
+| [`EMIT_AS_INTERMEDIATE_RESULT.md`](EMIT_AS_INTERMEDIATE_RESULT.md) | `emit` for intermediate results — related to but distinct from `yield` |
+| [`PUSH_STREAMS.md`](PUSH_STREAMS.md) | Push-based counterpart — observables as the dual of pull-based generators |
+| [`imperative-crutch-lazy-sequences.md`](../imperative-crutch-lazy-sequences.md) | Analysis of lazy sequence pain points in imperative languages |
+
 ## Decision History
 
 *To be filled during Concept Design Review (Milestone 2).*

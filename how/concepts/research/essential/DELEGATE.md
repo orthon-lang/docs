@@ -9,7 +9,8 @@
 > not mandate a concrete implementation.
 >
 > **Related:** `ACTORS.md` (superseded — actor removed from language concepts),
-> `ACT_AS_ACTIVE_OBJECT.md` (superseded), `ACT_AS_FUNCTION.md` (superseded).
+> `ACT_AS_ACTIVE_OBJECT.md` (superseded), `ACT_AS_FUNCTION.md` (superseded),
+> `CONCURRENCY.md` (superseded).
 > **Reference:** [../../../notes/actor-implementation-taxonomy.md](../../../notes/actor-implementation-taxonomy.md) —
 > taxonomy of 12 actor implementation approaches catalogued during design-space exploration.
 > **See also:** [`SINGLETON_PATTERN_ANALYSIS.md`](../../deferrable/SINGLETON_PATTERN_ANALYSIS.md) —
