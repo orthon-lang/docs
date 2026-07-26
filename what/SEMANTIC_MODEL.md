@@ -5,12 +5,12 @@
 >
 > **Status:** Placeholder — to be filled during Phase 2 of M1.
 > **See also:** [`ROADMAP.md`](../when/ROADMAP.md) § Phase 2,
-> [`DATA_MODEL.md`](../how/concepts/research/DATA_MODEL.md),
-> [`OWNERSHIP.md`](../how/concepts/research/OWNERSHIP.md),
-> [`MUTABILITY.md`](../how/concepts/research/MUTABILITY.md),
-> [`ALLOCATION.md`](../how/concepts/research/ALLOCATION.md),
-> [`EQUALITY.md`](../how/concepts/research/EQUALITY.md),
-> [`FOUNDATIONAL_ABSTRACTIONS.md`](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md),
+> [`DATA_MODEL.md`](../how/concepts/research/essential/DATA_MODEL.md),
+> [`OWNERSHIP.md`](../how/concepts/research/essential/OWNERSHIP.md),
+> [`MUTABILITY.md`](../how/concepts/research/essential/MUTABILITY.md),
+> [`ALLOCATION.md`](../how/concepts/research/essential/ALLOCATION.md),
+> [`EQUALITY.md`](../how/concepts/research/essential/EQUALITY.md),
+> [`FOUNDATIONAL_ABSTRACTIONS.md`](../how/concepts/research/essential/FOUNDATIONAL_ABSTRACTIONS.md),
 > [`PRIMITIVE_BLOCKS.md`](PRIMITIVE_BLOCKS.md)
 
 ---
