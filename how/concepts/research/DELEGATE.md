@@ -17,73 +17,42 @@
 
 ## Issue (Why)
 
-In Orthon, mutable objects (list, set, map, user-defined types) exist in **direct
-mode** by default — their methods are called synchronously and directly. Under
-concurrent access from multiple threads or fibers, data races and the need for
-manual synchronization (mutexes, locks) arise easily. This adds accidental
-complexity, contradicts the "Intent Over Implementation" principle, and
-introduces a whole class of concurrency bugs.
-
-Today, most languages address this by introducing concurrency as a separate
-language feature:
+Today, most languages introduce concurrency as a separate language feature:
 
 - `async`
 - `actor`
 - `coroutine`
 - `goroutine`
 
-Each introduces its own object model and execution semantics. As a result,
-programmers must decide *how* to represent computation before writing business
-logic.
+Each introduces its own object model and execution semantics.
+
+As a result, programmers must decide *how* to represent computation before
+writing business logic.
 
 Orthon instead separates two concerns:
 
 - **what** is executed (function, method, object)
 - **how** it is executed (execution policy)
 
-We need a way to make any existing (or new) object **concurrently safe with
-minimal syntactic cost**, preserving the convenience of method calls while
-eliminating accidental direct access from outside.
-
 ---
 
 ## Hypothesis
 
-**Object delegation** wraps an instance inside a lightweight execution context
-managed by the Orthon runtime. The delegate accepts messages and processes them
-sequentially, guaranteeing race-free access. The delegation model supports three
-operations unified through the keyword `delegate`:
+`delegate` is an execution policy.
 
-1. **Create a new object directly in delegate mode**
+It wraps a **state-owning** entity into a delegated execution context.
 
-   ```
-   let lst = delegate(List())
-   let nums = delegate([1, 2, 3])
-   ```
+```
+let list = delegate(List())       // List owns its state — valid
+let counter = delegate(closure)   // closure captures state — valid
+```
 
-   The object is born inside the delegate — direct access never exists.
+The resulting object accepts delegated invocations.
 
-2. **Transition an existing object from direct to delegate mode**
-
-   ```
-   let shared = delegate(move lst)
-   ```
-
-   Ownership is moved into the delegate. After this, `lst` becomes invalid,
-   and `shared` has type `DelegatedContext<List>`.
-
-3. **Return from delegate mode to direct mode**
-
-   ```
-   let direct = release(move shared)
-   ```
-
-   The delegate drains remaining messages, then ownership returns to the
-   synchronous context. `shared` becomes invalid; `direct` is `List` again.
-
-Internally, the runtime may implement delegation using actors, mailboxes,
-queues, executors, fibers, or any other mechanism — the language specification
-does not mandate a concrete implementation.
+```
+list <- append(item)
+counter <- increment()
+```
 
 ---
 
@@ -363,79 +332,24 @@ Business logic never depends on actor semantics.
 - No distinction between active and passive objects.
 - Runtime remains free to choose the optimal implementation.
 - Business logic is independent of the concurrency backend.
-- Orthogonal design.
-- Smaller language surface.
-- Easier to optimize.
-- Future execution models can be added without changing the language.
 
 ---
 
 ## Trade-offs
 
-### Flexibility vs. Model Simplicity
+### Advantages
 
-Supporting `delegate(move ...)` and `release(move ...)` transitions enables the
-**populate-then-delegate** pattern — construct in direct mode (no mailbox
-overhead), populate, then hand off to a concurrent environment, and optionally
-return for synchronous post-processing. This is especially valuable for
-expensive initialization.
+- Orthogonal design.
+- Smaller language surface.
+- Easier to optimize.
+- Easier to reason about.
+- Future execution models can be added without changing the language.
 
-The cost is a more complex mental model: a variable can change modes (via
-shadowing with a new `let`), and the programmer must track which mode is
-current. The compiler helps by distinguishing types `T` and
-`DelegatedContext<T>`, catching errors statically.
+### Disadvantages
 
-### Explicit Ownership via `move`
-
-Transitions always require explicit `move`. This is slightly verbose but fully
-consistent with Orthon's ownership model and avoids implicit transfers. Risk of
-accidental loss of the delegated object is eliminated.
-
-### Actor Overhead
-
-Method calls through a delegate (even after `<-` is introduced) add message
-serialization and dispatch costs. For hot loops, direct mode is preferred, then
-delegate the finished result. This is an intentional trade-off: safety and
-convenience in exchange for a small performance cost in concurrent access.
-
-### Two New Keywords: `delegate` and `release`
-
-These extend the language vocabulary but are orthogonal and do not overlap with
-other concepts. `release` could have been a method on `DelegatedContext`, but a
-keyword (or built-in function) emphasizes its fundamental role in the ownership
-model.
-
-### Deferred `<-`/`->` Operators
-
-Message-sending operators are not part of this hypothesis. This leaves the
-model incomplete for practical use (how do you send commands to a delegate?),
-but allows focusing first on ownership and lifecycle without mixing them with
-asynchrony and effect systems. This follows the Single Responsibility Principle
-at the language design level.
-
----
-
-## Related Concepts and Alternatives
-
-### Related Orthon Concepts
-
-- **Ownership model and `move`** — the foundation for transferring objects into
-  and out of delegates. `delegate(move x)` and `release(move x)` are ownership
-  transfers first, delegation operations second.
-- **Asynchrony and concurrency** — delegates become a core building block for
-  parallel computation after message operators (`<-`/`->`) are introduced.
-- **Type safety** — static distinction between `T` and `DelegatedContext<T>`
-  prevents an entire class of concurrency bugs at compile time.
-
-### Alternatives (Considered and Rejected)
-
-| Alternative | Rationale for Rejection |
-|-------------|------------------------|
-| Mode fixed at creation only (no `delegate(move ...)`, no `release`) | Simpler, but loses populate-then-delegate and synchronous-return idioms — too restrictive for real use |
-| `List() as delegate` syntax | Reads better per "Data First", but reserves the `as` keyword needed for type casting; less symmetric with transition syntax |
-| `:=` shorthand (`let lst := List()`) | Violates Semantic Purity (one symbol → one meaning) and Explicitness (behavior-changing operation is invisible) |
-| Full actors (Erlang, Akka) | Heavyweight — require explicit behavior protocol. Our approach: "actor as invisible shell" around a regular object, preserving its interface |
-| Automatic delegation (annotations, type inference) | Contradicts the Explicitness principle — delegation must be syntactically visible |
+- Delegated execution is no longer visible from declarations.
+- Lifetime of delegated contexts must be explicitly managed.
+- Some actor-specific concepts become implementation details rather than language features.
 
 ---
 
@@ -610,21 +524,6 @@ lst = release(move lst)         // OK
 lst.append(5)                   // OK (List restored)
 ```
 
-### DelegatedContext<T>
-
-`DelegatedContext<T>` is a transparent wrapper type with static guarantees:
-
-| Property | Rule |
-|----------|------|
-| Non-copyable | The wrapper cannot be copied — only one reference exists |
-| Non-dereferenceable | The wrapped value cannot be accessed directly via `.` or dereference |
-| Namespace routing | `.` calls resolve to `DelegatedContext<T>` methods (lifecycle); no calls resolve directly to `T` methods |
-| Type distinctness | `DelegatedContext<T>` is a different type than `T` — the compiler enforces the correct dispatch at every call site |
-
-`DelegatedContext<T>` has no public access path to the inner `T` value. The only
-way to interact with the wrapped state is through delegated message sending
-(via `<-`, designed separately) or by returning ownership via `release(move x)`.
-
 ### Interaction with Other Hypotheses
 
 - **`OWNERSHIP.md`** — `move` uses the same ownership transfer semantics.
@@ -658,10 +557,3 @@ way to interact with the wrapped state is through delegated message sending
 | 2026-07-26 | Hypothesis created. Actor removed from language concepts. `ACTORS.md`, `ACT_AS_ACTIVE_OBJECT.md`, `ACT_AS_FUNCTION.md` superseded by this hypothesis. |
 | 2026-07-26 | **Refinement:** `delegate` applies to state owners, not arbitrary code. State is the unit of serialization. Method-level delegation (`delegate(obj.method)`) is invalid — methods are operations on state, not state owners. Concurrency model tied to ownership model. |
 | 2026-07-26 | **Refinement:** Ownership integration — `delegate` takes ownership via `move`. Shadowing pattern: same variable name, type changes, operator changes to `<-`. `release` returns ownership. `OWNERSHIP.md` open question resolved. |
-| 2026-07-26 | **Refinement:** Hypothesis restructured with three explicit syntax forms (create in delegate mode, transition into delegate, return to direct mode). `DelegatedContext<T>` wrapper type formally defined (non-copyable, non-dereferenceable, type-distinct). Problem statement broadened to include concurrent access safety. |
-| 2026-07-26 | **Decision:** Init-time delegation uses `delegate(...)` — rejected `as delegate` to keep `as` available for type casting. |
-| 2026-07-26 | **Decision:** Transitions require explicit `delegate(move x)` / `release(move x)` — rejected fixed-mode-only design. |
-| 2026-07-26 | **Decision:** Rejected `:=` shorthand for delegation (violates Semantic Purity + Explicitness). |
-| 2026-07-26 | **Decision:** Rejected full actors as language feature (delegate-as-shell is lighter). |
-| 2026-07-26 | **Decision:** Rejected automatic delegation without `delegate` keyword (violates Explicitness). |
-| 2026-07-26 | **Decision:** `<-`/`->` message operators deferred to separate hypothesis. |
