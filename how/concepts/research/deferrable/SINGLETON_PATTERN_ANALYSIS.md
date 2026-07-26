@@ -12,7 +12,7 @@
 > [`DELEGATE.md`](../essential/DELEGATE.md) (execution policy),
 > [`CLASS_WITH_ACT.md`](../essential/CLASS_WITH_ACT.md) (field isolation),
 > [`TOP_LEVEL_DECLARATIONS.md`](TOP_LEVEL_DECLARATIONS.md) (module-level values),
-> [`CONTEXT_PARAMETERS.md`](../important/CONTEXT_PARAMETERS.md) (dependency injection alternative),
+> [`CONTEXT_PARAMETERS.md`](../essential/CONTEXT_PARAMETERS.md) (dependency injection alternative),
 > [`LIBRARY_BOUNDARY.md`](../../../what/LIBRARY_BOUNDARY.md) (level classification framework)
 >
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject

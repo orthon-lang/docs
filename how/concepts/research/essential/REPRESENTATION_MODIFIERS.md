@@ -324,8 +324,8 @@ This concept fits naturally into Orthon's existing architecture:
 | Concept | Relationship |
 |---|---|
 | [`DATA_MODEL.md`](DATA_MODEL.md) | Data-level representations (Value, Tuple, etc.) are orthogonal; type-level representation modifiers compose with them |
-| [`SLOTS.md`](SLOTS.md) | `struct(T)` subsumes the slots concept — it is a general mechanism that includes fixed-field compact storage |
-| [`DATACLASSES.md`](DATACLASSES.md) | Representation modifiers do not generate boilerplate (equals, hash, toString); that remains a separate concern |
+| [`SLOTS.md`](../important/SLOTS.md) | `struct(T)` subsumes the slots concept — it is a general mechanism that includes fixed-field compact storage |
+| [`DATACLASSES.md`](../important/DATACLASSES.md) | Representation modifiers do not generate boilerplate (equals, hash, toString); that remains a separate concern |
 | [`VALUE_SEMANTICS.md`](VALUE_SEMANTICS.md) | `struct(T)` is value-like (copied on move), `boxed(T)` is reference-like — the modifier system makes both available for the same type |
 | [`ALLOCATION.md`](ALLOCATION.md) | Each modifier implies an allocation strategy; `struct(T)` is stack/arena, `boxed(T)` is heap |
 | [`OWNERSHIP.md`](OWNERSHIP.md) | `shared(T)` implies reference-counted ownership; `struct(T)` implies unique/linear ownership |
