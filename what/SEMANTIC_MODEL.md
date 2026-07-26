@@ -641,7 +641,47 @@ layering violation.
 
 ## Relationship to Design Principles
 
-<!-- To be filled during Phase 2 — verify each dimension against DESIGN_PRINCIPLES.md -->
+Each dimension is checked against the five principles most load-bearing
+for a semantic model — **Explicitness**, **Orthogonality**, **Semantic
+Purity**, **Minimal Core**, and **LLM Generability** (the latter via the
+`LLM_GENERABILITY_GATE` criteria in `how/gates/DECISION_VALIDATION.md`,
+since `DESIGN_PRINCIPLES.md` does not itself enumerate LLM Generability
+as a named principle but treats it as a first-class validation gate).
+Every other principle in `DESIGN_PRINCIPLES.md` (Data First, Consistency,
+Uniformity, Deterministic Behavior, etc.) is satisfied by construction
+where referenced inline in the dimension sections above; this table
+focuses on the five principles where a dimension's design required an
+explicit trade-off or verification step.
+
+| Dimension | Explicitness | Orthogonality | Semantic Purity | Minimal Core | LLM Generability |
+|---|---|---|---|---|---|
+| **Identity** | Pass — reference semantics is opt-in, never implicit; value semantics is the silent default but is a *documented*, uniform default rather than a hidden rule. | Pass — orthogonal to Ownership by construction (see pair 1); no shared vocabulary between the two sections. | Pass — `==` has exactly one meaning (structural); no context-dependent overload. | Pass — one default (value semantics) plus one opt-in mechanism (explicit shared types); no third mode. | Pass — an LLM never has to infer whether a type has reference semantics from context; it is declared. |
+| **Ownership** | Pass for the semantic contract (transfer must be visible); **Flag** for concrete syntax — `@ownership`/`$`/`move` are all still open, so today an LLM/human cannot yet write one canonical form. Resolved by explicit Phase 5 deferral, not by the semantic model itself. | Pass — deliberately non-prescriptive about enforcement mechanism, so it does not entangle with an Implementation Strategy choice (`IMPLEMENTATION_INDEPENDENCE_GATE`). | Pass — "ownership" names exactly one concept (accountability for a value's lifecycle), not conflated with Identity or Lifetime despite close interaction. | Pass — single-owner + move + borrow is the minimal rule set that satisfies memory-safety-without-GC; no additional ownership modes introduced. | Flag (same root cause as Explicitness) — schema-serializability of ownership transfer cannot be finalized until Phase 5 chooses a concrete syntax; the *semantic* contract is fully schema-serializable today. |
+| **Mutation** | Pass — the three-way `fun`/`proc`/`new` split makes an operation's effect on `self` visible at the declaration, and no `mut` inference is required. | Pass — one clean coupling to Ownership (pair 6), explicitly identified as shared-invariant rather than incidental; no other cross-dimension entanglement. | Pass — three keywords, three non-overlapping meanings; no combination forms (no `mut fun`) that would blur the boundary. | Pass — three declaration kinds is the minimum needed to distinguish the three observably different effects (read-only, mutate-in-place, transform); collapsing to two would lose information the type checker needs. | Pass — the effect of a call is fully determined by which of three keywords its declaration uses; no ambiguity for a generator to resolve. |
+| **Evaluation** | Pass — laziness requires an explicit marker; eagerness (the invisible default) is nonetheless a single, uniformly-applied rule, not a per-construct special case. | Pass — no dimension depends on evaluation timing except Mutation (pair 10), and that dependency is on evaluation *order*, not evaluation *strategy* (eager vs. lazy). | Pass — `emit` has exactly one responsibility (produce the next Sequence value); rejecting `yield` was explicitly justified by a Semantic Purity violation in the rejected alternative. | Pass — no separate statement grammar; unifying statements and expressions is a *reduction* of the core grammar, not an addition. | Pass — every construct being an expression removes an entire class of generation ambiguity (should this be a statement or produce a value?) that a statement/expression-split language forces an LLM to resolve per-construct. |
+| **Visibility** | Pass — three explicit levels, no naming-convention fallback; `priv`/`pub` are always visible at the declaration site. | Pass — one identified edge case (pair 8, Ownership) is documented as expected orthogonality, not a violation. | Pass — each of the three levels (`priv`, default, `pub`) has exactly one meaning; no level is contextually reinterpreted. | Pass — three levels is the minimum needed to distinguish type-local, module-local, and exported scope; a `protected` fourth level was explicitly rejected as unnecessary given sealed types/open modules as the future alternative mechanism. | Pass — no runtime bypass means an LLM-generated program's visibility guarantees cannot be silently violated by generated code that happens to compile; violations are caught at compile time. |
+| **Lifetime** | Pass — scope-bound lifetime is visible from the block/function structure itself; no lifetime is ever open-ended without a visible scope. | Pass — universality (pair 15) is itself the orthogonality argument: Lifetime constrains no other dimension's rules, it only requires that all of them respect scope-boundedness. | Pass — "lifetime" means exactly one thing (the span between creation/binding and scope-exit destruction); it is never conflated with Ownership's "who is accountable" question. | Pass — scope-based lifetime with deterministic destruction is the minimal rule; no GC, no reference counting, and no additional lifetime annotations are part of the Core (regions/arenas are Strategy-level, not Core). | Pass — deterministic, scope-derived destruction means an LLM never needs to reason about when a value is freed beyond reading the enclosing block structure it already had to generate. |
+
+**Net Flags:** Two flags, both on the same root cause — **Ownership's
+concrete transfer syntax is not yet chosen** (Phase 5 work). Both are
+tracked as an explicit, intentional Phase 5 dependency rather than a
+Phase 2 defect: the semantic requirement (transfer must be visible) is
+fully specified; only its notation is open. This satisfies
+`DECISION_VALIDATION.md`'s rule that a Flag "may proceed but the flagged
+issue must be resolved before the final gate" — the final gate for
+syntax choice is Phase 5's own validation cycle, not Phase 2's.
+
+**Minimal Core check across all six dimensions.** Per
+`DESIGN_PRINCIPLES.md` § Minimal Core, the Core changes "only when new
+semantics cannot be expressed through composition of existing Core
+primitives." All six dimensions were tested against this bar during
+synthesis: no candidate seventh dimension (e.g., a separate "Aliasing"
+or "Concurrency" dimension) survived the check, because aliasing is
+fully explained as Ownership's borrowing rules plus Mutation's exclusive-
+access requirement, and concurrency-safe mutation is a *consequence* of
+Ownership + Mutation composing correctly, not an additional semantic
+primitive. Six dimensions is confirmed as the minimum needed to fully
+characterize what an Orthon program means.
 
 ---
 
