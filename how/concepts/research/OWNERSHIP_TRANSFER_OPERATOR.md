@@ -15,7 +15,7 @@
 > **Related:** `OWNERSHIP.md` (semantic model), `DELEGATE.md` (primary consumer
 > of the move concept), `IDENTITY_BASED_SAFETY.md` (implicit move),
 > `REGION_BASED_MEMORY_MANAGEMENT.md` (move as default).
-> **Competing hypothesis:** `@ownership` metaproperty (not yet written).
+> **Competing hypothesis:** [`@ownership` metaproperty](OWNERSHIP_METAPROPERTY.md).
 
 ---
 
@@ -225,9 +225,10 @@ let d3 = delegate($items)         // $ required — items is a named binding
 - **`move` keyword** — the baseline alternative from which this hypothesis
   departs. May remain as a secondary/documentation form.
 - **Postfix `a$`** — less convenient for parsing and reading; not recommended.
-- **`@ownership` metaproperty** — a separate, competing hypothesis (not yet
-  written). More verbose but more self-documenting. Would annotate the
-  *declaration* rather than the *use site*.
+- **`@ownership` metaproperty** — a separate, competing hypothesis (see
+  [`OWNERSHIP_METAPROPERTY.md`](OWNERSHIP_METAPROPERTY.md)). More verbose but
+  more self-documenting. Uses the `@` operator as a universal metaproperty
+  accessor.
 - **Implicit move** (no syntax at all) — `y = x` transfers ownership silently.
   Rejected: violates Orthon's principle of explicitness. The loss of access
   to `x` must be syntactically visible.
