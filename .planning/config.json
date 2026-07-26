@@ -29,7 +29,7 @@
     "ui_safety_gate": true,
     "ai_integration_phase": true,
     "api_coverage_gate": true,
-    "human_verify_mode": "end-of-phase",
+    "human_verify_mode": "per-task",
     "context_guard_mode": "warn",
     "text_mode": true,
     "research_before_questions": false,
@@ -88,7 +88,7 @@
     "source_grounding_authority": "grep"
   },
   "resolve_model_ids": "omit",
-  "mode": "yolo",
+  "mode": "ask",
   "granularity": "standard",
   "intel": {
     "enabled": true
