@@ -13,22 +13,27 @@ scope: medium
 
 Phase 4 of `when/ROADMAP.md` runs every concept in `how/concepts/research/` through
 a 10-question Decision Pipeline before it can be accepted into `what/concepts/`.
-At ~100 research files, reviewing them in arbitrary order risks burning review
+At ~110 research files, reviewing them in arbitrary order risks burning review
 effort on sugar/library/tooling concepts before the semantic foundations they
 depend on are even settled — an accepted `PATTERN_MATCHING.md` is worthless if
 `DATA_MODEL.md` (which it destructures) is still unresolved underneath it.
 
-This triage applies the Pareto principle: ~20% of concept files (Tier 1) define
+This triage applies the Pareto principle: ~27% of concept files (Tier 1) define
 ~80% of the language's semantic identity. Sequencing Tier 1 first, then Tier 2,
 then explicitly deferring Tier 3 to v0.2/v0.3, cuts the effective Phase 4 review
-surface from ~100 files to ~40 and gives a concrete order of operations instead
+surface from ~110 files to ~61 and gives a concrete order of operations instead
 of an undifferentiated backlog.
+
+The triage was applied to the directory structure itself: files live in
+`how/concepts/research/{essential,important,deferrable,reject}/`.
+See `how/concepts/research/README.md` for the structure.
 
 It also flags several Tier 3 candidates that may directly **contradict**
 Orthon's stated principles (`PROTOTYPE.md`, `SIGNIFICANT_WHITESPACE.md`,
 `DYNAMIC_TYPING.md`, `CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md`) — these
-should probably be rejected outright during Phase 4 rather than merely
+should be rejected outright during Phase 4 rather than merely
 deferred, and that determination itself is a decision worth an EDR.
+Currently they reside in `deferrable/` pending that formal decision.
 
 ## When to Surface
 
@@ -50,7 +55,8 @@ it is the work of Phase 4.
 
 - `when/ROADMAP.md` §"Phase 4: Derived Features & Decision Pipeline" (line ~219) — the
   10-question Decision Pipeline this triage is meant to sequence
-- `how/concepts/research/` — the ~100 files being triaged
+- `how/concepts/research/{essential,important,deferrable,reject}/` — the ~110 files being triaged, organized by tier
+- `how/concepts/research/README.md` — tier directory structure documented
 - `how/gates/DECISION_VALIDATION.md` — the six validation gates each concept must pass
   regardless of tier
 - `what/concepts/` — destination for accepted concepts
@@ -59,12 +65,13 @@ it is the work of Phase 4.
 
 ## Notes
 
-Full triage tables (Tier 1 ~18 files, Tier 2 ~23 files, Tier 3 ~45+ files) are
-preserved below verbatim since they are the actual working artifact — do not
-re-derive this list from scratch when Phase 4 starts; start from here and
-verify each file still exists / hasn't since been accepted.
+Full triage tables are preserved below since they are the actual working
+artifact — do not re-derive this list from scratch when Phase 4 starts;
+start from here and verify each file still exists / hasn't since been accepted.
+The files have been physically moved into `how/concepts/research/{essential,important,deferrable}/`
+to enforce the triage at the directory level.
 
-### Tier 1 — Must-Have (semantic bedrock)
+### Essential (Tier 1) — Must-Have (semantic bedrock)
 
 | Concept | Why it's essential |
 |---------|-------------------|
@@ -87,15 +94,27 @@ verify each file still exists / hasn't since been accepted.
 | TRAITS.md | Interfaces/typeclasses — without them, no polymorphism. |
 | EXPRESSION_ORIENTED_LANGUAGE.md | Expression vs statement — affects every syntactic construct. |
 | FINAL_BY_DEFAULT.md | Immutability default — affects every variable declaration. |
+| EXCLUSIVE_DECLARATIONS.md | `proc`/`fun`/`new` as core operation classification — replaces `mut` modifier. |
+| IDENTITY_BASED_SAFETY.md | Memory safety via identity-preserved/changed operators — no borrow checker needed. |
+| REGION_BASED_MEMORY_MANAGEMENT.md | Arena/region allocation as primary memory model — no GC, no references. |
+| ERROR_UNION.md | Zig-style `!T` error union — concrete error propagation mechanism. |
+| COMPILE_TIME_EXECUTION.md | Unified comptime model — collapses generics, reflection, metaprogramming into one mechanism. |
+| DELEGATE.md | `delegate` as uniform execution policy — replaces actors with a single mechanism for all callable entities. |
+| ACT_AS_FUNCTION.md | `act` at the function level (superseded by DELEGATE.md). |
+| CLASS_WITH_ACT.md | Class + `act` modifier model for reference types and concurrency isolation. |
+| STRUCT_AS_VALUE_TYPE.md | Struct as the default value type — what guarantees value types provide. |
+| OWNERSHIP_METAPROPERTY.md | `@ownership` syntax for ownership transfer (competing with `$` operator). |
+| OWNERSHIP_TRANSFER_OPERATOR.md | `$` prefix operator for ownership transfer (competing with `@ownership`). |
 
-**Count: ~18 — the language's skeleton.**
+**Count: ~30 — the language's skeleton.**
 
-### Tier 2 — Important (usable and expressive)
+### Important (Tier 2) — Usable and expressive
 
 | Concept | Why it matters |
 |---------|---------------|
 | CONCURRENCY.md | Parallel execution — most programs need it, but could be defined as a library. |
 | ASYNC_AWAIT.md | Async programming — could be syntactic sugar over concurrency primitives. |
+| ASYNC_AS_EXPLICIT_MODIFIER.md | Async as orthogonal modifier for `proc`/`fun`/`new`. |
 | GENERATORS.md | Lazy sequences — elegant but expressible via closures. |
 | ITERATION_LOOP.md | Loop construct — could be syntactic sugar over recursion/sequences. |
 | OBJECT_INITIALIZATION.md | Constructor patterns — ergonomic but not foundational. |
@@ -118,13 +137,19 @@ verify each file still exists / hasn't since been accepted.
 | SORTING.md | Sort algorithm — standard library, not language. |
 | SPAN.md | Memory views — important for systems programming but library-level. |
 | NAMED_AND_OPTIONAL_PARAMETERS.md | Function call ergonomics. |
+| CONTEXT_PARAMETERS.md | Dual parameter model — separates data from execution environment. |
+| PUSH_STREAMS.md | Push-based reactive streams (Observable-like) — the dual of pull-based sequences. |
+| UNION_INTERSECTION_TYPES.md | Structural `A \| B` / `A & B` type combinators (TypeScript-style). |
+| TYPE_LEVEL_COMPUTATION.md | Conditional/mapped types — TypeScript-style type-level programming. |
+| EMIT_AS_INTERMEDIATE_RESULT.md | `emit` for producing intermediate computation results — push model for sequences. |
+| LITERAL_TYPES.md | Values as types (`type Method = "GET"`). |
 
-**Count: ~23 — the language's muscles.**
+**Count: ~31 — the language's muscles.**
 
-### Tier 3 — Nice-to-Have (sugar, domains, tooling, or deferrable)
+### Deferrable (Tier 3) — Sugar, domains, tooling, or deferrable
 
-| Concept | Why it's Tier 3 |
-|---------|-----------------|
+| Concept | Why it's deferrable |
+|---------|---------------------|
 | CUSTOM_OPERATORS.md | Cool but dangerous — can wait for v0.2. |
 | METAOBJECTS.md | Metaprogramming — compiler macros or library, not core. |
 | REFLECTION_ALTERNATIVES.md | Reflection — important but not for v0.1. |
@@ -145,7 +170,9 @@ verify each file still exists / hasn't since been accepted.
 | OBJECTS_AND_SINGLETONS.md | Object literals — expressible via anonymous types. |
 | PROTOTYPE.md | Prototype-based OO — **contradicts Orthon's design; candidate for outright rejection.** |
 | CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md | Classes as primary — **contradicts Data First principle; candidate for outright rejection.** |
-| ACTORS.md | Actor model — advanced concurrency, not for v0.1. |
+| ACTORS.md | Actor model — advanced concurrency, not for v0.1 (superseded by DELEGATE.md). |
+| ACT_AS_ACTIVE_OBJECT.md | Active objects with mailbox (superseded by DELEGATE.md). |
+| ASYNC_LAMBDA.md | Async lambda — syntactic sugar over named async functions. |
 | SOFTWARE_TRANSACTIONAL_MEMORY.md | STM — research-grade, not for v0.1. |
 | TASK_PARALLEL_LIBRARY.md | Parallel patterns — library, not language. |
 | DIFFERENTIABLE_PROGRAMMING.md | ML/AI — domain-specific, not for v0.1. |
@@ -169,27 +196,33 @@ verify each file still exists / hasn't since been accepted.
 | CODE_BLOCK_AS_HOF.md | Last-block-arg syntax — sugar. |
 | COLLECTIONS_FUNCTIONAL_API.md | map/filter/reduce — standard library. |
 | DYNAMIC_COLLECTIONS.md | Auto-growing arrays — implementation detail. |
-| IMPERATIVE_CRUTCH_*.md (10 files) | Anti-pattern research — informs design but not language features themselves. |
-| LANGUAGE_LLM_COMPARISON.md | Research reference — not a feature. |
 | COMPILE_TIME_CONCURRENCY_SAFETY.md | Advanced static analysis — aspirational. |
-| GENERATORS_IDEMPOTENT_GENERATION.md | Deterministic code gen — LLM tooling concern. |
-| IMPERATIVE_CRUTCHES_INDEX.md | Index — meta. |
+| IDEMPOTENT_GENERATION.md | Deterministic code gen — LLM tooling concern. |
 | EXPLICIT_COMPOSITION.md | Composition syntax — could be sugar over traits. |
 | DEVELOPER_TOOLING.md | Tooling spec — separate from language spec. |
 
-**Count: ~45+ — the language's accessories.**
+**Count: ~50 — the language's accessories.**
+
+Meta-files that stay in `research/` root (not tiered):
+- `IMPERATIVE_CRUTCH_*.md` (11 files) — anti-pattern research
+- `LANGUAGE_LLM_COMPARISON.md` — language comparison reference
 
 ### Summary by Volume
 
 | Tier | Count | Approx % | Character |
 |------|-------|----------|-----------|
-| Tier 1 — Must-have | ~18 | ~20% | Skeleton |
-| Tier 2 — Important | ~23 | ~25% | Muscles |
-| Tier 3 — Nice-to-have | ~45+ | ~55% | Accessories |
+| Essential — Must-have | ~30 | ~27% | Skeleton |
+| Important — Usable | ~31 | ~28% | Muscles |
+| Deferrable — Nice-to-have | ~50 | ~45% | Accessories |
 
 ### Recommended Action for Phase 4
 
-Run Tier 1 through the Decision Pipeline first, do a quick pass through Tier 2,
-and explicitly defer Tier 3 to a v0.2/v0.3 milestone with a one-paragraph
-rationale per concept (except the four flagged Tier 3 files above, which
-should be evaluated for outright rejection via EDR rather than deferral).
+Run Essential files through the Decision Pipeline first, do a quick pass through
+Important, and explicitly defer Deferrable to a v0.2/v0.3 milestone with a
+one-paragraph rationale per concept (except the four flagged contradicting-
+principles files, which should be evaluated for outright rejection via EDR
+rather than deferral).
+
+The files have been physically organized into
+`how/concepts/research/{essential,important,deferrable,reject}/` to enforce
+the triage at the directory level.

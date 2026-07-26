@@ -4,22 +4,38 @@ This directory contains raw research and analysis of language concepts
 from various programming languages. Files here are **input material**,
 not Orthon specification.
 
-## Purpose
+## Directory Structure
 
-- Analyse how other languages solve specific problems
-- Identify patterns, anti-patterns, and implications for Orthon
-- Provide evidence for design decisions during Concept Design Review
+Research files are triaged by importance into tier directories.
+A new concept must always be placed into the appropriate tier directory,
+never directly into `research/` root.
 
-## Contents
+| Directory | Priority | Description | Decision Pipeline |
+|-----------|----------|-------------|-------------------|
+| `essential/` | Must-have | Semantic bedrock — the language's skeleton. Without these, Orthon cannot exist. | Phase 4, first pass |
+| `important/` | Important | Makes the language usable and expressive — the language's muscles. | Phase 4, second pass |
+| `deferrable/` | Nice-to-have | Sugar, domains, tooling, or features deferrable to v0.2/v0.3 — the language's accessories. | Phase 4, deferred |
+| `reject/` | Contradicts principles | Concepts that contradict Orthon's stated principles; candidates for formal rejection via EDR. | Phase 4, rejection decision |
 
-The directory includes two kinds of research:
+The `research/` root itself contains only meta-files that are not feature
+proposals:
+- `README.md` — this file
+- `imperative-crutch-*.md` — anti-pattern analysis (informs design, not a feature)
+- `imperative-crutches-index.md` — index of anti-pattern analysis
+- `language-llm-comparison.md` — language comparison reference
 
-- **Orthon-proposed concept analysis** — files named `CONCEPT_NAME.md`
-  (e.g., `DATA_MODEL.md`, `FUNCTIONS.md`, `OWNERSHIP.md`). These are
-  draft concept analyses from Milestone 0, awaiting formal review.
-- **Problem-domain research** — files named `imperative-crutch-TOPIC.md`.
-  These analyse imperative anti-patterns from Python/Java to inform
-  Orthon's declarative design.
+## Adding Research
+
+To add a new concept research document:
+
+1. Determine its tier (essential / important / deferrable) based on how
+   foundational the concept is to Orthon's semantic identity.
+2. Place it in the corresponding subdirectory.
+3. Follow the research format below.
+4. Reference [`_concept.md`](../../templates/_concept.md) for the eventual design stage.
+
+**Rule:** Do NOT place new concept files directly into `research/` root.
+They must go into a tier directory.
 
 ## Research Format
 

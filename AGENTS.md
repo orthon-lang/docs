@@ -137,11 +137,13 @@ docs/
 │   ├── EVOLUTION_MODEL.md    # Versioning, deprecation, feature gates (Phase 8)
 │   ├── concepts/             # Concept design pipeline
 │   │   ├── README.md
-│   │   └── research/         # Concept research inbox (raw analyses)
-│   │       ├── README.md
-│   │       ├── DATA_MODEL.md
-│   │       ├── FUNCTIONS.md
-│   │       └── ... (30+ research files)
+│   │   ├── research/         # Concept research inbox (raw analyses, triaged by tier)
+│   │   │   ├── README.md
+│   │   │   ├── essential/    # Must-have concepts — semantic bedrock
+│   │   │   ├── important/    # Important concepts — usability & expressiveness
+│   │   │   ├── deferrable/   # Nice-to-have — deferrable to v0.2/v0.3
+│   │   │   ├── reject/       # Contradicts principles — rejection candidates
+│   │   │   └── ... (110+ research files across tiers)
 │   ├── IMPLEMENTATION_POLICIES.md
 │   ├── architecture/         # Compiler architecture
 │   │   ├── ARCHITECTURE.md
@@ -219,6 +221,13 @@ When assigned a task in this project, follow this protocol:
 
 1. **Assert language.** Before any other step, assert: *"All file content I produce will be in English."* Chat responses to the user may match the user's language. The project language is English (§10.9).
 2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `how/DESIGN_PRINCIPLES.md`.
+
+2a. **Place new concept research in the correct tier directory.** When adding a
+    new concept research document to `how/concepts/research/`, do NOT place it
+    directly in the root. Instead, put it in the appropriate tier subdirectory
+    (`essential/`, `important/`, `deferrable/`) based on how foundational the
+    concept is to Orthon's semantic identity. Meta-files (anti-pattern analyses,
+    language comparisons, reference indices) stay in the root.
 3. **Check cross-references.** A design decision in one document may affect documents in other layers.
 4. **Run the Decision Pipeline** (`how/process/DECISION_PIPELINE.md`) before designing any new feature — 10 questions determine whether the feature should exist and at what level.
 5. **Check `how/gates/_language-design.md`** if the task involves making a design decision — the gate defines the acceptance criteria.
