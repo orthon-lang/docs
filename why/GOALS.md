@@ -192,6 +192,11 @@ are rejected.
   program-scale development with the Execution Program as its primary
   artifact. REPL and notebook interfaces may be built on top, but they
   are not design drivers.
+- **Formal verification of semantics.** Orthon's v0.1 specification is
+  prose-based, with machine readability only through the `SCHEMA.md`
+  grammar. Formalization in Coq, Lean, or similar proof assistants is
+  deferred until the language attracts an implementation and real-world
+  usage that justifies the investment.
 
 ---
 

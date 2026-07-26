@@ -480,6 +480,10 @@ Test the language design in practice before freezing.
   code for each concept
 - **Schema round-trip tests** — verify schema → generation → validation cycle
 - Document ambiguities and friction points
+- **Conformance test suite** — create `tests/` directory with Orthon
+  programs covering every accepted concept, all canonical forms, edge
+  cases, and interaction pairs from the Interaction Matrix; each test
+  annotated with expected behaviour
 - Produce new EDRs for issues discovered
 
 **Step 8.5 — Freeze:**
@@ -508,6 +512,42 @@ Freeze the first version of the language specification.
 **Dependencies:** Phase 7 (Execution Model part of frozen spec),
 Phase 6 (cross-cutting issues resolved), Phase 5 (syntax resolved),
 Phase 4 (concepts designed).
+
+---
+
+### Phase 9: Onboarding Material (post-Freeze, pre-M2) ⬜
+
+**Goal:** Produce developer-facing learning materials so that someone
+encountering Orthon for the first time can read, write, and understand
+idiomatic programs without reading the full specification.
+
+**Steps:**
+
+1. **Tutorial / Getting Started** — `docs/tutorial/GETTING_STARTED.md`:
+   write your first Orthon program, step by step.
+2. **Language Tour** — `docs/tutorial/LANGUAGE_TOUR.md`: walk through
+   each concept in learnability order, not specification order, with
+   runnable examples.
+3. **Cookbook / Idioms** — `docs/cookbook/`: idiomatic solutions to
+   common problems (iteration, error handling, concurrency, etc.),
+   serving as both documentation and a validation of the language's
+   expressiveness.
+4. **Cross-reference consistency check** — verify that all tutorial
+   and cookbook examples are consistent with the frozen `SPEC.md`.
+
+**New artifacts:**
+- `docs/tutorial/` — getting-started guide and language tour
+- `docs/cookbook/` — idiom-by-example reference
+
+**Exit criteria:**
+- [ ] Tutorial covers every accepted concept with runnable examples
+- [ ] Cookbook demonstrates idiomatic solutions for at least 5 common
+      programming tasks
+- [ ] All examples consistent with frozen `SPEC.md`
+- [ ] No undefined terms — every concept used in examples is defined
+      in `GLOSSARY.md` or the tutorial itself
+
+**Dependencies:** Phase 8 (frozen SPEC.md is the source of truth).
 
 ---
 
