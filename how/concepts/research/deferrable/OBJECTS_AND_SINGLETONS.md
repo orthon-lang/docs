@@ -7,6 +7,14 @@
 >
 > **Last updated:** 2026-07-22
 >
+> **⚠️ CHALLENGED by `SINGLETON_PATTERN_ANALYSIS.md` (2026-07-26).**
+> This document proposes the `object` keyword as a dedicated singleton
+> declaration. The companion analysis in `SINGLETON_PATTERN_ANALYSIS.md`
+> argues that singleton scenarios can be expressed through composition of
+> existing primitives (top-level declarations + delegate + lazy) and that
+> a dedicated `object` keyword is unjustified. Both hypotheses should be
+> evaluated together during Concept Design Review.
+>
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
 > to language-wide agreement and will be specified in Phase 5 (Syntax).
 
