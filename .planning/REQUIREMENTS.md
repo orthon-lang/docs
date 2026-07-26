@@ -107,6 +107,13 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 - [ ] **FREEZE-06**: Whitepaper strategy revisited; whitepaper(s) commissioned/drafted
 - [ ] **FREEZE-07**: Launch/announcement strategy defined (audience, channels, timing)
 
+### Onboarding Material — Phase 9
+
+- [ ] **ONBOARD-01**: Tutorial covering every accepted concept (`docs/tutorial/GETTING_STARTED.md`)
+- [ ] **ONBOARD-02**: Language tour in learnability order (`docs/tutorial/LANGUAGE_TOUR.md`)
+- [ ] **ONBOARD-03**: Cookbook with idiomatic solutions for at least 5 common programming tasks (`docs/cookbook/`)
+- [ ] **ONBOARD-04**: Cross-reference consistency check — all examples consistent with frozen `SPEC.md`; no undefined terms
+
 ## v2 Requirements
 
 Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in current roadmap.
@@ -215,10 +222,14 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | FREEZE-05 | Phase 8 | Pending |
 | FREEZE-06 | Phase 8 | Pending |
 | FREEZE-07 | Phase 8 | Pending |
+| ONBOARD-01 | Phase 9 | Pending |
+| ONBOARD-02 | Phase 9 | Pending |
+| ONBOARD-03 | Phase 9 | Pending |
+| ONBOARD-04 | Phase 9 | Pending |
 
 **Coverage:**
-- v1 requirements: 70 total
-- Mapped to phases: 70 (100%)
+- v1 requirements: 74 total
+- Mapped to phases: 74 (100%)
 - Unmapped: 0
 
 **Phase summary:**
@@ -231,6 +242,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 - Phase 6 — Cross-Cutting Review: 2 requirements (XCUT-01..02)
 - Phase 7 — Execution & Optimization Model: 3 requirements (EXEC-01..03)
 - Phase 8 — Evolution Model & Freeze: 11 requirements (EVOL-01, SPEC-01, VALID-01, NAME-01, FREEZE-01..07)
+- Phase 9 — Onboarding Material: 4 requirements (ONBOARD-01..04)
 
 ---
 *Requirements defined: 2026-07-20*

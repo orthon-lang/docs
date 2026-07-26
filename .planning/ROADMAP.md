@@ -14,7 +14,7 @@ from it (Phase 3), design every outstanding concept through the Decision
 Pipeline (Phase 4), derive Syntax from the semantic model (Phase 5), verify
 Cross-Cutting interactions (Phase 6), define the Execution & Optimization
 boundary (Phase 7), and finally define the Evolution Model and Freeze v0.1
-(Phase 8). Every phase in this roadmap is documentation/design work — there
+(Phase 8), followed by onboarding materials (Phase 9). Every phase in this roadmap is documentation/design work — there
 is no compiler or runtime in this repository.
 
 **Note on Phase 1.1:** this phase was inserted to carry forward the
@@ -42,6 +42,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
 - [ ] **Phase 7: Execution & Optimization Model** - Define the boundary between language semantics and implementation
 - [ ] **Phase 8: Evolution Model & Freeze** - Define versioning/deprecation policy, produce the canonical spec, validate, and freeze v0.1
+- [ ] **Phase 9: Onboarding Material (post-Freeze, pre-M2)** - Produce developer-facing learning materials (tutorial, language tour, cookbook) consistent with the frozen SPEC.md
 
 ## Phase Details
 
@@ -203,10 +204,26 @@ Plans:
 
 **Plans**: TBD
 
+---
+
+### Phase 9: Onboarding Material (post-Freeze, pre-M2)
+
+**Goal**: Produce developer-facing learning materials so that someone encountering Orthon for the first time can read, write, and understand idiomatic programs without reading the full specification.
+**Depends on**: Phase 8 (frozen SPEC.md is the source of truth)
+**Requirements**: ONBOARD-01, ONBOARD-02, ONBOARD-03, ONBOARD-04
+**Success Criteria** (what must be TRUE):
+
+  1. Tutorial covers every accepted concept with runnable examples (`docs/tutorial/GETTING_STARTED.md`).
+  2. Language Tour walks through each concept in learnability order, not specification order (`docs/tutorial/LANGUAGE_TOUR.md`).
+  3. Cookbook demonstrates idiomatic solutions for at least 5 common programming tasks (`docs/cookbook/`).
+  4. All examples consistent with frozen `SPEC.md`; no undefined terms — every concept used in examples is defined in `GLOSSARY.md` or the tutorial itself.
+
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|-----------------|--------|-----------|
@@ -219,3 +236,4 @@ Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 5 → 6 → 7 �
 | 6. Cross-Cutting Review | 0/TBD | Not started | - |
 | 7. Execution & Optimization Model | 0/TBD | Not started | - |
 | 8. Evolution Model & Freeze | 0/TBD | Not started | - |
+| 9. Onboarding Material | 0/TBD | Not started | - |
