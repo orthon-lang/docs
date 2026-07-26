@@ -8,7 +8,8 @@ completed_via: quick task 260726-s31 (commits b99f075, 5978d7a, 8c2ee5d)
 ---
 
 **Note:** "Also touch while in there" listed ROADMAP.md too — that part was
-explicitly deferred (see 260726-s31's SUMMARY.md). Still open if wanted.
+initially deferred (see 260726-s31's SUMMARY.md), then completed directly
+2026-07-26 (commit `b0e6f7b`), closing out this todo's full original scope.
 
 ## What
 
