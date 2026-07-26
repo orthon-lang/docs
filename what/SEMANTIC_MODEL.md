@@ -1,9 +1,15 @@
 # Semantic Model
 
-> **⚠️ DRAFT — Placeholder for Phase 2.**
-> This document will define *what a program means* at the foundational level.
+> **✅ ACCEPTED — [EDR-013](../how/decision_records/architecture/EDR-013-semantic-model.md).**
+> This document defines *what a program means* at the foundational level,
+> synthesizing 10 essential/important-tier research documents into six
+> semantic dimensions: Identity, Ownership, Mutation, Evaluation,
+> Visibility, Lifetime.
 >
-> **Status:** Placeholder — to be filled during Phase 2 of M1.
+> **Status:** Accepted 2026-07-27 (Phase 2 of M1). Two open items are
+> intentionally deferred to Phase 5 (Syntax Design) — see
+> [Design Principles verification](#relationship-to-design-principles)
+> § Net Flags.
 > **See also:** [`ROADMAP.md`](../when/ROADMAP.md) § Phase 2,
 > [`DATA_MODEL.md`](../how/concepts/research/essential/DATA_MODEL.md),
 > [`OWNERSHIP.md`](../how/concepts/research/essential/OWNERSHIP.md),
@@ -687,5 +693,9 @@ characterize what an Orthon program means.
 
 ## EDR
 
-- **EDR-NNN:** Acceptance of the Orthon Semantic Model
-  <!-- Created during Phase 2 -->
+- **[EDR-013](../how/decision_records/architecture/EDR-013-semantic-model.md):**
+  Acceptance of the Orthon Semantic Model — Identity, Ownership,
+  Mutation, Evaluation, Visibility, Lifetime. Records how each of the
+  10 source research documents' proposals were merged, modified, or
+  superseded, and the rejection of the Identity-Based Safety, GC-based,
+  and statement-oriented alternatives.
