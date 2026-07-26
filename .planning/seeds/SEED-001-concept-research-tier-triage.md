@@ -71,6 +71,20 @@ start from here and verify each file still exists / hasn't since been accepted.
 The files have been physically moved into `how/concepts/research/{essential,important,deferrable}/`
 to enforce the triage at the directory level.
 
+**2026-07-26 caveat:** This essential-tier table (~30 files at time of writing,
+42 today) is not flat "Phase 4, first pass" material. It splits three ways: ~10
+files feed Phase 2 (Semantic Model), ~10 feed Phase 3 (Primitive Blocks), 3 are
+a separate Policy-level pocket pending relocation (see
+`.planning/todos/pending/move-policy-level-essential-concepts-out-of-pipeline.md`),
+and the remaining ~17-19 stay in Phase 4 alongside `important/` and
+`deferrable/` (this table's row list is also now slightly behind the live
+`essential/`/`important/` directory split — see
+`.planning/REQUIREMENTS.md`'s CONCEPT-ESS-01 for the current file-to-tier
+reality). See `.planning/notes/2026-07-26-tier-vs-phase-mapping.md` for the
+fuller classification. The Important (Tier 2) and Deferrable (Tier 3) tables
+below are unaffected in spirit — they remain entirely Phase 4 material and are
+still the authoritative Phase 4 sequencing source.
+
 ### Essential (Tier 1) — Must-Have (semantic bedrock)
 
 | Concept | Why it's essential |

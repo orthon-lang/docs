@@ -17,6 +17,16 @@ never directly into `research/` root.
 | `deferrable/` | Nice-to-have | Sugar, domains, tooling, or features deferrable to v0.2/v0.3 — the language's accessories. | Phase 4, deferred |
 | `reject/` | Contradicts principles | Concepts that contradict Orthon's stated principles; candidates for formal rejection via EDR. | Phase 4, rejection decision |
 
+**Note (2026-07-26):** `essential/` is not exclusively "Phase 4, first pass."
+Roughly half of its files (~20 of ~42) define one of the six Semantic Model
+dimensions or a primitive construct/composition rule and feed Phase 2 or Phase 3
+directly instead of Phase 4; a further 3 are Policy-level material pending
+relocation out of this pipeline entirely; a further 2 were moved into this tier
+mid-cycle and still await a Phase 2/3/4 classification call. See
+`.planning/notes/2026-07-26-tier-vs-phase-mapping.md` for the split.
+`important/` and `deferrable/` remain entirely Phase 4 material as described
+above.
+
 The `research/` root itself contains only meta-files that are not feature
 proposals:
 - `README.md` — this file
