@@ -179,7 +179,67 @@ stance on enforcement mechanism.
 
 > What is visible where? Scoping rules, modules, privacy.
 
-<!-- To be filled during Phase 2 -->
+**Model.** Orthon defines exactly three visibility levels, each with a
+single, unambiguous meaning:
+
+- **`priv`** — visible only within the containing type or function.
+  The most restrictive level; used for implementation details.
+- **default (no keyword)** — visible within the containing module. This
+  is the default for every declaration that carries no visibility
+  keyword.
+- **`pub`** — visible to any module that imports the declaring module.
+  An explicit, opt-in contract; changing a `pub` declaration later is a
+  breaking change.
+
+```
+type Counter:
+    priv count: Int = 0      # visible only inside Counter
+    fun peek() -> Int         # module-scoped by default
+        self.count
+    pub proc increment()      # exported — part of the public API
+        self.count += 1
+```
+
+**Module is the encapsulation boundary**, not the type. This is why the
+*default* (no keyword) visibility is module-scoped rather than
+type-scoped: two types in the same module may freely see each other's
+default-visibility members, matching the principle that the module — not
+the class — is Orthon's primary organizational unit.
+
+**No `protected`, no backdoors.** Orthon deliberately omits a
+`protected` level; inheritance-oriented visibility concerns are deferred
+to sealed types / open modules (a future, separate mechanism — not part
+of this dimension). There is no reflection API, name-mangling trick, or
+other runtime mechanism that can reach a `priv` or default-visibility
+declaration from outside its permitted scope. This directly instantiates
+Semantic Invariant 5.
+
+**Compile-time enforcement only.** Visibility is checked entirely at
+compile time. There is no visibility check performed at runtime, and
+therefore no way to defeat it dynamically — a `priv` field is not merely
+discouraged from external access, it is *unreachable* by any well-typed
+program outside its scope.
+
+**Open question (deferred to Phase 5):** whether `pub` on a type implies
+`pub` on all of its members, or whether members default to `priv`/module
+visibility even when their containing type is `pub`. Both the
+`priv`-fields-under-a-`pub`-type example above and Orthon's
+minimum-necessary-access principle suggest the latter (members do *not*
+automatically inherit their type's `pub`), but the concrete rule and its
+syntax are left to Phase 5 (Syntax Design).
+
+**Visibility and Ownership are orthogonal.** A declaration's visibility
+level says nothing about how ownership flows through it, and Ownership's
+move/borrow rules say nothing about who may call a function. The
+resulting edge case is legal and expected: a `priv` type may appear in a
+`pub` function's signature (for example, a `pub` constructor function
+returning a `priv` internal handle type used only to prevent external
+construction, while the function itself is part of the public API). This
+is not a special case requiring reconciliation — it is the two
+dimensions composing exactly as orthogonal dimensions should. See
+[Cross-Dimension Consistency](#cross-dimension-consistency).
+
+**Source:** `how/concepts/research/essential/VISIBILITY_AND_ENCAPSULATION.md`
 
 ### Lifetime
 
