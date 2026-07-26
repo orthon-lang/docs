@@ -2,8 +2,13 @@
 title: Rewrite REQUIREMENTS.md Phase 2/3/4 sections to match actual concept inventory
 date: 2026-07-26
 priority: high
-status: pending
+status: done
+completed: 2026-07-26
+completed_via: quick task 260726-s31 (commits b99f075, 5978d7a, 8c2ee5d)
 ---
+
+**Note:** "Also touch while in there" listed ROADMAP.md too — that part was
+explicitly deferred (see 260726-s31's SUMMARY.md). Still open if wanted.
 
 ## What
 
