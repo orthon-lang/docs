@@ -533,6 +533,10 @@ lst.append(5)                   // OK (List restored)
 - **`CLASS_WITH_ACT.md`** — If `class` uses `act` fields, `delegate(move obj)`
   provides runtime isolation for a type that already has compile-time
   isolation markers. The two models compose rather than compete.
+- **`OWNERSHIP_TRANSFER_OPERATOR.md`** — Candidate syntax (`$`) for the
+  `move` concept used throughout this hypothesis. If adopted, `delegate(move
+  lst)` becomes `delegate($lst)` and `release(move lst)` becomes
+  `release($lst)`. The underlying semantics are unchanged.
 
 ---
 

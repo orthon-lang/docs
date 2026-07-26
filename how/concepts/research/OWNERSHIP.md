@@ -82,6 +82,7 @@ Arena-based allocation with ownership and static borrow checking (Rust-style). N
 3. How does ownership interact with closures — can they capture by move or by reference?
 4. Should there be a way to "pin" a value to prevent moves after initialisation?
 5. Can the borrow checker support partial moves from compound types?
+6. What is the concrete syntax for ownership transfer? See `OWNERSHIP_TRANSFER_OPERATOR.md` for the `$` prefix operator hypothesis (vs. `move` keyword). This document defines the semantic model; that document explores syntax alternatives.
 
 ## Decision History
 
