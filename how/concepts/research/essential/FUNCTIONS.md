@@ -94,6 +94,10 @@ to stack allocation where safe.
 3. Should functions have named/default parameters?
 4. How do functions interact with the type system — are function types
    nominal or structural?
+5. Does the presence of first-class functions eliminate the need for the
+   GoF Strategy pattern as an explicit language construct? See
+   [`../deferrable/STRATEGY_PATTERN_ELIMINATION.md`](../deferrable/STRATEGY_PATTERN_ELIMINATION.md)
+   for analysis.
 
 ## Decision History
 

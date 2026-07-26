@@ -77,3 +77,4 @@ The default strategy uses **composition-only** (no implementation inheritance) w
 - See `VISIBILITY_AND_ENCAPSULATION.md` for how visibility interacts with embedding
 - See `DATA_MODEL.md` for how structs fit into the data model
 - See [`../../why/MANIFESTO.md`](../../why/MANIFESTO.md) § Minimal Core for the principle that guides composition over hierarchy
+- See [`../deferrable/STRATEGY_PATTERN_ELIMINATION.md`](../deferrable/STRATEGY_PATTERN_ELIMINATION.md) for how first-class functions eliminate the GoF Strategy pattern — a concrete case of composition replacing structural boilerplate
