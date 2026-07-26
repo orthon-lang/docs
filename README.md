@@ -56,6 +56,7 @@ This repository contains the language design documentation — the *why*,
 | [Core Concepts](what/CORE_CONCEPTS.md) | Registry of accepted Orthon concepts — currently empty (see [research](how/concepts/research/) for in-progress drafts) |
 | [Decision Process](how/process/DECISION_PROCESS.md) | One-page decision authority — who decides what, using which criteria, and how it's recorded |
 | [Decision Records](how/decision_records/INDEX.md) | Engineering Decision Records — every consequential design choice documented with rationale |
+| [Artifact Map](notes/language-design-artifact-map.md) | Complete taxonomy of language design artifacts — what a full design produces, with Orthon's status per artifact |
 
 ## For AI Agents
 
