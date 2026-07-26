@@ -33,7 +33,8 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 
 | File | Layer | Purpose |
 |------|-------|---------|
-| `why/VISION.md` | Why | Core philosophy, inspiration from Python/Java, Principle of Least Astonishment, orthogonality |
+| `why/VISION.md` | Why | Core philosophy, Principle of Least Astonishment, orthogonality, Execution Program model |
+| `why/DESIGN_INFLUENCES.md` | Why | External language influences — Python, Java, and what Orthon learns from them |
 | `why/GOALS.md` | Why | Concrete aims derived from the vision — six goals with criteria and non-goals |
 | `why/MANIFESTO.md` | Why | Explicit principles — consistency over legacy, minimal core, composition over exceptions |
 | `why/ZEN.md` | Why | Aphorisms capturing the language's spirit |
@@ -113,6 +114,7 @@ docs/
 ├── LICENSE
 ├── why/                      # WHY — purpose, vision, philosophy
 │   ├── VISION.md
+│   ├── DESIGN_INFLUENCES.md
 │   ├── GOALS.md
 │   ├── MANIFESTO.md
 │   └── ZEN.md
