@@ -257,7 +257,96 @@ above.
 
 > When and how do values change? Are data immutable by default?
 
-<!-- To be filled during Phase 2 -->
+**Model.** Orthon is **immutable by default**; mutation is always an
+explicit, opt-in act, both at the binding site and at the declaration
+site.
+
+**Binding-level mutability:**
+
+```
+val x = 42        # immutable binding — explicit keyword
+x = 43            # error: x is val
+
+var y = 0         # mutable binding — explicit keyword
+y = 1             # OK
+
+count = 42        # declaration by assignment in local context —
+                   # creates an immutable binding (equivalent to `val`);
+                   # compiler may assist inference
+
+const PI = 3.14   # compile-time constant — a distinct concept from
+                   # an immutable runtime binding
+```
+
+**Function-level mutability: three exclusive declaration kinds.**
+Rather than a `mut` modifier layered onto a single function keyword,
+Orthon distinguishes mutation at the declaration level with three
+mutually exclusive kinds:
+
+| Kind | Effect on `self` | Return |
+|---|---|---|
+| **`fun`** | Read-only — never mutates `self` | Always returns a value |
+| **`proc`** | Mutates `self`; identity preserved | May return a value or nothing |
+| **`new`** | Never mutates `self`; produces a distinct value | Always returns a new value |
+
+```
+type List:
+    items: Array<Int>
+
+    fun len() -> Int              # read-only
+        self.items.len()
+
+    proc append(item: Int)        # mutating, identity preserved
+        self.items.push(item)
+
+    new sorted() -> List           # transforming, identity changed
+        List(self.items.sorted())
+```
+
+The contract lives in the declaration kind, not in a caller-side
+annotation: **there is no `mut` at the call site.** A caller of
+`nums.append(4)` knows `nums` is mutated because `append` is declared
+`proc` — the call site itself carries no extra marker. This directly
+implements Semantic Invariant 2 (mutation requires exclusive access) at
+the granularity of individual operations: only `proc` operations require
+the compiler to establish exclusive access to `self`; `fun` and `new`
+never do, because they never mutate.
+
+**Four governing principles** (mirrored from `MUTABILITY.md`, now
+expressed in terms of `val`/`var` and `fun`/`proc`/`new` rather than a
+`mut` modifier):
+
+1. **Immutable by default** — every binding is `val`-like unless
+   declared `var`; every method is `fun`-like unless declared `proc` or
+   `new`.
+2. **Explicit mutation** — mutation is visible in the declaration kind
+   (`var`, `proc`) — never inferred from usage.
+3. **Aliasing control** — the compiler tracks whether a value can be
+   mutated through multiple references, per Ownership's shared-XOR-
+   mutable rule (see [Ownership](#ownership)).
+4. **No hidden mutation** — no implicit mutation through property
+   setters, operator overloading, or method calls whose declaration kind
+   does not say `proc`.
+
+**Mutation requires exclusive access (Semantic Invariant 2).** A `proc`
+call is only legal when the compiler can establish that its receiver is
+not simultaneously observable through another live reference — the same
+requirement Ownership's borrowing rules impose on any exclusive (`&mut`-
+style) access. Mutation and Ownership share one invariant, viewed from
+two angles: Ownership asks "who may access this," Mutation asks "what
+may that access do." See [Cross-Dimension Consistency](#cross-dimension-consistency).
+
+**Deferred to Phase 3:** interior mutability (`Cell`/`RefCell`-style
+patterns) and mutation captured by closures are explicitly out of scope
+for this semantic model — they are Primitive Block-level questions, not
+foundational semantic commitments. Similarly, whether `mut` (a binding
+modifier) and `&mut` (a reference modifier) collapse to one keyword or
+remain two is left open; the *semantic* distinction between "this
+binding may change" (`var`) and "this operation changes its receiver"
+(`proc`) is settled here regardless of eventual keyword choice.
+
+**Source:** `how/concepts/research/essential/MUTABILITY.md`,
+`EXCLUSIVE_DECLARATIONS.md`
 
 ### Evaluation
 
