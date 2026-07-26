@@ -75,14 +75,22 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Success Criteria** (what must be TRUE):
 
   1. A concept acceptance gate is documented — the DRAFT → Accepted transition, its owner, criteria, and EDR linkage (`docs/how/concept-design-review.md` is no longer a stub).
-  2. `docs/how/concept-design-review.md` is collapsed from its current 11-step procedure to the pipeline-throughput-gaps-recommended 3-5 step process for solo authorship, and every former TODO.md milestone item is represented as a tracked GSD requirement with explicit status.
+  2. `docs/how/concept-design-review.md` is collapsed from its former 12-step procedure to the pipeline-throughput-gaps-recommended 3-5 step process for solo authorship, and every former TODO.md milestone item is represented as a tracked GSD requirement with explicit status.
   3. `docs/how/process/DECISION_PROCESS.md` moves from its current DRAFT status to Accepted (referenced from `AGENTS.md` and `README.md` as the single source of decision authority), and `docs/how/process/DECISION_PIPELINE.md` (the 10-question feature pipeline) is finalized alongside it.
   4. `why/MANIFESTO.md`, `why/VISION.md`, and `why/ZEN.md` each show evidence of review against `why/WORKING_BACKWARDS.md` rationale, and are consolidated into a compact canonical `VISION.md` (Vision · Mission · Non-goals · Target Audience · Success Criteria), keeping the existing docs as reference expansions.
   5. `docs/notes/criteria-based-algorithm-selection.md` carries an explicit validation verdict (accepted / revised / rejected), and the LLM-native language research shortlist (`docs/notes/llm-native-concept-shortlist.md` or equivalent) is complete and ready to inform Phase 4's concept prioritization.
   6. `docs/how/DESIGN_PRINCIPLES.md` is declared closed for modification — any future change requires a Tier 1 EDR — and this rule is stated in the document itself.
   7. `docs/how/architecture/FITNESS_FUNCTIONS.md` includes throughput fitness functions (at minimum: concepts-in-flight, oldest-open-proposal age), per the `docs/notes/pipeline-throughput-gaps.md` analysis.
 
-**Plans**: TBD
+**Plans**: 4 plans (3 waves)
+
+```
+Plans:
+- [ ] 01.1-01-PLAN.md — Wave 1: Vision consolidation (review evidence, algorithm selection, LLM-native shortlist)
+- [ ] 01.1-02-PLAN.md — Wave 1: Principles lock and throughput fitness functions
+- [ ] 01.1-03-PLAN.md — Wave 2: Concept review collapse, acceptance gate, process doc finalization
+- [ ] 01.1-04-PLAN.md — Wave 3: TODO.md edit (depends on D-01/D-03/D-10 landing)
+```
 
 ---
 
