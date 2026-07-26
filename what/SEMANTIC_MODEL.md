@@ -72,7 +72,90 @@ escape analysis, or another mechanism, but it may never relax them.
 
 > What does it mean for two values to be "the same"?
 
-<!-- To be filled during Phase 2 -->
+**Model.** Orthon uses **value semantics by default**: assignment copies
+data structurally, and `==` compares data structurally. Two values are
+"the same" when they are structurally equal — not when they occupy the
+same memory location.
+
+```
+a = Point(1, 2)
+b = a              # structural copy — independent value
+b.x = 99           # a.x is still 1 — no aliasing
+a == b             # false — structurally different after mutation
+```
+
+**Identity is not universal.** Most Orthon values (`Int`, `String`,
+`Point`, `List`, `Map`, and other ordinary data) have no notion of
+identity distinct from their structure — asking "is this the *same*
+`Point`?" is meaningless beyond "does it hold the same values?" Identity
+only becomes a meaningful question for entities that represent **shared
+state or an external resource** — a database connection, a file handle,
+an actor mailbox, a mutable cell shared across owners. For those cases,
+Orthon requires an explicit, opt-in reference type (a "shared" type);
+there is no reference semantics by accident.
+
+**Binding identity vs. value identity.** Two distinct notions must not be
+confused:
+
+- **Binding identity** — whether two *names* currently refer to the
+  same storage location. This is a compiler/runtime bookkeeping concern
+  (aliasing analysis, borrow tracking), not something the language
+  exposes as a first-class equality operator on ordinary values.
+- **Value identity** — whether two *values* are considered the same
+  entity across time, independent of their current structural content.
+  This only exists for the explicit shared/reference types described
+  above, and is what a hypothetical identity-comparison (`===`) would
+  mean if Orthon exposes one.
+
+Structural equality (`==`) always answers the value-identity question in
+value-semantics terms ("do these currently look the same"); it never
+silently answers the binding-identity question ("are these the same
+storage").
+
+**Identity is orthogonal to Ownership.** Whether a value has identity
+(is it a plain value or a shared/reference type) is a separate question
+from who is *accountable* for it (owns it, borrows it, or has moved it).
+A shared/reference type still has exactly one owner of the *reference
+itself* at any point (see [Ownership](#ownership)); its distinguishing
+property is that the referent it points to is not copied on assignment.
+Conversely, a plain value with no identity can still participate fully
+in ownership, moves, and borrows. The two dimensions compose freely: a
+type's identity model does not constrain its ownership model, and vice
+versa.
+
+**Fresh-value exemption.** An unbound temporary — a literal, a
+constructor call, or any expression result that has not yet been bound
+to a name — has no permanent identity of any kind: it cannot be aliased
+because nothing yet holds a second reference to it. This is why fresh
+values may be passed directly into ownership-consuming contexts (e.g.
+`delegate(List())`) without an explicit transfer marker: there is no
+prior owner from which to transfer. Once bound to a name, a value's
+identity (or lack thereof) is fixed by its type.
+
+**Reference semantics via explicit opt-in.** When shared, mutable state
+is genuinely required, Orthon does not forbid it — it requires the
+programmer to opt in to a reference/shared type explicitly. The default
+never silently becomes a reference; a type is a value type unless it
+declares otherwise. This mirrors Swift's `struct`-by-default,
+`class`-by-opt-in model rather than Java's reference-by-default model.
+
+**Implementation freedom.** Value semantics is a **language contract**,
+not a promise of eager, physical copying. An Implementation Strategy may
+use copy-on-write, copy elision, SSA form, NRVO, or register promotion
+to avoid actually copying bytes, as long as the *observable* behavior is
+indistinguishable from independent values. This follows directly from
+`DESIGN_PRINCIPLES.md` § Semantics Before Optimization and § Intent Over
+Implementation: the compiler decides *how*, the language guarantees
+*what*.
+
+**Source:** `how/concepts/research/essential/DATA_MODEL.md`,
+`VALUE_SEMANTICS.md`. `IDENTITY_BASED_SAFETY.md`'s `.`/`!` operator
+model was evaluated and **rejected** for Phase 2 (see
+[Cross-Dimension Consistency](#cross-dimension-consistency) and the
+EDR's Alternatives Considered) — its implicit mutability inference
+violates the Explicitness principle, though its ownership/escape-analysis
+machinery informed the [Ownership](#ownership) section's non-prescriptive
+stance on enforcement mechanism.
 
 ### Ownership
 
