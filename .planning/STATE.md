@@ -2,18 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
-current_phase: 1.1
-current_phase_name: Foundation Completion
-status: planning
-stopped_at: Roadmap restructured to match when/ROADMAP.md's 8-phase pipeline. Phase 1 (Concerns Remediation) confirmed complete. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
-last_updated: "2026-07-22T16:59:48.219Z"
-last_activity: 2026-07-22
-last_activity_desc: "Fast task: add Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>)"
+status: Not yet discussed/planned
+last_updated: "2026-07-26T17:29:30.878Z"
+last_activity: "2026-07-22 - Fast task: added Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>)"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 1
   completed_plans: 1
+  percent: 11
 ---
 
 # Project State
@@ -66,6 +63,7 @@ Recent decisions affecting current work:
 - Roadmap: CONCERNS.md blockers/tech-debt regrouped into a dedicated Concerns Remediation phase (Phase 1) — now complete.
 - Roadmap (2026-07-21): GSD roadmap restructured to mirror `when/ROADMAP.md`'s 8-phase architectural design pipeline (adopted 2026-07-21, commit `3ec6c8a`). Old Phase 2 (Foundations/Process/Vision) became inserted Phase 1.1 (Foundation Completion). Old Phase 3 (Language Inventory, Anti-Pattern Research & Concept Design Review) was split three ways: Phase 2 (Semantic Model), Phase 3 (Primitive Blocks), Phase 4 (Derived Features & Decision Pipeline). Two new phases were added that didn't exist before: Phase 5 (Syntax Design) and Phase 7 (Execution & Optimization Model). Old Phase 4 (Cross-Cutting Review) became Phase 6; old Phase 5 (Freeze & Naming) became Phase 8 (Evolution Model & Freeze). See ROADMAP.md's Overview note and REQUIREMENTS.md's 2026-07-21 changelog entry for the full requirement-ID remapping.
 - Roadmap: former ANTIPAT-11 (Concept Design Review of all 22 concepts) retired in favor of DERIV-03 in Phase 4, same intent (zero DRAFT headers, all EDR-accepted), cleaner ID scheme under the new phase split.
+- Quick task 260726-s6t: Reclassified CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md from important/ to essential/ tier — both describe semantic bedrock rather than ergonomic sugar, correcting a tier-classification mistake before Phase 4 planning treats the split as ground truth.
 
 ### Pending Todos
 
@@ -91,6 +89,7 @@ None yet.
 | 260722-rge | Add COMPILE_TIME_EXECUTION.md DRAFT concept research (Zig's unified `comptime` mechanism — generics, duck-typed polymorphism, reflection, and metaprogramming collapsed into one compile-time execution model — closing the sole Java-to-Zig comparison table gap) | 2026-07-22 | 837f0a9 | [260722-rge-add-concepts-from-java-to-zig-comparison](./quick/260722-rge-add-concepts-from-java-to-zig-comparison/) |
 | 260722-rcc | Add UNION_INTERSECTION_TYPES.md, LITERAL_TYPES.md, and TYPE_LEVEL_COMPUTATION.md DRAFT concept research (structural union/intersection combinators, value-as-type literals, and the bundled conditional/mapped/template-literal/keyof/typeof/infer type-computation cluster — closing the three genuine gaps in the Java-to-TypeScript comparison table) | 2026-07-22 | ecf6c28, cfcb206, 8152d41 | [260722-rcc-add-concepts-from-java-to-typescript-com](./quick/260722-rcc-add-concepts-from-java-to-typescript-com/) |
 | 9 | Add Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>) | 2026-07-22 | f8b6045 | — |
+| 260726-s6t | Move CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md from important/ to essential/ tier and repair the three cross-references broken by the move | 2026-07-26 | bf0f10a, 83c47c0 | [260726-s6t-move-context-parameters-md-and-represent](./quick/260726-s6t-move-context-parameters-md-and-represent/) |
 
 ### Roadmap Evolution
 
@@ -109,6 +108,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-21
-Stopped at: Roadmap restructured to the 8-phase pipeline; Phase 1 confirmed complete. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
+Last session: 2026-07-26
+Stopped at: Quick task 260726-s6t complete — CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md reclassified to essential/ tier, cross-references repaired. Ready to run `/gsd-discuss-phase 1.1` or `/gsd-plan-phase 1.1`.
 Resume file: .planning/phases/01-concerns-remediation/01-01-SUMMARY.md (Phase 1 complete); no context/plan yet for Phase 1.1
