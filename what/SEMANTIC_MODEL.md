@@ -161,7 +161,97 @@ stance on enforcement mechanism.
 
 > Who owns data? Linear, shared, borrowed?
 
-<!-- To be filled during Phase 2 -->
+**Model.** Ownership is a semantic invariant, not an enforcement
+mechanism: **every value has exactly one owner at any point in the
+program** (Semantic Invariant 1). Ownership can be transferred (moved),
+but never implicitly duplicated. This holds universally, but its
+*practical weight* differs sharply by kind of value:
+
+- **Ordinary values** (`Int`, `String`, `Point`, `List`, `Map`, and
+  similar plain data) use pure value semantics (see [Identity](#identity)).
+  Assignment copies; there is nothing to "own" beyond the copy itself.
+  The vast majority of Orthon code — an estimated 95% — never needs to
+  reason about ownership explicitly, because copying eliminates the
+  question.
+- **Resources** — anything with **exclusive responsibility**: a value
+  representing a file handle, a network socket, a unique in-memory
+  buffer, or any entity where duplication would be meaningless or unsafe
+  — is where Ownership becomes an active concern. For these, Orthon
+  adopts a Rust-like model:
+  1. Single owner per value.
+  2. **Move** transfers ownership; assigning or passing the value
+     invalidates the source binding.
+  3. **Borrowing** creates temporary access without transferring
+     ownership: multiple shared (read) borrows may coexist, or exactly
+     one exclusive (write) borrow — never both at once (**shared XOR
+     mutable**, the same rule stated as Semantic Invariant 2).
+  4. No implicit duplication: copying a resource, if ever needed,
+     requires an explicit operation — never a bare assignment.
+
+```
+data = create_resource()
+other = data              # move: data is now invalid
+# use(data)                # compile error: data was moved
+use(other)                 # OK
+```
+
+**Ownership applies only where exclusive responsibility exists.** This
+is a deliberate widening from "only external resources" (an earlier,
+narrower framing) to "any case of exclusive accountability" — the test
+is not "is this a file handle," but "would silently duplicating this
+value violate an invariant the program depends on." Plain data almost
+never fails that test; resources almost always do.
+
+**Fresh-value exemption.** A value that has just been constructed and
+not yet bound to a name (see [Identity](#identity) § Fresh-value
+exemption) has no existing owner to invalidate, so the compiler
+transfers it implicitly:
+
+```
+consume(create_resource())   # fresh value — no transfer marker needed
+existing = create_resource()
+consume(existing)             # ERROR in strict mode — existing is a named
+                               # binding and requires an explicit transfer
+```
+
+**Transfer is semantically explicit (concrete syntax deferred).**
+Semantic Invariant 6 requires that the *fact* of an ownership transfer
+be visible at the transfer site whenever the source is a named binding.
+Two concrete syntaxes are under research — the `@ownership` metaproperty
+and the `$` prefix operator (see
+[`OWNERSHIP_METAPROPERTY.md`](../how/concepts/research/essential/OWNERSHIP_METAPROPERTY.md),
+[`OWNERSHIP_TRANSFER_OPERATOR.md`](../how/concepts/research/essential/OWNERSHIP_TRANSFER_OPERATOR.md)),
+alongside the plain `move` keyword baseline both documents compare
+against. **This document commits only to the semantic requirement — a
+transfer must be syntactically visible — and explicitly defers the
+choice of concrete syntax to Phase 5 (Syntax Design).** All three
+candidate syntaxes express identical semantics; none is favored here.
+
+**No enforcement mechanism prescribed.** This section defines *what
+ownership means*, deliberately not *how the compiler verifies it*.
+Rust's static borrow checker, `IDENTITY_BASED_SAFETY.md`'s
+ownership-plus-escape-analysis model, and other enforcement strategies
+are all compatible implementations of the same semantic contract. Per
+`DESIGN_PRINCIPLES.md` § Implementation Independence
+(`how/gates/DECISION_VALIDATION.md`'s `IMPLEMENTATION_INDEPENDENCE_GATE`),
+the choice of enforcement mechanism belongs to Implementation Strategy
+(Phase 7), not to the Core semantic model.
+
+**No GC, no RC by default.** Consistent with [Lifetime](#lifetime),
+ownership plus move semantics eliminates the need for reference counting
+or tracing collection to answer "when is this value done." Opt-in RC/GC
+strategies remain available as Implementation Strategy choices (Phase 7)
+for the specific case where sharing is genuinely required (see
+`delegate`/`release` in the Source documents), but they are never the
+default behavior.
+
+**Source:** `how/concepts/research/essential/OWNERSHIP.md`,
+`OWNERSHIP_METAPROPERTY.md`, `OWNERSHIP_TRANSFER_OPERATOR.md`.
+`IDENTITY_BASED_SAFETY.md` is not adopted as the enforcement model (its
+implicit `.`/`!` inference conflicts with Explicitness), but its
+ownership + escape-analysis reasoning about uniqueness is compatible
+with — and informed — the "no enforcement mechanism prescribed" stance
+above.
 
 ### Mutation
 
