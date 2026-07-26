@@ -1,6 +1,6 @@
 # Criteria-based Algorithm Selection
 
-**Status:** *Unvalidated idea — needs feasibility validation.*
+**Status:** *Accepted — validated during Phase 1.1 (Foundation Completion); own-scope question deferred to Phase 4.*
 
 **Date:** 2026-07-17
 
@@ -58,7 +58,7 @@ another example.
 - How to resolve conflicts between criteria (speed vs memory)?
 - Can the programmer still "pin" an algorithm when needed?
 - How does this affect performance predictability?
-- Does this idea apply only to Algorithm Policy, or more broadly?
+- Does this idea apply only to Algorithm Policy, or more broadly? — **deferred to Phase 4 (\`SORTING.md\`/Algorithm Policy concept design)**
 
 ## See also
 

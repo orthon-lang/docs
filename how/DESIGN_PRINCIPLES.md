@@ -1,5 +1,8 @@
 # Language Design Principles
 
+> **🔒 Closed for modification.**
+> `DESIGN_PRINCIPLES.md` is locked as the project's constitutional design authority. Any future change requires a **Tier 1 EDR** (Architecture category) per [`DECISION_PROCESS.md`](../how/process/DECISION_PROCESS.md) Guiding Rule 2.
+
 These design principles serve the project's goals defined in
 [`GOALS.md`](../why/GOALS.md). Each principle exists to advance one or
 more of those goals. When a principle is ambiguous or conflicts with

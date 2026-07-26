@@ -30,18 +30,18 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 
 **Status:** All 17 executed and verified 2026-07-20 (`.planning/phases/01-concerns-remediation/01-01-SUMMARY.md`).
 
-### Foundation Completion (resolves CONCERNS.md governance/process gaps) — Phase 1.1
+### Foundation Completion (resolves CONCERNS.md governance/process gaps) — Phase 1.1 ✅
 
-- [ ] **PROC-01**: Concept acceptance gate defined — documents the DRAFT → Accepted transition (owner, criteria, EDR linkage)
-- [ ] **PROC-02**: Concept Design Review process fully documented and collapsed from its current 11-step procedure to a 3-5 step pipeline for solo authorship (`docs/how/concept-design-review.md`)
-- [ ] **PROC-03**: Milestone/TODO tracking model defined for solo authorship — every TODO.md item converted into a tracked GSD requirement with explicit status
-- [ ] **PROC-04**: Template-compliance process defined for the 8-section concept template (`_concept.md`) — audit checklist or equivalent
-- [ ] **PROC-05**: `docs/how/process/DECISION_PROCESS.md` (one-page decision authority) finalized from DRAFT to Accepted, referenced from `AGENTS.md`/`README.md`, alongside a finalized `docs/how/process/DECISION_PIPELINE.md` (10-question feature pipeline)
-- [ ] **VISION-01**: Manifesto, Vision, and Zen reviewed against Working Backwards rationale, and consolidated into a compact canonical `VISION.md` (Vision · Mission · Non-goals · Audience · Success Criteria)
-- [ ] **VISION-02**: Criteria-based algorithm selection idea validated (`docs/notes/criteria-based-algorithm-selection.md`)
-- [ ] **VISION-03**: LLM-native language research completed — produces a written shortlist of concrete concepts/ideas to strengthen Orthon's LLM-native design, feeding Phase 4's concept design and prioritization work
-- [ ] **PRINC-01**: `docs/how/DESIGN_PRINCIPLES.md` declared closed for modification — any change requires a Tier 1 EDR
-- [ ] **FITNESS-01**: Throughput fitness functions added to `FITNESS_FUNCTIONS.md` (concepts-in-flight, oldest-open-proposal age), per `docs/notes/pipeline-throughput-gaps.md`
+- [x] **PROC-01**: Concept acceptance gate defined — documents the DRAFT → Accepted transition (owner, criteria, EDR linkage)
+- [x] **PROC-02**: Concept Design Review process fully documented and collapsed from its former 12-step procedure to a 5-step pipeline for solo authorship (`docs/how/concept-design-review.md`)
+- [x] **PROC-03**: Milestone/TODO tracking model defined for solo authorship — every TODO.md item converted into a tracked GSD requirement with explicit status
+- [x] **PROC-04**: Template-compliance process defined for the 8-section concept template (`_concept.md`) — audit checklist or equivalent
+- [x] **PROC-05**: `docs/how/process/DECISION_PROCESS.md` (one-page decision authority) finalized from DRAFT to Accepted, referenced from `AGENTS.md`/`README.md`, alongside a finalized `docs/how/process/DECISION_PIPELINE.md` (10-question feature pipeline)
+- [x] **VISION-01**: Manifesto, Vision, and Zen reviewed against Working Backwards rationale, and consolidated into a compact canonical `VISION.md` (Vision · Mission · Non-goals · Audience · Success Criteria)
+- [x] **VISION-02**: Criteria-based algorithm selection idea validated (`docs/notes/criteria-based-algorithm-selection.md`)
+- [x] **VISION-03**: LLM-native language research completed — produces a written shortlist of concrete concepts/ideas to strengthen Orthon's LLM-native design, feeding Phase 4's concept design and prioritization work
+- [x] **PRINC-01**: `docs/how/DESIGN_PRINCIPLES.md` declared closed for modification — any change requires a Tier 1 EDR
+- [x] **FITNESS-01**: Throughput fitness functions added to `FITNESS_FUNCTIONS.md` (concepts-in-flight, oldest-open-proposal age), per `docs/notes/pipeline-throughput-gaps.md`
 
 ### Semantic Model — Phase 2
 

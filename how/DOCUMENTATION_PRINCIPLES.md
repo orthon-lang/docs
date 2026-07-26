@@ -56,6 +56,24 @@ return value ->     # shorthand: return value as sequence tail
 All three forms compile to the same semantics and must be documented
 together to give the reader the complete picture.
 
+### Template Compliance Checklist
+
+Every concept document submitted to the Concept Design Review must be
+audited against the 8-section `_concept.md` template (`how/templates/_concept.md`).
+The checklist verifies:
+
+1. **Issue (Why)** — Is the problem stated in user terms?
+2. **Principles** — Are the constraints that cannot be violated listed?
+3. **Policy Footprint** — Which Policy Types does the concept involve?
+4. **Model (What)** — Is the language model and semantics formally defined?
+5. **Default Strategy** — Is the default implementation behaviour specified?
+6. **Alternative Strategies** — Are permitted implementation variants documented?
+7. **Open Questions** — Are unresolved issues recorded?
+8. **Decision History** — Are rejected alternatives and rationale documented?
+
+A concept document missing one or more sections (or with sections out of
+order) must be revised before it can pass the Acceptance Gate.
+
 ### Policy Footprint Requirement
 
 Every concept must declare which Policy Types it involves and how. This

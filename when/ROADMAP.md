@@ -96,7 +96,7 @@ infrastructure so subsequent phases have a defined acceptance procedure.
 
 4. **Process infrastructure:**
    - `DECISION_PROCESS.md` — one-page decision authority (from GAP-03)
-   - Collapse 11-step Concept Design Review → 5-step pipeline for solo author
+   - Collapse 12-step Concept Design Review → 5-step pipeline for solo author
    - Add throughput fitness functions to `FITNESS_FUNCTIONS.md`
 
 **Vision & Philosophy deliverables:**

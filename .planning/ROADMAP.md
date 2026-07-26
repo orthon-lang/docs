@@ -86,10 +86,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ```
 Plans:
-- [ ] 01.1-01-PLAN.md — Wave 1: Vision consolidation (review evidence, algorithm selection, LLM-native shortlist)
-- [ ] 01.1-02-PLAN.md — Wave 1: Principles lock and throughput fitness functions
-- [ ] 01.1-03-PLAN.md — Wave 2: Concept review collapse, acceptance gate, process doc finalization
-- [ ] 01.1-04-PLAN.md — Wave 3: TODO.md edit (depends on D-01/D-03/D-10 landing)
+- [x] 01.1-01-PLAN.md — Wave 1: Vision consolidation (review evidence, algorithm selection, LLM-native shortlist)
+- [x] 01.1-02-PLAN.md — Wave 1: Principles lock and throughput fitness functions
+- [x] 01.1-03-PLAN.md — Wave 2: Concept review collapse, acceptance gate, process doc finalization
+- [x] 01.1-04-PLAN.md — Wave 3: TODO.md edit (depends on D-01/D-03/D-10 landing)
 ```
 
 ---

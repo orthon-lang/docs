@@ -1,5 +1,7 @@
 # The Zen of Orthon
 
+> **Reviewed against Working Backwards:** 2026-07-26 — verdict: consistent, no drift found. Cross-checked against `docs/why/WORKING_BACKWARDS.md` Derived Requirements table (R1-R6).
+
 > Every special case creates complexity.
 
 > Orthogonality removes exceptions.

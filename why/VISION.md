@@ -2,6 +2,8 @@
 
 > **Canonical block.** This document is the single source of truth for
 > Orthon's vision. Expanded discussions follow below.
+>
+> **Reviewed against Working Backwards:** 2026-07-26 — verdict: consistent, no drift found. Cross-checked against `docs/why/WORKING_BACKWARDS.md` Derived Requirements table (R1-R6).
 
 ```
 Vision

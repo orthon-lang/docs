@@ -199,6 +199,45 @@ transformations are flagged.
 
 ---
 
+## Concepts In Flight
+
+**Source:** [Pipeline Throughput Gaps](../../notes/pipeline-throughput-gaps.md) — Gap 4
+
+Measures how many concepts are currently in the active design pipeline —
+any concept in `how/concepts/research/` that has entered the Concept Design
+Review but has not yet been accepted into `what/CORE_CONCEPTS.md`. A high
+count indicates pipeline congestion; a consistently zero count between
+phases indicates the pipeline may be stalled.
+
+Acknowledged limitation: the current pipeline has no explicit "review-started"
+marker — this function measures from the lifecycle perspective of
+`how/concepts/research/` (total backlog) → `what/CORE_CONCEPTS.md` (accepted).
+Once Phase 4 begins producing review-started signals, this function should
+be refined to measure in-review concepts specifically.
+
+**Measured by:** Count of research documents in `how/concepts/research/{essential,important,deferrable,reject}/`
+minus count of accepted entries in `what/CORE_CONCEPTS.md`. Baseline at Phase 1.1:
+132 research files, 0 accepted concepts — this is expected, not a defect, and
+will change once Phase 4 begins accepting concepts.
+
+---
+
+## Oldest Open Proposal
+
+**Source:** [TODO.md](../../../TODO.md) — GAP-04
+
+Tracks the age (in days) of the oldest concept research document that has
+not yet entered the Concept Design Review. A growing age indicates the
+pipeline is not making progress on backlog items.
+
+**Measured by:** File modification date of the oldest file in
+`how/concepts/research/{essential,important,deferrable,reject}/` that
+has not been accepted into `what/CORE_CONCEPTS.md`. Baseline at Phase 1.1:
+N/A — no concept has been accepted yet, so the "oldest open" is effectively
+the oldest research document's age. Expected to become actionable in Phase 4.
+
+---
+
 ## Traceability
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Transparency principle; [\_language-design.md](../gates/_language-design.md) — Traceability criterion

@@ -13,7 +13,7 @@ This directory contains the design process for Orthon language concepts.
 
 ## Pipeline
 
-See [`CONCEPT_PIPELINE.md`](../CONCEPT_PIPELINE.md) for the full 11-stage lifecycle — research inbox, decision pipeline, primitive decomposition, layer classification, concept design review, validation gates, language design gate, EDR, accepted draft, cross-cutting review, and registry entry.
+See [`CONCEPT_PIPELINE.md`](../CONCEPT_PIPELINE.md) for the full multi-stage lifecycle — research inbox, decision pipeline, primitive decomposition, layer classification, concept design review, validation gates, language design gate, EDR, accepted draft, cross-cutting review, and registry entry.
 
 ## Adding Research
 

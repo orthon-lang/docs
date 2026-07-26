@@ -1,6 +1,6 @@
 # Concept Design Review
 
-> The 12-step procedure for designing and validating each language
+> The 5-step procedure for designing and validating each language
 > concept during Milestone 2 of the design process.
 >
 > **Applies to:** [ROADMAP](../when/ROADMAP.md) § Milestone 2
@@ -15,7 +15,7 @@
 
 The Concept Design Review is the core design workflow of the Orthon
 project. Each concept identified in the Language Inventory (Milestone 1)
-undergoes a uniform 12-step procedure that ensures the design is:
+undergoes a uniform 5-step procedure that ensures the design is:
 
 - **Problem-driven** — starts from a real programmer need, not a
   technically interesting idea.
@@ -35,11 +35,11 @@ govern language design decisions. They serve distinct roles:
 
 | Artifact | Role | Answers | Applied |
 |----------|------|---------|---------|
-| **12-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
-| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 12-step output |
+| **5-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
+| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 5-step output |
 | **Language Design Gate** (`_language-design.md`) | **Checklist** — what to verify concretely | *Did we check everything?* | Operationalises the gates into a review form |
 
-**The flow:** The 12-step procedure produces a concept design. That design
+**The flow:** The 5-step procedure produces a concept design. That design
 is then evaluated through the seven Decision Validation gates. The
 `_language-design.md` checklist records the outcome of each check. Only
 concepts that pass all gates and satisfy the checklist are accepted.
@@ -57,155 +57,72 @@ concepts that pass all gates and satisfy the checklist are accepted.
 
 ---
 
-## 12-Step Procedure
+## 5-Step Procedure
 
-Each concept goes through the following 12 steps in order. Every step
-maps to one or more validation gates or checklist criteria, as shown in
-the third column.
+Each concept goes through the following 5 steps in order. Procedure steps
+capture the creative design work; the deliverable (EDR + concept document)
+is handled separately in the Output section below.
 
-| Step | Section | Description | Maps To |
-|------|---------|-------------|---------|
-| 1 | **Problem** | What problem does this concept solve? Without which problem would its existence be meaningless? | `USER_VALUE_GATE` · [`_language-design.md`](gates/_language-design.md) § Problem-first |
-| 2 | **Use Cases** | Where is it used? What real problems does it solve? | `USER_VALUE_GATE` |
-| 3 | **Necessity** | Can we live without it? If removed, what becomes impossible? What becomes inconvenient? | `CONCEPTUAL_SIMPLICITY_GATE` |
-| 4 | **Sufficiency** | Is the concept too large? Can it be split? Does it contain unnecessary capabilities? | `CONCEPTUAL_SIMPLICITY_GATE` · [`_language-design.md`](gates/_language-design.md) § Minimality |
-| 5 | **Alternatives** | What alternative implementations exist? (e.g., generator → yield → iterator → stream → pipeline → callback) | `LONG_TERM_MAINTAINABILITY_GATE` |
-| 6 | **Principles Check** | Verified against all Design Principles (Simplicity, Orthogonality, Explicitness, etc.) | `LOGICAL_CONSISTENCY_GATE` · [`_language-design.md`](gates/_language-design.md) § Principle compliance |
-| 7 | **Interactions** | How does this concept interact with every other concept? Any non-orthogonal behaviours? | `ARCHITECTURAL_INTEGRITY_GATE` · [`_language-design.md`](gates/_language-design.md) § Interaction analysis |
-| 8 | **Rationale** | Why was this specific option chosen? Why were others rejected? | [`_language-design.md`](gates/_language-design.md) § Traceability |
-| 9 | **Examples** | Minimal, typical, edge case, and incorrect usage examples | Comprehension check (no gate) |
-| 10 | **Open Questions** | What remains unresolved? | `LONG_TERM_MAINTAINABILITY_GATE` |
-| 11 | **Complexity Assessment** | Assess implementation burden, novelty, perception cost, error cost, and coupling risk | `CONCEPTUAL_SIMPLICITY_GATE` · `LONG_TERM_MAINTAINABILITY_GATE` |
-| 12 | **EDR** | If a decision is made, it is formalised as an Engineering Decision Record (Architecture category) | [`_language-design.md`](gates/_language-design.md) § Decision journal |
+| # | Step | Purpose | Answer |
+|---|------|---------|--------|
+| 1 | Idea/Problem | What problem does this concept solve? | Problem description |
+| 2 | Minimal Solution | What is the simplest valid solution? | Solution sketch |
+| 3 | Principle Check | Which Design Principles does it satisfy? | Principle mapping |
+| 4 | Examples | Show all canonical forms | Examples list |
+| 5 | EDR | Record the decision with rationale | EDR file |
 
 ### Step Details
 
-#### 1. Problem
+#### 1. Idea / Problem
 
-State the problem in **user terms**, not implementation terms. A
-realistic code example should demonstrate the pain point. The problem
-must be justified by the project's Vision.
+What problem does this concept solve for the programmer? State the gap
+or friction. If it solves no independently-statable problem, reject at
+this step.
 
 **Output:** A clear problem statement that a competent programmer would
 recognise as genuine.
 
-#### 2. Use Cases
+#### 2. Minimal Solution
 
-Describe where and when this concept is used. Cover the common cases,
-not just the edge cases. Use cases help validate that the problem is
-real and the concept addresses it.
+Describe the simplest valid solution. What is the minimum semantic
+addition that solves the problem? If the solution requires multiple
+simultaneous additions, it is not orthogonal — split the concept.
 
-**Output:** A list of concrete scenarios with representative inputs and
-expected outcomes.
+**Output:** A solution sketch describing the minimal semantic addition.
 
-#### 3. Necessity
+#### 3. Principle Check
 
-Test whether the concept earns its place. Ask: without this concept, is
-the problem genuinely unsolvable or just inconvenient? If the answer is
-"inconvenient", assess whether the inconvenience justifies the cognitive
-cost of a new concept.
-
-**Output:** A necessity verdict (essential / valuable / marginal) with
-reasoning.
-
-#### 4. Sufficiency
-
-Check that the concept is not too large. Can it be split into smaller
-orthogonal concepts? Does it contain capabilities that belong elsewhere?
-A concept should solve exactly one problem.
-
-**Output:** A sufficiency verdict (atomic / could be split / overgrown)
-with proposed splitting if applicable.
-
-#### 5. Alternatives
-
-Survey the design space. For each alternative, document what it does
-well, what it does poorly, and why it was rejected. This step prevents
-the team from rediscovering rejected options later.
-
-**Output:** A table of alternatives with pros, cons, and rejection
-rationale.
-
-#### 6. Principles Check
-
-Verify the concept against all Design Principles. If a violation is
-found, it must be intentional and documented — never accidental.
+Map the concept to `DESIGN_PRINCIPLES.md`. Which principles does it
+satisfy? Does it violate any principle? If it violates any
+closed-for-modification principle, the concept requires a **Tier 1 EDR**
+and is ineligible for solo-author acceptance.
 
 **Output:** A table of principles with pass/fail per principle, and
 notes for any flagged violations.
 
-#### 7. Interactions
+#### 4. Examples
 
-For each existing accepted concept, describe how the new concept
-interacts with it. Identify any non-orthogonal behaviours, special
-cases, or context-dependent semantics. This step directly feeds the
-interaction matrix consolidated in Milestone 3.
+Write all canonical forms — every equivalent way to express this
+feature. Follow the *Show All Canonical Forms* principle from
+`DESIGN_PRINCIPLES.md`. Examples precede semantic explanation.
 
-**Output:** Per-existing-concept interaction descriptions, feeding into
-the [interaction matrix](../notes/interaction-matrix-format.md) in
-Milestone 3.
+**Output:** Code examples demonstrating minimal, typical, edge case,
+and incorrect usage categories.
 
-#### 8. Rationale
+#### 5. EDR
 
-Document why the chosen option was selected over the alternatives.
-This is the decision record — it captures the reasoning so future
-designers understand why things are the way they are.
+Create an Engineering Decision Record (Architecture category) accepting
+the concept. Use the [`_edr-architecture.md`](templates/_edr-architecture.md)
+template. The EDR must cite the Problem, Solution, and Principle Check
+from steps 1-3.
 
-**Output:** A narrative explanation of the decision, referencing the
-alternatives considered (step 5) and principles check (step 6).
-
-#### 9. Examples
-
-Provide four categories of examples:
-
-- **Minimal** — the simplest possible correct usage.
-- **Typical** — realistic usage in context.
-- **Edge case** — unusual but valid inputs or states.
-- **Incorrect** — common mistakes that should be caught.
-
-**Output:** Code examples demonstrating each category.
-
-#### 10. Open Questions
-
-Record any unresolved questions about the concept. These may be
-deferred to Milestone 3 (Cross-cutting Review) or noted as future
-work. If there are no open questions, state that explicitly.
-
-**Output:** A list of open questions with owner (if assigned) and
-target milestone for resolution.
-
-#### 11. Complexity Assessment
-
-Evaluate the concept across five dimensions to surface implementation
-and adoption risk before formalising the decision.
-
-| Dimension | Rating (Low / Medium / High) | Guidance |
-|-----------|------------------------------|----------|
-| **Novelty** | | Are there direct analogs in Python, Rust, Java, or other mainstream languages? Low = well-established pattern; High = unprecedented |
-| **Perception complexity** | | Strive for Python-level density. A typical use should fit 1–2 lines (e.g., `[x*2 for x in lst]`, `with open(f) as f: ...`). Count lines/characters for the minimal example. |
-| **Implementation complexity** | | Does this require new AST nodes, IR passes, type system extensions? Low = syntactic sugar over existing primitives; High = core architecture change |
-| **Error cost** | | When used incorrectly, is the mistake caught at compile time (Low), causes a runtime crash with clear message (Medium), or produces silent data corruption (High)? |
-| **Feature coupling risk** | | Does this concept demand supporting concepts? Low = stands alone (e.g., `const`); High = opens a dependency chain (generics → traits → HKT) |
-
-**Output:** A 5-row assessment table with ratings and brief justification.
-
-**Reference:** [`_language-design.md`](gates/_language-design.md) § Minimality,
-`CONCEPTUAL_SIMPLICITY_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` in
-[`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md).
-
-#### 12. EDR (Architecture)
-
-Formalise the decision as an Engineering Decision Record using the
-[EDR Architecture template](templates/_edr-architecture.md). The EDR captures
-the context, decision, consequences, and links to the concept document.
-
-**Output:** One `decision_records/architecture/EDR-NNN-concept-name.md` file per accepted concept.
+**Output:** One `decision_records/architecture/EDR-NNN-concept-name.md` file.
 
 ---
 
 ## Validation
 
-After the 12-step procedure is complete, the concept design must be
+After the 5-step procedure is complete, the concept design must be
 validated through all 7 Decision Validation gates defined in
 [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — see that
 document for the gate catalogue with criteria tables and gate selection
@@ -229,6 +146,30 @@ The deliverables of a Concept Design Review are:
    template for the required structure).
 2. **EDR** in `docs/how/decision_records/architecture/` — records the decision, rationale, and
    alternatives considered (Architecture category).
+3. **CORE_CONCEPTS.md registration** — the concept is entered into the
+   accepted-concept registry at `what/CORE_CONCEPTS.md`.
+
+---
+
+---
+
+## Acceptance Gate
+
+The transition from **DRAFT** (concept research in `how/concepts/research/`) to
+**Accepted** (registered in `what/CORE_CONCEPTS.md`) requires:
+
+| Criteria | Requirement |
+|----------|-------------|
+| **Owner** | Solo author (per `TODO.md` convention) |
+| **Procedure** | All 5 Concept Design Review steps completed |
+| **EDR** | Architecture-category EDR filed in `decision_records/architecture/` |
+| **Gate validation** | Passes all 7 Decision Validation gates (`DECISION_VALIDATION.md`) |
+| **LLM Generability Gate** | Passes the 5-criteria LLM Generability Gate check — see [`llm-native-concept-shortlist.md`](../notes/llm-native-concept-shortlist.md) § LLM Generability Gate Requirement |
+| **Template compliance** | Concept document follows the 8-section `_concept.md` template — audited per [`DOCUMENTATION_PRINCIPLES.md`](DOCUMENTATION_PRINCIPLES.md) § Template Compliance Checklist |
+
+Once all criteria are met, the concept is entered into `what/CORE_CONCEPTS.md`,
+the EDR is indexed in `decision_records/INDEX.md`, and the research document
+graduates from `how/concepts/research/` to `what/concepts/`.
 
 ---
 

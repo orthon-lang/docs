@@ -1,10 +1,11 @@
 # Decision Pipeline
 
-> **⚠️ DRAFT — Placeholder for Phase 4.**
 > This document defines the 10-question pipeline that every proposed
 > language feature must pass before detailed design begins.
 >
-> **Status:** Placeholder — to be filled during Phase 4 of M1.
+> **Status:** Finalized during Phase 1.1 (Foundation Completion). The
+> Pipeline Application log below stays empty until Phase 4 populates
+> it per-feature — this is expected, not a gap.
 > **See also:** [`ROADMAP.md`](../../when/ROADMAP.md) § Phase 4,
 > [`DECISION_PROCESS.md`](DECISION_PROCESS.md),
 > [`Concept Design Review`](../../how/concept-design-review.md)

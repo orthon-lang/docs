@@ -1,5 +1,7 @@
 # Orthon Manifesto
 
+> **Reviewed against Working Backwards:** 2026-07-26 — verdict: consistent, no drift found. Cross-checked against `docs/why/WORKING_BACKWARDS.md` Derived Requirements table (R1-R6).
+
 ## Introduction
 
 Orthon is built on the belief that a programming language should be small in its core, consistent in its rules, and extensible by design. The language favors orthogonality over historical compatibility and composition over special cases.

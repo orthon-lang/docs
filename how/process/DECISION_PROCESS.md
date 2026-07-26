@@ -2,7 +2,7 @@
 
 > One-page decision authority for the Orthon language design project.
 >
-> **Status:** DRAFT — created during Phase 1 (Foundation).
+> **Status:** Accepted — finalized during Phase 1.1 (Foundation Completion).
 > **See also:** [`Concept Design Review`](../concept-design-review.md),
 > [`DECISION_VALIDATION.md`](../gates/DECISION_VALIDATION.md),
 > [`_language-design.md`](../gates/_language-design.md),

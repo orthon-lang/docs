@@ -54,6 +54,7 @@ This repository contains the language design documentation — the *why*,
 | [Design Philosophy](how/PHILOSOPHY.md) | How design decisions flow from vision to implementation |
 | [Architecture](how/architecture/ARCHITECTURE.md) | The layered design — Language Core, Execution Environment, LLM Toolchain |
 | [Core Concepts](what/CORE_CONCEPTS.md) | Registry of accepted Orthon concepts — currently empty (see [research](how/concepts/research/) for in-progress drafts) |
+| [Decision Process](how/process/DECISION_PROCESS.md) | One-page decision authority — who decides what, using which criteria, and how it's recorded |
 | [Decision Records](how/decision_records/INDEX.md) | Engineering Decision Records — every consequential design choice documented with rationale |
 
 ## For AI Agents

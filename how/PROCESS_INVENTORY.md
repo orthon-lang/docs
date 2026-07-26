@@ -27,7 +27,7 @@ specific failure mode each one prevents.
 | Fitness Functions | Guard | EDR-005 | No measurable architectural health checks | Architectural decay accumulates undetected |
 | Implementation Policies | Policy | EDR-006 | What and how entangled | Cannot change implementation strategy without changing semantics |
 | Implementation Strategies | Strategy | EDR-006 | Ad-hoc strategy selection | No coherent implementation profiles for different use cases |
-| Concept Design Review (11-step) | Procedure | EDR-007 | Unstructured, inconsistent concept design | Variable quality across language concepts |
+| Concept Design Review (5-step) | Procedure | EDR-007 | Unstructured, inconsistent concept design | Variable quality across language concepts |
 | Architecture Decision Records (ADR) | Record | EDR-001 | Decisions without documented rationale | Design amnesia — "why did we choose this?" |
 | Tools Decision Records (TDR) | Record | EDR-001 | Process tools without documented rationale | Process becomes unexamined ritual |
 | Layered Architecture | Architecture | EDR-010 | Cross-layer coupling | Changes in one layer ripple unpredictably to others |

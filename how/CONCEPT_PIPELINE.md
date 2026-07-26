@@ -43,14 +43,15 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
            ▼
 ┌─────────────────────────────┐
 │ Concept Design Review       │  ◄── DETAILED DESIGN
-│ (11 steps)                  │      1. Problem         7. Interactions
+│ (12 steps)                  │      1. Problem         7. Interactions
 │ how/concept-design-review.md│      2. Use Cases       8. Rationale
 └──────────┬──────────────────┘      3. Necessity       9. Examples
            │                         4. Sufficiency    10. Open Questions
-           │                         5. Alternatives   11. EDR
+           │                         5. Alternatives   11. Complexity
+           │                         6. Principles     12. EDR
            │                         │
            │                         ├── Step 7 → feeds what/CROSS_CUTTING.md
-           │                         └── Step 11 → triggers EDR creation
+           │                         └── Step 12 → triggers EDR creation
            ▼
 ┌─────────────────────────────┐
 │ Decision Validation Gates   │  ◄── VALIDATION
@@ -182,11 +183,11 @@ composition formula. See EDR-012 for the full classification rule.
 
 ---
 
-### 5. Concept Design Review (11 Steps)
+### 5. Concept Design Review (5 Steps)
 
 **Document:** [`how/concept-design-review.md`](concept-design-review.md)
 
-The core design workflow. Each concept undergoes 11 steps in order —
+The core design workflow. Each concept undergoes 5 steps in order —
 see [`concept-design-review.md`](concept-design-review.md) for the full
 procedure with step descriptions and gate mappings.
 
@@ -200,7 +201,7 @@ procedure with step descriptions and gate mappings.
 
 **Document:** [`how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md)
 
-After the 11-step design, the concept is evaluated through 7 independent
+After the 5-step design, the concept is evaluated through 7 independent
 validation gates. Each gate produces a binary verdict (pass / fail) or
 a conditional flag. Any **fail** or unresolved **flag** means the
 concept must be revised.

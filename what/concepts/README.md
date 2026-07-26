@@ -10,7 +10,7 @@ analysis. Research (from any language) lives in `how/concepts/research/`.
 ## Pipeline
 
 See [`how/CONCEPT_PIPELINE.md`](../../how/CONCEPT_PIPELINE.md) for the
-full 11-stage lifecycle from research inbox to registry entry.
+full 5-stage lifecycle from research inbox to registry entry.
 
 ## Current Status
 
