@@ -245,7 +245,64 @@ dimensions composing exactly as orthogonal dimensions should. See
 
 > How long do values live? Stack, heap, arena, GC.
 
-<!-- To be filled during Phase 2 -->
+**Model.** Every value's lifetime is **scope-based**: a value lives from
+its point of creation (or binding) until the end of its enclosing scope
+(a `{}` block or a function body), at which point it is deterministically
+destroyed. This directly instantiates Semantic Invariant 3.
+
+```
+fun process():
+    data = load()      # data's lifetime begins here
+    transform(data)
+    # scope exits here — data is deterministically destroyed
+```
+
+**Deterministic destruction.** Destruction happens at a well-defined
+point in program order — scope exit or, for a moved-from binding, the
+point of the move — never at an unpredictable point chosen by a runtime
+collector. This is what makes scope-based lifetime compatible with
+Orthon's **No GC by default** commitment (see [Ownership](#ownership)):
+there is no need for a collector to *discover* when a value is no longer
+needed, because the language already knows, statically, exactly when
+that is.
+
+**Reference lifetime ≤ referent lifetime.** Any reference (borrow) into
+a value must not outlive the value it points to. This is the lifetime
+dimension's contribution to memory safety and composes directly with
+Ownership's borrowing rules (see [Ownership](#ownership) § Borrowing):
+Ownership defines *what kind* of access a borrow grants (shared vs.
+exclusive); Lifetime defines *how long* that access, or the borrowed-from
+value itself, may remain valid.
+
+**Value semantics: copies are independent.** Per [Identity](#identity),
+assignment copies structurally by default. A consequence for Lifetime is
+that a copy is a wholly independent value with its own lifetime, bound
+to its own scope — destroying the original does not affect the copy, and
+vice versa. Lifetime dependencies (one value's destruction implying
+another's) only arise through explicit reference/borrow relationships,
+never through ordinary value copies.
+
+**No GC by default.** Garbage collection is not part of Orthon's core
+semantic model. Scope-based lifetime plus ownership/move semantics is
+sufficient to guarantee that every value is destroyed exactly once, at a
+statically known point, without runtime tracing. Opt-in GC or reference-
+counted strategies are an **Implementation Strategy** concern (Phase 7),
+not a Core Language semantic — a Strategy may choose to *implement*
+deterministic destruction using GC/RC bookkeeping internally, but the
+*observable* semantics (scope-bound, deterministic destruction order)
+must be indistinguishable from the default. This follows
+`DESIGN_PRINCIPLES.md` § Semantics Before Optimization.
+
+**Regions/arenas as implementation freedom, not semantics.** Whether the
+compiler actually allocates scope-bound values on a stack, in a region,
+in an arena, or promotes them to registers is entirely an Allocation
+Policy decision within an Implementation Strategy (Phase 7). The
+semantic guarantee — a value's lifetime is bound to its scope and ends
+deterministically — holds regardless of which allocation mechanism a
+given Strategy chooses.
+
+**Source:** `how/concepts/research/essential/SCOPED_RESOURCE_LIFECYCLE.md`,
+`OWNERSHIP.md`
 
 ---
 
