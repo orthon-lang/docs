@@ -557,7 +557,85 @@ given Strategy chooses.
 
 ## Cross-Dimension Consistency
 
-<!-- To be filled during Phase 2 — check conflicts between dimensions -->
+Six dimensions produce fifteen pairwise interactions. Per
+`DESIGN_PRINCIPLES.md` § Orthogonality, the goal for each pair is
+**orthogonal composition** — each dimension answers a different
+question, and nothing about one dimension's answer constrains or is
+inferred from another's. Where a pair is not fully orthogonal (an
+edge case exists), the resolution is documented so it is settled once,
+not rediscovered per-feature in later phases.
+
+| # | Pair | Relationship | Resolution |
+|---|------|--------------|------------|
+| 1 | Identity ↔ Ownership | Orthogonal | Binding identity (does a name alias a storage location) is distinct from value identity (does a shared/reference type persist across mutation). A value's identity model (plain vs. shared type) never constrains its ownership model — see detail below. |
+| 2 | Identity ↔ Mutation | Orthogonal | Structural equality (`==`) is defined in terms of a value's *current* structure — a `proc` mutation changes that structure and therefore can change `==` results, but this is a consequence of Mutation acting on data, not an interaction requiring special-casing. Identity's "is this the same entity" question (for shared types) survives mutation by construction (identity ≠ structure), so mutating a shared-identity value never breaks its identity. |
+| 3 | Identity ↔ Evaluation | Orthogonal | Whether an expression's result is a fresh (identity-exempt) value or a named binding does not affect *when* it is evaluated (eager by default) or *what value* the expression produces. |
+| 4 | Identity ↔ Visibility | Orthogonal | A type's visibility level says nothing about whether it has identity (plain value vs. shared/reference type), and vice versa — a `priv` shared-state type and a `pub` plain-value type are both fully legal, independent choices. |
+| 5 | Identity ↔ Lifetime | Orthogonal | A value copy (per value semantics) has both independent identity-relevant structure and an independent lifetime — the two properties travel together for plain values by construction, and for shared/reference types, lifetime tracks the referent while identity tracks the reference's persistence across the program; neither constrains the other's rules. |
+| 6 | Ownership ↔ Mutation | Bridges via shared invariant | Both dimensions instantiate Semantic Invariant 2 (mutation requires exclusive access) from different angles: Ownership defines *who may hold access* (single owner, shared XOR mutable borrows); Mutation defines *what that access permits* (`fun`/`proc`/`new`). A `proc` call is only legal exactly when Ownership's exclusivity rule is satisfied for its receiver — this is the sharpest cross-dimension coupling in the model, and it is coupling by design, not accident: it is the same invariant, not two independent rules that happen to agree. |
+| 7 | Ownership ↔ Evaluation | Orthogonal | Eager evaluation determines *when* an expression's value is computed; that timing is independent of whether the resulting value is then owned, moved, or borrowed. A moved value and a copied value are evaluated identically before the transfer/copy decision applies. |
+| 8 | Ownership ↔ Visibility | Edge case documented | A `priv` type may appear in a `pub` function's signature (e.g., a public constructor returning an internal handle type used to prevent external construction). Visibility governs *who may name/reference* a declaration; Ownership governs *what happens to the value's accountability* once referenced. The two never need to agree, because they answer unrelated questions — see the [Visibility](#visibility) section for the full example. |
+| 9 | Ownership ↔ Lifetime | Bridges via scope | A move ends the source binding's meaningful lifetime early (before its enclosing scope exits) without triggering destruction — destruction happens once, at the new owner's scope exit. Ownership decides *whether* a given binding is still the value's owner at a point in the program; Lifetime decides *when* the value still owned is destroyed. These compose without conflict because Lifetime only ever asks its question of the *current* owner. |
+| 10 | Mutation ↔ Evaluation | Interacts at evaluation order | Because Orthon is expression-oriented, a `proc` call can appear in expression position (e.g., inside an `if` condition or as a sub-expression of a larger expression). The defined left-to-right evaluation order (see [Evaluation](#evaluation)) is what makes the *order* of such mutating sub-expressions' side effects predictable — without a defined order, mutating expressions nested in larger expressions would have implementation-dependent side-effect visibility, violating Deterministic Behavior. |
+| 11 | Mutation ↔ Visibility | Orthogonal | A `priv` method may be `proc` (mutating) or `fun` (pure) independent of its visibility; visibility restricts *who may call* an operation, mutation defines *what the operation does* once called. No composition rule is needed beyond "both apply independently." |
+| 12 | Mutation ↔ Lifetime | Orthogonal | Mutating a value in place does not change its lifetime — the same binding continues to denote the same scope-bound storage before and after a `proc` call. A `new` operation, by contrast, produces a value with its own independent lifetime, but this follows directly from `new` producing a *distinct* value (Identity), not from any Lifetime-specific rule about transformation. |
+| 13 | Evaluation ↔ Visibility | Orthogonal | Expression evaluation order and exhaustiveness checking apply uniformly regardless of the visibility of the functions or values involved — a `priv` function's body is exhaustiveness-checked exactly like a `pub` one. |
+| 14 | Evaluation ↔ Lifetime | Orthogonal | A block expression's value (its last sub-expression) may reference bindings scoped to that block only if the value itself does not depend on those bindings outliving the block — this is Lifetime's ordinary scope-exit rule applied to the last expression like any other, not a special evaluation-order carve-out. |
+| 15 | Lifetime ↔ All | Cross-cutting by construction | Every dimension operates on values, and every value has a scope-bound lifetime (Semantic Invariant 3). Lifetime is therefore not merely "one more pairwise interaction" — it is the substrate every other dimension's examples are drawn against (an owned value's scope, a borrowed reference's scope, a mutated binding's scope, an evaluated expression's scope, a visible declaration's scope). No dimension's rules are permitted to imply a lifetime that contradicts scope-based destruction. |
+
+**Detail: Identity ↔ Ownership (pair 1).** This is the pair most likely
+to be conflated because both dimensions concern "sameness" in some
+sense. They must be kept separate: Identity asks *"are these two values
+the same entity, structurally or referentially?"* Ownership asks *"who
+is currently accountable for this value's lifecycle?"* A plain value
+(no identity beyond structure) can still be moved, borrowed, and owned
+exactly like a shared/reference type — Ownership's single-owner
+invariant applies to *every* value, not only to those with reference
+identity. Conversely, a shared/reference type's persistent identity
+across mutation does not exempt it from having exactly one owner of the
+reference itself at any point. The two dimensions are validated as
+orthogonal because no rule in either section depends on a term defined
+by the other.
+
+**Detail: Ownership ↔ Mutation (pair 6).** Restated for emphasis because
+it is the tightest coupling in the model: `proc` (Mutation) is legal
+exactly when the compiler can prove exclusive access to `self`
+(Ownership). This is not two rules that must be kept in sync by
+convention — it is one invariant (Semantic Invariant 2) with two
+dimension-level names for its two halves. Any future Implementation
+Strategy that enforces Ownership (borrow checker, escape analysis, or
+otherwise) automatically enforces this half of Mutation's contract as a
+side effect; a Strategy cannot legally implement one without the other.
+
+**Detail: Mutation ↔ Evaluation (pair 10).** Expression-orientation
+means a `proc` call is not confined to a statement position — it can sit
+inside any sub-expression. This makes the defined left-to-right
+evaluation order (see [Evaluation](#evaluation)) load-bearing for
+Mutation in a way it would not be in a purely eager, purely
+statement-oriented language: without a fixed sub-expression order, two
+semantically identical-looking expressions containing `proc` calls could
+observe different intermediate states under different Implementation
+Strategies, which `DESIGN_PRINCIPLES.md` § Deterministic Behavior
+forbids.
+
+**Detail: Visibility ↔ Ownership (pair 8).** The `priv`-type-in-`pub`-
+signature edge case is not a defect requiring reconciliation between the
+two dimensions — it is the expected, desired outcome of true
+orthogonality. Visibility's scope is "can this name be written in this
+location"; Ownership's scope is "who is accountable for this value once
+it exists." A function's public callability and its parameter/return
+types' visibility are simply different declarations, each governed by
+its own dimension's rules.
+
+**Detail: Lifetime ↔ All (pair 15).** Because every other dimension's
+model section above defines its rules in terms of values that exist
+within some scope, Lifetime cannot be evaluated as "compatible" or
+"incompatible" with any single other dimension in isolation — it is the
+common ground all five other dimensions are built on. The Design
+Principles verification below treats this explicitly when checking
+Orthogonality: Lifetime's universality is itself evidence that the
+model's foundation (Semantic Invariant 3) is sound, not evidence of a
+layering violation.
 
 ---
 
