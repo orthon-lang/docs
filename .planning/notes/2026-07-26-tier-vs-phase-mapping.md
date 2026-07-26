@@ -57,6 +57,13 @@ TYPE_INFERENCE, TYPE_LEVEL_NULL_SAFETY
 **→ Policy pocket (neither Phase 2/3 nor Phase 4 — see linked todo)**
 ALLOCATION, REGION_BASED_MEMORY_MANAGEMENT, EXECUTION_PROGRAM
 
+> **Caveat (2026-07-26, `/gsd-explore`):** `REGION_BASED_MEMORY_MANAGEMENT`
+> is not a clean Policy-pocket member — it embeds semantic ownership/mutation
+> claims (linear ownership, no reference types) alongside genuine allocation
+> mechanics. It needs to be *split* between Phase 2 and the Policy pocket,
+> not moved wholesale. See [[2026-07-26-no-separate-memory-phase]] and the
+> updated [[move-policy-level-essential-concepts-out-of-pipeline]] todo.
+
 ### Why this matters for the plan
 
 `.planning/REQUIREMENTS.md`'s `SEM-01..03` (Phase 2) and `PRIM-01..03`

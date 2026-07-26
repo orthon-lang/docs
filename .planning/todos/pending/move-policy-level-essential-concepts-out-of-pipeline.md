@@ -13,8 +13,12 @@ Policy definition — "implementation-level decision"), not Core Language
 semantics:
 
 - `ALLOCATION.md` — stack vs. heap vs. arena is an Allocation Policy
-- `REGION_BASED_MEMORY_MANAGEMENT.md` — a specific Allocation/Lifetime
-  Policy choice, not a semantic dimension
+- `REGION_BASED_MEMORY_MANAGEMENT.md` — **not purely Policy**: it embeds
+  semantic claims (linear/affine ownership — "each value has exactly one
+  owning name", no reference types, closure-capture-by-move, `mut`
+  semantics) alongside genuine Allocation/Lifetime Policy mechanics (arena
+  structure, bump-allocator performance, region inference). See
+  [[2026-07-26-no-separate-memory-phase]].
 - `EXECUTION_PROGRAM.md` — arguably core architecture (one of the five
   Vision pillars) rather than a Semantic Model dimension or Primitive Block;
   needs its own call rather than defaulting into Phase 2/3
@@ -34,10 +38,21 @@ guidance in `how/strategies/`.
 
 ## Suggested action
 
-For each of the three files, decide (small design review, not a big
-process): does it belong in `how/strategies/DEFAULT_STRATEGY.md` (or a new
-Allocation Policy section) instead of `how/concepts/research/essential/`? If
-`EXECUTION_PROGRAM.md` is core architecture rather than a Policy, it may
-instead warrant staying in the Phase 4 pipeline as its own top-level
-Language concept (it already has Vision-pillar status) rather than being
-grouped with the other two.
+For `ALLOCATION.md` and `EXECUTION_PROGRAM.md`, decide (small design
+review, not a big process): does it belong in
+`how/strategies/DEFAULT_STRATEGY.md` (or a new Allocation Policy section)
+instead of `how/concepts/research/essential/`? If `EXECUTION_PROGRAM.md` is
+core architecture rather than a Policy, it may instead warrant staying in
+the Phase 4 pipeline as its own top-level Language concept (it already has
+Vision-pillar status) rather than being grouped with the other two.
+
+For `REGION_BASED_MEMORY_MANAGEMENT.md`, **don't move it wholesale — split
+it**:
+
+- The semantic content (linear/affine ownership discipline, no reference
+  types, `mut` semantics, closure-capture-by-move) feeds Phase 2's Semantic
+  Model as additional Ownership/Mutation raw material, alongside
+  `OWNERSHIP.md` and `MUTABILITY.md`.
+- The mechanism content (arena structure, module/expression arenas,
+  bump-allocator performance, region-inference implementation) moves to
+  `how/strategies/` alongside `ALLOCATION.md`, feeding Phase 7.
