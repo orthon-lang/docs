@@ -147,5 +147,6 @@ Bird
 - How does a mixin interact with slots (see [`SLOTS.md`](SLOTS.md))? If a mixin adds fields, are those part of the type's slot set?
 - Does the evolution model allow adding a method to a published mixin without breaking existing implementations?
 - Should mixins be parametrisable (generic mixins that take type parameters)?
-- Can a mixin declare abstract methods that the mixing type must provide — making it a "template method" pattern?
+- Can a mixin declare abstract methods that the mixing type must provide — making it a "template method" pattern?  
+  **Resolved:** Traits with default implementations cover this case. See [`TRAITS.md`](../essential/TRAITS.md) § Design Patterns with Traits: Template Method.
 - Should composition use a dedicated declarative block (e.g. `compose:`) distinct from any inheritance clause, so "is-a" and "has the capability of" are never expressed through the same keyword (see the `compose:` sketch above)?

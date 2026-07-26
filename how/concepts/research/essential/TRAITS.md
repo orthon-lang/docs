@@ -119,6 +119,75 @@ impl Stringifiable for Int
     // uses default — no override needed unless custom behaviour wanted
 ```
 
+### Design Patterns with Traits: Template Method
+
+The **Template Method** pattern defines the skeleton of an algorithm in a method,
+delegating some steps to implementors. In class-based OOP (Java, C#), this
+requires an `abstract` base class with `virtual`/`abstract` hook methods:
+
+```csharp
+// C# — Template Method via abstract class
+public abstract class DataImporter
+{
+    public void Import()           // template method — non-virtual
+    {
+        Open();
+        Parse();
+        Close();
+    }
+
+    protected abstract void Parse();  // hook — subclasses provide
+}
+```
+
+In Orthon, traits with **default implementations** express the same pattern
+without abstract classes, `virtual`, or `override`:
+
+```orthon
+trait DataImporter
+    fn open(self)                   // hook — declared in trait signature
+    fn parse(self)                  // hook — declared in trait signature
+    fn close(self)                  // hook — declared in trait signature
+
+    // default implementation = template method
+    fn import(self)
+        self.open()
+        self.parse()
+        self.close()
+```
+
+A concrete type then implements only the hook methods:
+
+```orthon
+impl DataImporter for CsvImporter
+    fn open(self)    // file open logic
+    fn parse(self)   // CSV parsing logic
+    fn close(self)   // resource cleanup
+```
+
+The template method `import()` is inherited from the default — it cannot be
+accidentally overridden because `impl` blocks only require providing the methods
+declared in the trait signature, not default methods. This eliminates the
+design-for-inheritance tax described in [`FINAL_BY_DEFAULT.md`](./FINAL_BY_DEFAULT.md).
+
+**Key differences from class-based Template Method:**
+
+| Aspect | Java/C# Abstract Class | Orthon Trait |
+|--------|------------------------|--------------|
+| Base mechanism | `abstract class` + `virtual`/`override` | `trait` + default implementation |
+| Hook methods | Declared `abstract`, subclasses `override` | Declared in trait signature, required in `impl` |
+| Template safety | Must remember to mark template method as `final` or non-virtual | Template is a default — not required by `impl`, cannot be accidentally overridden |
+| Dispatch | Virtual dispatch by default | Static dispatch by default (monomorphisation); no vtable overhead |
+| Reuse coupling | Class hierarchy — single inheritance path | No hierarchy — any type can implement the trait independently |
+
+This pattern also answers the open question raised in
+[`MIXIN.md`](../deferrable/MIXIN.md): *"Can a mixin declare abstract methods
+that the mixing type must provide — making it a 'template method' pattern?"*
+Traits with default implementations already cover this case — the trait
+declares the hook methods as part of its interface contract, and the default
+implementation composes them into a higher-level operation. No separate `mixin`
+keyword or `abstract`/`virtual` mechanism is required.
+
 ## Default Strategy
 
 Traits with explicit `impl` blocks, static dispatch by default, dynamic dispatch opt-in via `dyn`, an orphan rule (no downstream implementations of foreign traits on foreign types), associated types, and default method implementations. Generic functions use `where` clauses for trait bounds.
