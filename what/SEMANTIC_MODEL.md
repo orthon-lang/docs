@@ -26,6 +26,46 @@ to *"What does a program mean?"* It is distinct from:
 
 ---
 
+## Semantic Invariants
+
+These six rules are cross-cutting — they apply to *all* six dimensions
+below, not to any single one. Where a dimension's section states a rule
+that appears to narrow or restate one of these invariants, the dimension
+section is the specialization and this list is the general law it obeys.
+
+1. **Every value has exactly one owner at any point in the program.**
+   Ownership may move, but it is never implicitly duplicated. See
+   [Ownership](#ownership).
+2. **Mutation requires exclusive access; read access may be shared.**
+   Many readers may observe a value concurrently; at most one writer may
+   change it, and no reader may observe a value mid-mutation. See
+   [Mutation](#mutation) and [Ownership](#ownership) § Aliasing.
+3. **Every value has a well-defined lifetime tied to its scope.**
+   Lifetime is never open-ended by default; it is anchored to a lexical
+   scope and ends deterministically. See [Lifetime](#lifetime).
+4. **All control flow produces a value (expression-oriented).**
+   There is no statement/expression split — `if`, `when`, `try`, and
+   blocks are all expressions with a well-defined value. See
+   [Evaluation](#evaluation).
+5. **Visibility is a compile-time guarantee with no runtime bypass.**
+   What is not visible cannot be reached by any mechanism — no
+   reflection, no naming-convention workaround. See
+   [Visibility](#visibility).
+6. **Ownership transfer is semantically explicit (syntax TBD in Phase 5).**
+   The *fact* that a value's ownership changes hands must always be
+   visible at the transfer site. Which concrete syntax marks that fact
+   (`move`, `$`, `@ownership`) is a Phase 5 decision; that some marker
+   exists is a Phase 2 semantic commitment. See [Ownership](#ownership)
+   § Transfer.
+
+These invariants are stated as absolutes because they are the semantic
+floor every Implementation Strategy must guarantee (per
+[`DESIGN_PRINCIPLES.md`](../how/DESIGN_PRINCIPLES.md) § Semantics Before
+Optimization) — a Strategy may implement them with a borrow checker,
+escape analysis, or another mechanism, but it may never relax them.
+
+---
+
 ## Semantic Dimensions
 
 ### Identity
