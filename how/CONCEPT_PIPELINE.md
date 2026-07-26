@@ -43,19 +43,15 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
            ▼
 ┌─────────────────────────────┐
 │ Concept Design Review       │  ◄── DETAILED DESIGN
-│ (12 steps)                  │      1. Problem         7. Interactions
-│ how/concept-design-review.md│      2. Use Cases       8. Rationale
-└──────────┬──────────────────┘      3. Necessity       9. Examples
-           │                         4. Sufficiency    10. Open Questions
-           │                         5. Alternatives   11. Complexity
-           │                         6. Principles     12. EDR
-           │                         │
-           │                         ├── Step 7 → feeds what/CROSS_CUTTING.md
-           │                         └── Step 12 → triggers EDR creation
+│ (5 steps)                   │      1. Idea/Problem
+│ how/concept-design-review.md│      2. Minimal Solution
+└──────────┬──────────────────┘      3. Principle Check
+           │                         4. Examples
+           │                         5. EDR
            ▼
 ┌─────────────────────────────┐
 │ Decision Validation Gates   │  ◄── VALIDATION
-│ (6 + 1 gates)               │      Each gate = binary verdict or flag
+│ 7 gates                     │      Each gate = binary verdict or flag
 │ how/gates/                  │
 │   DECISION_VALIDATION.md    │      Required gates (new construct):
 └──────────┬──────────────────┘      • USER_VALUE_GATE
@@ -145,7 +141,7 @@ as a language feature. See [`DECISION_PIPELINE.md`](process/DECISION_PIPELINE.md
 - **Optimisation** — move to `what/OPTIMIZATION_MODEL.md`
 - **ACCEPT / DEFER** — proceeds to next stage
 
-**Status:** Placeholder — to be populated during M1 Phase 4.
+**Status:** Pipeline definition finalized (Phase 1.1). Application log to be populated during Phase 4.
 
 ---
 
@@ -191,9 +187,9 @@ The core design workflow. Each concept undergoes 5 steps in order —
 see [`concept-design-review.md`](concept-design-review.md) for the full
 procedure with step descriptions and gate mappings.
 
-**Step 7 (Interactions)** directly feeds into the interaction matrix
-(consolidated in `what/CROSS_CUTTING.md` during M1 Phase 6).
-**Step 11 (EDR)** creates the Architecture-category EDR file.
+**Step 5 (EDR)** creates the Architecture-category EDR file.
+Interactions analysis is deferred to Phase 6 (Cross-Cutting Review)
+and is not part of the individual 5-step Concept Design Review.
 
 ---
 

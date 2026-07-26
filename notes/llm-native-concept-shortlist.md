@@ -7,9 +7,9 @@
 
 This shortlist is synthesized from existing internal research only — no external web research was performed:
 
-- [`docs/notes/language-llm-comparison.md`](../docs/notes/language-llm-comparison.md) — cross-language comparison of schema availability, syntax predictability, and hallucination risk
-- [`docs/notes/llm-generability-gate.md`](../docs/notes/llm-generability-gate.md) — the 5-criteria LLM Generability Gate specification
-- [`.planning/notes/2026-07-20-orthon-llm-native-design.md`](../docs/.planning/notes/2026-07-20-orthon-llm-native-design.md) — complete picture of Orthon's LLM-native architecture (Schema Provider, Static Analyser, Code Generator, etc.)
+- [`docs/notes/language-llm-comparison.md`](./language-llm-comparison.md) — cross-language comparison of schema availability, syntax predictability, and hallucination risk
+- [`docs/notes/llm-generability-gate.md`](./llm-generability-gate.md) — the 5-criteria LLM Generability Gate specification
+- [`.planning/notes/2026-07-20-orthon-llm-native-design.md`](../.planning/notes/2026-07-20-orthon-llm-native-design.md) — complete picture of Orthon's LLM-native architecture (Schema Provider, Static Analyser, Code Generator, etc.)
 
 ## Candidate Concepts
 
@@ -28,7 +28,7 @@ The following concepts from the essential/important tiers of `.planning/seeds/SE
 
 ## LLM Generability Gate Requirement
 
-Every concept, at acceptance time, **must pass the LLM Generability Gate as an additional check alongside its other acceptance criteria**. The gate criteria are defined in [`docs/notes/llm-generability-gate.md`](../docs/notes/llm-generability-gate.md) (lines 69-75) and consist of five independent criteria:
+Every concept, at acceptance time, **must pass the LLM Generability Gate as an additional check alongside its other acceptance criteria**. The gate criteria are defined in [`docs/notes/llm-generability-gate.md`](./llm-generability-gate.md) (lines 69-75) and consist of five independent criteria:
 
 | Criterion | Description |
 |-----------|-------------|
@@ -43,6 +43,6 @@ This requirement connects VISION-03's shortlist output to PROC-01's acceptance g
 ## See Also
 
 - [`../how/concept-design-review.md`](../how/concept-design-review.md) — acceptance gate that references LLM Generability Gate criteria
-- [`../docs/notes/llm-generability-gate.md`](../docs/notes/llm-generability-gate.md) — full 5-criteria gate specification
-- [`../docs/notes/language-llm-comparison.md`](../docs/notes/language-llm-comparison.md) — cross-language analysis that informs the shortlist
-- [`.planning/seeds/SEED-001-concept-research-tier-triage.md`](../docs/.planning/seeds/SEED-001-concept-research-tier-triage.md) — tier tables for candidate selection
+- [`../notes/llm-generability-gate.md`](../notes/llm-generability-gate.md) — full 5-criteria gate specification (also listed under Source above)
+- [`../notes/language-llm-comparison.md`](../notes/language-llm-comparison.md) — cross-language analysis that informs the shortlist (also listed under Source above)
+- [`.planning/seeds/SEED-001-concept-research-tier-triage.md`](../.planning/seeds/SEED-001-concept-research-tier-triage.md) — tier tables for candidate selection
