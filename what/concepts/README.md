@@ -14,9 +14,15 @@ full 5-stage lifecycle from research inbox to registry entry.
 
 ## Current Status
 
-**Currently empty** — all existing concept drafts are in
-`how/concepts/research/` awaiting formal processing through the
-Decision Pipeline (Phase 4 of M1).
+**Populated** — 51 accepted concept specification documents reside in
+this directory, covering all essential-tier (17) and important-tier (34)
+Language and StdLib concepts accepted during Phase 4.
 
-Once accepted, concepts graduate to this directory, and an entry is
-added to `what/CORE_CONCEPTS.md`.
+Each concept here has passed the full pipeline:
+Decision Pipeline → Primitive Decomposition → Concept Design Review →
+EDR acceptance (Architecture category). The research source documents
+remain in `how/concepts/research/` as traceable provenance.
+
+See [`CORE_CONCEPTS.md`](../CORE_CONCEPTS.md) for the registry index and
+[`LIBRARY_BOUNDARY.md`](../LIBRARY_BOUNDARY.md) for the Language vs.
+StdLib classification summary.

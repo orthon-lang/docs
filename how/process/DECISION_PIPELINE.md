@@ -3,9 +3,12 @@
 > This document defines the 10-question pipeline that every proposed
 > language feature must pass before detailed design begins.
 >
-> **Status:** Finalized during Phase 1.1 (Foundation Completion). The
-> Pipeline Application log below stays empty until Phase 4 populates
-> it per-feature — this is expected, not a gap.
+> **Status:** Complete. Populated during Phase 4 (Derived Features &
+> Decision Pipeline). All essential-tier (22 concepts), important-tier
+> (36 concepts), policy-level (3 concepts), borderline corrections
+> (2 concepts), rejected (4 concepts), and deferrable-tier (50 concepts)
+> have passed through the pipeline. See [`EDR-079`](../decision_records/architecture/EDR-079-aggregating-p4.md)
+> for the aggregating acceptance record.
 > **See also:** [`ROADMAP.md`](../../when/ROADMAP.md) § Phase 4,
 > [`DECISION_PROCESS.md`](DECISION_PROCESS.md),
 > [`Concept Design Review`](../../how/concept-design-review.md)
