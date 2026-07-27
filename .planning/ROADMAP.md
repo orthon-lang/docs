@@ -151,7 +151,20 @@ Plans:
   3. `what/LIBRARY_BOUNDARY.md` documents the language-vs-stdlib-vs-external classification rationale for every feature classified as Standard Library or External.
   4. Every feature classified "Language" has a corresponding EDR (Architecture category) and moves to `what/concepts/`; zero `⚠️ DRAFT` headers remain across `how/concepts/research/`.
 
-**Plans**: TBD
+**Plans**: 9 plans (6 waves)
+
+```
+Plans:
+- [ ] 04-01-PLAN.md — Wave 1: Essential Core — Semantic Foundation (EQUALITY, NULL_SAFETY, TRAITS, ERROR_HANDLING, LAZY_SEQUENCE_GENERATORS, ITERATOR_PROTOCOL)
+- [ ] 04-02-PLAN.md — Wave 2: Essential Core — Type System & Pattern Matching (GENERICS, PATTERN_MATCHING, TYPE_INFERENCE, TYPE_LEVEL_NULL_SAFETY, PATTERN_MATCHING_DISPATCH, ERROR_UNION) [depends on 04-01]
+- [ ] 04-03-PLAN.md — Wave 2: Essential — Remaining Core (AST_MACROS, COMPILER_AS_STATIC_ANALYZER, COMPILE_TIME_EXECUTION, COMPOSABLE_COLLECTION_OPS, CONCURRENCY_MODEL) [depends on 04-01]
+- [ ] 04-04-PLAN.md — Wave 3: Policy-Level + Borderline Concepts (ALLOCATION, REGION_BASED_MEMORY, EXECUTION_PROGRAM, CONTEXT_PARAMETERS, REPRESENTATION_MODIFIERS) [depends on 04-01/02/03]
+- [ ] 04-05-PLAN.md — Wave 4: Important Tier — Data & Type System (8 concepts: ADTs, ENUM_ALTERNATIVES, COLLECTION_LITERAL_SYNTAX, DATACLASSES, LITERAL_TYPES, STRUCTURAL_TYPING, UNION_INTERSECTION_TYPES, TYPE_LEVEL_COMPUTATION)
+- [ ] 04-06-PLAN.md — Wave 4: Important Tier — Control & Async (9 concepts: ASYNC_AWAIT, ASYNC_MODIFIER, CONCURRENCY, GENERATORS, PUSH_STREAMS, EMIT_INTERMEDIATE, ITERATION_LOOP, OBJECT_INIT, UNPACKING)
+- [ ] 04-07-PLAN.md — Wave 4: Important Tier — Remaining (19 concepts: CONTRACTS, DELEGATION, EXTENSION_FUNCTIONS, GRADUAL_TYPING, SMART_CAST, COPY_ON_WRITE, PROPERTIES, SLOTS, SPAN, NAMED_PARAMS, SORTING, MULTI_KEY_SORT, DATE_TIME, PERSISTENT_DATA, DERIVE_SERIALIZATION, COMMAND_PATTERN, CONTEXT_MODULES, DECLARATIVE, DECLARATION_BY_ASSIGNMENT)
+- [ ] 04-08-PLAN.md — Wave 5: Rejections + Deferrals (4 rejection EDRs + 54 deferral rationales)
+- [ ] 04-09-PLAN.md — Wave 6: Finalization (LIBRARY_BOUNDARY.md, aggregating EDR, pipeline log completion, human verification checkpoint)
+```
 
 ---
 
