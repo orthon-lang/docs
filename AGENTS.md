@@ -73,6 +73,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/gates/DECISION_VALIDATION.md` | How | Six independent validation gates for language design decisions |
 | `how/process/DECISION_PROCESS.md` | How | One-page decision authority — who decides what, using which criteria |
 | `how/process/DECISION_PIPELINE.md` | How | 10-question pipeline — pre-filter before detailed concept design |
+| `how/EXPLORING_THE_DOCS.md` | How | Using `graphify` to build a queryable knowledge graph of this repository for orientation and research |
 | `what/SEMANTIC_MODEL.md` | What | Unified semantic model — identity, ownership, mutation, evaluation, visibility, lifetime |
 | `what/PRIMITIVE_BLOCKS.md` | What | Minimal orthogonal primitive blocks — all features decompose to these |
 | `what/LIBRARY_BOUNDARY.md` | What | Language vs. standard library vs. external classification |
