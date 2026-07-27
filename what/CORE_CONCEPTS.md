@@ -6,12 +6,15 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** No concepts have been accepted yet. Active research and
-> design proposals are in [`how/concepts/research/`](../how/concepts/research/).
-> See [`how/concepts/README.md`](../how/concepts/README.md) for the concept
-> pipeline. Concepts are processed through the Decision Pipeline
-> ([`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md))
-> before entering Concept Design Review.
+> **Status:** 13 concepts accepted through Phase 4 Wave 2. Wave 3
+> (Policy-classified + borderline concepts) processed via Decision
+> Pipeline — see [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
+> § Essential — Policy Level and § Essential — Derived Features (Wave 3).
+> Policy concepts (ALLOCATION, REGION_BASED_MEMORY, EXECUTION_PROGRAM)
+> are routed to `how/strategies/` area per D-04. Borderline concepts
+> (CONTEXT_PARAMETERS, REPRESENTATION_MODIFIERS) resolved as corrections
+> to existing documents — see [EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)
+> and [EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md).
 >
 > **Last updated:** 2026-07-27
 

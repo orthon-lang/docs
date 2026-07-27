@@ -44,6 +44,11 @@
 | EDR-031 | Architecture | [Unified Compile-Time Execution](architecture/EDR-031-compile-time-execution.md) | Accepted | 2026-07-27 | — |
 | EDR-032 | Architecture | [Composable Collection Operations](architecture/EDR-032-composable-collection-ops.md) | Accepted | 2026-07-27 | — |
 | EDR-033 | Architecture | [Delegate-Based Concurrency Model](architecture/EDR-033-concurrency-model.md) | Accepted | 2026-07-27 | — |
+| EDR-034 | Architecture | [Allocation as Policy — Core Allocation Model](architecture/EDR-034-allocation.md) | Accepted | 2026-07-27 | — |
+| EDR-035 | Architecture | [Region-Based Memory Management as Allocation Sub-Policy](architecture/EDR-035-region-based-memory-management.md) | Accepted | 2026-07-27 | — |
+| EDR-036 | Architecture | [Execution Program — Decoupling Semantics from Execution Strategy](architecture/EDR-036-execution-program.md) | Accepted | 2026-07-27 | — |
+| EDR-037 | Architecture | [Context Parameters — SEMANTIC_MODEL Correction for Implicit Context Flow](architecture/EDR-037-context-parameters.md) | Accepted | 2026-07-27 | — |
+| EDR-038 | Architecture | [Representation Modifiers — PRIMITIVE_BLOCKS Correction for Type Storage Annotations](architecture/EDR-038-representation-modifiers.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -84,6 +89,11 @@
 | EDR-031 | [Unified Compile-Time Execution](architecture/EDR-031-compile-time-execution.md) | Accepted | 2026-07-27 |
 | EDR-032 | [Composable Collection Operations](architecture/EDR-032-composable-collection-ops.md) | Accepted | 2026-07-27 |
 | EDR-033 | [Delegate-Based Concurrency Model](architecture/EDR-033-concurrency-model.md) | Accepted | 2026-07-27 |
+| EDR-034 | [Allocation as Policy](architecture/EDR-034-allocation.md) | Accepted | 2026-07-27 |
+| EDR-035 | [Region-Based Memory Management](architecture/EDR-035-region-based-memory-management.md) | Accepted | 2026-07-27 |
+| EDR-036 | [Execution Program](architecture/EDR-036-execution-program.md) | Accepted | 2026-07-27 |
+| EDR-037 | [Context Parameters](architecture/EDR-037-context-parameters.md) | Accepted | 2026-07-27 |
+| EDR-038 | [Representation Modifiers](architecture/EDR-038-representation-modifiers.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -106,7 +116,7 @@
 *No records yet.*
 
 ---
-
+6
 ## Status Summary
 
 | Status | Count |
@@ -118,4 +128,4 @@
 
 ---
 
-*Last updated: 2026-07-27*
+*Last updated: 2026-07-27* (EDR-034 through EDR-038 added)
