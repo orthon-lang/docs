@@ -61,19 +61,6 @@ that every Implementation Strategy must fulfill.
 
 ### Data
 
-### Dependency Flow
-
-The central invariant of the Semantic Dependency Architecture: each
-semantic layer depends only on layers below it; no layer may reference
-or rely on constructs from a layer above it. This creates a natural
-Dependency Inversion at the language level, enforced architecturally
-rather than by convention.
-
-- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
-- **See also:** [Language Pattern](#language-pattern), [Primitive Operation](#primitive-operation), [Semantic Layer](#semantic-layer)
-
-### Data
-
 The primary abstraction in Orthon. Values viewed without imposed semantic meaning — the raw material that modifiers transform.
 
 ```
@@ -90,37 +77,6 @@ A construct that transforms data from one representation to another. Modifiers e
 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
-
-### Declaration Kind (`fun` / `proc` / `new`)
-
-The three mutually exclusive function-declaration kinds that carry
-Orthon's Mutation contract at the declaration site rather than the call
-site: **`fun`** (read-only, never mutates `self`, always returns a
-value), **`proc`** (mutates `self`, identity preserved, may return a
-value or nothing), and **`new`** (never mutates `self`, always produces
-a distinct value). There is no `mut` modifier and no caller-side
-annotation — the contract lives entirely in which of the three keywords
-a declaration uses.
-
-- **Source:** `../what/SEMANTIC_MODEL.md` § Mutation
-- **See also:** [Explicit Semantics](#explicit-semantics), [Semantic Dimension](#semantic-dimension)
-
-### Declaration Model (Unified)
-
-Variables, functions, types, classes, and modules follow the same declaration principles and modifier system. No special-case declaration syntax for different kinds of entities.
-
-- **Source:** `../why/MANIFESTO.md` § A unified declaration model
-
-### Deterministic Behavior
-
-The same source code must produce identical observable behavior across optimization levels and implementations. Only performance characteristics may differ.
-
-- **Source:** `../how/DESIGN_PRINCIPLES.md` § Deterministic Behavior
-- **See also:** [Explicit Semantics](#explicit-semantics), [Semantics Before Optimization](#semantics-before-optimization)
-
----
-
-## D (cont.)
 
 ### Decision Log
 
@@ -147,6 +103,44 @@ long-term maintainability, and LLM generability.
 
 - **Source:** `../how/gates/DECISION_VALIDATION.md`
 - **See also:** [Language Design Gate](#language-design-gate), [Validation Gate](#validation-gate)
+
+### Declaration Kind (`fun` / `proc` / `new`)
+
+The three mutually exclusive function-declaration kinds that carry
+Orthon's Mutation contract at the declaration site rather than the call
+site: **`fun`** (read-only, never mutates `self`, always returns a
+value), **`proc`** (mutates `self`, identity preserved, may return a
+value or nothing), and **`new`** (never mutates `self`, always produces
+a distinct value). There is no `mut` modifier and no caller-side
+annotation — the contract lives entirely in which of the three keywords
+a declaration uses.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Mutation
+- **See also:** [Explicit Semantics](#explicit-semantics), [Semantic Dimension](#semantic-dimension)
+
+### Declaration Model (Unified)
+
+Variables, functions, types, classes, and modules follow the same declaration principles and modifier system. No special-case declaration syntax for different kinds of entities.
+
+- **Source:** `../why/MANIFESTO.md` § A unified declaration model
+
+### Dependency Flow
+
+The central invariant of the Semantic Dependency Architecture: each
+semantic layer depends only on layers below it; no layer may reference
+or rely on constructs from a layer above it. This creates a natural
+Dependency Inversion at the language level, enforced architecturally
+rather than by convention.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Language Pattern](#language-pattern), [Primitive Operation](#primitive-operation), [Semantic Layer](#semantic-layer)
+
+### Deterministic Behavior
+
+The same source code must produce identical observable behavior across optimization levels and implementations. Only performance characteristics may differ.
+
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Deterministic Behavior
+- **See also:** [Explicit Semantics](#explicit-semantics), [Semantics Before Optimization](#semantics-before-optimization)
 
 ---
 
@@ -218,13 +212,6 @@ Execution Program
 
 - **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine
 - **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
-
-### Explicit Optimization
-
-Performance-oriented execution strategies are enabled intentionally by the programmer, never applied silently. The default execution model favors predictability over performance.
-
-- **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Optimization
-- **See also:** [Deterministic Behavior](#deterministic-behavior), [Semantics Before Optimization](#semantics-before-optimization)
 
 ### Execution Program
 
@@ -315,17 +302,6 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
-
-### Program Enricher
-
-The component that combines a Program with its Execution Descriptor
-into a fully-defined Execution Program. Internally coordinates
-dependency, runtime, strategy, platform, permission, and resource
-resolvers. Externally it is a single step — the boundary between
-"incomplete" and "fully-defined" program.
-
-- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Program Enricher
-- **See also:** [Execution Descriptor](#execution-descriptor), [Execution Program](#execution-program)
 
 ---
 
@@ -490,6 +466,17 @@ The behaviour of a construct must match what a competent programmer intuitively 
 - **Source:** `../why/VISION.md` § Comfortable by Design
 - **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Semantics](#explicit-semantics)
 
+### Program Enricher
+
+The component that combines a Program with its Execution Descriptor
+into a fully-defined Execution Program. Internally coordinates
+dependency, runtime, strategy, platform, permission, and resource
+resolvers. Externally it is a single step — the boundary between
+"incomplete" and "fully-defined" program.
+
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Program Enricher
+- **See also:** [Execution Descriptor](#execution-descriptor), [Execution Program](#execution-program)
+
 ---
 
 ## R
@@ -583,6 +570,20 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
 
+### Stable Mental Model
+
+Programmers should reason about language semantics, not compiler internals. Users should never need to understand implementation details to predict program behaviour.
+
+- **Source:** `../how/DESIGN_PRINCIPLES.md` § Stable Mental Model
+- **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Semantics](#explicit-semantics)
+
+### Standard Library
+
+The layer that defines public abstractions exposed by the language. It specifies *behaviour*, not *implementation*. The Standard Library is the interface between user code and the Implementation Strategy.
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Standard Library
+- **See also:** [Architecture](#architecture), [Core Language](#core-language), [Implementation Strategy](#implementation-strategy)
+
 ### Structural Equality
 
 The `==` comparison semantics for value-typed data: two values are
@@ -620,20 +621,6 @@ binding-identity question.
 
 - **Source:** `../what/SEMANTIC_MODEL.md` § Identity
 - **See also:** [Binding Identity](#binding-identity), [Structural Equality](#structural-equality)
-
-### Stable Mental Model
-
-Programmers should reason about language semantics, not compiler internals. Users should never need to understand implementation details to predict program behaviour.
-
-- **Source:** `../how/DESIGN_PRINCIPLES.md` § Stable Mental Model
-- **See also:** [Deterministic Behavior](#deterministic-behavior), [Explicit Semantics](#explicit-semantics)
-
-### Standard Library
-
-The layer that defines public abstractions exposed by the language. It specifies *behaviour*, not *implementation*. The Standard Library is the interface between user code and the Implementation Strategy.
-
-- **Source:** `../how/architecture/ARCHITECTURE.md` § Standard Library
-- **See also:** [Architecture](#architecture), [Core Language](#core-language), [Implementation Strategy](#implementation-strategy)
 
 ---
 
