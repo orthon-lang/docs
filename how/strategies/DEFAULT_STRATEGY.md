@@ -7,7 +7,9 @@
 
 | Policy | Value | Status |
 |--------|-------|--------|
-| **Allocation Policy** | `Arena` | Active |
+| **Allocation Policy** | `Arena` | Active ([EDR-034](../decision_records/architecture/EDR-034-allocation.md)) |
+| **Region-Based Memory (Allocation Sub-Policy)** | `ScopeRegion` | Active ([EDR-035](../decision_records/architecture/EDR-035-region-based-memory-management.md)) |
+| **Execution Model Policy** | `AOT` | Active ([EDR-036](../decision_records/architecture/EDR-036-execution-program.md)) |
 | **Algorithm Policy** | `Adaptive` | *Pending concept design* |
 | **Evaluation Policy** | `Lazy Defaults` | *Pending concept design* |
 | **Lifetime Policy** | `ReferenceCounting` | *Pending concept design* |
@@ -23,6 +25,14 @@ It targets general-purpose workloads where no single constraint
   deallocation provides good average-case performance without the
   overhead of a full garbage collector. Supports both short-lived
   and long-lived allocations through multiple arenas.
+- **Region-Based Memory = ScopeRegion** — arena lifetimes inferred
+  from lexical scope. The compiler automatically inserts arena
+  creation at scope entry and bulk deallocation at scope exit.
+  No programmer annotation required for the common case.
+- **Execution Model Policy = AOT** — ahead-of-time compilation to
+  native code. Programs are compiled once and deployed as native
+  binaries. This is the default execution strategy for production
+  deployments.
 - **Algorithm Policy = Adaptive** — algorithm selection adapts to
   input characteristics (size, order, distribution) at runtime or
   compile time, choosing the best available implementation.

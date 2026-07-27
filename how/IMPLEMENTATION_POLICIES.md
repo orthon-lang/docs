@@ -54,9 +54,11 @@ type is added when its first corresponding concept is designed (see
 
 ### Allocation Policy
 
-**Related Concepts:** [`concepts/ALLOCATION.md`](../concepts/research/ALLOCATION.md) *(+ pending validation)*
+**Status:** Accepted ([EDR-034](../decision_records/architecture/EDR-034-allocation.md))
 
-Controls memory acquisition and deallocation strategy.
+**Related Concepts:** [`concepts/research/ALLOCATION.md`](../concepts/research/ALLOCATION.md)
+
+Controls memory acquisition and deallocation strategy. Classified as **Policy** per D-04: allocation is an implementation choice about HOW primitives (`literal`, `pack`, `identifier`, `reference`) are materialised in memory — not a Language construct.
 
 | Value | Description |
 |-------|-------------|
@@ -112,6 +114,36 @@ released.
 
 *Specific values will be formalised when the corresponding language
 concept is designed.*
+
+### Region-Based Memory Sub-Policy (Allocation)
+
+**Status:** Accepted ([EDR-035](../decision_records/architecture/EDR-035-region-based-memory-management.md))
+
+**Related Concepts:** [`concepts/research/REGION_BASED_MEMORY_MANAGEMENT.md`](../concepts/research/REGION_BASED_MEMORY_MANAGEMENT.md)
+
+Sub-policy within the Allocation Policy (EDR-034), effective when Allocation Policy is set to `Arena`. Defines how arena lifetimes are scoped and managed. Classified as **Policy** per D-04: region-based allocation refines HOW Arena allocation materialises memory, not WHAT allocation semantics are.
+
+| Value | Description |
+|-------|-------------|
+| `ScopeRegion` | Arena lifetime inferred from lexical scope — arena created at scope entry, freed at scope exit. Compiler inserts arena operations automatically. |
+| `ExplicitRegion` | Programmer explicitly declares arena lifetimes via annotations (`@arena`). Compiler validates. |
+| `NoRegion` | No region-based allocation — falls back to another Allocation Policy value (Heap, GC, Static). |
+
+### Execution Model Policy
+
+**Status:** Accepted ([EDR-036](../decision_records/architecture/EDR-036-execution-program.md))
+
+**Related Concepts:** [`concepts/research/EXECUTION_PROGRAM.md`](../concepts/research/EXECUTION_PROGRAM.md)
+
+Controls how a fully-defined Execution Program is materialised and consumed. This is a *new* Policy type introduced by the Execution Program model. Classified as **Policy** per D-04: execution strategy is a HOW decision (how to run), not a WHAT decision (what the program means).
+
+| Value | Description |
+|-------|-------------|
+| `Interpreted` | AST walking or bytecode VM — no compilation stage |
+| `AOT` | Ahead-of-time compilation to native code |
+| `JIT` | Just-in-time compilation, profile-guided optimisation |
+| `WASM` | Compilation to WebAssembly |
+| `Container` | Execution Program materialised as OCI container image (Docker-compatible) |
 
 ### Concurrency Policy
 
