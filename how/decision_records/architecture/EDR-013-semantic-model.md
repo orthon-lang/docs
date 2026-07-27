@@ -232,4 +232,4 @@ Compliance is verified through:
 |--------|-------------|
 | EDR-010 (Layered Architecture) | This EDR's six dimensions define the Core Language layer's semantic contract that EDR-010's Implementation Strategy layer must fulfill. |
 | EDR-012 (Semantic Dependency Architecture) | The six dimensions operate at Level 0/1 (Data Model / Primitive Operations) of EDR-012's pyramid; Phase 3's Primitive Blocks (Level 1) must decompose onto this semantic model. |
-| EDR-011 (LLM Generability Gate) | The `LLM_GENERABILITY_GATE` criteria from that EDR were applied during this model's validation (see Consequences § Negative for the two open Flags). |
+| EDR-014 (LLM Generability Gate) | The `LLM_GENERABILITY_GATE` criteria from that EDR were applied during this model's validation (see Consequences § Negative for the two open Flags). |

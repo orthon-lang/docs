@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 03
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-07-27
+Last activity: 2026-07-27 - Completed quick task 260727-flc: Renumber duplicate EDR-011 architecture record and reindex it
 
 Progress: [██████████] 100%
 
@@ -94,6 +94,7 @@ None yet.
 | 9 | Add Error Union concept research (Zig-style inferred, tag-only error union, distinct from ERROR_HANDLING.md's Result<T,E>) | 2026-07-22 | f8b6045 | — |
 | 260726-s6t | Move CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md from important/ to essential/ tier and repair the three cross-references broken by the move | 2026-07-26 | bf0f10a, 83c47c0 | [260726-s6t-move-context-parameters-md-and-represent](./quick/260726-s6t-move-context-parameters-md-and-represent/) |
 | 260726-s31 | Rewrite REQUIREMENTS.md Phase 2/3/4 sections to match actual concept inventory — SEM-01..03/PRIM-01..03 now name their 10 real essential-tier source files each, CONCEPT-01..13 (stale 13-item list) replaced with 4 tier-scaled requirements (CONCEPT-ESS-01/IMP-01/DEFER-01/REJECT-01), Traceability/Coverage corrected (a pre-existing 79-vs-66 miscount was also fixed), and caveat notes added to SEED-001 and the research README | 2026-07-26 | b99f075, 5978d7a, 8c2ee5d | [260726-s31-rewrite-requirements-md-phase-2-3-4-sect](./quick/260726-s31-rewrite-requirements-md-phase-2-3-4-sect/) |
+| 260727-flc | Renumber duplicate EDR-011 architecture record (LLM Generability Gate) to EDR-014, repoint its 6 live cross-references, and index it in INDEX.md — resolves the ID collision flagged by 02-VERIFICATION.md | 2026-07-27 | 9bd7614 | [260727-flc-renumber-duplicate-edr-011-architecture-](./quick/260727-flc-renumber-duplicate-edr-011-architecture-/) |
 
 ### Roadmap Evolution
 

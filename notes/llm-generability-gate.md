@@ -1,6 +1,6 @@
 # LLM Generability Gate
 
-**Status:** *Accepted — see EDR-011 for the formal decision.*
+**Status:** *Accepted — see EDR-014 for the formal decision.*
 
 **Date:** 2026-07-19
 
