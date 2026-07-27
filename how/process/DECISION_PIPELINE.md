@@ -182,3 +182,236 @@ Q10    ──► Final value judgement → ACCEPT / DEFER / REJECT
 **Classification per D-03:** Language. Protocol definition (`next() -> Option[T]`) is a compiler-level concept (trait with special `for` loop desugaring). Combinators should be StdLib.
 
 **Primitive decomposition path:** `Iterator[T]` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; range `0..10` → syntax desugaring to `RangeIterator` constructor + `literal`; combinators (map, filter, etc.) → `function` implementations on `Iterator[T]` (StdLib, not core). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition.
+
+### Essential Core — Wave 2
+
+#### ERROR_UNION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Error type declaration and conversion boilerplate for tag-only errors. Most errors are simple identifiers (FileNotFound, Timeout) without payload data, but `Result<T, E>` requires explicit enum declaration and `From` implementations for every error type. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Inferred error sets, structural widening from subset to superset, and the `anyerror` escape hatch require compiler support. The `!T` type former is a new kind of type, not expressible via composition of existing constructs. |
+| Q3 | Can it be solved with existing primitives? | No. Inferred error set semantics — computing the union of error tags from every fallible call in the function body — require compiler-level call-graph analysis not present in the 9-primitive set. Structural widening (subset → superset coercion) is a type-system operation beyond primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one new type former replaces error-enum declaration boilerplate), Explicitness (`!T` makes fallibility visible), Intent Over Implementation (programmer writes `!T`, compiler infers the set). The implicit widening relaxation of Explicitness is weighed against the ergonomic gain — explicit conversion would defeat the purpose. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** The `!T` type former is a distinct kind of type — not sugar for `Result<T, E>`. Inferred error sets are a new semantic operation: the compiler discovers, unions, and tracks error tags across the call graph. Structural widening is a new coercion rule. |
+| Q6 | Can it be expressed through composition? | No. Error set inference is inherently compiler-level — the set is derived from the call graph, not composed from primitive constructs. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Error handling semantics (which errors can occur, how they propagate) are semantic, not optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Coexists with `Result<T, E>` from EDR-020. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates the most common source of error-handling boilerplate. Zig's Error Union model has proven production stability. Complements `Result<T, E>` for payload-bearing errors. |
+
+**Classification per D-03:** Language. `!T` type former adds inferred error set semantics not decomposable to primitives. Compiler must infer and track error sets.
+
+**Primitive decomposition path:** `!T` → not decomposable — the type former itself is new syntax; error tag literal → `literal` (unit-like tag); error set inference → compiler-level call-graph analysis beyond primitive composition; structural widening → type-system coercion rule; `?` propagation → `match` + early return (shared with EDR-020's `?` operator). The inference and widening semantics add compiler-level behaviour beyond primitive composition.
+
+---
+
+#### GENERICS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | How to write code that works with multiple types without sacrificing type safety, performance, or readability. Generic parameters must be constrained by behavioural contracts (traits). |
+| Q2 | Is this a language problem or a library problem? | **Language.** Trait bounds on generic parameters, monomorphisation, variance rules, associated type resolution — all require compiler support. The `[T: Trait]` and `where T: TraitA + TraitB` syntax are parser/type-system features. |
+| Q3 | Can it be solved with existing primitives? | No. Type parameterization — the ability to abstract over types themselves — is not expressible via the 9 primitive operations. Monomorphisation (code generation per concrete type) is a compiler-level transformation. Trait bound resolution and variance checking are type-system operations beyond primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Orthogonality (generics are orthogonal to specific types), Minimal Core (one mechanism — trait-bounded generics — replaces manual type-specific implementations), Explicitness (trait bounds declare constraints visibly in the signature). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Parametric polymorphism adds type-level abstraction — a function parameterised over `T` has different semantics than one specialised to a concrete type. Monomorphisation preserves those semantics for each instantiation. Trait bound resolution, associated type substitution, and variance rules are new type-system operations. |
+| Q6 | Can it be expressed through composition? | No. Type-level abstraction is not expressible via the 9 value-level primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Generics are a semantic concept — abstraction over types. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language. Enables type-safe collections, algorithms, and abstractions. Required for standard library design. |
+
+**Classification per D-03:** Language. Parametric polymorphism adds new semantics (type parameterization, trait bounds, monomorphisation) not expressible via composition. Cross-reference COMPILE_TIME_EXECUTION (Plan 04-03).
+
+**Primitive decomposition path:** Generic function → `function` + type parameters (new abstraction); monomorphised instantiation → `function` + concrete type substitution (compiler transformation); trait bound → `identifier` (trait name) + type-system constraint; associated type resolution → type substitution during monomorphisation. The type-level abstraction, bound resolution, and monomorphisation add compiler-level semantics beyond primitive composition.
+
+---
+
+#### PATTERN_MATCHING
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Cascading `if-else if-else` chains produce poor code — they mix data structure inspection with control flow, the compiler cannot verify exhaustiveness, and missed branches cause bugs. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Exhaustiveness checking, destructuring semantics, match ergonomics, and guard evaluation require compiler support. The `match` keyword is a new syntactic form. |
+| Q3 | Can it be solved with existing primitives? | No. Exhaustiveness checking — verifying that all variants of a sum type are covered — is a compiler-level analysis not present in the 9-primitive set. Destructuring (decomposing a value by its structure) requires the compiler to know the type's structural representation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Declarative With Static Guarantees (exhaustiveness), Explicitness (`match` makes branching visible), Minimal Core (one construct replaces if-else chains, manual destructuring, and runtime type checking). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Exhaustiveness checking — compiler verification that all cases are covered. Destructuring — compiler-level decomposition of compound types. Guards — conditional predicates evaluated after structural matching. Or patterns — combined arms for multiple patterns. |
+| Q6 | Can it be expressed through composition? | No. Exhaustiveness checking requires the compiler to enumerate type variants — not expressible via composition of primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Partial — `match` desugars to a decision tree of `if`/`else` and equality checks, but the exhaustiveness verification and destructuring semantics require compiler support beyond simple desugaring. |
+| Q8 | Is this an optimisation, not semantics? | No. Pattern matching is a semantic operation — declarative structure description. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any modern language. Replaces entire categories of bugs (unhandled cases) with compiler-enforced correctness. Required for ergonomic use of sum types (Option, Result, Error Union). |
+
+**Classification per D-03:** Language. Exhaustiveness checking, destructuring semantics, match ergonomics. Compiler must verify exhaustiveness. Patterns match against trait-implementing types.
+
+**Primitive decomposition path:** `match` expression → `function` (match arms as closures) + `call` (pattern evaluation) + `scope` (arm bodies); destructuring → `pack`/`unpack` (value composition/decomposition); guard → `function` (predicate) + `call` (predicate evaluation); wildcard `_` → `identifier` (ignored binding). The exhaustiveness verification, decision tree compilation, and type-variant enumeration add compiler-level semantics beyond primitive composition.
+
+---
+
+#### PATTERN_MATCHING_DISPATCH
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | N-way dispatch on multiple arguments requires exponential nested checks. When a function's behaviour depends on the types of multiple arguments simultaneously, single-receiver trait dispatch is insufficient. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Definition-site dispatch declaration, specificity resolution, and exhaustiveness across multiple argument patterns require compiler support. The `match` parameter form is a new syntactic declaration pattern. |
+| Q3 | Can it be solved with existing primitives? | No. Dispatch on argument types at the function definition site — generating a dispatch tree from declared argument patterns — is not expressible via the 9-primitive set. Specificity resolution (comparing pattern specificity across multiple arguments) is a compiler-level operation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Orthogonality (dispatch is orthogonal to specific type combinations), Explicitness (dispatch variants are visible in the declaration), Minimal Core (one construct replaces nested if-else type checking). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Multimethod dispatch — pattern matching on function arguments at declaration site, resolved at call site. Specificity resolution — deterministic selection of the most specific matching arm. Exhaustiveness across argument type combinations. |
+| Q6 | Can it be expressed through composition? | No. Dispatch on multiple argument types simultaneously is not expressible via single-receiver trait dispatch. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Partial — pattern matching dispatch desugars to nested pattern matching on each argument, but the exhaustiveness checking across argument combinations and specificity resolution require compiler support. |
+| Q8 | Is this an optimisation, not semantics? | No. Dispatch semantics — which implementation runs for a given set of argument types — is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates the most egregious nested type-check boilerplate — N-way dispatch. Complements trait dispatch for multimethod scenarios. Cross-reference: COMMAND_PATTERN_VIA_DELEGATE (Plan 04-07). |
+
+**Classification per D-03:** Language. Multimethod dispatch — pattern matching applied to function arguments at definition site, resolved at call site.
+
+**Primitive decomposition path:** `match` declaration form → `function` (dispatch function) + `match` (per EDR-025) + `scope` (arm bodies); argument pattern → `identifier` (type name) + `pack`/`unpack` (destructuring); specificity resolution → compiler-level pattern comparison. The dispatch tree generation, specificity analysis, and cross-argument exhaustiveness add compiler-level semantics beyond primitive composition.
+
+---
+
+#### TYPE_INFERENCE
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Type annotations inside function bodies add noise without providing documentation value. The programmer must spell out types that are obvious from context, and type changes cascade through annotations. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Type inference is a compiler-level type-system service — it determines types from expression context. The bidirectional inference algorithm (top-down + bottom-up), generic type argument inference, and the annotation boundary rule all require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. Type inference is the type system determining types from usage — this is a meta-level operation, not expressible via value-level primitives. The inference algorithm (unification, constraint solving) is a compiler service. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicitness (annotations at API boundaries), Simplicity (inference inside functions reduces noise), Intent Over Implementation (programmer describes what, compiler resolves types). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Type inference is a compiler service — the compiler determines types that are not explicitly written. Type unification (comparison of type structures) depends on EQUALITY (EDR-017) semantics. Bidirectional inference flows are a semantic specification of how inference proceeds. |
+| Q6 | Can it be expressed through composition? | No. Type inference is inherently compiler-level — the type system determines types from context. This is not expressible via composition of value-level primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Type inference determines the semantic type of an expression — it is a semantic operation, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for ergonomic use of generics, lambda expressions, and local variable declarations. Without inference, Orthon would require type annotations on every expression — unacceptable for LLM readability and programmer productivity. |
+
+**Classification per D-03:** Language. Compiler-level semantic service (local bidirectional inference). Type annotations required at public API boundaries. Depends on EQUALITY (EDR-017) for type unification.
+
+**Primitive decomposition path:** Inferred type → compiler-determined, not primitive-expressible; type annotation at API boundary → `identifier` (type name) + `scope` (binding); type unification → `===` (structural equality per EDR-017) applied to type structures; generic argument inference → compiler constraint solving. The inference algorithm, constraint solving, and type unification are compiler-level services beyond primitive composition.
+
+---
+
+#### TYPE_LEVEL_NULL_SAFETY
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | After a pattern match on `Option<T>` that establishes the value is `Some(T)`, the programmer should not need to manually unbox. Without narrowing, every pattern match requires explicit `!` unwrap, defeating the ergonomic benefit of pattern matching. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Flow-sensitive type narrowing — tracking type information across control flow edges — requires compiler support. The narrowing rules (after match, after explicit check, per-variable, reset on reassignment) are compiler-level semantics. |
+| Q3 | Can it be solved with existing primitives? | No. Flow-sensitive type analysis — tracking that a variable of type `Option<T>` is known to be `T` in a specific code path — is not expressible via the 9-primitive set. It requires the compiler to track type information across control flow edges. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Declarative With Static Guarantees (narrowing is compiler-enforced safety), Explicitness (narrowing follows visible checks), Minimal Core (narrowing eliminates manual unwrap calls without adding new syntax). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Flow-sensitive type narrowing — the compiler tracks per-variable type information across control flow edges. After `if value != None`, the compiler knows `value` is `T` in the true branch. This is a new type-system operation not present in existing constructs. |
+| Q6 | Can it be expressed through composition? | No. Flow-sensitive type analysis is inherently compiler-level — the type system must track state across control flow. Not expressible via composition of value-level primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Type narrowing determines what operations are legal on a value — this is a semantic guarantee, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Builds on NULL_SAFETY (EDR-018). |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for ergonomic null safety. Without narrowing, every `Some` match would require an explicit `!` — eliminating the ergonomic benefit of pattern matching. Makes safe code as concise as unsafe code. |
+
+**Classification per D-03:** Language. Null safety tracked at type level (`Option<T>` vs `T`). Compiler tracks when a value is definitely non-null after a check. Depends on NULL_SAFETY (EDR-018).
+
+**Primitive decomposition path:** Narrowed type → compiler-determined, not primitive-expressible; `match` narrowing → pattern matching (EDR-025) + compiler type tracking; `if` check narrowing → `function` (condition) + compiler type tracking across control flow edges; `!` escape hatch → `function` (unwrapping with panic contract). The flow-sensitive type tracking across control flow edges is a compiler-level analysis beyond primitive composition.
+
+---
+
+### Essential Core — Wave 2
+
+#### AST_MACROS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Metaprogramming — code that writes code — without introducing multiple special-purpose sublanguages (macro\_rules!, proc macros, annotation processors). |
+| Q2 | Is this a language problem or a library problem? | **Language.** AST macros operate on compiler-level AST type nodes. The `@macro` annotation, `@derive` sugar, hygienic scoping, and single-pass expansion require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. AST node manipulation (typed AST types, AST construction) is not expressible via primitive composition. The comptime execution engine (EDR-031) provides the runtime; the macro mechanism provides the structured AST-layer interface. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one macro mechanism replaces multiple sublanguages), Explicitness (`@macro` is syntactically visible), Orthogonality (macros compose freely with other constructs). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Typed AST node manipulation at compile time, hygienic scoping, single-pass expansion, `@derive` resolution. |
+| Q6 | Can it be expressed through composition? | No. Compiler-level AST types and macro expansion ordering are not expressible via primitive composition. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Partial — `@derive` could desugar to `@macro` invocations, but the macro mechanism itself requires compiler support. |
+| Q8 | Is this an optimisation, not semantics? | No. Macro expansion is a semantic operation (code generation), not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for metaprogramming. Eliminates manual code duplication for trait implementations. `@derive` alone justifies the mechanism. |
+
+**Classification per D-03:** Language. Operate on parse tree at compile time, requiring compiler-level understanding. Builds on COMPILE\_TIME\_EXECUTION.
+
+**Primitive decomposition path:** `@macro` function → `function` + comptime annotation (compiler-recognized); `@derive(Trait)` → compiler-resolved macro registry lookup; AST types → compiler-internal type system (not user-visible beyond macro API); hygienic scoping → compiler-enforced scope isolation. The macro registry, AST type contracts, and expansion ordering add compiler-level semantics beyond primitive composition.
+
+---
+
+#### COMPILER_AS_STATIC_ANALYZER
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | The line between compiler errors, warnings, and linter concerns must be explicitly defined. LLM-native design requires a single feedback channel for all static checks. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The compiler IS the analyzer — verification layers are part of the compiler pipeline, not an external tool. The existence and ordering of verification layers is a language specification concern. |
+| Q3 | Can it be solved with existing primitives? | No. Verification layers (ownership, effects, exhaustiveness) require compiler-level semantic analysis not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicit Semantics (effects tracking requires declared effect boundaries), Declarative With Static Guarantees (compiler enforces correctness before runtime), LLM Readiness (single diagnostic channel). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Each verification layer adds compiler-enforced semantic guarantees: ownership, effect tracking, exhaustiveness, pattern-match completeness. |
+| Q6 | Can it be expressed through composition? | No. Ownership analysis, effect tracking, and exhaustiveness checking are compiler-level analyses, not compositions of primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Verification establishes semantic correctness. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for a safe, LLM-native language. The compiler as single verification channel provides the fastest feedback loop. |
+
+**Classification per D-03:** Language. Compiler provides static analysis API — the compiler IS the analyzer. Meta-concept — not a feature programmers invoke, but the architecture of how the compiler verifies correctness.
+
+**Primitive decomposition path:** Not directly applicable — the static analyzer is the compiler itself. Verification layers are meta-operations on the compiler pipeline, not decomposable to user-visible primitives.
+
+---
+
+#### COMPILE_TIME_EXECUTION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Generics, reflection, and metaprogramming should not each require their own sublanguage. A single compile-time execution mechanism replaces four separate mechanisms. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `comptime` keyword, comptime parameter semantics, and comptime evaluation model require compiler support. The comptime interpreter is part of the compiler. |
+| Q3 | Can it be solved with existing primitives? | No. Compile-time evaluation of the same language semantics is a new execution phase, not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one mechanism replaces four), Same Semantics Earlier Phase (no separate sublanguage), Explicit Semantics (`comptime` keyword makes phase visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Comptime evaluation phase, comptime parameters, type as first-class comptime value, deterministic sandboxed execution, `@typeInfo`/`@field`/`@hasDecl` reflection operations. |
+| Q6 | Can it be expressed through composition? | No. A second execution phase (compile time vs. runtime) is a fundamental semantic addition, not a composition. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Comptime defines a new execution phase with semantic consequences (code runs at compile time vs. runtime produces different observable behaviour). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Unified comptime is the elegant answer to generics + reflection + metaprogramming. Cross-ref with GENERICS (Plan 04-02) — comptime IS the generic mechanism. LLM generability restrictions documented in concept doc. |
+
+**Classification per D-03:** Language. Unified comptime model (Zig-inspired). Same semantics, earlier phase. Compiler-level execution mode. Cross-ref with GENERICS (Plan 04-02).
+
+**Primitive decomposition path:** Comptime parameter → `function` parameter + comptime annotation; comptime block → `scope` + comptime annotation; `@typeInfo` → comptime-evaluated `call` to compiler intrinsic; monomorphisation → compiler specialization of `function` + types. The comptime execution phase and evaluation engine add compiler-level semantics beyond primitive composition.
+
+---
+
+#### COMPOSABLE_COLLECTION_OPS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Manual index-based loops, empty accumulator lists, and explicit search flags force the programmer to describe *how* instead of *what*. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** `.map()`, `.filter()`, `.reduce()` are compositions of `Iterator[T].next()` calls. No new language semantics required — the Iterator Protocol (EDR-022) provides everything. |
+| Q3 | Can it be solved with existing primitives? | Yes. Each combinator is implementable as a method on `Iterator[T]` using existing `function`, `call`, `scope`, and `pack`/`unpack` primitives. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (StdLib is the right home), Intent Over Implementation (declarative combinators over imperative loops). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Each combinator is a function composition. Loop fusion is an optimisation, not semantics. |
+| Q6 | Can it be expressed through composition? | Yes — of `Iterator[T].next()` calls. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — combinators are function calls, fully expressible via primitive operations. |
+| Q8 | Is this an optimisation, not semantics? | The operations themselves are semantic (map, filter, reduce). Loop fusion (combining multiple passes) is a pure optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Declarative collection operations are essential for any practical language. StdLib classification means zero language additions. |
+
+**Classification per D-03:** StdLib. Combinators are compositions of ITERATOR\_PROTOCOL operations. Note compiler-level optimization (loop fusion) is an Implementation Strategy concern.
+
+**Primitive decomposition path:** Each combinator (`map`, `filter`, `fold`, etc.) → `function` implementation on `Iterator[T]` trait + `call` to `next()` + `scope` + `pack`/`unpack` for result construction + `function` (closure parameter). Fully expressible via primitive composition — no new compiler semantics.
+
+---
+
+#### CONCURRENCY_MODEL
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Concurrent execution without shared mutable state, data races, or deadlocks. How does Orthon extend its "no shared mutable state" safety guarantee to parallel execution? |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `act` modifier, `delegate` keyword, `<-` message operator, and ownership transfer rules require compiler support. StdLib concurrency utilities (channels, timers) are a separate concern (Plan 04-06). |
+| Q3 | Can it be solved with existing primitives? | No. The `act` modifier changes type semantics (isolated state, message-passing interface). The `<-` operator introduces message-queue semantics. Ownership transfer across isolation boundaries requires compiler-enforced rules. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with "no shared mutable state" (core principle), Explicit Semantics (`act`, `delegate`, `<-` are syntactically visible), Orthogonality (concurrency model composes with traits, error handling, ownership). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Delegate isolation, message-passing execution, single-threaded per-delegate processing, automatic parallelism from independence, ownership transfer across boundaries, error propagation across delegates. |
+| Q6 | Can it be expressed through composition? | No. Delegate isolation and message-passing semantics require compiler-level support — the compiler must enforce that no two delegates share mutable memory. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Concurrency semantics define how programs execute in parallel. Scheduling (work-stealing vs. pinned-to-thread) is an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language targeting multi-core processors. The delegate model provides data-race freedom by construction. Cross-ref with ERROR_HANDLING (EDR-020) and TRAITS (EDR-019). Cross-ref with CONCURRENCY (Plan 04-06) for downstream StdLib utilities. |
+
+**Classification per D-03:** Language. Core semantic dimension (how concurrent execution is defined). Compiler-level guarantees (data-race freedom, isolation). Delegate-based model, `act` modifier, no shared-state threads.
+
+**Primitive decomposition path:** `act` modifier → type declaration modifier (compiler-enforced isolation semantics); `delegate` → `reference` + isolated `scope` + message queue; `<-` operator → compiler-recognized message-send syntax; ownership transfer (`$`) → existing `reference` + ownership semantics across boundaries. The isolation guarantee, message ordering, and single-threaded processing per delegate add compiler-level semantics beyond primitive composition.

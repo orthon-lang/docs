@@ -33,6 +33,17 @@
 | EDR-020 | Architecture | [Error Handling — Result Type with Explicit Propagation](architecture/EDR-020-error-handling.md) | Accepted | 2026-07-27 | — |
 | EDR-021 | Architecture | [Lazy Sequence Generators — `emit` Keyword for Lazy Production](architecture/EDR-021-lazy-sequence-generators.md) | Accepted | 2026-07-27 | — |
 | EDR-022 | Architecture | [Iterator Protocol — Trait-Based Lazy Consumption](architecture/EDR-022-iterator-protocol.md) | Accepted | 2026-07-27 | — |
+| EDR-023 | Architecture | [Error Union — Zig-Style Tag-Only Error Union](architecture/EDR-023-error-union.md) | Accepted | 2026-07-27 | — |
+| EDR-024 | Architecture | [Generics — Trait-Bounded Parametric Polymorphism](architecture/EDR-024-generics.md) | Accepted | 2026-07-27 | — |
+| EDR-025 | Architecture | [Pattern Matching — Exhaustive Expression-Oriented Structural Matching](architecture/EDR-025-pattern-matching.md) | Accepted | 2026-07-27 | — |
+| EDR-026 | Architecture | [Pattern Matching Dispatch — Multimethod Dispatch via Definition-Site Pattern Matching](architecture/EDR-026-pattern-matching-dispatch.md) | Accepted | 2026-07-27 | — |
+| EDR-027 | Architecture | [Type Inference — Local Bidirectional Inference with Explicit API Boundaries](architecture/EDR-027-type-inference.md) | Accepted | 2026-07-27 | — |
+| EDR-028 | Architecture | [Type-Level Null Safety — Option&lt;T&gt; Type-Level Tracking with Compiler Narrowing](architecture/EDR-028-type-level-null-safety.md) | Accepted | 2026-07-27 | — |
+| EDR-029 | Architecture | [AST Macros as Functions](architecture/EDR-029-ast-macros.md) | Accepted | 2026-07-27 | — |
+| EDR-030 | Architecture | [Compiler as Static Analyzer](architecture/EDR-030-compiler-as-static-analyzer.md) | Accepted | 2026-07-27 | — |
+| EDR-031 | Architecture | [Unified Compile-Time Execution](architecture/EDR-031-compile-time-execution.md) | Accepted | 2026-07-27 | — |
+| EDR-032 | Architecture | [Composable Collection Operations](architecture/EDR-032-composable-collection-ops.md) | Accepted | 2026-07-27 | — |
+| EDR-033 | Architecture | [Delegate-Based Concurrency Model](architecture/EDR-033-concurrency-model.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -62,6 +73,17 @@
 | EDR-020 | [Error Handling — Result Type](architecture/EDR-020-error-handling.md) | Accepted | 2026-07-27 |
 | EDR-021 | [Lazy Sequence Generators — `emit` Keyword](architecture/EDR-021-lazy-sequence-generators.md) | Accepted | 2026-07-27 |
 | EDR-022 | [Iterator Protocol — Trait-Based Consumption](architecture/EDR-022-iterator-protocol.md) | Accepted | 2026-07-27 |
+| EDR-023 | [Error Union — Zig-Style Tag-Only Error Union](architecture/EDR-023-error-union.md) | Accepted | 2026-07-27 |
+| EDR-024 | [Generics — Trait-Bounded Parametric Polymorphism](architecture/EDR-024-generics.md) | Accepted | 2026-07-27 |
+| EDR-025 | [Pattern Matching — Exhaustive Expression-Oriented Structural Matching](architecture/EDR-025-pattern-matching.md) | Accepted | 2026-07-27 |
+| EDR-026 | [Pattern Matching Dispatch — Multimethod Dispatch via Definition-Site Pattern Matching](architecture/EDR-026-pattern-matching-dispatch.md) | Accepted | 2026-07-27 |
+| EDR-027 | [Type Inference — Local Bidirectional Inference with Explicit API Boundaries](architecture/EDR-027-type-inference.md) | Accepted | 2026-07-27 |
+| EDR-028 | [Type-Level Null Safety — Option&lt;T&gt; Type-Level Tracking with Compiler Narrowing](architecture/EDR-028-type-level-null-safety.md) | Accepted | 2026-07-27 |
+| EDR-029 | [AST Macros as Functions](architecture/EDR-029-ast-macros.md) | Accepted | 2026-07-27 |
+| EDR-030 | [Compiler as Static Analyzer](architecture/EDR-030-compiler-as-static-analyzer.md) | Accepted | 2026-07-27 |
+| EDR-031 | [Unified Compile-Time Execution](architecture/EDR-031-compile-time-execution.md) | Accepted | 2026-07-27 |
+| EDR-032 | [Composable Collection Operations](architecture/EDR-032-composable-collection-ops.md) | Accepted | 2026-07-27 |
+| EDR-033 | [Delegate-Based Concurrency Model](architecture/EDR-033-concurrency-model.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -89,7 +111,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 17 |
+| Accepted | 31 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |

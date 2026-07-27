@@ -45,6 +45,19 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Documentation Principle
 - **See also:** [Operator Equivalence](#operator-equivalence)
 
+### Combinator
+
+A higher-order function on `Iterator[T]` that transforms, filters, or aggregates a sequence without materialising intermediate collections. Combinators are lazy by default — they return new `Iterator` values that apply the transformation on demand. Examples: `map`, `filter`, `fold`, `take`, `skip`, `chain`, `zip`, `enumerate`.
+
+Combinators are classified as **StdLib** (EDR-032) — they are method implementations on the `Iterator[T]` trait, not language constructs. Loop fusion (combining multiple combinator passes) is an Implementation Strategy concern.
+
+```orthon
+let result = numbers@filter(fn(x) -> x > 0)@map(fn(x) -> x * 2)@collect()
+```
+
+- **Source:** `../what/concepts/COMPOSABLE_COLLECTION_OPS.md`
+- **See also:** [Iterator Protocol](#iterator-protocol), [Generator](#generator), [Lazy Sequence](#lazy-sequence)
+
 ### Core Language
 
 The minimal, stable set of language semantics and semantic contracts,
@@ -64,6 +77,20 @@ what the primitives provide.
 
 - **Source:** `../what/PRIMITIVE_BLOCKS.md` § Composition Rules
 - **See also:** [Primitive Block](#primitive-block), [Semantic Layer](#semantic-layer), [Dependency Flow](#dependency-flow)
+
+### Comptime
+
+Shorthand for "compile time." In Orthon, a unified execution phase where code with the `comptime` keyword is evaluated during compilation using the same language semantics as runtime code. Comptime serves three roles: **generics** (`comptime T: type` parameters replace `<T>` syntax), **reflection** (`@typeInfo`, `@field`, `@hasDecl` as comptime function calls), and **metaprogramming** (ordinary control flow executed at comptime to generate code).
+
+Public comptime parameters MUST include explicit trait bounds for LLM discoverability. Private comptime parameters MAY omit bounds (duck-typed). Comptime evaluation is deterministic and sandboxed (no IO, filesystem, or network access).
+
+```orthon
+fun max(comptime T: type + Comparable, a: T, b: T) -> T
+    return if a > b then a else b
+```
+
+- **Source:** `../what/concepts/COMPILE_TIME_EXECUTION.md`, EDR-031
+- **See also:** [Combinator](#combinator), [Core Language](#core-language), [Macro](#macro)
 
 ---
 
@@ -98,6 +125,18 @@ produce or structure data.
 
 - **Source:** `../what/PRIMITIVE_BLOCKS.md`
 - **See also:** [Data Primitive](#data-primitive), [Primitive Block](#primitive-block), [Data Modifier](#data-modifier)
+
+### Delegate
+
+A concurrent execution context in Orthon's concurrency model. Created with the `delegate` keyword (or the `act` modifier on a type declaration), a delegate owns isolated state and communicates via message passing. Internally, each delegate is implemented as an actor with a mailbox and single-threaded message processing, but the programmer never writes `actor` or manages mailboxes directly.
+
+```orthon
+let counter = delegate(Counter(0))
+counter <- increment()    # asynchronous message send
+```
+
+- **Source:** `../what/concepts/CONCURRENCY_MODEL.md`, EDR-033
+- **See also:** [Exclusive Access](#exclusive-access), [Foreign Function Interface (FFI)](#foreign-function-interface-ffi)
 
 ### Data Primitive
 
@@ -156,6 +195,20 @@ Variables, functions, types, classes, and modules follow the same declaration pr
 
 - **Source:** `../why/MANIFESTO.md` § A unified declaration model
 
+### Derive
+
+A declarative annotation (`@derive(TraitA, TraitB)`) that instructs the compiler to generate trait implementations automatically. The compiler consults a registry of `derive`-compatible macro implementations. If a named trait has no registered derive macro, the compiler reports an error.
+
+```orthon
+@derive(Show, Eq, Clone)
+type Point(x: Int, y: Int)
+```
+
+`@derive` is syntactic sugar over the `@macro` mechanism — each derive target invokes a registered macro function that generates the corresponding `impl Trait for Type` block.
+
+- **Source:** `../what/concepts/AST_MACROS.md` § Derive Sugar
+- **See also:** [Macro](#macro), [Comptime](#comptime)
+
 ### Dependency Flow
 
 The central invariant of the Semantic Dependency Architecture: each
@@ -206,6 +259,108 @@ establish exclusive access to its receiver.
 
 - **Source:** `../what/SEMANTIC_MODEL.md` § Semantic Invariants, § Ownership, § Mutation
 - **See also:** [Semantic Invariant](#semantic-invariant), [Declaration Kind (`fun` / `proc` / `new`)](#declaration-kind-fun--proc--new), [Binding Identity](#binding-identity)
+
+### Error Propagation
+
+The mechanism by which errors in a `Result<T, E>` type are passed upward
+through the call stack. In Orthon, propagation is **explicit** via the `?`
+operator — `expr?` unwraps an `Ok` value or returns the `Error` variant
+immediately from the enclosing function. There is no implicit or hidden
+propagation (no exceptions, no unchecked fallibility).
+
+```orthon
+fun read_config(path: String) -> Result<Config, IOError>
+    data = fs.read_file(path)?  # Error propagated upward
+    parse_config(data)
+```
+
+- **Source:** `../what/concepts/ERROR_HANDLING.md` § Model
+- **See also:** [Result Type](#result-type), [Option Type](#option-type)
+
+### Error Set
+
+The set of possible error tags that a fallible function can produce. In
+Orthon's Error Union model, error sets are **inferred** by the compiler:
+the function body's `!T` return type triggers automatic discovery and
+union of every error tag from every fallible call inside the body.
+Inferred error sets grow and shrink automatically as the implementation
+changes.
+
+```orthon
+fun foo() -> !T
+    bar()?   # adds bar's error tags
+    baz()?   # adds baz's error tags
+# error set = union of bar's and baz's error tags
+```
+
+Explicit error set declaration is available as an opt-in for
+documentation purposes. Structural widening (subset → superset coercion)
+is implicit — no explicit conversion required.
+
+- **Source:** `../what/concepts/ERROR_UNION.md` § Model
+- **See also:** [Error Tag](#error-tag), [Error Union](#error-union), [Structural Widening](#structural-widening)
+
+### Error Tag
+
+A unit-like, payload-free error value in Orthon's Error Union model.
+Error tags are simple identifiers without associated data — they signal
+which error occurred, not additional context about why.
+
+```orthon
+error.FileNotFound
+error.AccessDenied
+error.ParseError
+error.Timeout
+```
+
+Tags are structurally comparable: `error.FileNotFound` is a distinct
+value from `error.AccessDenied`. When an error needs associated data
+(line numbers, field names, validation details), use `Result<T, E>`
+explicitly with a payload-bearing error type.
+
+- **Source:** `../what/concepts/ERROR_UNION.md` § Model
+- **See also:** [Error Set](#error-set), [Error Union](#error-union)
+
+### Error Union
+
+A distinct type former `!T` representing a fallible operation whose
+error side is an inferred set of unit-like error tags. The `!T` type is
+not sugar for `Result<T, E>` — it is a distinct kind of type with
+different properties: inferred error sets, structural widening, and
+tag-only error values.
+
+```orthon
+fun read_config(path: String) -> !Config
+    let data = fs.read_file(path)?
+    return parse_config(data)
+```
+
+Error Union coexists with `Result<T, E>` for payload-bearing errors.
+Both use the same `?` operator for propagation.
+
+- **Source:** `../what/concepts/ERROR_UNION.md` (EDR-023)
+- **See also:** [Error Set](#error-set), [Error Tag](#error-tag), [Error Propagation](#error-propagation), [Structural Widening](#structural-widening)
+
+### Exhaustiveness
+
+The compiler-enforced requirement that all cases of a sum type, enum,
+or sealed trait hierarchy are covered in a `match` expression or
+dispatch declaration. Missing cases are a compile-time error, not a
+warning — the compiler enumerates every unhandled variant.
+
+```orthon
+match opt:
+    case Some(x) => process(x)
+    # Error: `None` not handled
+```
+
+Exhaustiveness applies to: all variants of an enum/sum type, `Some`/`None`
+for `Option<T>`, `Ok`/`Error` for `Result<T, E>`, all cases of a sealed
+trait hierarchy. A wildcard `_` satisfies exhaustiveness for remaining
+cases.
+
+- **Source:** `../what/concepts/PATTERN_MATCHING.md` § Model (EDR-025)
+- **See also:** [Pattern Matching](#pattern-matching), [Pattern Matching Dispatch](#pattern-matching-dispatch), [Option Type](#option-type)
 
 ### Execution Descriptor
 
@@ -287,23 +442,6 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Semantics
 - **See also:** [Deterministic Behavior](#deterministic-behavior)
 
-### Error Propagation
-
-The mechanism by which errors in a `Result<T, E>` type are passed upward
-through the call stack. In Orthon, propagation is **explicit** via the `?`
-operator — `expr?` unwraps an `Ok` value or returns the `Error` variant
-immediately from the enclosing function. There is no implicit or hidden
-propagation (no exceptions, no unchecked fallibility).
-
-```orthon
-fun read_config(path: String) -> Result<Config, IOError>
-    data = fs.read_file(path)?  # Error propagated upward
-    parse_config(data)
-```
-
-- **Source:** `../what/concepts/ERROR_HANDLING.md` § Model
-- **See also:** [Result Type](#result-type), [Option Type](#option-type)
-
 ---
 
 ## F
@@ -316,6 +454,23 @@ Orthon's type system and memory model and those of foreign languages.
 
 - **Source:** `../when/ROADMAP.md` § Milestone 8
 - **See also:** [Standard Library](#standard-library)
+
+### Flow-Sensitive Narrowing
+
+The compiler's ability to track type information across control flow
+edges, narrowing an `Option<T>` to `T` after a check that establishes
+the value is present. After `match value { case Some(x) => ... }`, the
+compiler knows `value` is `T` in the `Some` arm. After `if value != None
+{ ... }`, the compiler narrows within the true branch.
+
+Narrowing is **per-variable** (follows the variable's type through each
+control flow path), **flow-sensitive** (different branches may have
+different narrowed states), and **conservative** (if the compiler cannot
+prove a value is non-null, it remains `Option<T>`). Narrowing resets on
+variable reassignment.
+
+- **Source:** `../what/concepts/TYPE_LEVEL_NULL_SAFETY.md` (EDR-028)
+- **See also:** [Option Type](#option-type), [Pattern Matching](#pattern-matching), [Narrowing](#narrowing)
 
 ### Fresh-Value Exemption
 
@@ -333,6 +488,28 @@ syntactically explicit.
 ---
 
 ## G
+
+### Generics
+
+Trait-bounded parametric polymorphism — the ability to write functions
+and types that operate uniformly across different concrete types while
+preserving type safety and performance. Generic parameters are
+constrained by traits that specify required operations.
+
+```orthon
+fn identity[T](value: T) -> T
+    return value
+
+fn sort[T](items: [T]) where T: Ordered + Printable
+```
+
+Static dispatch by default (monomorphisation). Dynamic dispatch via
+`dyn Trait` is opt-in. Generic type parameters are invariant by default;
+covariance/contravariance are declared via trait method signatures. No
+HKT or negative bounds in v0.1.
+
+- **Source:** `../what/concepts/GENERICS.md` (EDR-024)
+- **See also:** [Trait](#trait), [Trait Bound](#trait-bound), [Type Inference](#type-inference), [Monomorphisation](#monomorphisation)
 
 ### Generator
 
@@ -544,6 +721,23 @@ Complex language features should emerge from composition of simple primitives ra
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Minimal Core, `../why/MANIFESTO.md` § Minimal core, maximum expressiveness
 - **See also:** [Orthogonality](#orthogonality)
+
+### Macro
+
+In Orthon, a function annotated with `@macro` that operates on typed AST nodes at compile time and returns typed AST nodes. Macros are ordinary Orthon functions — there is no separate macro-definition language. Macros execute via the comptime mechanism (EDR-031).
+
+Key properties: **hygienic by default** (identifiers scoped to expansion), **typed AST contracts** (input/output types verified), **single-pass expansion** (no recursive macros), **side-effect-free** (no IO, no filesystem).
+
+The `@derive` annotation is declarative sugar over the macro mechanism.
+
+```orthon
+@macro
+fun json_serialize(type_def: TypeDef) -> Vec<ImplBlock>
+    # inspect type_def, generate ImplBlock nodes
+```
+
+- **Source:** `../what/concepts/AST_MACROS.md`, EDR-029
+- **See also:** [Comptime](#comptime), [Derive](#derive), [Hygienic Macro](#hygienic-macro)
 
 ### Metadata Protocol
 
@@ -881,6 +1075,50 @@ Multiple bounds are combined with `+`. Trait bounds enable static dispatch by de
 - **Source:** `../what/concepts/TRAITS.md` § Model
 - **See also:** [Trait](#trait), [Orphan Rule](#orphan-rule)
 
+### Type Inference
+
+The compiler's ability to determine the type of an expression from its
+context without explicit annotation. Orthon uses **local bidirectional
+inference**: types are inferred within function bodies (bottom-up from
+expressions, top-down from expected type), but explicit annotations
+are required at public API boundaries (parameters and return types).
+
+```orthon
+fn process(items: [Int]) -> Int
+    let doubled = items.map(fn (x) -> x * 2)   # all inferred
+    return doubled.sum()
+```
+
+Generic type arguments are inferred at call sites. Turbofish `::<T>`
+disambiguates ambiguous cases. No cross-module inference — module
+consumers never need to run the inference engine. Inferred types
+are inspectable via the Schema Provider.
+
+- **Source:** `../what/concepts/TYPE_INFERENCE.md` (EDR-027)
+- **See also:** [Generics](#generics), [Trait Bound](#trait-bound), [Schema Provider](#schema-provider)
+
+### Type-Level Null Safety
+
+The extension of Orthon's null safety model (EDR-018) with
+flow-sensitive type narrowing. `Option<T>` and `T` are distinct,
+incompatible types. After a pattern match on `Some(x)`, the compiler
+narrows the value's type to `T` in the matching arm. After an explicit
+`if value != None` check, the compiler narrows within the true branch.
+
+```orthon
+match opt:
+    case Some(x) => process(x)    # x is T — narrowed
+    case None => handle_empty()
+```
+
+Narrowing is per-variable and flow-sensitive: it follows control flow
+and resets on variable reassignment. Conservative by default — if the
+compiler cannot prove a value is non-null, it remains `Option<T>`. The
+`!` operator is the explicit escape hatch.
+
+- **Source:** `../what/concepts/TYPE_LEVEL_NULL_SAFETY.md` (EDR-028)
+- **See also:** [Flow-Sensitive Narrowing](#flow-sensitive-narrowing), [Option Type](#option-type), [Pattern Matching](#pattern-matching)
+
 ---
 
 ## V
@@ -892,6 +1130,23 @@ to assess a language design proposal. Each gate has its own criteria,
 pass/fail conditions, and scope of examination.
 
 - **Source:** `../how/gates/DECISION_VALIDATION.md`
+- **See also:** [Decision Validation](#decision-validation), [Language Design Gate](#language-design-gate)
+
+### Verification Layer
+
+One of seven ordered stages of static analysis in the compiler pipeline. Each layer depends on the layers before it:
+
+1. **Syntax & Parsing** — well-formed tokens, valid grammar
+2. **Name Resolution** — symbol resolution, duplicate detection, visibility
+3. **Type Checking** — type validity, argument matching, trait bounds
+4. **Ownership & Borrowing** — ownership, borrowing, lifetime correctness
+5. **Effect Verification** — mutation, allocation, I/O, async boundaries
+6. **Exhaustiveness & Completeness** — pattern match coverage, return paths
+7. **Contract Verification** (optional) — pre/post conditions, loop invariants
+
+Layers 1–6 are always enabled. `--relaxed` mode skips layers 6–7 for prototyping.
+
+- **Source:** `../what/concepts/COMPILER_AS_STATIC_ANALYZER.md`, EDR-030
 - **See also:** [Decision Validation](#decision-validation), [Language Design Gate](#language-design-gate)
 
 ### Value Identity
@@ -964,6 +1219,21 @@ The four guiding aphorisms of the language:
 - **See also:** [Orthogonality](#orthogonality)
 
 ---
+
+### Hygienic Macro
+
+A macro whose identifier bindings are scoped to the macro expansion site and cannot collide with identifiers in the calling scope. In Orthon, macros are hygienic **by default** — identifiers introduced by a macro expansion are invisible outside that expansion. Unhygienic access (intentional access to the caller's scope) uses an explicit `#` prefix.
+
+```orthon
+@macro
+fun counter_generator() -> Expr
+    return `#counter += 1`  # unhygienic — accesses caller's `counter`
+```
+
+Hygiene-by-default prevents accidental identifier collisions, a common source of bugs in non-hygienic macro systems (C preprocessor, early Lisp macros).
+
+- **Source:** `../what/concepts/AST_MACROS.md` § Hygiene
+- **See also:** [Macro](#macro), [Derive](#derive), [Comptime](#comptime)
 
 ## How to Maintain This Glossary
 
