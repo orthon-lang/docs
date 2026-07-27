@@ -1,4 +1,4 @@
-# EDR-011: LLM Generability Gate
+# EDR-014: LLM Generability Gate
 
 **Status:** Accepted
 
