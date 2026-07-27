@@ -415,3 +415,106 @@ Q10    ──► Final value judgement → ACCEPT / DEFER / REJECT
 **Classification per D-03:** Language. Core semantic dimension (how concurrent execution is defined). Compiler-level guarantees (data-race freedom, isolation). Delegate-based model, `act` modifier, no shared-state threads.
 
 **Primitive decomposition path:** `act` modifier → type declaration modifier (compiler-enforced isolation semantics); `delegate` → `reference` + isolated `scope` + message queue; `<-` operator → compiler-recognized message-send syntax; ownership transfer (`$`) → existing `reference` + ownership semantics across boundaries. The isolation guarantee, message ordering, and single-threaded processing per delegate add compiler-level semantics beyond primitive composition.
+
+---
+
+### Essential — Policy Level
+
+The following concepts run through the Decision Pipeline but are classified as **Policy** (not Language) per D-04. They do not add new semantics expressible via primitives — they are implementation choices about HOW primitives are realised. They are routed to `how/strategies/` area, NOT `what/concepts/`.
+
+#### ALLOCATION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | How and when is memory allocated for program data? Allocation affects performance predictability, memory safety, and overall program design. |
+| Q2 | Is this a language problem or a library problem? | **Policy.** Allocation is how language semantics are realised in memory — an implementation choice, not a language feature. |
+| Q3 | Can it be solved with existing primitives? | Yes — allocation is the materialisation of existing primitives (`literal`, `pack`, `identifier`, `reference`). The programmer declares data structures; allocation is implicit. |
+| Q4 | Does it violate any Design Principle? | No. Allocation as Policy aligns with Minimal Core (allocation mechanism is an implementation detail), Intent Over Implementation (programmer declares data; compiler decides allocation), Implementation Independence (allocation strategy is interchangeable). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Allocation is the realisation of existing primitives — it does not add new semantic operations. |
+| Q6 | Can it be expressed through composition? | N/A — Policy is about how primitives are realised, not composition. |
+| Q7 | Can it be syntactic sugar over existing primitives? | N/A — Policy classification. |
+| Q8 | Is this an optimisation, not semantics? | Yes — allocation is purely an implementation/optimisation concern. Language semantics are allocation-agnostic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical implementation. Strategy system must define allocation choices. |
+
+**Classification per D-04:** Policy. Allocation is an Implementation Policy — how data is materialised in memory, not what data means.
+
+**EDR:** [EDR-034](../decision_records/architecture/EDR-034-allocation.md)
+
+#### REGION_BASED_MEMORY_MANAGEMENT
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Predictable, efficient memory deallocation without garbage collection. How to manage memory in bulk by scoped regions (arenas). |
+| Q2 | Is this a language problem or a library problem? | **Policy.** Region-based allocation is a sub-policy within the Allocation Policy — a specific implementation choice for how Arena allocation works. |
+| Q3 | Can it be solved with existing primitives? | Yes — region allocation is a materialisation strategy for the `pack` and `reference` primitives. The programmer never writes arena management code. |
+| Q4 | Does it violate any Design Principle? | No. Region allocation as Policy aligns with Intent Over Implementation (arenas are an invisible optimisation), Minimal Core (arena mechanism is implementation detail). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Region allocation refines how Arena policy materialises memory — it does not add new language semantics. |
+| Q6 | Can it be expressed through composition? | N/A — Policy classification. |
+| Q7 | Can it be syntactic sugar over existing primitives? | N/A — Policy classification. |
+| Q8 | Is this an optimisation, not semantics? | Yes — region allocation is an implementation optimisation (bulk deallocation, bump allocation). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Provides the default allocation strategy (Arena) with three scoping modes: ScopeRegion, ExplicitRegion, NoRegion. |
+
+**Classification per D-04:** Policy. Sub-policy of Allocation Policy (EDR-034). Refines Arena allocation with lifetime-scoping strategies.
+
+**EDR:** [EDR-035](../decision_records/architecture/EDR-035-region-based-memory-management.md)
+
+#### EXECUTION_PROGRAM
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | The fragmented toolchain problem — compilation, packaging, and deployment are separate stages with incompatible formats. The same information is described multiple times (Cargo.toml, Dockerfile, Kubernetes manifests, CI config). |
+| Q2 | Is this a language problem or a library problem? | **Policy.** Execution model is an implementation choice — how a program is run, not what the program means. Introduces a new Policy type (Execution Model Policy). |
+| Q3 | Can it be solved with existing primitives? | Yes — execution model does not add new language semantics. Core concepts (equality, ownership, pattern matching) are unchanged regardless of execution strategy. |
+| Q4 | Does it violate any Design Principle? | No. Execution Program aligns with Intent Over Implementation (programmer declares what; infrastructure decides how), SOLID (single responsibility, dependency inversion), Minimal Core (execution is infrastructure, not language). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Execution model is about packaging and running — it does not change what programs mean. |
+| Q6 | Can it be expressed through composition? | N/A — Policy classification. |
+| Q7 | Can it be syntactic sugar over existing primitives? | N/A — Policy classification. |
+| Q8 | Is this an optimisation, not semantics? | Yes — execution strategy is a build-time/deployment concern, not language semantics. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** This is Orthon's core innovation — decoupling semantics from execution strategy. The Execution Program model eliminates toolchain fragmentation. |
+
+**Classification per D-04:** Policy. New Execution Model Policy type in the Strategy system. Execution is infrastructure, not language.
+
+**EDR:** [EDR-036](../decision_records/architecture/EDR-036-execution-program.md)
+
+---
+
+### Essential — Derived Features (Wave 3)
+
+The following borderline concepts were evaluated per D-03 classification rules. Both resolved as corrections to existing documents rather than standalone Language features.
+
+#### CONTEXT_PARAMETERS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Plumbing execution environment objects (logger, database connection, configuration) through call chains without explicit threading at every intermediate call site. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Context resolution requires compiler support for type-directed `given` resolution and lexical scoping rules — not implementable as a library. However, the mechanism is a cross-cutting concern of the Evaluation and Visibility dimensions, not a standalone feature. |
+| Q3 | Can it be solved with existing primitives? | No — implicit parameter threading is not expressible via the 9-primitive set. It requires compiler-level parameter resolution. |
+| Q4 | Does it violate any Design Principle? | No. Context parameters align with Explicitness (`using` block is visible in signature), Intent Over Implementation (programmer declares context need; compiler resolves it). However, implicit resolution risks violating Transparency (where did this `given` come from?). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | Yes — context parameters add implicit-passing semantics with static resolution. However, these are a correction to the Evaluation dimension (context supply timing) and Visibility dimension (`given` scope resolution), not a standalone feature. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No — parameter passing is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes, but deferred.** Context parameters solve a real ergonomic problem. However, for v0.1, a SEMANTIC_MODEL correction acknowledging context flow as a cross-cutting concern is sufficient. Full specification deferred beyond v0.1. |
+
+**Classification per D-03:** SEMANTIC_MODEL correction. Cross-cutting concern of Evaluation and Visibility dimensions. Not a standalone Language feature. See [EDR-037](../decision_records/architecture/EDR-037-context-parameters.md).
+
+#### REPRESENTATION_MODIFIERS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | How to control how values of a type are stored in memory (inline, boxed, packed, FFI-compatible) without changing the type's semantic identity. |
+| Q2 | Is this a language problem or a library problem? | **Primitive-level.** Representation modifiers are annotations on existing primitives (`pack` for inline/struct, `reference` for indirection/boxed) — they are not new operations requiring separate language status. |
+| Q3 | Can it be solved with existing primitives? | Yes — representation modifiers are orthogonal annotations on the `pack` primitive (struct, packed) and the `reference` primitive (boxed, shared, atomic). They add constraints to how primitives are materialised, not new operations. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicit Semantics (modifier syntax is visible), Orthogonality (modifiers compose with any type), Minimal Core (modifiers are annotations, not new primitives). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | The modifiers add annotation semantics (storage strategy selection), but these are constraints on how existing primitives are realised — not new primitive operations. |
+| Q6 | Can it be expressed through composition? | Yes — `struct(T)` = `pack` without runtime metadata; `boxed(T)` = `reference` to heap allocation. The modifiers are composition annotations. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — each modifier desugars to a constraint on how `pack` or `reference` is realised. |
+| Q8 | Is this an optimisation, not semantics? | Partially — storage selection is an implementation concern (how to lay out data). The modifier syntax itself is language-level, but the semantics (what operations are legal on the value) are unchanged. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes, but deferred.** Representation modifiers solve a genuine problem. For v0.1, a PRIMITIVE_BLOCKS correction noting that representation annotations are orthogonal modifiers on primitives is sufficient. Full specification deferred beyond v0.1. |
+
+**Classification per D-03:** PRIMITIVE_BLOCKS correction. Representation modifiers are orthogonal annotations on existing primitives (`pack` and `reference`), not new primitives or a standalone Language feature. See [EDR-038](../decision_records/architecture/EDR-038-representation-modifiers.md).
