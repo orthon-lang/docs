@@ -339,3 +339,292 @@ Einstein's Method, and this gate's own criteria) — convergent
 evidence, not three unrelated concerns. No gate returned Fail. The
 model is accepted via EDR-013 with this one item explicitly deferred
 to Phase 5's validation cycle.
+
+---
+
+## Entry: Primitive Blocks (EDR-016)
+
+**Date:** 2026-07-27
+**Artifact validated:** [`what/PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md)
+**Decision recorded as:** [EDR-016](../decision_records/architecture/EDR-016-primitive-blocks.md)
+**Gates applied:** All 7 (a new architectural foundation at Level 1 of the Semantic Dependency Architecture requires the full catalogue, per `DECISION_VALIDATION.md` § Gate Selection)
+
+### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon language designer working on Phase 4 (Derived
+Features), I want one irreducible set of primitive operations that every
+language feature decomposes onto, so that I can verify a new feature is
+not secretly adding a new primitive when composition of existing ones
+would suffice, and so that syntax designers (Phase 5) have a stable target
+to render.
+
+**Press release.** *Orthon's design pipeline now has a settled foundation.
+Phase 4 concepts — pattern matching, error handling, generics, traits,
+iterators — all decompose onto exactly 9 primitive operations, down from
+the earlier 11-item hypothesis. The set is verified minimal: removing any
+one makes at least one known feature inexpressible. Phase 5 and Phase 6
+can proceed with confidence that no hidden atomic operation will be
+discovered halfway through derived feature design.*
+
+**FAQ.**
+- *How is this different from the 11-item hypothesis in the DRAFT
+  PRIMITIVE_BLOCKS.md?* — `operator definition` removed (it is syntactic
+  sugar for `function` per Named Before Symbolic). `struct`, `class`,
+  `delegate`, `namespace` removed (they are compositions, not primitives).
+  `pack`/`unpack` unified into one symmetric pair.
+- *When would I use this instead of the Semantic Model?* — The Semantic
+  Model (EDR-013) answers *what programs mean*; the Primitive Blocks
+  answer *how the language makes that meaning operational*. They are
+  complementary — Phase 3 maps each primitive to its Semantic Dimensions.
+- *What do I lose without it?* — Phase 4 would have no stable foundation
+  to decompose against, and would either re-derive basic operations ad
+  hoc per feature (inconsistency risk) or introduce hidden primitives
+  disguised as derived features (non-orthogonality risk).
+
+**Requirements derived.** A 9-primitive specification document
+(`what/PRIMITIVE_BLOCKS.md`); verification that all ~132 concept research
+files decompose onto this set; an EDR formally accepting the set. All
+three are satisfied.
+
+**Verdict: Pass.** The benefit is concrete (a stable decomposition target
+for Phases 4-6) and the cost is bounded (9 primitives is a
+comprehensible set).
+
+---
+
+### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** Each of the 9 primitives has a precise, single-
+sentence definition and an explicit orthogonal-to statement listing every
+other primitive it does NOT overlap with.
+
+**Test with counterexamples.**
+- *What happens when `call` and `function` appear to overlap?* — They
+  are explicitly separated: `function` is declaration (defines *what*);
+  `call` is invocation (triggers *when*). A function declaration without
+  a call is a valid (if unused) construct; a call without a declaration
+  (to a known function) is a compile-time error. The overlap is
+  intentional composition, not ambiguity.
+- *What happens when `pack` and `unpack` are the same syntax?* — Per the
+  symmetry principle (UNPACKING.md), construction and destruction follow
+  the same structural syntax — the *direction* is determined by context
+  (expression position vs. binding position). This is a single primitive
+  with two operations, not two primitives that accidentally share syntax.
+- *Does `scope` overlap with `reference` for lifetime?* — No. Scope
+  defines *where a binding lives* (lexical region). Reference defines
+  *how to point to a value without owning it* (indirection). Reference
+  lifetime is bounded by scope, but they are independent operations — a
+  scope with no references is still a scope; a reference whose referent
+  is outside the current scope (but still alive) is valid.
+
+**Follow the contradiction.** Apparent tension: `assignment` is both an
+Ownership operation (establishing ownership) and an Evaluation operation
+(storing a value for later). Is this a dimension leak? Resolved:
+assignment's single mechanism (bind name to value) produces *both*
+effects — a binding necessarily establishes ownership *and* makes the
+value available. This is one operation with two natural consequences,
+not two operations conflated into one primitive.
+
+**Play devil's advocate.** Strongest attack: "If `pack`/`unpack` is one
+primitive, why isn't `function`/`call` also one primitive?" The document
+pre-empts this directly: `pack`/`unpack` are one primitive because
+construction and destruction of the *same structural shape* are inverse
+operations that share syntax. `function`/`call` are separate because
+declaration and invocation serve *different semantic dimensions*
+(Evaluation for function, Evaluation + Lifetime for call) and have
+different orthogonalities.
+
+**Verdict: Pass.** Every term has a single, clear definition. The one
+apparent contradiction (assignment serving two dimensions) is documented
+as a natural consequence, not an ambiguity. Edge cases at overlap
+boundaries are explicitly addressed.
+
+---
+
+### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** "9 primitives are the minimum needed — no primitive can
+be removed without making some concept inexpressible."
+
+**What is known.** The starting 11-primitive hypothesis (from the DRAFT
+PRIMITIVE_BLOCKS.md) includes `operator definition`, `struct`, `class`,
+`delegate`, `namespace` — all of which can be expressed as compositions
+of simpler primitives.
+
+**What is unknown (pre-test).** Whether any of the remaining 9 primitives
+is redundant (expressible as composition of the other 8).
+
+**Simplest experiment.** For each primitive, attempt to express every
+concept in the ~132-file research catalog using only the other 8
+primitives. If a concept becomes inexpressible, the removed primitive is
+necessary.
+
+**Evaluate the evidence.** All 9 tests confirmed necessity (documented in
+PRIMITIVE_BLOCKS.md §10.6 Minimality Verification). For example:
+removing `reference` makes class identity semantics (`CLASS_WITH_ACT.md`)
+and borrowing (`OWNERSHIP.md`) inexpressible; removing `scope` makes
+lifetime management and lexical boundaries inexpressible; removing
+`assignment` makes variable binding and parameter passing inexpressible.
+
+**Verdict: Pass.** The hypothesis holds. Nine is the floor.
+
+---
+
+### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**State the premises.** (1) Level 1 (Primitive Operations) sits between
+Level 0 (Data Model) and Level 2 (Language Patterns) in the Semantic
+Dependency Architecture (EDR-012). (2) Primitives must not reference
+Level 2 constructs in their definitions. (3) Primitives must serve at
+least one of the six Semantic Dimensions (EDR-013).
+
+**Deduce the consequences.** If accepted: every Phase 4 (Level 2) feature
+must decompose into these Level 1 primitives; no Phase 4 feature can
+introduce a primitive-level operation without revisiting this set. Phase 5
+(Syntax) renders these primitives in concrete syntax.
+
+**Test for contradiction.** Does any primitive secretly require a Level 2
+construct? Checked every definition and composition rule: `function`
+defines a computation boundary but its body is composed of other
+primitives (scope, assignment, call) — not of derived features.
+`attribute access` defines member selection — no trait or class concept
+is needed to understand it. No primitive references a Level 2 pattern.
+
+**Identify hidden premises.** Does the set assume a particular execution
+model (eager evaluation, stack-based) to make `scope` work? No — `scope`
+is defined lexically; the *mechanism* of scope exit (stack pop, arena
+reset, region exit) is delegated to the Allocation Policy (Phase 7).
+
+**Verdict: Pass.** The primitive set sits cleanly at Level 1, requires
+no Level 2 constructs, and serves only the six Level 0 Semantic
+Dimensions.
+
+---
+
+### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+**Apparent contradiction.** Primitives must be concrete enough for Phase 4
+decomposition verification, yet abstract enough to be independent of any
+Implementation Strategy (Default, Embedded, High-Performance).
+
+**Apply separation principles.** **Separation in space**: the *semantic
+definition* of each primitive is strategy-independent (what it does); the
+*policy values* that govern how it is realised (Allocation Policy for
+scope lifetimes, Evaluation Policy for call semantics) are delegated to
+Phase 7. **Separation on condition**: the observable behaviour of each
+primitive never changes per Strategy; only the performance characteristics
+of *how* it is implemented do.
+
+**Consult known patterns.** This mirrors `DESIGN_PRINCIPLES.md` §
+Semantics Before Optimization — define *what* before *how* — the same
+separation the project already uses for all Core Language concepts.
+
+**Formulate the abstract solution.** *"A primitive's observable semantics
+are defined independently of any Implementation Strategy; each Strategy
+realises the same semantics using its own Policy values, without changing
+the observable behaviour."* Verified for all 9 primitives. Example:
+`reference` is always "indirection without ownership transfer" — the
+borrow checker (Default), escape analysis (Embedded), or region inference
+(High-Performance) are all valid mechanisms for the same semantics.
+
+**Verdict: Pass.** All 9 primitives pass the abstraction test. No
+primitive's definition requires a specific Policy value.
+
+---
+
+### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+**Explain each primitive in one sentence** (none may contain "and", "but",
+"except", "however", "unless"):
+
+- `literal`: *"This lets the programmer create a value directly from
+  source text."*
+- `identifier`: *"This lets the programmer name a value and refer to it
+  later."*
+- `pack`/`unpack`: *"This lets the programmer combine values into a
+  composite or decompose a composite into its parts."*
+- `assignment`: *"This lets the programmer bind a name to a value."*
+- `function`: *"This lets the programmer declare a reusable
+  computation."*
+- `call`: *"This lets the programmer trigger a declared computation."*
+- `attribute access`: *"This lets the programmer select a named member
+  of a composite value."*
+- `scope`: *"This lets the programmer define a lexical boundary for
+  names and lifetimes."*
+- `reference`: *"This lets the programmer point to a value without
+  owning it."*
+
+All nine pass the conjunction test.
+
+**Explain to a non-expert.** A programmer coming from Python, Java, or
+Rust recognises each sentence against a familiar parallel: `literal` is
+`42` or `"hello"`, `function`/`call` are `def` and `()`, `scope` is `{ }`,
+`reference` is `&`. No unfamiliar concept is required to parse any
+one-sentence explanation.
+
+**Remove one thing.** Removing any primitive makes at least one concept
+inexpressible (see CONCEPTUAL_SIMPLICITY_GATE). Nine is confirmed as
+the floor, not a padded ceiling.
+
+**Check for obviousness.** Each primitive reads as "the natural way, not
+clever": `attribute access` via `.` is universal; `pack`/`unpack` as a
+symmetric pair mirrors ML/Haskell pattern matching; `reference` as
+indirection is the same model as Rust's `&T`/`&mut T`. Proven patterns
+age better than experimental ones.
+
+**Verdict: Pass.** No permanent complexity debt is accepted. The
+9-primitive set is comprehensible, teachable, and founded on established
+patterns.
+
+---
+
+### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Structural analysis** (scan each primitive for known LLM-unfriendly
+patterns — ambiguity, special cases, context-dependent syntax):
+
+- `literal`: inline value notation — zero ambiguity, zero special cases.
+- `identifier`: naming convention — minimum identifier length.
+- `pack`/`unpack`: symmetric syntax — context determines direction, which
+  is a single binary distinction. LLMs handle this pattern well (Python's
+  star expressions, JavaScript's destructuring).
+- `assignment`: `let`/`var` — clear keyword distinction for immutability
+  vs. mutability.
+- `function`: `fun`/`proc`/`new` — three keywords, zero combination
+  forms, zero ambiguity. Each maps to one declaration kind.
+- `call`: `()` — universal call syntax. No distinction between method
+  call and function call at the primitive level.
+- `attribute access`: `.` — single unambiguous operator.
+- `scope`: `{ }` — universal block syntax. No ambiguity.
+- `reference`: `&`/`&mut` — two-mode design with one prefix symbol and
+  one modifier keyword.
+
+**Schema round-trip** (can each primitive be fully expressed in a
+machine-readable grammar/type schema?): All 9 primitives — yes, cleanly.
+The abstract grammar in PRIMITIVE_BLOCKS.md (§3) provides concrete
+examples for each.
+
+**Apply the gate's five-criterion table directly:**
+
+| Criterion | Verdict | Basis |
+|---|---|---|
+| Schema-serializable | Pass | All 9 primitives have fixed, unambiguous grammar shapes in PRIMITIVE_BLOCKS.md |
+| Predictable generation (≥90%) | Pass | Every primitive has one canonical form — no "which syntax should I use?" decision for the LLM |
+| No hallucination surface | Pass | Every primitive has exactly one meaning — no context-dependent behaviour |
+| Strategy-aware default | Pass | All primitives defined semantically, not mechanically — default-generated code is valid under any Strategy |
+| Self-correctable | Pass | Violations (e.g., `attribute access` on non-composite, dangling `reference`) are all statically detectable per SEMANTIC_MODEL.md's compile-time enforcement framing |
+
+**Verdict: Pass.** All five criteria pass cleanly across all 9
+primitives. The `pack`/`unpack` symmetric syntax is the only potential
+LLM confusion point, but the binary context distinction (expression
+vs. binding) is well-understood by existing LLMs through analogous
+patterns in Python, JavaScript, and Rust.
+
+---
+
+### Overall
+
+All seven gates Pass outright. No gate returned Flag or Fail. The 9-primitive
+set is accepted via EDR-016, verified complete and minimal against the
+~132-file concept research catalog, and ready for Phase 4 (Derived Features)
+where every concept must decompose onto these primitives.

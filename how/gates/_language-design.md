@@ -91,6 +91,12 @@
       • What alternatives might be reconsidered in the future?
 - [ ] **Decision journal** — is the decision recorded with date,
       concept, verdict, and rationale for future reference?
+- [ ] **EDR Gate Validation section complete** — does the EDR have a
+      filled Gate Validation table listing all applied gates, methods,
+      verdicts, and notes?
+- [ ] **DECISION_LOG.md entry exists** — does a corresponding entry in
+      `how/gates/DECISION_LOG.md` record the per-gate reasoning trail
+      for this decision?
 
 ## Decision Journal
 

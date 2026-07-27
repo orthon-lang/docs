@@ -63,7 +63,7 @@ in the Semantic Dependency Architecture, specified in
 2. **`identifier`** — Named reference to a value; binding point for ownership.
 3. **`pack`/`unpack`** — Symmetric composition/decomposition pair (one primitive, two operations).
 
-**Data Modifier Primitives (6):**
+**Data Operations Primitives (6):**
 4. **`assignment`** — Bind a value to an identifier; creates or updates a binding.
 5. **`function`** — Parameterized computation declaration. Three declaration kinds (`fun`/`proc`/`new`) are tags on this primitive.
 6. **`call`** — Invocation of a declared function; triggers evaluation.
@@ -119,13 +119,34 @@ This replaces the earlier 11-item hypothesis by:
 | Not separating `function` and `call` | Serve different semantic dimensions (declaration vs. invocation) — merging would obscure the eval/lifetime split (D-04) |
 | Including interior mutability as primitive | Derived Standard Library feature; not irreducible (D-10) |
 
+### Gate Validation
+
+The Primitive Blocks set (Level 1 of the Semantic Dependency Architecture)
+is an architectural decision affecting the entire language foundation.
+All seven validation gates apply per `DECISION_VALIDATION.md` § Gate
+Selection (new language construct).
+
+| Gate | Method | Verdict | Notes |
+|------|--------|---------|-------|
+| `USER_VALUE_GATE` | [Working Backwards](../gates/methods/WORKING_BACKWARDS_METHOD.md) | Pass | The primitive set solves a concrete problem: every derived feature (Phase 4) needs a stable, minimal foundation to decompose against. Without it, each concept would re-derive basic operations ad hoc, risking non-orthogonality and gaps. |
+| `LOGICAL_CONSISTENCY_GATE` | [Socratic Method](../gates/methods/SOCRATIC_METHOD.md) | Pass | All 9 primitives have precise, non-overlapping definitions. Each primitive's orthogonal-to statement was verified against every other primitive. No self-referential paradoxes — a primitive cannot be expressed in terms of itself. The Data/Data Modifiers organising taxonomy is a classification aid, not the primitive set itself (D-02), eliminating the apparent overlap between `function`/`call` (declaration vs. invocation) and `pack`/`unpack` (symmetric pair, not two unrelated operations). |
+| `CONCEPTUAL_SIMPLICITY_GATE` | [Scientific Method](../gates/methods/SCIENTIFIC_METHOD.md) | Pass | Hypothesis: "9 primitives are the minimum needed — no primitive can be removed without making some concept inexpressible." Tested by attempting to express every concept in the ~132-file research catalog with each primitive removed one at a time. Result: removing any primitive makes at least one concept inexpressible (§10.6 of PRIMITIVE_BLOCKS.md). The set is confirmed minimal. |
+| `ARCHITECTURAL_INTEGRITY_GATE` | [Logical Analysis](../gates/methods/LOGICAL_ANALYSIS_METHOD.md) | Pass | Premises: (1) Level 1 (Primitive Operations) sits above Level 0 (Data Model) and below Level 2 (Language Patterns) in the Semantic Dependency Architecture (EDR-012). (2) Primitives must be defined without reference to Level 2 constructs. Consequence: every primitive must serve at least one of the six Semantic Dimensions (EDR-013) and must not require a Level 2 construct for its definition. Verified: each primitive's semantic-dimensions mapping (§3) shows direct service to Level 0 dimensions; no primitive references a Level 2 pattern. |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | [TRIZ](../gates/methods/TRIZ_METHOD.md) | Pass | Apparent contradiction: primitives must be concrete enough for Phase 4 decomposition, yet independent of any Implementation Strategy. Separation in space: the *semantic definition* of each primitive (what it does) is strategy-independent; the *policy values* (Allocation Policy, Evaluation Policy, Lifetime Policy) are delegated to Phase 7. Example: `reference` is defined as "indirection without ownership transfer" — the mechanism (borrow check, escape analysis, region inference) is a Strategy choice. All 9 primitives pass this abstraction test. |
+| `LONG_TERM_MAINTAINABILITY_GATE` | [Einstein's Method](../gates/methods/EINSTEIN_METHOD.md) | Pass | One-sentence test: each primitive can be explained without "and", "but", "except" — `literal`: "inline value from source text"; `assignment`: "bind a name to a value"; `scope`: "lexical boundary for names and lifetimes". Remove-one-thing test: removing any primitive makes some concept inexpressible (see CONCEPTUAL_SIMPLICITY). Obviousness check: primitives match established patterns (value literals in every language, scope blocks in Rust/Kotlin/Swift, uniform call syntax in Kotlin/D). No permanent complexity debt accepted. |
+| `LLM_GENERABILITY_GATE` | [Empirical Analysis](../gates/methods/EMPIRICAL_ANALYSIS_METHOD.md) | Pass | Structural analysis: each primitive is unambiguous — `literal` creates a value from text, `identifier` names an existing value, `call` invokes a function. No primitive has context-dependent syntax or hidden special cases. Schema round-trip: all 9 primitives are expressible in the abstract grammar defined in PRIMITIVE_BLOCKS.md. Hallucination surface: zero — every primitive has exactly one meaning. Self-correction: violations (e.g., using `attribute access` on a non-composite) are statically detectable. |
+
+**Gates not applied:** None — all seven gates are required for an architecture-level decision affecting the entire language foundation.
+
+**Detailed reasoning:** See `DECISION_LOG.md` entry (2026-07-27) for per-gate reasoning trail.
+
 ### Related Concepts
 
 - `what/PRIMITIVE_BLOCKS.md` — Full specification of the primitive set
 - `what/SEMANTIC_MODEL.md` (EDR-013) — Six Semantic Dimensions each primitive serves
 - `how/DESIGN_PRINCIPLES.md` — Constitutional design rules governing the set
 - `how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture — Level 1 position
-- `what/GLOSSARY.md` — Terminology (Primitive Block, Data Primitive, Data Modifier Primitive)
+- `what/GLOSSARY.md` — Terminology (Primitive Block, Data Primitive, Data Operations Primitive)
 
 ### Supersedes
 

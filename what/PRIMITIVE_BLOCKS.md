@@ -52,7 +52,7 @@ NOT as the primitive set itself. Primitives are categorized into:
 | Category | Responsibility | Primitives |
 |----------|---------------|------------|
 | **Data Primitives** | Producing or structuring data values | `literal`, `identifier`, `pack/unpack` |
-| **Data Modifier Primitives** | Transforming, accessing, or controlling data | `assignment`, `function`, `call`, `attribute access`, `scope`, `reference` |
+| **Data Operations Primitives** | Transforming, accessing, or controlling data | `assignment`, `function`, `call`, `attribute access`, `scope`, `reference` |
 
 The taxonomy is a classification aid, not a replacement for the primitive set.
 Two abstractions alone would be too coarse-grained for Phase 4 decomposition
@@ -65,7 +65,7 @@ losing the granularity needed to confirm orthogonality.
 
 Each primitive is defined with:
 1. **Name and one-sentence definition.**
-2. **Category** — Data or Data Modifier.
+2. **Category** — Data or Data Operations.
 3. **Semantic dimensions served** — which of the six SEMANTIC_MODEL.md
    dimensions this primitive addresses, with explanation.
 4. **Orthogonality statement** — what it does NOT overlap with.
@@ -124,13 +124,13 @@ let * = point                # unpack — decompose (destructuring)
 (x, y) = *point              # unpack — positional destructuring
 ```
 
-### 3.2 Data Modifier Primitives
+### 3.2 Data Operations Primitives
 
 #### 3.2.1 `assignment`
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Bind a value to an identifier. Creates or updates a binding between a name and a storage location holding a value. |
 | **Semantic dimensions** | **Evaluation** — stores a value for later use, making it available to subsequent expressions. **Ownership** — establishes ownership of the value at the binding point; the binding becomes the owner until ownership is transferred (moved) or the scope exits. |
 | **Orthogonal to** | `identifier` (identifier names the slot; assignment fills it). `scope` (assignment changes what a name denotes within its scope; scope defines where that change is visible — the two are independent operations). |
@@ -146,7 +146,7 @@ count = count + 1 # reassignment (update)
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Parameterized computation declaration. Defines a reusable computation with explicit parameters, an optional return type, and a body enclosed in a `scope`. |
 | **Semantic dimensions** | **Evaluation** — declares a computation boundary; the function's body is evaluated only when the function is called, not when it is defined. |
 | **Orthogonal to** | `call` (declaration vs. invocation is the fundamental split — function defines *what*; call triggers *how*). |
@@ -167,7 +167,7 @@ new sorted() -> List        # transforming constructor
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Invocation of a declared function. Triggers evaluation of a function body with supplied arguments. Unified syntax regardless of declaration form (named, anonymous, closure). |
 | **Semantic dimensions** | **Evaluation** — triggers computation; the function's body is evaluated with the given arguments. **Lifetime** — function scope begins at call and ends at return; the call frame's lifetime is bounded by the call. |
 | **Orthogonal to** | `function` (declaration vs. invocation). `assignment` (call triggers computation that may produce a value; assignment binds that value — the two compose sequentially). |
@@ -183,7 +183,7 @@ func_ptr(args)          # closure/callable call
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Access a member of a composite value. Dereferences a named field or method on a composite using `.` syntax. |
 | **Semantic dimensions** | **Visibility** — selects which part of a composite to expose; the accessible members are determined by the type's visibility rules. |
 | **Orthogonal to** | `reference` (attribute access selects a named member within a value; reference points to a value without selecting a member). `pack`/`unpack` (attribute access extracts a single named member; unpack extracts multiple members by structure). |
@@ -199,7 +199,7 @@ nested.value.field   # chained access
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Lexical boundary for names and lifetimes. Defines a region where bindings are valid, lifetimes are determined, and visibility is contained. |
 | **Semantic dimensions** | **Visibility** — names are visible only within their scope; scope is the mechanism that implements the Visibility dimension's module-level encapsulation. **Lifetime** — values live until scope exit per Semantic Invariant 3 (see SEMANTIC_MODEL.md). |
 | **Orthogonal to** | All other primitives — scope is the container, not an operation. A scope with zero bindings is still a scope (it still affects lifetime). |
@@ -221,7 +221,7 @@ else:
 
 | Field | Value |
 |-------|-------|
-| **Category** | Data Modifier Primitive |
+| **Category** | Data Operations Primitive |
 | **Definition** | Indirection to a value without ownership transfer. Creates a handle that points to an existing value without claiming ownership. |
 | **Semantic dimensions** | **Ownership** — is the borrowing mechanism; a reference allows access without transfer of ownership. **Lifetime** — reference lifetime must be ≤ referent lifetime (SEMANTIC_MODEL.md § Lifetime). |
 | **Orthogonal to** | `pack` (reference points to a value; pack combines values). `assignment` (reference does not create a new binding — it aliases an existing one; assignment creates or updates a binding). |
@@ -401,12 +401,12 @@ Primitives compose according to these rules:
 | 1 | `literal` | Data | Data |
 | 2 | `identifier` | Data | Identity, Ownership |
 | 3 | `pack`/`unpack` | Data | Data, Representation |
-| 4 | `assignment` | Data Modifier | Evaluation, Ownership |
-| 5 | `function` | Data Modifier | Evaluation |
-| 6 | `call` | Data Modifier | Evaluation, Lifetime |
-| 7 | `attribute access` | Data Modifier | Visibility |
-| 8 | `scope` | Data Modifier | Visibility, Lifetime |
-| 9 | `reference` | Data Modifier | Ownership, Lifetime |
+| 4 | `assignment` | Data Operations | Evaluation, Ownership |
+| 5 | `function` | Data Operations | Evaluation |
+| 6 | `call` | Data Operations | Evaluation, Lifetime |
+| 7 | `attribute access` | Data Operations | Visibility |
+| 8 | `scope` | Data Operations | Visibility, Lifetime |
+| 9 | `reference` | Data Operations | Ownership, Lifetime |
 
 **Count:** 9 conceptual primitives (counting pack/unpack as one symmetric pair)
 across two categories.

@@ -88,10 +88,10 @@ A construct that transforms data from one representation to another. Modifiers e
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
 
-### Data Modifier Primitive
+### Data Operations Primitive
 
 A primitive block whose primary responsibility is transforming, accessing,
-or controlling data rather than constructing it. The six Data Modifier
+or controlling data rather than constructing it. The six Data Operations
 primitives are `assignment`, `function`, `call`, `attribute access`,
 `scope`, and `reference`. Distinguished from Data Primitives which
 produce or structure data.
@@ -104,11 +104,11 @@ produce or structure data.
 A primitive block whose primary responsibility is producing or structuring
 data values. The three Data primitives are `literal` (value creation),
 `identifier` (value naming), and `pack/unpack` (value composition/
-decomposition). Distinguished from Data Modifier Primitives which transform
+decomposition). Distinguished from Data Operations Primitives which transform
 or access data rather than constructing it.
 
 - **Source:** `../what/PRIMITIVE_BLOCKS.md`
-- **See also:** [Data Modifier Primitive](#data-modifier-primitive), [Primitive Block](#primitive-block), [Data](#data)
+- **See also:** [Data Operations Primitive](#data-operations-primitive), [Primitive Block](#primitive-block), [Data](#data)
 
 ### Decision Log
 
