@@ -7,6 +7,23 @@
 
 ## A
 
+### Allocation Policy
+
+An Implementation Policy that controls how memory is acquired and
+deallocated. Part of the Strategy system ([EDR-034](../how/decision_records/architecture/EDR-034-allocation.md)).
+Defines five mutually exclusive values: `Heap`, `Arena`, `Linear`,
+`GC`, `Static`. The Allocation Policy is classified as Policy, not
+Language — allocation is an implementation choice about HOW primitives
+are materialised in memory.
+
+```text
+DEFAULT_STRATEGY: Allocation = Arena
+EMBEDDED_STRATEGY: Allocation = Static
+```
+
+- **Source:** `../how/IMPLEMENTATION_POLICIES.md` § Allocation Policy, [EDR-034](../how/decision_records/architecture/EDR-034-allocation.md)
+- **See also:** [Implementation Strategy](#implementation-strategy), [Policy](#policy), [Region-Based Memory](#region-based-memory)
+
 ### Architecture
 
 The layered structure of Orthon: Core Language → Syntax → Standard Library → Implementation Strategy.
@@ -400,6 +417,22 @@ Execution Program
 - **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine
 - **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
 
+### Execution Model Policy
+
+An Implementation Policy that controls how a fully-defined Execution
+Program is materialised and consumed. Part of the Strategy system
+([EDR-036](../how/decision_records/architecture/EDR-036-execution-program.md)).
+Defines five values: `Interpreted`, `AOT`, `JIT`, `WASM`, `Container`.
+Classified as Policy, not Language — execution strategy is a HOW
+decision (how to run), not a WHAT decision (what the program means).
+
+```text
+DEFAULT_STRATEGY: Execution Model = AOT
+```
+
+- **Source:** `../how/IMPLEMENTATION_POLICIES.md` § Execution Model Policy, [EDR-036](../how/decision_records/architecture/EDR-036-execution-program.md)
+- **See also:** [Execution Program](#execution-program), [Implementation Strategy](#implementation-strategy), [Policy](#policy)
+
 ### Execution Program
 
 The central abstraction of the Orthon execution model. A fully-defined,
@@ -538,6 +571,26 @@ combinators does not allocate intermediate collections.
 ---
 
 ## I
+
+### Implicit Context Flow
+
+A cross-cutting concern of the Evaluation and Visibility dimensions where
+some function parameters are resolved automatically from the enclosing
+scope rather than passed explicitly at the call site. Context parameters
+(analogous to Scala 3's `given`/`using`) are the primary mechanism:
+a `using` block in the function signature declares a context dependency,
+and the compiler resolves a matching `given` instance from scope.
+
+```orthon
+fun sort[A](list: List[A])(using ord: Ord[A]): List[A]
+```
+
+Context parameters are noted as a SEMANTIC_MODEL correction
+([EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md))
+but full specification is deferred beyond v0.1.
+
+- **Source:** `../how/concepts/research/essential/CONTEXT_PARAMETERS.md`, [EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)
+- **See also:** [Given Resolution](#given-resolution), [Semantic Dimension](#semantic-dimension), [Evaluation Dimension](#evaluation-dimension)
 
 ### Implementation Strategy
 
@@ -819,6 +872,41 @@ Each language construct solves exactly one problem and combines freely with othe
 
 ## P
 
+### Policy
+
+See [Implementation Policy](#implementation-policy).
+
+### Program Enricher
+
+The component that combines a [Program](#program) with its
+[Execution Descriptor](#execution-descriptor) into a fully-defined
+[Execution Program](#execution-program). The Enricher is infrastructure
+— it resolves dependencies, selects the Implementation Strategy, and
+produces the canonical Execution Program artifact consumed by all
+Execution Engines.
+
+The Enricher is not part of the language — it is a tooling concern
+in the Execution Program pipeline. The Language specification defines
+only the *shape* of the Execution Descriptor and the *interface* of
+the Execution Program.
+
+```
+Program + Execution Descriptor
+            │
+            ▼
+    Program Enricher
+            │
+            ▼
+    Execution Program
+```
+
+- **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Program Enricher
+- **See also:** [Execution Descriptor](#execution-descriptor), [Execution Engine](#execution-engine), [Execution Program](#execution-program)
+
+---
+
+## R
+
 ### Primitive Block
 
 An irreducible atomic language operation from which all constructs are
@@ -904,7 +992,46 @@ A specific view of data. Orthon provides several fundamental representations:
 
 Reversible transformations use symmetric syntax. Prefix form creates an alternative representation; postfix form restores the original.
 
+```R
+
+### Region-Based Memory
+
+A sub-policy within the Allocation Policy ([EDR-034](../how/decision_records/architecture/EDR-034-allocation.md))
+that refines how Arena allocation manages memory regions. Effective
+when Allocation Policy is set to `Arena`. Defines three values:
+`ScopeRegion` (arena lifetime inferred from lexical scope),
+`ExplicitRegion` (programmer-declared arena annotations), and
+`NoRegion` (no region-based allocation).
+
+```text
+DEFAULT_STRATEGY: Region = ScopeRegion
 ```
+
+Classified as Policy per D-04 — region-based allocation is an
+implementation choice about how Arena allocation materialises memory,
+not Language semantics.
+
+- **Source:** `../how/IMPLEMENTATION_POLICIES.md` § Region-Based Memory Sub-Policy, [EDR-035](../how/decision_records/architecture/EDR-035-region-based-memory-management.md)
+- **See also:** [Allocation Policy](#allocation-policy), [Implementation Strategy](#implementation-strategy)
+
+### Representation Modifier
+
+An orthogonal annotation on a primitive that controls how a type is
+stored in memory without changing its semantic identity. Representation
+modifiers (`struct(T)`, `boxed(T)`, `shared(T)`, `atomic(T)`, `ffi(T)`,
+`packed(T)`) are annotations on the `pack` and `reference` primitives,
+not new primitives themselves ([EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md)).
+
+Key property: `struct(User)` and `boxed(User)` are the *same semantic
+type* — they differ only in storage strategy. Assignment between
+representations is safe.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md` § 7b. Representation Modifiers, [EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md)
+- **See also:** [Primitive Block](#primitive-block), [Data Primitive](#data-primitive)
+
+---
+
+## 
 &value   → Reference
 ref&     → Value
 

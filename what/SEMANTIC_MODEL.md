@@ -394,6 +394,19 @@ requires an explicit marker (a `sec` keyword or equivalent — concrete
 syntax deferred to Phase 5); there is no implicit laziness anywhere in
 the default evaluation model.
 
+**Implicit context flow (cross-cutting concern).** The Evaluation
+dimension also governs *when and how parameters are supplied* — whether
+explicitly at the call site or implicitly via scope-directed resolution.
+Context parameters (a mechanism where some function arguments are
+resolved automatically from the enclosing scope rather than passed
+explicitly) are a cross-cutting concern of both the Evaluation dimension
+(when is context supplied?) and the Visibility dimension (which `given`
+instances are in scope?). This is noted here as a design space
+correction ([EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)):
+the current model assumes all parameters are explicitly provided;
+a future version may introduce implicit context flow without changing
+the underlying Evaluation semantics.
+
 **Defined evaluation order.** Sub-expressions evaluate left-to-right.
 This is a semantic commitment, not an optimization detail: per
 `DESIGN_PRINCIPLES.md` § Deterministic Behavior, the same source must

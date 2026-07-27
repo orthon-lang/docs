@@ -362,6 +362,37 @@ lazy `emit`.
 
 ---
 
+## 7b. Representation Modifiers (Orthogonal Annotations)
+
+Per [EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md),
+representation modifiers (`struct(T)`, `boxed(T)`, `shared(T)`,
+`atomic(T)`, `ffi(T)`, `packed(T)`) are **orthogonal annotations on
+existing primitives** — they control *how* a primitive is materialised
+without adding new primitive operations.
+
+**Decomposition:**
+
+| Modifier | Primitive | Effect |
+|----------|-----------|--------|
+| `struct(T)` | `pack` | Pack without runtime metadata (plain data layout) |
+| `boxed(T)` | `reference` | Heap-allocate with full runtime type info |
+| `shared(T)` | `reference` | Reference-counted shared ownership |
+| `atomic(T)` | `reference` | Thread-safe atomic access guarantees |
+| `ffi(T)` | `pack` | C-compatible memory layout (POD) |
+| `packed(T)` | `pack` | Densely packed with minimal alignment padding |
+
+**Key property:** `struct(User)` and `boxed(User)` are the *same semantic
+type* — they differ only in storage strategy. Assignment between
+representations is safe; the compiler inserts the conversion. Method
+dispatch works regardless of representation.
+
+These modifiers are **excluded from the primitive set** because they add
+constraints to existing operations rather than new operations. They are
+annotations on primitives, not primitives themselves. Full specification
+of their syntax and semantics is deferred beyond v0.1.
+
+---
+
 ## 8. Composition Rules
 
 Primitives compose according to these rules:
