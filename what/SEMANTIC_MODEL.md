@@ -8,7 +8,7 @@
 >
 > **Status:** Accepted 2026-07-27 (Phase 2 of M1). Two open items are
 > intentionally deferred to Phase 5 (Syntax Design) — see
-> [Design Principles verification](#relationship-to-design-principles)
+> [Relationship to Design Principles](#relationship-to-design-principles)
 > § Net Flags.
 > **See also:** [`ROADMAP.md`](../when/ROADMAP.md) § Phase 2,
 > [`DATA_MODEL.md`](../how/concepts/research/essential/DATA_MODEL.md),
