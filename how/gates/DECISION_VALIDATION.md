@@ -276,7 +276,7 @@ and a machine-readable schema that eliminates hallucination.
 - Generated code silently behaves differently under different
   Implementation Strategies without explicit syntactic indication.
 
-**See also:** `EDR-011-llm-generability-gate`, `../../how/concepts/research/LLM_NATIVE_TOOLCHAIN.md`,
+**See also:** `EDR-014-llm-generability-gate`, `../../how/concepts/research/LLM_NATIVE_TOOLCHAIN.md`,
 `../../how/strategies/LLM_STRATEGY.md`
 
 ---
