@@ -45,9 +45,9 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 
 ### Semantic Model — Phase 2
 
-- [ ] **SEM-01**: `what/SEMANTIC_MODEL.md` synthesizes the 10 essential-tier source files identified as Semantic-Model raw material (`how/concepts/research/essential/DATA_MODEL.md`, `OWNERSHIP.md`, `OWNERSHIP_METAPROPERTY.md`, `OWNERSHIP_TRANSFER_OPERATOR.md`, `MUTABILITY.md`, `VALUE_SEMANTICS.md`, `IDENTITY_BASED_SAFETY.md`, `VISIBILITY_AND_ENCAPSULATION.md`, `SCOPED_RESOURCE_LIFECYCLE.md`, `EXPRESSION_ORIENTED_LANGUAGE.md`) into all 6 semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) as one coherent whole, replacing the current DRAFT placeholder
-- [ ] **SEM-02**: Cross-dimension conflicts across the 10 source files checked and resolved; validated against every Design Principle
-- [ ] **SEM-03**: EDR accepting the Semantic Model, recording how each of the 10 source files' proposals were merged, modified, or superseded
+- [x] **SEM-01**: `what/SEMANTIC_MODEL.md` synthesizes the 10 essential-tier source files identified as Semantic-Model raw material (`how/concepts/research/essential/DATA_MODEL.md`, `OWNERSHIP.md`, `OWNERSHIP_METAPROPERTY.md`, `OWNERSHIP_TRANSFER_OPERATOR.md`, `MUTABILITY.md`, `VALUE_SEMANTICS.md`, `IDENTITY_BASED_SAFETY.md`, `VISIBILITY_AND_ENCAPSULATION.md`, `SCOPED_RESOURCE_LIFECYCLE.md`, `EXPRESSION_ORIENTED_LANGUAGE.md`) into all 6 semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) as one coherent whole, replacing the current DRAFT placeholder
+- [x] **SEM-02**: Cross-dimension conflicts across the 10 source files checked and resolved; validated against every Design Principle
+- [x] **SEM-03**: EDR accepting the Semantic Model, recording how each of the 10 source files' proposals were merged, modified, or superseded
 
 ### Primitive Blocks — Phase 3
 
@@ -179,9 +179,9 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | VISION-03 | Phase 1.1 | Done |
 | PRINC-01 | Phase 1.1 | Done |
 | FITNESS-01 | Phase 1.1 | Done |
-| SEM-01 | Phase 2 | Pending |
-| SEM-02 | Phase 2 | Pending |
-| SEM-03 | Phase 2 | Pending |
+| SEM-01 | Phase 2 | Complete |
+| SEM-02 | Phase 2 | Complete |
+| SEM-03 | Phase 2 | Complete |
 | PRIM-01 | Phase 3 | Pending |
 | PRIM-02 | Phase 3 | Pending |
 | PRIM-03 | Phase 3 | Pending |
