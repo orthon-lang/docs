@@ -24,6 +24,7 @@
 | EDR-011 | Process | [Process Inventory](process/EDR-011-process-inventory.md) | Accepted | 2026-07-18 | TDR-010 |
 | EDR-012 | Architecture | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 | — |
 | EDR-013 | Architecture | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 | — |
+| EDR-014 | Architecture | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -45,6 +46,7 @@
 | EDR-010 | [Layered Architecture](architecture/EDR-010-layered-architecture.md) | Accepted | 2026-07-18 |
 | EDR-012 | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 |
 | EDR-013 | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 |
+| EDR-014 | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -71,7 +73,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 11 |
+| Accepted | 12 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |
