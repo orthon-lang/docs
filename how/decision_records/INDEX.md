@@ -30,6 +30,9 @@
 | EDR-017 | Architecture | [Equality — Three-Operator Model (Value, Semantic, Identity)](architecture/EDR-017-equality.md) | Accepted | 2026-07-27 | — |
 | EDR-018 | Architecture | [Null Safety — Option Type Without Null Sentinel](architecture/EDR-018-null-safety.md) | Accepted | 2026-07-27 | — |
 | EDR-019 | Architecture | [Traits — Nominal Trait System for Polymorphic Behaviour](architecture/EDR-019-traits.md) | Accepted | 2026-07-27 | — |
+| EDR-020 | Architecture | [Error Handling — Result Type with Explicit Propagation](architecture/EDR-020-error-handling.md) | Accepted | 2026-07-27 | — |
+| EDR-021 | Architecture | [Lazy Sequence Generators — `emit` Keyword for Lazy Production](architecture/EDR-021-lazy-sequence-generators.md) | Accepted | 2026-07-27 | — |
+| EDR-022 | Architecture | [Iterator Protocol — Trait-Based Lazy Consumption](architecture/EDR-022-iterator-protocol.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -56,6 +59,9 @@
 | EDR-017 | [Equality — Three-Operator Model](architecture/EDR-017-equality.md) | Accepted | 2026-07-27 |
 | EDR-018 | [Null Safety — Option Type](architecture/EDR-018-null-safety.md) | Accepted | 2026-07-27 |
 | EDR-019 | [Traits — Nominal Trait System](architecture/EDR-019-traits.md) | Accepted | 2026-07-27 |
+| EDR-020 | [Error Handling — Result Type](architecture/EDR-020-error-handling.md) | Accepted | 2026-07-27 |
+| EDR-021 | [Lazy Sequence Generators — `emit` Keyword](architecture/EDR-021-lazy-sequence-generators.md) | Accepted | 2026-07-27 |
+| EDR-022 | [Iterator Protocol — Trait-Based Consumption](architecture/EDR-022-iterator-protocol.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -83,7 +89,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 14 |
+| Accepted | 17 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |

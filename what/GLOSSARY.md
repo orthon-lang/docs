@@ -287,6 +287,23 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Explicit Semantics
 - **See also:** [Deterministic Behavior](#deterministic-behavior)
 
+### Error Propagation
+
+The mechanism by which errors in a `Result<T, E>` type are passed upward
+through the call stack. In Orthon, propagation is **explicit** via the `?`
+operator — `expr?` unwraps an `Ok` value or returns the `Error` variant
+immediately from the enclosing function. There is no implicit or hidden
+propagation (no exceptions, no unchecked fallibility).
+
+```orthon
+fun read_config(path: String) -> Result<Config, IOError>
+    data = fs.read_file(path)?  # Error propagated upward
+    parse_config(data)
+```
+
+- **Source:** `../what/concepts/ERROR_HANDLING.md` § Model
+- **See also:** [Result Type](#result-type), [Option Type](#option-type)
+
 ---
 
 ## F
@@ -315,6 +332,34 @@ syntactically explicit.
 
 ---
 
+## G
+
+### Generator
+
+A function that produces a sequence of values lazily, one at a time,
+using the `emit` keyword. Generator bodies are compiled into state
+machines that implement `Iterator[T]`. Generators are the production
+side of the sequence model — the iterator protocol is the consumption
+side.
+
+```orthon
+fun natural_numbers() -> Iterator[Int]
+    let i = 0
+    loop:
+        emit i
+        i = i + 1
+```
+
+Three equivalent canonical forms: `emit value`, `return sequence(value)`,
+and `return value ->`. Generators are lazy by default (values produced
+on demand) and support infinite sequences. Composition with iterator
+combinators does not allocate intermediate collections.
+
+- **Source:** `../what/concepts/LAZY_SEQUENCE_GENERATORS.md`
+- **See also:** [Iterator Protocol](#iterator-protocol), [Lazy Sequence](#lazy-sequence)
+
+---
+
 ## I
 
 ### Implementation Strategy
@@ -334,6 +379,46 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
+
+### IntoIterator
+
+A trait that enables a type to be converted into an `Iterator[T]` for
+use in `for` loops and combinator chains. Collections implement
+`IntoIterator[T]` to enable direct iteration. `Iterator[T]` itself
+implements `IntoIterator[T]` (returning `self`), so both iterators and
+collections work uniformly with `for`.
+
+```orthon
+trait IntoIterator[T]
+    fn iter(self) -> Iterator[T]
+```
+
+- **Source:** `../what/concepts/ITERATOR_PROTOCOL.md` § IntoIterator[T] for Collections
+- **See also:** [Iterator Protocol](#iterator-protocol), [Generator](#generator)
+
+### Iterator Protocol
+
+The consumption side of Orthon's sequence model. Defined by the
+`Iterator[T]` trait:
+
+```orthon
+trait Iterator[T]
+    fn next(self) -> Option[T]
+```
+
+Key properties: **lazy** (elements produced on demand), **single-pass**
+(consumed on traversal), **composable** (combinators return new
+iterators without intermediate allocation), **zero-cost** (monomorphisation
+eliminates combinator overhead).
+
+The `for` loop desugars to the iterator protocol: `IntoIterator::iter()`
++ `loop` calling `next()`. Protocol method access uses the `@` prefix
+per D-07 (`iterator@next()`). Standard combinators (map, filter, take,
+fold, collect, etc.) are default method implementations on `Iterator[T]`
+living in the Standard Library.
+
+- **Source:** `../what/concepts/ITERATOR_PROTOCOL.md`
+- **See also:** [IntoIterator](#intoiterator), [Generator](#generator), [Lazy Sequence](#lazy-sequence)
 
 ---
 
@@ -396,6 +481,22 @@ tooling implements an LSP server to provide IDE support.
 
 - **Source:** `../when/ROADMAP.md` § Milestone 9
 - **See also:** [LLM Toolchain](#llm-toolchain)
+
+### Lazy Sequence
+
+A sequence whose elements are produced on demand rather than eagerly
+materialised. In Orthon, lazy sequences are the default: generator
+functions produce values one at a time via `emit`, and iterator
+combinators (map, filter, take, etc.) compose without allocating
+intermediate collections. Materialisation is explicit via
+`.collect()`.
+
+Lazy by default is established by Phase 3 D-06: the `emit` keyword
+guarantees lazy evaluation. Infinite sequences are valid — the
+consumer controls termination via combinators like `.take(n)`.
+
+- **Source:** `../what/concepts/LAZY_SEQUENCE_GENERATORS.md` § Principles
+- **See also:** [Generator](#generator), [Iterator Protocol](#iterator-protocol)
 
 ### LLM-Native
 
@@ -619,6 +720,28 @@ pack*    → Values
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Representation Symmetry
 - **See also:** [Explicit Semantics](#explicit-semantics), [Named Before Symbolic](#named-before-symbolic)
+
+### Result Type
+
+The canonical representation of fallible operations in Orthon. A sum
+type with two variants: `Ok(T)` (success, containing a value of type
+`T`) and `Error(E)` (failure, containing an error value of type `E`).
+Functions that can fail declare `Result<T, E>` as their return type.
+The compiler enforces exhaustive matching on both variants.
+
+```orthon
+fun divide(a: Int, b: Int) -> Result<Int, DivisionError>
+    if b == 0 then Error(DivisionError.DivisionByZero)
+    else Ok(a / b)
+```
+
+Key operator: `?` for short-circuit propagation. Combinators: `map`,
+`and_then`, `or_else`, `unwrap`, `unwrap_or`, `unwrap_or_else`.
+Distinct from `Option<T>` — `Result` carries diagnostic error
+information, while `Option` represents mere absence.
+
+- **Source:** `../what/concepts/ERROR_HANDLING.md`
+- **See also:** [Error Propagation](#error-propagation), [Option Type](#option-type)
 
 ---
 
