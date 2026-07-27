@@ -1,3 +1,9 @@
+> **REJECTED — See EDR-077 for rationale.**
+> Dynamic typing violates Orthon's Declarative With Static Guarantees (dynamic typing trades
+> compile-time guarantees for flexibility), Explicitness (type errors become runtime failures),
+> and Correctness Before Performance (dynamic typing optimizes for iteration speed over
+> correctness). Formally rejected. Orthon provides no `dynamic` type or `any` escape hatch.
+
 # Dynamic Typing
 
 > **⚠️ DRAFT — This document is a preliminary draft.**

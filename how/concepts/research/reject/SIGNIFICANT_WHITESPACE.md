@@ -1,3 +1,9 @@
+> **REJECTED — See EDR-076 for rationale.**
+> Significant whitespace violates Orthon's Explicitness (indentation is not visible in the syntax tree),
+> Consistency (harder for LLM generation), and Semantics Before Optimization (whitespace-significant
+> parsing optimizes for typing, not correctness). Formally rejected. The language uses explicit
+> delimiters for block structure.
+
 # Significant Whitespace
 
 > **⚠️ DRAFT — This document is a preliminary draft.**

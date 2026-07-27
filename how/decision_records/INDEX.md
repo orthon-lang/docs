@@ -58,6 +58,29 @@
 | EDR-053 | Architecture | [Iteration Loop — `for`/`while` with Protocol-Based Iteration](architecture/EDR-053-iteration-loop.md) | Accepted | 2026-07-27 | — |
 | EDR-054 | Architecture | [Object Initialization — Named Parameters with Defaults and Builder Patterns](architecture/EDR-054-object-initialization.md) | Accepted | 2026-07-27 | — |
 | EDR-055 | Architecture | [Unpacking — Destructuring Assignment with Pattern Syntax](architecture/EDR-055-unpacking.md) | Accepted | 2026-07-27 | — |
+| EDR-056 | Architecture | [Contracts — Compiler-Enforced Pre/Postconditions](architecture/EDR-056-contracts.md) | Accepted | 2026-07-27 | — |
+| EDR-057 | Architecture | [Delegation — Composition via Delegation Pattern](architecture/EDR-057-delegation.md) | Accepted | 2026-07-27 | — |
+| EDR-058 | Architecture | [Extension Functions — Method-Call Syntax on External Types](architecture/EDR-058-extension-functions.md) | Accepted | 2026-07-27 | — |
+| EDR-059 | Architecture | [Gradual Typing — Optional Type Annotations with Selective Type Checking](architecture/EDR-059-gradual-typing.md) | Accepted | 2026-07-27 | — |
+| EDR-060 | Architecture | [Smart Cast — Flow-Sensitive Type Narrowing](architecture/EDR-060-smart-cast.md) | Accepted | 2026-07-27 | — |
+| EDR-061 | Architecture | [Copy-on-Write — Memory Optimisation for Value Semantics](architecture/EDR-061-copy-on-write.md) | Accepted | 2026-07-27 | — |
+| EDR-062 | Architecture | [Properties — Getter/Setter Sugar Over Attribute Access](architecture/EDR-062-properties.md) | Accepted | 2026-07-27 | — |
+| EDR-063 | Architecture | [Slots — Compact Fixed-Field Storage for Types](architecture/EDR-063-slots.md) | Accepted | 2026-07-27 | — |
+| EDR-064 | Architecture | [Span — Safe Non-Owning Memory View](architecture/EDR-064-span.md) | Accepted | 2026-07-27 | — |
+| EDR-065 | Architecture | [Named and Optional Parameters — StdLib Call Ergonomics](architecture/EDR-065-named-and-optional-parameters.md) | Accepted | 2026-07-27 | — |
+| EDR-066 | Architecture | [Sorting — Stable Sort by Default with Explicit Unstable Variant](architecture/EDR-066-sorting.md) | Accepted | 2026-07-27 | — |
+| EDR-067 | Architecture | [Declarative Multi-Key Sort — Syntactic Sugar Over Sorting](architecture/EDR-067-declarative-multi-key-sort.md) | Accepted | 2026-07-27 | — |
+| EDR-068 | Architecture | [Immutable Date and Time — Value-Semantics Date/Time Types](architecture/EDR-068-immutable-date-time.md) | Accepted | 2026-07-27 | — |
+| EDR-069 | Architecture | [Persistent Data Structures — Immutable Collections with Structural Sharing](architecture/EDR-069-persistent-data-structures.md) | Accepted | 2026-07-27 | — |
+| EDR-070 | Architecture | [Derive Serialization — Automatic Serialization via Trait Derivation](architecture/EDR-070-derive-serialization.md) | Accepted | 2026-07-27 | — |
+| EDR-071 | Architecture | [Command Pattern via Language-Level Delegate](architecture/EDR-071-command-pattern-via-delegate.md) | Accepted | 2026-07-27 | — |
+| EDR-072 | Architecture | [Context-Limited Modules — Compiler-Level Capability Checks](architecture/EDR-072-context-limited-modules.md) | Accepted | 2026-07-27 | — |
+| EDR-073 | Architecture | [Declarative Constructs — Declarative StdLib Patterns](architecture/EDR-073-declarative-constructs.md) | Accepted | 2026-07-27 | — |
+| EDR-074 | Architecture | [Declaration by Assignment — Variable Introduction via First Assignment](architecture/EDR-074-declaration-by-assignment.md) | Accepted | 2026-07-27 | — |
+| EDR-075 | Architecture | [Reject Prototype-Based Object Model](architecture/EDR-075-reject-prototype.md) | **Rejected** | 2026-07-27 | — |
+| EDR-076 | Architecture | [Reject Significant Whitespace](architecture/EDR-076-reject-significant-whitespace.md) | **Rejected** | 2026-07-27 | — |
+| EDR-077 | Architecture | [Reject Dynamic Typing](architecture/EDR-077-reject-dynamic-typing.md) | **Rejected** | 2026-07-27 | — |
+| EDR-078 | Architecture | [Reject Class or Structure as Primary Composition Unit](architecture/EDR-078-reject-class-or-structure-as-primary-composition.md) | **Rejected** | 2026-07-27 | — |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -119,23 +142,37 @@
 | EDR-044 | Architecture | [Structural Typing — Structural Trait Satisfaction](architecture/EDR-044-structural-typing.md) | Accepted | 2026-07-27 | — |
 | EDR-045 | Architecture | [Union and Intersection Types — Structural Type Combinators](architecture/EDR-045-union-intersection-types.md) | Accepted | 2026-07-27 | — |
 | EDR-046 | Architecture | [Type-Level Computation — Closed Set of Compiler Intrinsics](architecture/EDR-046-type-level-computation.md) | Accepted | 2026-07-27 | — |
-| EDR-039 | [Algebraic Data Types (subsumes ENUM_ALTERNATIVES)](architecture/EDR-039-algebraic-data-types.md) | Accepted | 2026-07-27 |
-| EDR-040 | [ENUM_ALTERNATIVES — folded into EDR-039](architecture/EDR-039-algebraic-data-types.md) | Skipped | — |
-| EDR-041 | [Collection Literal Syntax](architecture/EDR-041-collection-literal-syntax.md) | Accepted | 2026-07-27 |
-| EDR-042 | [Dataclasses — Derive-Based Data Carriers](architecture/EDR-042-dataclasses.md) | Accepted | 2026-07-27 |
-| EDR-043 | [Literal Types — Values as Types](architecture/EDR-043-literal-types.md) | Accepted | 2026-07-27 |
-| EDR-044 | [Structural Typing — Structural Trait Satisfaction](architecture/EDR-044-structural-typing.md) | Accepted | 2026-07-27 |
-| EDR-045 | [Union and Intersection Types — Structural Type Combinators](architecture/EDR-045-union-intersection-types.md) | Accepted | 2026-07-27 |
-| EDR-046 | [Type-Level Computation — Closed Set of Compiler Intrinsics](architecture/EDR-046-type-level-computation.md) | Accepted | 2026-07-27 |
-| EDR-047 | [Async/Await with Async as Explicit Modifier](architecture/EDR-047-async-await.md) | Accepted | 2026-07-27 |
-| EDR-048 | *(Skipped — combined with EDR-047)* | — | — |
-| EDR-049 | [Concurrency — StdLib Utilities Built on Delegate Model](architecture/EDR-049-concurrency.md) | Accepted | 2026-07-27 |
-| EDR-050 | [Generators — Bidirectional Yield and Generator Expressions](architecture/EDR-050-generators.md) | Accepted | 2026-07-27 |
-| EDR-051 | [Push Streams — StdLib Observable-Style Reactive Streams](architecture/EDR-051-push-streams.md) | Accepted | 2026-07-27 |
-| EDR-052 | [`emit` as Intermediate Result](architecture/EDR-052-emit-as-intermediate-result.md) | Accepted | 2026-07-27 |
-| EDR-053 | [Iteration Loop — `for`/`while` with Protocol-Based Iteration](architecture/EDR-053-iteration-loop.md) | Accepted | 2026-07-27 |
-| EDR-054 | [Object Initialization — Named Parameters with Defaults](architecture/EDR-054-object-initialization.md) | Accepted | 2026-07-27 |
-| EDR-055 | [Unpacking — Destructuring Assignment with Pattern Syntax](architecture/EDR-055-unpacking.md) | Accepted | 2026-07-27 |
+| EDR-047 | Architecture | [Async/Await with Async as Explicit Modifier](architecture/EDR-047-async-await.md) | Accepted | 2026-07-27 | — |
+| EDR-049 | Architecture | [Concurrency — StdLib Utilities Built on Delegate Model](architecture/EDR-049-concurrency.md) | Accepted | 2026-07-27 | — |
+| EDR-050 | Architecture | [Generators — Bidirectional Yield and Generator Expressions](architecture/EDR-050-generators.md) | Accepted | 2026-07-27 | — |
+| EDR-051 | Architecture | [Push Streams — StdLib Observable-Style Reactive Streams](architecture/EDR-051-push-streams.md) | Accepted | 2026-07-27 | — |
+| EDR-052 | Architecture | [`emit` as Intermediate Result](architecture/EDR-052-emit-as-intermediate-result.md) | Accepted | 2026-07-27 | — |
+| EDR-053 | Architecture | [Iteration Loop — `for`/`while` with Protocol-Based Iteration](architecture/EDR-053-iteration-loop.md) | Accepted | 2026-07-27 | — |
+| EDR-054 | Architecture | [Object Initialization — Named Parameters with Defaults and Builder Patterns](architecture/EDR-054-object-initialization.md) | Accepted | 2026-07-27 | — |
+| EDR-055 | Architecture | [Unpacking — Destructuring Assignment with Pattern Syntax](architecture/EDR-055-unpacking.md) | Accepted | 2026-07-27 | — |
+| EDR-056 | Architecture | [Contracts — Compiler-Enforced Pre/Postconditions](architecture/EDR-056-contracts.md) | Accepted | 2026-07-27 | — |
+| EDR-057 | Architecture | [Delegation — Composition via Delegation Pattern](architecture/EDR-057-delegation.md) | Accepted | 2026-07-27 | — |
+| EDR-058 | Architecture | [Extension Functions — Method-Call Syntax on External Types](architecture/EDR-058-extension-functions.md) | Accepted | 2026-07-27 | — |
+| EDR-059 | Architecture | [Gradual Typing — Optional Type Annotations with Selective Type Checking](architecture/EDR-059-gradual-typing.md) | Accepted | 2026-07-27 | — |
+| EDR-060 | Architecture | [Smart Cast — Flow-Sensitive Type Narrowing](architecture/EDR-060-smart-cast.md) | Accepted | 2026-07-27 | — |
+| EDR-061 | Architecture | [Copy-on-Write — Memory Optimisation for Value Semantics](architecture/EDR-061-copy-on-write.md) | Accepted | 2026-07-27 | — |
+| EDR-062 | Architecture | [Properties — Getter/Setter Sugar Over Attribute Access](architecture/EDR-062-properties.md) | Accepted | 2026-07-27 | — |
+| EDR-063 | Architecture | [Slots — Compact Fixed-Field Storage for Types](architecture/EDR-063-slots.md) | Accepted | 2026-07-27 | — |
+| EDR-064 | Architecture | [Span — Safe Non-Owning Memory View](architecture/EDR-064-span.md) | Accepted | 2026-07-27 | — |
+| EDR-065 | Architecture | [Named and Optional Parameters — StdLib Call Ergonomics](architecture/EDR-065-named-and-optional-parameters.md) | Accepted | 2026-07-27 | — |
+| EDR-066 | Architecture | [Sorting — Stable Sort by Default with Explicit Unstable Variant](architecture/EDR-066-sorting.md) | Accepted | 2026-07-27 | — |
+| EDR-067 | Architecture | [Declarative Multi-Key Sort — Syntactic Sugar Over Sorting](architecture/EDR-067-declarative-multi-key-sort.md) | Accepted | 2026-07-27 | — |
+| EDR-068 | Architecture | [Immutable Date and Time — Value-Semantics Date/Time Types](architecture/EDR-068-immutable-date-time.md) | Accepted | 2026-07-27 | — |
+| EDR-069 | Architecture | [Persistent Data Structures — Immutable Collections with Structural Sharing](architecture/EDR-069-persistent-data-structures.md) | Accepted | 2026-07-27 | — |
+| EDR-070 | Architecture | [Derive Serialization — Automatic Serialization via Trait Derivation](architecture/EDR-070-derive-serialization.md) | Accepted | 2026-07-27 | — |
+| EDR-071 | Architecture | [Command Pattern via Language-Level Delegate](architecture/EDR-071-command-pattern-via-delegate.md) | Accepted | 2026-07-27 | — |
+| EDR-072 | Architecture | [Context-Limited Modules — Compiler-Level Capability Checks](architecture/EDR-072-context-limited-modules.md) | Accepted | 2026-07-27 | — |
+| EDR-073 | Architecture | [Declarative Constructs — Declarative StdLib Patterns](architecture/EDR-073-declarative-constructs.md) | Accepted | 2026-07-27 | — |
+| EDR-074 | Architecture | [Declaration by Assignment — Variable Introduction via First Assignment](architecture/EDR-074-declaration-by-assignment.md) | Accepted | 2026-07-27 | — |
+| EDR-075 | Architecture | [Reject Prototype-Based Object Model](architecture/EDR-075-reject-prototype.md) | **Rejected** | 2026-07-27 | — |
+| EDR-076 | Architecture | [Reject Significant Whitespace](architecture/EDR-076-reject-significant-whitespace.md) | **Rejected** | 2026-07-27 | — |
+| EDR-077 | Architecture | [Reject Dynamic Typing](architecture/EDR-077-reject-dynamic-typing.md) | **Rejected** | 2026-07-27 | — |
+| EDR-078 | Architecture | [Reject Class or Structure as Primary Composition Unit](architecture/EDR-078-reject-class-or-structure-as-primary-composition.md) | **Rejected** | 2026-07-27 | — |
 
 ### Process
 | ID | Title | Status | Date |
@@ -163,11 +200,12 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 38 |
+| Accepted | 57 |
+| **Rejected** | **4** |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |
 
 ---
 
-*Last updated: 2026-07-27* (EDR-047 through EDR-055 added — Wave 4 important-tier concepts)
+*Last updated: 2026-07-27* (EDR-075 through EDR-078 added — PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING, CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION rejected. See also: EDR-063 through EDR-074 added in prior wave)

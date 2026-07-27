@@ -839,3 +839,490 @@ The following 8 important-tier concepts were processed through the Decision Pipe
 **Classification per D-03:** Language (restricted closed intrinsic set). Non-recursive compiler intrinsics for type transformation. NO user-extensible type-level programming language.
 
 **EDR:** [EDR-046](../decision_records/architecture/EDR-046-type-level-computation.md)
+
+---
+
+### Important Tier — Wave 4 (Batch 2)
+
+The following 12 important-tier concepts were processed through the Decision Pipeline. See individual EDRs for Gate Validation and detailed reasoning.
+
+#### SLOTS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Fixed-field storage for types — preventing accidental attribute creation, ensuring ABI-stable layout, and eliminating per-instance dictionary overhead. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Fixed-field verification requires compiler-level type checking — accessing an undeclared field must be a compile-time error. |
+| Q3 | Can it be solved with existing primitives? | No. Compile-time field-set restriction is not expressible via the 9-primitive set — it requires the compiler to know the declared field set. |
+| Q4 | Does it violate any Design Principle? | No. Fixed fields as default aligns with Explicitness (type declaration defines exact fields), Safety (typos caught at compile time). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new runtime semantics** — slots are compile-time verification. The `dynamic` modifier is an annotation on existing type declaration syntax. |
+| Q6 | Can it be expressed through composition? | Yes — fixed fields = type declaration with compile-time field verification. Dynamic = type declaration without verification. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — slot restriction is a compile-time gate over existing `attribute access` primitive. |
+| Q8 | Is this an optimisation, not semantics? | The slot layout is an ABI optimisation. The compile-time field verification is a safety gate, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Fixed fields as default is the simplest, safest model. |
+
+**Classification per D-03:** Language. Fixed-field verification is compiler-level type checking. Dynamic modifier for opt-out expressibility.
+
+**EDR:** [EDR-063](../decision_records/architecture/EDR-063-slots.md)
+
+---
+
+#### SPAN
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Safe, non-owning access to contiguous memory — preventing dangling pointers, bounds violations, and implicit copies. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Lifetime tracking, bounds checking, and slice syntax require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. Lifetime tracking to prevent dangling — the span must not outlive backing storage — requires compiler-level borrow checking. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Safety (bounds-checked access), Explicitness (slice syntax is visible), Minimal Core (one concept replaces pointer+length, copy-on-slice, unsafe casts). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Lifetime-tracked borrowed view, bounds-checked access guarantee, sub-span slicing. |
+| Q6 | Can it be expressed through composition? | No — lifetime tracking through borrow checking is a compiler-level analysis. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Safe memory access is a semantic guarantee (no dangling, no UB). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for safe, efficient memory view operations. |
+
+**Classification per D-03:** Language. Lifetime-tracked, bounds-checked memory view. Compiler-level borrow-checking integration required.
+
+**EDR:** [EDR-064](../decision_records/architecture/EDR-064-span.md)
+
+---
+
+#### NAMED_AND_OPTIONAL_PARAMETERS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Call-site readability for functions with many parameters — boilerplate overload explosion for optional parameters. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Named arguments desugar to positional calls. Default values are ordinary expressions. The macro system (EDR-029) handles the transformation. |
+| Q3 | Can it be solved with existing primitives? | Yes — named args = `call` with argument-name matching (desugars to positional `call`). Defaults = `function` parameter + initializer expression. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (no new syntax), Explicitness (defaults are visible in signature). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Sugar over existing function call mechanism. |
+| Q6 | Can it be expressed through composition? | Yes — of `call` primitive + `identifier` (argument name) + desugaring. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — named args desugar to positional `call`. Defaults are initializer expressions. |
+| Q8 | Is this an optimisation, not semantics? | No — call syntax is syntactic, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for ergonomic APIs with many parameters. |
+
+**Classification per D-03:** StdLib. Sugar over existing function call mechanism. Macro-based desugaring.
+
+**EDR:** [EDR-065](../decision_records/architecture/EDR-065-named-and-optional-parameters.md)
+
+---
+
+#### SORTING
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Sorting stability — multi-key sort pipelines require predictable relative ordering of equal elements. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Sort algorithms are method implementations on collection types. Algorithm selection is an Implementation Policy. |
+| Q3 | Can it be solved with existing primitives? | Yes — sort = `function` on collection + `call` to `Ord` comparison. Algorithm choice is implementation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (StdLib is the right home), Deterministic Behavior (stability guaranteed). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Sort is a function composition. Stability guarantee is a specification property, not new semantics. |
+| Q6 | Can it be expressed through composition? | Yes — of comparison operations (`==`, `<` per EDR-017) + collection reordering. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — sort methods are function calls. |
+| Q8 | Is this an optimisation, not semantics? | Algorithm selection is an optimisation. The sort operation itself is semantics (ordering). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language — sorting is universal. |
+
+**Classification per D-03:** StdLib. Sort algorithm as method implementation. Algorithm selection is Implementation Policy.
+
+**EDR:** [EDR-066](../decision_records/architecture/EDR-066-sorting.md)
+
+---
+
+#### DECLARATIVE_MULTI_KEY_SORT
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Manual comparator chain boilerplate for multi-field sorting with mixed directions. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Declarative multi-key sort is sugar over SORTING + EQUALITY. Tuple-as-key lexicographic comparison uses existing `Ord` trait. |
+| Q3 | Can it be solved with existing primitives? | Yes — `sorted(by: [.a, .b])` desugars to lexicographic comparison using `Ord` + tuple comparison. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Intent Over Implementation (specify sort keys, not comparators). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Sugar over existing `Ord` trait comparisons. |
+| Q6 | Can it be expressed through composition? | Yes — of `Ord` comparisons on tuples. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — declarative key paths desugar to `Ord` comparator construction. |
+| Q8 | Is this an optimisation, not semantics? | No — declarative API is a convenience, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates comparator chain boilerplate for the common case. |
+
+**Classification per D-03:** StdLib. Sugar over SORTING + EQUALITY. No new language semantics.
+
+**EDR:** [EDR-067](../decision_records/architecture/EDR-067-declarative-multi-key-sort.md)
+
+---
+
+#### IMMUTABLE_DATE_TIME
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Mutable date/time bugs — thread-unsafe formatters, surprising mutation semantics, inconsistent API design. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Date/time types are library types. Immutability is enforced at the type level (no setter methods). |
+| Q3 | Can it be solved with existing primitives? | Yes — each date/time type = `pack` (fields) + `function` (arithmetic, formatting). Immutability = no mutating methods. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Data-First model (dates as immutable values), Safety (thread-safe by construction). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Date/time arithmetic is function composition. Parsing returns `Result<T>` (EDR-020). |
+| Q6 | Can it be expressed through composition? | Yes — of existing primitives (`pack`, `function`, `call`, `===` for comparison). |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all date/time methods are function calls. |
+| Q8 | Is this an optimisation, not semantics? | No — temporal arithmetic is semantic. Calendar system choice is implementation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Universal need. Immutable-by-default eliminates the most common date/time bugs. |
+
+**Classification per D-03:** StdLib. Value-semantics date/time types. Immutable by construction.
+
+**EDR:** [EDR-068](../decision_records/architecture/EDR-068-immutable-date-time.md)
+
+---
+
+#### PERSISTENT_DATA_STRUCTURES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Hash-key safe, concurrent-safe, fully immutable collections with structural sharing across versions. |
+| Q2 | Is this a language problem or a library problem? | **StdLib (deferred to v0.2).** `Immutable` marker trait for compiler optimisation hooks. Collection types are library implementations. |
+| Q3 | Can it be solved with existing primitives? | Partially — `Immutable` marker trait is a compile-time guarantee. Structural sharing algorithms are library implementations. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (StdLib classification), Safety (immutability guarantee). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **Interface contract only in v0.1.** The `Immutable` trait is a guarantee. Full implementations deferred to v0.2. |
+| Q6 | Can it be expressed through composition? | Yes — `Immutable` trait = trait with no methods. Persistent collections = function implementations with structural sharing. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all collection operations are method calls. |
+| Q8 | Is this an optimisation, not semantics? | Structural sharing is an implementation technique for value semantics. |
+| Q9 | Does it affect backward compatibility? | N/A — v0.1 uses Tuple + CoW. `Immutable` trait is forward-compatible. |
+| Q10 | Is it worth adding at all? | **Yes, but deferred.** v0.1 uses Tuple + CoW. `Immutable` trait accepted now as forward contract. |
+
+**Classification per D-03:** StdLib (deferred to v0.2). `Immutable` marker trait + persistent collection types. v0.1 uses Tuple + CoW.
+
+**EDR:** [EDR-069](../decision_records/architecture/EDR-069-persistent-data-structures.md)
+
+---
+
+#### DERIVE_SERIALIZATION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Manual recursive serialization code — error-prone, type-unsafe, maintenance burden. |
+| Q2 | Is this a language problem or a library problem? | **StdLib / Macro.** `@derive(Serialize, Deserialize)` uses the existing macro system (EDR-029). Format-agnostic traits. |
+| Q3 | Can it be solved with existing primitives? | Yes — `Serialize`/`Deserialize` traits + `@derive` macro generation. Generated code uses `pack`/`unpack` + `call`. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (macro layer, not language core), Explicitness (`@derive` annotations are visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Serialization is trait implementation generation. Deserialization returns `Result<T>` (existing mechanism). |
+| Q6 | Can it be expressed through composition? | Yes — of existing primitives + `@derive` macro (EDR-029). |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — `@derive(Serialize)` desugars to macro-generated `impl` blocks. |
+| Q8 | Is this an optimisation, not semantics? | No — serialization format is semantic (what bytes represent a value). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates the most common boilerplate + bug surface in any practical codebase. |
+
+**Classification per D-03:** StdLib / Macro. `@derive(Serialize, Deserialize)` via existing macro system (EDR-029). Format-agnostic.
+
+**EDR:** [EDR-070](../decision_records/architecture/EDR-070-derive-serialization.md)
+
+---
+
+#### COMMAND_PATTERN_VIA_DELEGATE
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | GoF Command pattern requires class-per-command in languages without first-class functions — class explosion and indirection. |
+| Q2 | Is this a language problem or a library problem? | **Not a new feature.** Orthon's existing delegate model (EDR-033, EDR-057) and first-class functions already subsume all Command pattern use cases. |
+| Q3 | Can it be solved with existing primitives? | Yes — `() -> void` = Command, `() -> V` = Callable, `Event -> void` = ActionListener. All expressed via existing `function` + `call` + `scope` (closure capture). |
+| Q4 | Does it violate any Design Principle? | No. Not adding a new concept — the existing delegate model already covers it. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** This is a documentation-only decision — the pattern disappears into existing delegates. |
+| Q6 | Can it be expressed through composition? | Yes — of existing `delegate`, `function`, `scope` concepts. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all Command patterns already expressed via existing primitives. |
+| Q8 | Is this an optimisation, not semantics? | N/A — no new feature. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Not as a new feature.** The existing delegate model already covers it. Cross-reference PATTERN_MATCHING_DISPATCH (EDR-026). |
+
+**Classification per D-03:** Existing concept. Not a new feature — delegate model subsumes Command pattern. Documentation confirmation of existing coverage.
+
+**EDR:** [EDR-071](../decision_records/architecture/EDR-071-command-pattern-via-delegate.md)
+
+---
+
+#### CONTEXT_LIMITED_MODULES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | LLM attention window limit — understanding a module requires loading its entire transitive closure. Bounded context for human readers. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Module system requires compiler support for scoping, visibility, dependency declaration, and effect isolation. |
+| Q3 | Can it be solved with existing primitives? | No. Module scoping, visibility control, and effect verification require compiler-level semantics not expressible via the 9-primitive set. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicitness (declared dependencies and effects), Minimal Core (one module system). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Module-level scoping rules, effect isolation at module boundary, explicit dependency declaration, context budget diagnostic. |
+| Q6 | Can it be expressed through composition? | No — module system is a fundamental language organisation construct. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Module organisation determines what code is visible and what effects are permitted — semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for LLM-native design — bounded context window. Also valuable for human reasoning. |
+
+**Classification per D-03:** Language. Module system with explicit public API, declared dependencies, and effect isolation. Compiler-level capability checks.
+
+**EDR:** [EDR-072](../decision_records/architecture/EDR-072-context-limited-modules.md)
+
+---
+
+#### DECLARATIVE_CONSTRUCTS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Declarative constructs reduce LLM generation error rates — specifying intent (what) is easier than implementation steps (how). |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** All declarative constructs are method implementations on collection/resource types. Five synthesis-friendliness criteria govern inclusion. |
+| Q3 | Can it be solved with existing primitives? | Yes — each declarative construct has a documented desugaring to imperative primitives (collection ops = Iterator protocol, resource mgmt = scope, sorting = Ord trait, serialization = derive macro). |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Intent Over Implementation (what over how), Minimal Core (StdLib classification). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** All constructs have defined desugaring paths. No declarative construct adds expressive power beyond primitive composition. |
+| Q6 | Can it be expressed through composition? | Yes — of existing primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all declarative constructs are sugar over imperative primitives with documented desugaring. |
+| Q8 | Is this an optimisation, not semantics? | No — declarative constructs express programmer intent. Implementation efficiency (loop fusion) is optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Declarative constructs improve LLM generation accuracy and human readability. Query expressions deferred to v0.2. |
+
+**Classification per D-03:** StdLib. Declarative constructs for common transformations. All have documented desugaring. Query expressions deferred.
+
+**EDR:** [EDR-073](../decision_records/architecture/EDR-073-declarative-constructs.md)
+
+---
+
+#### DECLARATION_BY_ASSIGNMENT
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Variable declaration ceremony — explicit `let`/`var`/`Type name` before first use adds noise. But no accidental creation via typos. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Definite assignment analysis, read-before-write detection, and `let` for shadowing all require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. Definite assignment analysis — verifying variable is assigned on all paths before read — is a compiler-level flow analysis. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicitness (`let` for shadowing is visible, `mut` for mutation is visible), Concision (first assignment creates). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Definite assignment analysis (read-before-write is compile-time error), `let` shadowing semantics, no implicit globals rule. |
+| Q6 | Can it be expressed through composition? | No — flow analysis across code paths is compiler-level, not expressible via primitive composition. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Partial — `let` for shadowing is syntactic, but definite assignment analysis requires compiler support. |
+| Q8 | Is this an optimisation, not semantics? | No. Variable existence and initialization tracking is semantic — determines what operations are legal. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Concrete syntax deferred to Phase 5. |
+| Q10 | Is it worth adding at all? | **Yes.** Concise (first assignment creates) + safe (read-before-write error). Deferred to Phase 5 for concrete syntax finalization. |
+
+**Classification per D-03:** Language. Definite assignment analysis, read-before-write detection, explicit `let` for shadowing. Borderline with Phase 5 Syntax.
+
+**EDR:** [EDR-074](../decision_records/architecture/EDR-074-declaration-by-assignment.md)
+
+---
+
+### Important Tier — Wave 4 (continued)
+
+The following 7 important-tier concepts complete the Wave 4 pipeline. See individual EDRs for Gate Validation and detailed reasoning.
+
+#### CONTRACTS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Verifiable guarantees about function behaviour — typed signatures give structure but not intent. Contracts give both, reducing LLM hallucination of nonsensical calls. |
+| Q2 | Is this a language problem or a library problem? | **Language.** `requires`, `ensures`, and `invariant` keywords require syntactic integration into function signatures and compiler-level enforcement. |
+| Q3 | Can it be solved with existing primitives? | No. Contract semantics (caller-visible constraints on function domain, `result` postcondition variable) are not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Declarative With Static Guarantees, Explicitness (contracts are visible in signatures), Minimal Core (one mechanism replaces documentation assertions + runtime checks). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Pre/postcondition constraints, `result`/`old` implicit variables, invariant bounds, contract purity enforcement, Liskov inheritance rules. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No. Contract verification is a semantic guarantee. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for LLM code generation accuracy and compiler-verified intent. Proven model from Eiffel and Ada 2012. |
+
+**Classification per D-03:** Language. Contract keywords require syntactic integration into function signatures and compiler-level enforcement. Not expressible via composition of existing primitives.
+
+**EDR:** [EDR-056](../decision_records/architecture/EDR-056-contracts.md)
+
+---
+
+#### DELEGATION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Boilerplate forwarding when a type reuses behaviour from another type without inheritance (class delegation). Getters/setters with reusable behaviours (property delegation). |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** The `@delegate` macro desugars to explicit `impl` blocks using the existing macro system (EDR-029). No new compiler semantics. |
+| Q3 | Can it be solved with existing primitives? | Yes — delegation is expressible via composition of existing primitives (trait implementation + manual method forwarding). The macro automates the pattern. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Composition Over Inheritance, Minimal Core (reuses macro system), Explicitness (`@delegate` annotation is visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** `@delegate` macro desugars to explicit `impl` blocks. Property delegation uses StdLib protocols. |
+| Q6 | Can it be expressed through composition? | Yes — of trait `impl` blocks + method forwarding. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — `@delegate` is sugar over macro-generated `impl` blocks. |
+| Q8 | Is this an optimisation, not semantics? | No. Delegation is a code organisation pattern, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates boilerplate forwarding. StdLib classification means zero language additions. |
+
+**Classification per D-03:** StdLib. Delegation is expressible via composition of existing primitives. Macro system automates the pattern.
+
+**EDR:** [EDR-057](../decision_records/architecture/EDR-057-delegation.md)
+
+---
+
+#### EXTENSION_FUNCTIONS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Adding behaviour to existing types without modifying source, extending via inheritance, or wrapping in an adapter. Utility function syntax (`sort(list)`) is less natural than method syntax (`list.sort()`). |
+| Q2 | Is this a language problem or a library problem? | **Language.** Extension functions require the compiler to recognize receiver-call syntax on types from other modules and resolve dispatch based on static type. |
+| Q3 | Can it be solved with existing primitives? | No. Receiver-call syntax on external types requires name resolution rules and static dispatch — not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicit Semantics (extension import required, member precedence documented), Intent Over Implementation (natural call syntax). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Extension function resolution — the compiler must find the correct definition based on receiver type, import scope, and precedence rules. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — requires compiler-level name resolution and dispatch. |
+| Q8 | Is this an optimisation, not semantics? | No. Extension function dispatch determines which function runs — this is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Proven in Kotlin, C#, Swift — natural extension mechanism without inheritance or wrapper boilerplate. |
+
+**Classification per D-03:** Language. Extension functions require compiler-level name resolution and static dispatch. Not expressible via primitive composition.
+
+**EDR:** [EDR-058](../decision_records/architecture/EDR-058-extension-functions.md)
+
+---
+
+#### GRADUAL_TYPING
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | The same programmer needs dynamic speed while prototyping and static safety while shipping. The language should not force a permanent choice between the two modes. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Selective type checking, boundary checks at typed/untyped interfaces, and global consistency passes require compiler-level infrastructure. |
+| Q3 | Can it be solved with existing primitives? | No. The concept of a type checker that can be selectively enabled/disabled at module boundaries is not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one concept — optional annotations — covers the spectrum), Intent Over Implementation (start dynamic, add types as code matures). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Boundary checking, type inference on unannotated code, global consistency pass as optional lint. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No. Type checking determines program correctness — this is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Critical for LLM adoption — LLM-generated code starts with minimal annotations; compiler catches structural errors. Proven in TypeScript ecosystem. |
+
+**Classification per D-03:** Language. Optional type annotations require compiler-level checking that can be selectively enabled/disabled. Boundary checks, inference, and consistency passes are compiler services.
+
+**EDR:** [EDR-059](../decision_records/architecture/EDR-059-gradual-typing.md)
+
+---
+
+#### SMART_CAST
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | After checking that a value is a specific type, the programmer should not need to cast it again. The compiler should track type-narrowing information through control flow. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Flow-sensitive type analysis — tracking type information across control flow edges — is a compiler-level operation. |
+| Q3 | Can it be solved with existing primitives? | No. Flow-sensitive type tracking across control flow edges is not expressible via the primitive set. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Declarative With Static Guarantees (narrowing is compiler-enforced), Explicitness (narrowing follows visible type checks). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Flow-sensitive type narrowing — tracking per-variable type information across control flow edges. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No. Type narrowing determines what operations are legal on a value — this is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Builds on NULL_SAFETY (EDR-018) + PATTERN_MATCHING (EDR-025). |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates redundant casts after type checks. Partially subsumed by PATTERN_MATCHING, but handles non-pattern scenarios. Proven in Kotlin and TypeScript. |
+
+**Classification per D-03:** Language. Flow-sensitive type narrowing requires the compiler to track type information across control flow edges. Partially subsumed by PATTERN_MATCHING.
+
+**EDR:** [EDR-060](../decision_records/architecture/EDR-060-smart-cast.md)
+
+---
+
+#### COPY_ON_WRITE
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Memory safety without a borrow checker learning curve. Value semantics by default with efficient implementation. |
+| Q2 | Is this a language problem or a library problem? | **StdLib / Implementation Strategy.** CoW is an optimisation technique for value-semantics collections. The language spec defines value semantics; CoW is how the runtime achieves it efficiently. |
+| Q3 | Can it be solved with existing primitives? | Yes — CoW is an implementation choice for existing value-semantics primitives. The programmer writes value-semantics code; CoW is invisible. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Intent Over Implementation (invisible optimisation), Minimal Core (CoW is an implementation detail). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** CoW is an optimisation technique for existing value semantics. The language surface does not expose CoW. |
+| Q6 | Can it be expressed through composition? | Yes — of existing primitives (assignment, mutation, reference counting). |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — the programmer writes value-semantics code; CoW is an invisible optimisation. |
+| Q8 | Is this an optimisation, not semantics? | **Yes.** CoW is purely an implementation optimisation — it changes performance, not observable behaviour. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** CoW provides the performance of sharing with the safety of copying. Avoids borrow checker complexity for common patterns. |
+
+**Classification per D-03:** StdLib / Implementation Strategy. CoW is an implementation technique for value-semantics collections. Cross-reference VALUE_SEMANTICS (SEMANTIC_MODEL.md).
+
+**EDR:** [EDR-061](../decision_records/architecture/EDR-061-copy-on-write.md)
+
+---
+
+#### PROPERTIES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Exposing data without coupling consumers to internal representation. Stored fields and computed values should use the same call syntax. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Properties desugar to field access + function calls. The concept of "a named value with getter/setter" is expressible via existing primitives. |
+| Q3 | Can it be solved with existing primitives? | Yes — attribute access + function calls already provide the primitive operations. Properties add syntactic sugar. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (no new semantics), Uniform Access (stored and computed use same syntax). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Implicit getter generation is syntactic sugar over attribute access + function. |
+| Q6 | Can it be expressed through composition? | Yes — of attribute access + function calls. |
+| Q7 | Can it be syntactic sugar over existing primitives? | **Yes** — properties are sugar over field access + getter/setter function calls. |
+| Q8 | Is this an optimisation, not semantics? | No. Properties are a code organisation pattern, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Proven in C#, Kotlin, Swift — eliminates refactoring friction between stored and computed values. |
+
+**Classification per D-03:** StdLib. Properties desugar to field access + function calls. No compiler-level semantics beyond what attribute access already provides.
+
+**EDR:** [EDR-062](../decision_records/architecture/EDR-062-properties.md)
+
+---
+
+### Deferrable Tier — Deferred to v0.2/v0.3
+
+The following 50 concepts reside in `how/concepts/research/deferrable/` and have been
+deferred to v0.2 or v0.3 via the Phase 4 Decision Pipeline triage. Four additional
+concepts (PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING,
+CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION) were moved from deferrable/ to reject/ —
+see EDR-075 through EDR-078 and [`how/concepts/research/reject/README.md`](../concepts/research/reject/README.md).
+
+**Deferral rationale categories:**
+
+| Category | Meaning |
+|----------|---------|
+| **Scope boundary** | Explicitly out of scope for v0.1 specification |
+| **Dependency gated** | Depends on another concept deferred or not yet settled |
+| **Complexity deferred** | Design is understood but too complex for v0.1 |
+| **Low priority** | Useful but not critical for initial language adoption |
+| **Implementation detail** | Better addressed in the implementation phase (Milestone 10) |
+| **LLM toolchain** | Belongs to LLM toolchain workstream (post-Freeze) |
+
+| Concept | Deferral Rationale | Target | Dependency |
+|---------|-------------------|--------|------------|
+| ACTORS.md | **Scope boundary** — the actor model (lightweight processes with mailbox-based communication) is an advanced concurrency concern. Orthon's delegate-based concurrency model (EDR-033) and `async`/`await` (EDR-047) provide the v0.1 concurrency surface. Actors belong in the StdLib or a v0.3 concurrency workstream. | v0.3 | CONCURRENCY_MODEL, DELEGATE |
+| ACT_AS_ACTIVE_OBJECT.md | **Superseded** — active objects with mailbox (the `act` modifier) are superseded by Orthon's DELEGATE model (EDR-033) which provides a unified mechanism for all callable entities including concurrent ones. | v0.3 | DELEGATE |
+| ASYNC_LAMBDA.md | **Low priority** — async lambda syntax is syntactic sugar over named async functions. Orthon's `async` modifier on `fun`/`proc`/`new` (EDR-047) already covers the semantic model; a concise lambda form can be added when lambda syntax is finalised in Phase 5. | v0.3 | ASYNC_AWAIT, SYNTAX |
+| BUILDER_PATTERN_ELIMINATION.md | **Dependency gated** — the builder pattern is rendered unnecessary by Orthon's named-parameter-with-defaults model. However, named parameters are themselves deferred to StdLib status. The builder elimination follows naturally once named parameters are specified. | v0.3 | NAMED_AND_OPTIONAL_PARAMETERS |
+| CODE_BLOCK_AS_HOF.md | **Low priority** — syntactic sugar for passing a block of code as a higher-order function argument (Ruby-style `do...end` blocks, Kotlin trailing lambda). Orthon's `function` + `call` primitives already cover function passing; a dedicated block syntax is ergonomic sugar for Phase 5. | v0.3 | SYNTAX |
+| COLLECTIONS_FUNCTIONAL_API.md | **Low priority** — a rich functional API for collections (partition, groupBy, chunked, windowed, etc.) is StdLib work, not language specification. Orthon's COMPOSABLE_COLLECTION_OPS (EDR-032) provides the `map`/`filter`/`reduce` foundation; the extended API is implementation work for Milestone 10. | v0.3 | COMPOSABLE_COLLECTION_OPS |
+| COMPILE_TIME_CONCURRENCY_SAFETY.md | **Complexity deferred** — compile-time verification of concurrency safety (race condition detection, deadlock prevention) is an advanced compiler analysis topic. Orthon's delegate-based concurrency model (EDR-033) with ownership-based safety already provides strong guarantees; extending to full compile-time concurrency checking is a v0.3+ research area. | v0.3 | CONCURRENCY_MODEL, OWNERSHIP |
+| COMPILE_TIME_METAPROGRAMMING.md | **Dependency gated** — advanced compile-time metaprogramming (beyond `@macro` AST macros and comptime execution) depends on the stabilisation of Orthon's comptime model (EDR-031) and macro system (EDR-029). Post-v0.1 metaprogramming expansion is natural once the foundation is proven. | v0.3 | COMPILE_TIME_EXECUTION, AST_MACROS |
+| CUSTOM_OPERATORS.md | **Complexity deferred** — custom operators introduce precedence and associativity decisions that complicate the parser and conflict with Orthon's Semantic Purity principle (one symbol, one meaning). Designing a safe operator-overloading mechanism that does not degrade readability is a hard problem requiring community experience before committing. | v0.3 | SYNTAX, PARSER |
+| DEFAULT_INTERFACE_METHODS.md | **Dependency gated** — default interface methods are a subset of protocol extensions. Deferred alongside PROTOCOL_EXTENSIONS for the same reasons. Orthon's trait default implementations already cover the primary use case. | v0.3 | TRAITS |
+| DEVELOPER_TOOLING.md | **LLM toolchain** — developer tooling (language server, formatter, linter, debugger) is an implementation concern for Milestone 10, not part of the language specification. The specification defines what is correct; tooling implements those definitions. | Post-Freeze | Full specification |
+| DIALECTS.md | **Complexity deferred** — language subsets/dialects (e.g., Safe Orthon, Embedded Orthon) require a mature understanding of the full language before subsetting decisions can be principled. Premature subsetting would create arbitrary boundaries. | v0.3 | Full specification |
+| DIFFERENTIABLE_PROGRAMMING.md | **Scope boundary** — differentiable programming (automatic differentiation for ML/AI workloads) is a domain-specific language concern. It belongs in an Orthon-for-ML workstream, not the core language specification. | v0.3 | — |
+| DISPOSABLE_PATTERN.md | **Low priority** — resource management (dispose/close pattern) is expressible via Orthon's context parameters (EDR-037) and RAII-style lifetime management. A dedicated `using`/`disposable` keyword is syntactic sugar over these existing mechanisms. | v0.3 | CONTEXT_PARAMETERS |
+| DYNAMIC_COLLECTIONS.md | **Low priority** — dynamic collections (growable arrays, hash maps, sets) are StdLib types, not language constructs. Orthon's data model provides the semantic foundation; concrete collection types are implementation work for Milestone 10. | v0.3 | DATA_MODEL |
+| EVENTS.md | **Low priority** — event systems (publish/subscribe, event emitters) are a library/StdLib pattern expressible via Orthon's delegate mechanism and StdLib collections. A dedicated `event` keyword adds language complexity that is unnecessary for v0.1. | v0.3 | DELEGATE, TRAITS |
+| EXPLICIT_COMPOSITION.md | **Low priority** — mechanisms for explicit composition (delegation declarations, composition clauses) overlap with Orthon's DELEGATION (EDR-057) and TRAITS (EDR-019). Research preserved for reference but the concept is covered by existing accepted mechanisms. | v0.3 | DELEGATION, TRAITS |
+| FUNCTION_OVERLOADING.md | **Complexity deferred** — function overloading (multiple functions with the same name but different parameter types) interacts with Orthon's type inference (EDR-027), generics (EDR-024), and pattern matching dispatch (EDR-026). Designing a coherent overload resolution rule set that does not conflict with these mechanisms is a significant effort best deferred until they are stable. | v0.3 | TYPE_INFERENCE, GENERICS, PATTERN_MATCHING_DISPATCH |
+| HOMOICONICITY.md | **Low priority** — code-as-data (homoiconicity, where the language's primary representation is its own AST) is philosophically interesting and enables advanced metaprogramming, but Orthon already provides `@macro` for structured code generation. Full homoiconicity adds parser/runtime complexity without proportional benefit for v0.1. | v0.3 | AST_MACROS |
+| IDEMPOTENT_GENERATION.md | **LLM toolchain** — the property that LLM-generated Orthon code produces the same AST when re-generated (idempotent generation) is an LLM toolchain concern, not a language specification requirement. The spec defines the language; the toolchain ensures generation stability. | Post-Freeze | SYNTAX, LLM_NATIVE_TOOLCHAIN |
+| INDEXERS.md | **Low priority** — indexer syntax (`obj[key]` → value) is syntactic sugar over function calls (`obj.get(key)`). Orthon's Semantic Purity reserves `[]` for indexing collections; custom indexers would require expanding the `[]` meaning or adding a new syntactic form. Deferrable. | v0.3 | PROPERTIES, SYNTAX |
+| INTERACTIVE_DEVELOPMENT.md | **Scope boundary** — interactive development (REPL, notebook-style execution) is an implementation feature for Milestone 10. The language specification defines what correct programs look like; the runtime implements interactive execution. | v0.3 | EXECUTION_PROGRAM |
+| LAZY_INITIALIZATION.md | **Low priority** — a `lazy` keyword for deferred initialisation is syntactic sugar over a closure + memoisation pattern. Orthon's eager-by-default model (with explicit lazy sequences via generators) covers the semantic need; a field-level `lazy` keyword is a convenience for v0.3. | v0.3 | GENERATORS |
+| LITERATE_PROGRAMMING.md | **Low priority** — documentation-oriented programming (literate programming with embedded code blocks) is a niche workflow. While it aligns with Orthon's documentation goals, it does not belong in the v0.1 specification. Belongs to IDE/toolchain workstream. | v0.3 | — |
+| LLM_NATIVE_TOOLCHAIN.md | **LLM toolchain** — LLM-native tooling (structured generation contracts, AST-aware code generation, confidence scoring) is a separate workstream that runs in parallel to the specification. The v0.1 spec defines the language: the LLM toolchain implements the generation layer. | Post-Freeze | SYNTAX, SEMANTIC_MODEL |
+| METADATA_ANNOTATIONS.md | **Low priority** — metadata annotations (custom `@annotations` beyond compiler-recognised ones) are expressible via Orthon's `@` syntax for compiler-recognised metadata (EDR-029). User-defined annotations are a natural extension post-v0.1 when usage patterns emerge. | v0.3 | AST_MACROS |
+| METAOBJECTS.md | **Scope boundary** — metaprogramming beyond `@macro` (AST macros) is a deep topic (method interception, `__getattr__`-style hooks) that belongs in a post-v0.1 metaprogramming workstream. The `@macro` mechanism covers the v0.1 metaprogramming surface. | v0.3 | AST_MACROS |
+| MIXIN.md | **Dependency gated** — mixins are traits with concrete behaviour rather than a separate construct. The MIXIN research document itself concludes that mixins-as-traits-with-default-impls is the correct model. A dedicated `mixin` keyword or separate construct adds no semantic value and would conflict with Minimal Core. Deferred pending trait-coherence resolution. | v0.3 | TRAITS, DELEGATION |
+| NATIVE_COMPILATION.md | **Implementation detail** — native code compilation is an implementation strategy concern, not a language specification issue. The language defines semantics independent of compilation target (see EXECUTION_PROGRAM, EDR-036). Whether the reference implementation compiles to native code is a Milestone 10 decision. | v0.3 | EXECUTION_PROGRAM |
+| NESTED_CLASSES.md | **Low priority** — nested classes are expressible via namespacing within a module. Adding dedicated nested-class semantics (inner class access to outer instance, etc.) is a detail that can be deferred until practical usage demands it. | v0.3 | NAMESPACES |
+| OBJECTS_AND_SINGLETONS.md | **Low priority** — object literals (anonymous objects with inline method definitions) are expressible via anonymous types implementing a trait. A dedicated syntax for single-use objects can be deferred until the trait system stabilises and usage patterns emerge. | v0.3 | TRAITS |
+| OBSERVER.md | **Low priority** — the observer pattern (event listeners, callbacks) is a library pattern expressible via Orthon's delegate mechanism and StdLib collections. A dedicated `observer` keyword or construct is unnecessary — the pattern is already composable from existing primitives. | v0.3 | DELEGATE |
+| OPEN_CLASSES.md | **Rejected in spirit** — open classes (modifying existing types from outside their definition) directly contradict Explicitness and violate module boundaries. While not formally rejected via EDR, this concept is unlikely to be accepted. Deferred as a low-priority research topic with no concrete proposal. | v0.3 | — |
+| PARTIAL_CLASSES.md | **Low priority** — partial classes (C#-style split class definitions across files) are a code organisation pattern specific to code-generation workflows. Orthon's module system and `@derive` mechanism cover the same use cases without requiring partial-class language support. | v0.3 | MODULES |
+| PROPERTY_WRAPPERS.md | **Low priority** — property wrappers (Swift `@propertyWrapper`, Kotlin delegated properties) are syntactic sugar over getter/setter patterns. Orthon's PROPERTIES (EDR-062) already covers the basic pattern; wrappers add ergonomic sugar that can be deferred. | v0.3 | PROPERTIES |
+| PROTOCOL_EXTENSIONS.md | **Dependency gated** — protocol extensions (adding default implementations to protocols/traits) are expressible via Orthon's trait system (EDR-019) with default method implementations. The question of whether extensions can be added separately from the original trait definition (Swift-style) depends on coherence rule decisions not yet finalized. | v0.3 | TRAITS |
+| QUERY_EXPRESSIONS.md | **Low priority** — LINQ-style query expressions are syntactic sugar over collection combinator chains (`.map()`, `.filter()`, etc.). Orthon's composable collection operations (EDR-032) provide the semantic foundation; query syntax can be added in a sugar workstream post-v0.1. | v0.3 | COMPOSABLE_COLLECTION_OPS |
+| REFLECTION_ALTERNATIVES.md | **Scope boundary** — runtime reflection (type introspection, dynamic member access) is explicitly out of scope for the v0.1 specification. Orthon's compile-time execution model (EDR-031) provides comptime reflection; runtime reflection is a separate feature requiring runtime type information (RTTI) infrastructure. | v0.3 | COMPILE_TIME_EXECUTION |
+| ROOT_OBJECT.md | **Rejected in spirit** — a universal base class (Java `Object`, C# `object`) contradicts Orthon's trait-based model where behaviour is provided via trait satisfaction, not inheritance from a root type. Research preserved for reference but unlikely to be accepted. | v0.3 | TRAITS |
+| SAFE_SANDBOX.md | **Scope boundary** — sandboxed execution (running untrusted code in a restricted environment) is a security concern for the implementation (Milestone 10), not the language specification. The specification defines what programs mean; the runtime implements sandboxing. | v0.3 | EXECUTION_PROGRAM |
+| SCRIPT_EXECUTION_MODEL.md | **Scope boundary** — a scripting-mode execution model (interpreted, no explicit compilation step, dynamic dispatch) is a separate execution strategy that Orthon's Execution Program model (EDR-036) already supports as a policy choice. The v0.1 specification defines the default semantics; a scripting strategy is an implementation concern. | v0.3 | EXECUTION_PROGRAM |
+| SEMANTIC_ANNOTATIONS.md | **Low priority** — semantic annotations (`@pure`, `@async`, `@deterministic`) are interesting for compiler optimisation hints but are speculative without implementation experience. They may be introduced as StdLib decorations post-v0.1 rather than language-level annotations. | v0.3 | — |
+| SINGLETON_CLASS.md | **Low priority** — the singleton pattern is expressible via Orthon's existing mechanisms (a module-level `let` binding of an object). A dedicated `singleton` keyword or construct would add language complexity for a pattern that is already simple to express. | v0.3 | — |
+| SINGLETON_PATTERN_ANALYSIS.md | **Low priority** — analysis document for singleton pattern trade-offs. Informational only — no language feature proposed. Singleton is already expressible as a module-level `let` binding. | v0.3 | — |
+| SOFTWARE_TRANSACTIONAL_MEMORY.md | **Complexity deferred** — STM (software transactional memory) is an advanced concurrency control mechanism with ongoing research on performance and semantics. It is far beyond the v0.1 concurrency surface and may never be adopted if Orthon's delegate+async model proves sufficient. | v0.3 | CONCURRENCY_MODEL |
+| STRATEGY_PATTERN_ELIMINATION.md | **Low priority** — strategy pattern elimination (making strategies a language-level concept rather than a library pattern). Orthon's DELEGATE mechanism (EDR-033) and higher-order functions already cover the strategy pattern idiomatically. A dedicated strategy construct would add no semantic value. | v0.3 | DELEGATE, FUNCTIONS |
+| TASK_PARALLEL_LIBRARY.md | **Implementation detail** — parallel execution patterns (parallel-for, data parallelism) are StdLib concerns built on Orthon's delegate-based concurrency primitives (EDR-033). The specification defines the concurrency model; parallel patterns are implementation work for Milestone 10. | v0.3 | CONCURRENCY_MODEL, DELEGATE |
+| TOP_LEVEL_DECLARATIONS.md | **Low priority** — top-level declarations (functions, types, and values at module scope without a wrapping class) are already the default in Orthon's module model. This research document explores edge cases (ordering, visibility, shadowing) that are syntactic details for Phase 5. | v0.3 | NAMESPACES, SYNTAX |
+| TYPED_HOLES.md | **Low priority** — typed holes (`_` as a typed placeholder that triggers a compile error with the expected type) are useful during development but are an IDE/compiler diagnostic feature, not a core language semantic. They add no semantic value to the specification. | v0.3 | TYPE_INFERENCE |
+| USING_DIRECTIVES.md | **Low priority** — `using`/`import` directives (bringing names from other modules into scope) are a syntactic concern for Phase 5. Orthon's module/namespace model is accepted; the specific import syntax is design work for the Syntax phase. | v0.3 | NAMESPACES, SYNTAX |
+
+**Notes:**
+- Four concepts originally in `deferrable/` have been formally rejected and moved to `how/concepts/research/reject/`. See EDR-075 (PROTOTYPE), EDR-076 (SIGNIFICANT_WHITESPACE), EDR-077 (DYNAMIC_TYPING), EDR-078 (CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION).
+- `ACT_AS_ACTIVE_OBJECT.md` is listed as superseded — its semantic content is subsumed by DELEGATE (EDR-033).
+
+**Total deferrable concepts documented: 50** (across 54 original deferrable files, minus 4 moved to reject/).

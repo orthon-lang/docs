@@ -1,3 +1,10 @@
+> **REJECTED — See EDR-078 for rationale.**
+> Class or structure as the primary composition unit violates Orthon's Data First principle
+> (classes impose behaviour on data, not data transformed by behaviour), Minimal Core
+> (class is a composition of primitives, not a primitive itself — see PRIMITIVE_BLOCKS.md D-03),
+> and Orthogonality (class hierarchies create coupling that prevents independent composition).
+> Formally rejected. Orthon composes through orthogonal primitive blocks, not a privileged construct.
+
 # Class or Structure as Primary Composition Unit
 
 > **⚠️ DRAFT — This document is a preliminary draft.**
@@ -198,30 +205,3 @@ Orthon terms:
    in Orthon, not eliminated by construction.
 
 ## Open Questions
-
-1. The `TRAITS.md`-vs-`MIXIN.md`/`STRUCTURAL_TYPING.md` tension on whether traits carry fields and
-   whether satisfaction is nominal or structural, exactly as flagged in "Translating to Orthon"
-   above — this must be resolved before this pattern can be formally accepted.
-2. Does Orthon need to formally distinguish "mixin-role traits" (default-impl-bearing) from
-   "contract-role traits" (signature-only), or is this purely a usage convention layered over one
-   unified trait mechanism?
-3. Can a `derive`-annotated aggregate satisfy a trait using a mixin-provided method, or only
-   through its own directly-declared methods?
-4. How does this pattern interact with [`SLOTS.md`](SLOTS.md)'s fixed memory layout — does adding a
-   mixin-role trait ever force an aggregate out of a slot-like layout?
-
-## Decision History
-
-*To be filled during Concept Design Review (Milestone 2).*
-
----
-
-### Affected Documents
-
-- [ ] `what/CORE_CONCEPTS.md`
-- [ ] `DATA_MODEL.md`
-- [ ] `../DESIGN_PRINCIPLES.md`
-- [ ] `GLOSSARY.md`
-- [ ] `IMPLEMENTATION_STRATEGIES.md`
-- [ ] `IMPLEMENTATION_POLICIES.md`
-- [ ] Other: `DATACLASSES.md`, `MIXIN.md`, `COMPOSITION_OVER_INHERITANCE.md`, `STRUCTURAL_TYPING.md`, `TRAITS.md`, `SLOTS.md`

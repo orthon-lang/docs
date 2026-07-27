@@ -6,8 +6,8 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** 18 concepts accepted through Phase 4. Waves 1–2 (essential
-> core: 13 concepts) plus Wave 4 (important tier: 5 concepts) accepted
+> **Status:** 25 concepts accepted through Phase 4. Waves 1–2 (essential
+> core: 13 concepts) plus Wave 4 (important tier: 12 concepts) accepted
 > via Decision Pipeline. Wave 3 (Policy-classified + borderline concepts)
 > processed via Decision Pipeline — see
 > [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
@@ -19,6 +19,12 @@
 > and [EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md).
 > Wave 5 concepts (ALGEBRAIC_DATA_TYPES through TYPE_LEVEL_COMPUTATION,
 > EDR-039–046) registered separately.
+> Wave 6 concepts (CONTRACTS through PROPERTIES, EDR-056–062) registered
+> via Decision Pipeline § Important Tier — Wave 4.
+> Wave 7 (Plan 04-08): 4 concepts formally rejected via EDR-075 through
+> EDR-078 (PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING,
+> CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION). 50 deferrable-tier concepts
+> documented with deferral rationale in DECISION_PIPELINE.md § Deferrable Tier.
 >
 > **Last updated:** 2026-07-27
 
@@ -356,4 +362,221 @@
 | **Classification** | Language (D-03) |
 | **Summary** | Destructuring assignment matching pack/unpack symmetry (PRIMITIVE_BLOCKS). Tuple destructuring: `let (x, y) = point`. Record destructuring: `let {name, age} = person`. Rename syntax, rest patterns (`..rest`), ignore patterns (`_`), nested destructuring. Function parameter destructuring. `for` loop destructuring. All forms desugar to `pack`/`unpack` primitives — no new runtime semantics. |
 | **Primitive Decomposition** | All destructuring forms → `pack`/`unpack` + `identifier` + `call`. Fully expressible via primitive composition — desugaring is a syntactic transformation, not new runtime behaviour. |
+
+---
+
+## Wave 6 — Important Tier (Phase 4)
+
+### CONTRACTS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-056](../how/decision_records/architecture/EDR-056-contracts.md) |
+| **Specification** | [`concepts/CONTRACTS.md`](concepts/CONTRACTS.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Design by Contract via `requires`, `ensures`, and `invariant` clauses as part of the function signature. Preconditions checked at compile time where possible; runtime assertions otherwise. `result` and `old` implicit variables in postconditions. Pure contract expressions enforced by compiler. Liskov substitution inheritance (weaken pre, strengthen post). Release-build elision by default. |
+| **Primitive Decomposition** | `requires`/`ensures`/`invariant` keywords → compiler-recognized signature modifiers beyond primitive composition. Contract enforcement (compile-time verification, runtime assertion) adds compiler-level semantics. Pure-expression analysis is a compiler verification pass. |
+
+### DELEGATION
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-057](../how/decision_records/architecture/EDR-057-delegation.md) |
+| **Specification** | [`concepts/DELEGATION.md`](concepts/DELEGATION.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Class delegation via `@delegate(Trait) to field` macro (registered in macro registry per EDR-029). Property delegation via StdLib delegate protocols (`lazy`, `observable`, `vetoable`, `map`). Selective override — explicit methods take precedence. No implicit promotion. Distinct from DELEGATE concurrency execution policy (EDR-036). |
+| **Primitive Decomposition** | `@delegate` macro → desugars to explicit `impl` blocks using existing macro system (EDR-029). Property delegation → StdLib trait implementations + `function` calls. Fully expressible via primitive composition — no new compiler semantics. |
+
+### EXTENSION_FUNCTIONS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-058](../how/decision_records/architecture/EDR-058-extension-functions.md) |
+| **Specification** | [`concepts/EXTENSION_FUNCTIONS.md`](concepts/EXTENSION_FUNCTIONS.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Functions defined outside their receiver type but called with method-call syntax: `expr.method()`. Static dispatch based on static receiver type. No access to private members. Explicit import required across modules. Member function takes precedence over extension. Extension properties supported (computed only, no backing fields). |
+| **Primitive Decomposition** | Extension function call → compiler-resolved static dispatch based on receiver type + import scope. Not expressible via primitive composition — requires compiler recognition of receiver-call syntax on types from other modules. |
+
+### GRADUAL_TYPING
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-059](../how/decision_records/architecture/EDR-059-gradual-typing.md) |
+| **Specification** | [`concepts/GRADUAL_TYPING.md`](concepts/GRADUAL_TYPING.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Optional type annotations with selective type checking. Types inferred for all expressions — explicit annotations never required but always accepted. Boundary checks at typed/untyped interface. No separate declaration files. REPL and scripts operate dynamically. Global consistency pass as optional lint. Critical for LLM adoption — LLMs generate minimal-annotation code while compiler catches errors. |
+| **Primitive Decomposition** | Inferred type → compiler-determined, not primitive-expressible. Boundary check → compiler-inserted type assertion at function call interface. The inference algorithm, consistency pass, and selective checking are compiler-level services beyond primitive composition. |
+
+### SMART_CAST
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-060](../how/decision_records/architecture/EDR-060-smart-cast.md) |
+| **Specification** | [`concepts/SMART_CAST.md`](concepts/SMART_CAST.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Flow-sensitive type narrowing after type checks. After `if value is Type`, compiler narrows `value` to `Type` in the true branch. Null check narrowing: `value isnt None` unwraps `Option[T]` to `T`. `when` branch narrowing per PATTERN_MATCHING (EDR-025). Immutability prerequisite for safety. Explicit cast `as Type` escape hatch. Partially subsumed by PATTERN_MATCHING — handles non-pattern scenarios. |
+| **Primitive Decomposition** | Narrowed type → compiler-determined, not primitive-expressible. Flow-sensitive analysis across control flow edges adds compiler-level semantics beyond primitive composition. |
+
+### COPY_ON_WRITE
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-061](../how/decision_records/architecture/EDR-061-copy-on-write.md) |
+| **Specification** | [`concepts/COPY_ON_WRITE.md`](concepts/COPY_ON_WRITE.md) |
+| **Classification** | StdLib / Implementation Strategy (D-03) |
+| **Summary** | Copy-on-write memory optimisation for value-semantics collections. Assignment shares data (logical copy); mutation triggers clone only if shared. `shared` keyword for explicit reference semantics. CoW is DEFAULT_STRATEGY's mechanism for value semantics — the language surface does not expose CoW. No borrow checker required. Deterministic destruction. |
+| **Primitive Decomposition** | CoW is an implementation technique for existing value-semantics primitives (`assignment` + `function`). The programmer writes value-semantics code; CoW is an invisible optimisation. No new primitive operations. |
+
+### PROPERTIES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-062](../how/decision_records/architecture/EDR-062-properties.md) |
+| **Specification** | [`concepts/PROPERTIES.md`](concepts/PROPERTIES.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Getter/setter sugar over attribute access. Every field is implicitly a property with getter (optional setter). Computed properties specify getter body explicitly. Uniform `.name` access — stored and computed indistinguishable at call site. Independent getter/setter visibility. No call-site change when refactoring field to computation. |
+| **Primitive Decomposition** | Property getter → `attribute access` + implicit `function` call. Property setter → `assignment` + implicit `function` call. The implicit getter/setter generation is syntactic sugar — no new runtime semantics beyond attribute access. |
+
+---
+
+## Wave 4 — Important Tier (Phase 4, Batch 2)
+
+### SLOTS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-063](../how/decision_records/architecture/EDR-063-slots.md) |
+| **Specification** | [`concepts/SLOTS.md`](concepts/SLOTS.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Fixed fields as the default for all declared types. Every property declaration reserves a slot — no separate `__slots__` mechanism needed. Dynamic attribute extension via explicit `dynamic` modifier. ABI-stable layout for FFI. Traits can declare required fields, adding slots to implementing types. |
+| **Primitive Decomposition** | Fixed-field type → `pack`/`unpack` with compile-time field verification; `dynamic` modifier → annotation on existing `pack` primitive; slot → property field = backing storage + accessor. No new runtime semantics — slot restriction is compile-time verification. |
+
+### SPAN
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-064](../how/decision_records/architecture/EDR-064-span.md) |
+| **Specification** | [`concepts/SPAN.md`](concepts/SPAN.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | `Span<T>` — lightweight, non-owning, lifetime-tracked view over contiguous memory. Bounds-checked (debug mode always, release-safe configurable). No implicit copies — slicing is always a view. Factory from arrays, slices, contiguous buffers. Mutable variant (`mut Span<T>`). Zero-size span from empty collection. |
+| **Primitive Decomposition** | `Span<T>` → `reference` (non-owning) + `literal` (length) + bounds metadata; slicing (`arr[1..3]`) → `reference` + offset + length. Lifetime tracking adds compiler-level semantics beyond primitive composition. |
+
+### NAMED_AND_OPTIONAL_PARAMETERS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-065](../how/decision_records/architecture/EDR-065-named-and-optional-parameters.md) |
+| **Specification** | [`concepts/NAMED_AND_OPTIONAL_PARAMETERS.md`](concepts/NAMED_AND_OPTIONAL_PARAMETERS.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Named arguments desugar to positional calls via macro layer. Default values are ordinary expressions evaluated at call time. Named arguments in any order. Overload disambiguation. No new language-level syntax — builds on `@derive(init)` (EDR-042) and AST macros (EDR-029). |
+| **Primitive Decomposition** | Named argument at call site → compiler-resolved `call` with argument-name matching (desugars to positional `call`). Default value → `function` parameter with `literal`/`identifier` initializer. Fully expressible via primitive composition — no new runtime semantics. |
+
+### SORTING
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-066](../how/decision_records/architecture/EDR-066-sorting.md) |
+| **Specification** | [`concepts/SORTING.md`](concepts/SORTING.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Stable sort by default (Timsort). Explicit `sort_unstable()` for performance-critical use. Sort algorithm selection governed by Sort Algorithm Policy (Implementation Policy). Sorting returns new collection (immutable by default); `mut` variant sorts in-place. |
+| **Primitive Decomposition** | Sort → `function` implementation on collection types + `call` to comparison (`==` per EDR-017). Stable sort → algorithm choice (implementation concern). Fully expressible via primitive composition — no new compiler semantics. |
+
+### DECLARATIVE_MULTI_KEY_SORT
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-067](../how/decision_records/architecture/EDR-067-declarative-multi-key-sort.md) |
+| **Specification** | [`concepts/DECLARATIVE_MULTI_KEY_SORT.md`](concepts/DECLARATIVE_MULTI_KEY_SORT.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Sugar over SORTING + EQUALITY. Tuple-as-key lexicographic comparison via `Ord` trait. `.sorted(by: .last_name, .first_name)` API. Direction modifier (`desc`). Guaranteed stable. No new language semantics — desugars to `Ord` comparisons. |
+| **Primitive Decomposition** | `.sorted(by: keys)` → `function` call constructing lexicographic comparator using `Ord` trait comparisons. Fully expressible via primitive composition — no new runtime semantics. |
+
+### IMMUTABLE_DATE_TIME
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-068](../how/decision_records/architecture/EDR-068-immutable-date-time.md) |
+| **Specification** | [`concepts/IMMUTABLE_DATE_TIME.md`](concepts/IMMUTABLE_DATE_TIME.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Immutable, value-semantics date/time types in StdLib: `Instant`, `LocalDate`, `LocalTime`, `LocalDateTime`, `ZonedDateTime`, `Duration`, `Period`, `Offset`. All immutable — "modification" returns new instance. Immutable formatters. Parsing returns `Result<T>`. Thread-safe by construction. |
+| **Primitive Decomposition** | Each date/time type → `pack` (field composition) + `function` (arithmetic/formatting). Immutability → structural `===` comparison per EDR-017. `Result<T>` parsing → EDR-020. Fully expressible via primitive composition — no new runtime semantics. |
+
+### PERSISTENT_DATA_STRUCTURES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted (deferred to v0.2) |
+| **EDR** | [EDR-069](../how/decision_records/architecture/EDR-069-persistent-data-structures.md) |
+| **Specification** | [`concepts/PERSISTENT_DATA_STRUCTURES.md`](concepts/PERSISTENT_DATA_STRUCTURES.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | `Immutable` marker trait for compiler optimisation hooks. Persistent collection types (`PersistentList[T]`, `PersistentMap[K,V]`, `PersistentSet[T]`) deferred to v0.2. v0.1 uses Tuple + Copy-on-Write. `Immutable` trait accepted now as interface contract. |
+| **Primitive Decomposition** | `Immutable` marker trait → trait with no methods (compiler-recognized guarantee). Persistent collections → `function` implementations with structural sharing algorithms. No new runtime semantics v0.1 — trait is interface contract only. |
+
+### DERIVE_SERIALIZATION
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-070](../how/decision_records/architecture/EDR-070-derive-serialization.md) |
+| **Specification** | [`concepts/DERIVE_SERIALIZATION.md`](concepts/DERIVE_SERIALIZATION.md) |
+| **Classification** | StdLib / Macro (D-03) |
+| **Summary** | `@derive(Serialize, Deserialize)` generates serialization via registered macros (EDR-029). Format-agnostic (JSON, binary via encoder/decoder traits). Declarative annotations for field renaming (`@name`), skipping (`@skip`). Deserialization returns `Result<T>`. Cyclic reference tracking deferred to v0.2. |
+| **Primitive Decomposition** | `Serialize`/`Deserialize` trait → trait declaration per EDR-019. `@derive` → macro invocation per EDR-029. Generated code → `function` implementations using `pack`/`unpack` + `call`. Fully expressible via primitive composition + macro system. |
+
+### COMMAND_PATTERN_VIA_DELEGATE
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-071](../how/decision_records/architecture/EDR-071-command-pattern-via-delegate.md) |
+| **Specification** | [`concepts/COMMAND_PATTERN_VIA_DELEGATE.md`](concepts/COMMAND_PATTERN_VIA_DELEGATE.md) |
+| **Classification** | Language — existing concept (D-03) |
+| **Summary** | No dedicated Command pattern construct. Orthon's delegate model (EDR-033, EDR-057) and first-class functions subsume all Command use cases: `() -> void` = Command/Runnable, `() -> V` = Callable, `Event -> void` = ActionListener. StdLib provides `Undoable[T]`, `CommandQueue`, `Macro` compositors. Cross-refs PATTERN_MATCHING_DISPATCH (EDR-026). |
+| **Primitive Decomposition** | Command pattern → existing `function` + `call` + `scope` (closure capture). Undo pattern → `pack` (paired execute/undo delegates). All expressible via existing primitives — no new semantics needed. |
+
+### CONTEXT_LIMITED_MODULES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-072](../how/decision_records/architecture/EDR-072-context-limited-modules.md) |
+| **Specification** | [`concepts/CONTEXT_LIMITED_MODULES.md`](concepts/CONTEXT_LIMITED_MODULES.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Module system with explicit public API, declared dependencies, and effect isolation. `effects: [io, alloc, none]` declared in module header; compiler verifies undeclared effects not performed. Context budget diagnostic reports module surface token count. Effect isolation — modules do not inherit dependency effect types. |
+| **Primitive Decomposition** | Module declaration → `scope` + `identifier` + visibility rules; effect declaration → compiler-recognized annotation on module `scope`; dependency declaration → `identifier` (module name) + compiler resolution. Effect verification and context budget analysis add compiler-level semantics beyond primitive composition. |
+
+### DECLARATIVE_CONSTRUCTS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-073](../how/decision_records/architecture/EDR-073-declarative-constructs.md) |
+| **Specification** | [`concepts/DECLARATIVE_CONSTRUCTS.md`](concepts/DECLARATIVE_CONSTRUCTS.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Declarative constructs for common transformations: collection ops (map/filter/reduce — EDR-032), resource management (using), sorting (sorted-by-key — EDR-066/067), derived serialization (EDR-070), derived structural methods (eq/hash/copy — EDR-042). Every construct has documented desugaring to imperative primitives. Five synthesis-friendliness criteria. Query expressions deferred to v0.2. |
+| **Primitive Decomposition** | Each declarative construct → documented desugaring path. No construct adds expressive power beyond primitive composition. All are StdLib method implementations. |
+
+### DECLARATION_BY_ASSIGNMENT
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-074](../how/decision_records/architecture/EDR-074-declaration-by-assignment.md) |
+| **Specification** | [`concepts/DECLARATION_BY_ASSIGNMENT.md`](concepts/DECLARATION_BY_ASSIGNMENT.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | First assignment creates the variable — no `let`/`var` for initial declaration. Type inferred from initializer (optional explicit annotation). Read-before-write is compile-time error (definite assignment analysis). Shadowing requires `let` keyword. No implicit globals. `mut` required for reassignment. |
+| **Primitive Decomposition** | First-assignment declaration → `assignment` + `identifier` (binding creation); type inference → compiler-determined per EDR-027; definite assignment → compiler-level flow analysis beyond primitive composition; `let` for shadowing → `identifier` + `scope` with explicit marker semantics. Definite assignment analysis adds compiler-level semantics beyond primitive composition. |
 

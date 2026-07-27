@@ -1,3 +1,9 @@
+> **REJECTED — See EDR-075 for rationale.**
+> Prototype-based object model violates Orthon's Data First principle (conflates data and behaviour),
+> Explicitness (dynamic dispatch by default), and Orthogonality (prototypal inheritance conflates
+> composition and delegation). Formally rejected. Not deferred — structurally incompatible with
+> Orthon's core design principles.
+
 # Prototype
 
 > **⚠️ DRAFT — This document is a preliminary draft.**
