@@ -563,13 +563,17 @@ given Strategy chooses.
 
 ## Cross-Dimension Consistency
 
-Six dimensions produce fifteen pairwise interactions. Per
-`DESIGN_PRINCIPLES.md` § Orthogonality, the goal for each pair is
-**orthogonal composition** — each dimension answers a different
-question, and nothing about one dimension's answer constrains or is
-inferred from another's. Where a pair is not fully orthogonal (an
-edge case exists), the resolution is documented so it is settled once,
-not rediscovered per-feature in later phases.
+Six dimensions produce fifteen pairwise interactions, enumerated as
+rows 1–15 in the table below. (Row 16, Lifetime ↔ All, is an additional
+cross-cutting observation about Lifetime's universality across every
+other dimension — not itself one of the fifteen pairs, since each of
+Lifetime's five specific pairings already appears as its own numbered
+row above it.) Per `DESIGN_PRINCIPLES.md` § Orthogonality, the goal for
+each pair is **orthogonal composition** — each dimension answers a
+different question, and nothing about one dimension's answer
+constrains or is inferred from another's. Where a pair is not fully
+orthogonal (an edge case exists), the resolution is documented so it
+is settled once, not rediscovered per-feature in later phases.
 
 | # | Pair | Relationship | Resolution |
 |---|------|--------------|------------|
@@ -587,7 +591,8 @@ not rediscovered per-feature in later phases.
 | 12 | Mutation ↔ Lifetime | Orthogonal | Mutating a value in place does not change its lifetime — the same binding continues to denote the same scope-bound storage before and after a `proc` call. A `new` operation, by contrast, produces a value with its own independent lifetime, but this follows directly from `new` producing a *distinct* value (Identity), not from any Lifetime-specific rule about transformation. |
 | 13 | Evaluation ↔ Visibility | Orthogonal | Expression evaluation order and exhaustiveness checking apply uniformly regardless of the visibility of the functions or values involved — a `priv` function's body is exhaustiveness-checked exactly like a `pub` one. |
 | 14 | Evaluation ↔ Lifetime | Orthogonal | A block expression's value (its last sub-expression) may reference bindings scoped to that block only if the value itself does not depend on those bindings outliving the block — this is Lifetime's ordinary scope-exit rule applied to the last expression like any other, not a special evaluation-order carve-out. |
-| 15 | Lifetime ↔ All | Cross-cutting by construction | Every dimension operates on values, and every value has a scope-bound lifetime (Semantic Invariant 3). Lifetime is therefore not merely "one more pairwise interaction" — it is the substrate every other dimension's examples are drawn against (an owned value's scope, a borrowed reference's scope, a mutated binding's scope, an evaluated expression's scope, a visible declaration's scope). No dimension's rules are permitted to imply a lifetime that contradicts scope-based destruction. |
+| 15 | Visibility ↔ Lifetime | Orthogonal | A value's visibility level (`priv`/default/`pub`) says nothing about how long it lives, and a value's scope-bound lifetime says nothing about who may reach it; a `priv` value and a `pub` value are destroyed by the same scope-exit rule — Visibility governs *who can name* a declaration, Lifetime governs *how long* the value it names persists, and neither rule depends on a term defined by the other. |
+| 16 | Lifetime ↔ All | Cross-cutting by construction | Every dimension operates on values, and every value has a scope-bound lifetime (Semantic Invariant 3). Lifetime is therefore not merely "one more pairwise interaction" — it is the substrate every other dimension's examples are drawn against (an owned value's scope, a borrowed reference's scope, a mutated binding's scope, an evaluated expression's scope, a visible declaration's scope). No dimension's rules are permitted to imply a lifetime that contradicts scope-based destruction. |
 
 **Detail: Identity ↔ Ownership (pair 1).** This is the pair most likely
 to be conflated because both dimensions concern "sameness" in some
@@ -633,7 +638,7 @@ it exists." A function's public callability and its parameter/return
 types' visibility are simply different declarations, each governed by
 its own dimension's rules.
 
-**Detail: Lifetime ↔ All (pair 15).** Because every other dimension's
+**Detail: Lifetime ↔ All (pair 16).** Because every other dimension's
 model section above defines its rules in terms of values that exist
 within some scope, Lifetime cannot be evaluated as "compatible" or
 "incompatible" with any single other dimension in isolation — it is the
@@ -666,7 +671,7 @@ explicit trade-off or verification step.
 | **Mutation** | Pass — the three-way `fun`/`proc`/`new` split makes an operation's effect on `self` visible at the declaration, and no `mut` inference is required. | Pass — one clean coupling to Ownership (pair 6), explicitly identified as shared-invariant rather than incidental; no other cross-dimension entanglement. | Pass — three keywords, three non-overlapping meanings; no combination forms (no `mut fun`) that would blur the boundary. | Pass — three declaration kinds is the minimum needed to distinguish the three observably different effects (read-only, mutate-in-place, transform); collapsing to two would lose information the type checker needs. | Pass — the effect of a call is fully determined by which of three keywords its declaration uses; no ambiguity for a generator to resolve. |
 | **Evaluation** | Pass — laziness requires an explicit marker; eagerness (the invisible default) is nonetheless a single, uniformly-applied rule, not a per-construct special case. | Pass — no dimension depends on evaluation timing except Mutation (pair 10), and that dependency is on evaluation *order*, not evaluation *strategy* (eager vs. lazy). | Pass — `emit` has exactly one responsibility (produce the next Sequence value); rejecting `yield` was explicitly justified by a Semantic Purity violation in the rejected alternative. | Pass — no separate statement grammar; unifying statements and expressions is a *reduction* of the core grammar, not an addition. | Pass — every construct being an expression removes an entire class of generation ambiguity (should this be a statement or produce a value?) that a statement/expression-split language forces an LLM to resolve per-construct. |
 | **Visibility** | Pass — three explicit levels, no naming-convention fallback; `priv`/`pub` are always visible at the declaration site. | Pass — one identified edge case (pair 8, Ownership) is documented as expected orthogonality, not a violation. | Pass — each of the three levels (`priv`, default, `pub`) has exactly one meaning; no level is contextually reinterpreted. | Pass — three levels is the minimum needed to distinguish type-local, module-local, and exported scope; a `protected` fourth level was explicitly rejected as unnecessary given sealed types/open modules as the future alternative mechanism. | Pass — no runtime bypass means an LLM-generated program's visibility guarantees cannot be silently violated by generated code that happens to compile; violations are caught at compile time. |
-| **Lifetime** | Pass — scope-bound lifetime is visible from the block/function structure itself; no lifetime is ever open-ended without a visible scope. | Pass — universality (pair 15) is itself the orthogonality argument: Lifetime constrains no other dimension's rules, it only requires that all of them respect scope-boundedness. | Pass — "lifetime" means exactly one thing (the span between creation/binding and scope-exit destruction); it is never conflated with Ownership's "who is accountable" question. | Pass — scope-based lifetime with deterministic destruction is the minimal rule; no GC, no reference counting, and no additional lifetime annotations are part of the Core (regions/arenas are Strategy-level, not Core). | Pass — deterministic, scope-derived destruction means an LLM never needs to reason about when a value is freed beyond reading the enclosing block structure it already had to generate. |
+| **Lifetime** | Pass — scope-bound lifetime is visible from the block/function structure itself; no lifetime is ever open-ended without a visible scope. | Pass — universality (pair 16) is itself the orthogonality argument: Lifetime constrains no other dimension's rules, it only requires that all of them respect scope-boundedness. | Pass — "lifetime" means exactly one thing (the span between creation/binding and scope-exit destruction); it is never conflated with Ownership's "who is accountable" question. | Pass — scope-based lifetime with deterministic destruction is the minimal rule; no GC, no reference counting, and no additional lifetime annotations are part of the Core (regions/arenas are Strategy-level, not Core). | Pass — deterministic, scope-derived destruction means an LLM never needs to reason about when a value is freed beyond reading the enclosing block structure it already had to generate. |
 
 **Net Flags:** Two flags, both on the same root cause — **Ownership's
 concrete transfer syntax is not yet chosen** (Phase 5 work). Both are
