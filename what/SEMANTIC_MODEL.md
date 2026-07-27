@@ -196,7 +196,7 @@ but never implicitly duplicated. This holds universally, but its
 
 ```
 data = create_resource()
-other = data              # move: data is now invalid
+other = move data          # move: data is now invalid
 # use(data)                # compile error: data was moved
 use(other)                 # OK
 ```
