@@ -54,7 +54,36 @@ Covers requirements: PRIM-01, PRIM-02, PRIM-03.
 - **`struct` / `class`** — type constructors built from `pack` + `reference` + `scope` (see D-03).
 - **Rationale:** Each excluded item is either (a) syntactic sugar over a real primitive, (b) a composition of multiple primitives, or (c) a meta-language feature (syntax extension). Including any would violate orthogonality or mix abstraction levels.
 
-### D-06: Deferred to Phase 3 — Open Items Carried from Phase 2
+### D-06: `emit` is Lazy by Default (Correction to Phase 2 D-04)
+- **Correction to prior assumption:** `emit` is **lazy by default** — it produces values on demand, not eagerly. For eager sequence production, use `return` with an aggregate collection.
+- **Rationale (user clarification):** Lazy `emit` aligns with Sequence as a description of *what*, not *how*. Eager production is better served by constructing a collection and returning it — the distinction is explicit in the choice of mechanism.
+- **Consequence:** The Evaluation Policy for `emit` is settled as lazy. Phase 4 concepts (iterators, generators) are built on lazy `emit`.
+
+### D-07: `@` for Metadata Access — Not Dunder Methods
+- **Decision:** All metadata, protocol methods, and special operations are accessed via the `@` prefix notation, NOT via double-underscore conventions (`__len__`, `__getitem__`, etc.) or hidden method names.
+  - `list@len()` instead of `list.__len__()` or Python-style dunder methods
+  - `obj@fields`, `type@name`, etc. for reflective/structural access
+- **Rationale:** `@` makes metadata access syntactically visible and distinct from regular attribute access (`.`). This is more LLM-generable (no memorisation of which methods are "special") and more explicit for human readers. The `@` prefix is a single, consistent marker for "this is a language-level operation on the type/object, not a user-defined method."
+- **Consequence:** System functions like `len()`, `sorted()`, `str()` are mapped to `@`-prefixed protocol methods. Free functions (`len(obj)`) may exist as syntactic sugar that compiles to `obj@len()` — this is a Phase 4/5 decision.
+
+### D-08: Free Functions Need Special Design Conditions
+- **Decision:** Free functions like `len(list)`, `sorted(iter)`, `str(obj)` are acknowledged as an open design problem, not assumed to work automatically. They require:
+  1. A protocol system (`@`-prefixed methods) — see D-07
+  2. A resolution mechanism that maps free function calls to protocol methods
+  3. Clear boundary between language-provided functions and user-defined ones
+- **Status:** Open design question — deferred to Phase 4/5 (Derived Features/Syntax), but the `@` protocol convention is locked now (D-07).
+
+### D-09: Blocks `{ }` Require Explicit `return`
+- **Decision:** Blocks delimited by `{ }` require an explicit `return` keyword to produce a value. The "last expression is the block's value" rule (Phase 2 D-04's expression-oriented model) applies only to expression-level constructs like `if`, `match`, `when` — NOT to `{ }` block syntax.
+  ```orthon
+  let x = {
+      let tmp = compute()
+      return tmp + 1   // explicit return required in { } blocks
+  }
+  ```
+- **Rationale:** Distinguishes block-as-scope (where side effects happen) from block-as-expression (where the last expression is the value). `{ }` blocks are primarily for scoping and sequencing; making return explicit avoids ambiguity when a block contains multiple statements and only one is intended as the result.
+
+### D-10: Deferred to Phase 3 — Open Items Carried from Phase 2
 - **Interior mutability (`Cell`/`RefCell`):** To be addressed as a primitive-block level question — whether interior mutability is a primitive concept or a derived feature built on `reference` + mutation semantics.
 - **Mutation in closures:** Whether closures capture variables as immutable by default (matching D-03 immutability principle) or if explicit `mut` capture is needed.
 - **`mut` vs `&mut`:** Whether one keyword or two — a primitive-block level syntactic distinction that must be resolved before Phase 4 features can use it.

@@ -111,6 +111,27 @@ Variables, functions, types, classes, and modules follow the same declaration pr
 
 - **Source:** `../why/MANIFESTO.md` § A unified declaration model
 
+### Decorator
+
+A Language Pattern (Level 2) that wraps a callable with additional behaviour
+without modifying its declaration. In Orthon, a decorator is expressed as
+function composition — a function that takes a callable and returns a
+callable — rather than special syntax (`@` annotation).
+
+- **Source:** `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Language Pattern](#language-pattern), [Lambda](#lambda)
+
+### Descriptor
+
+A Language Pattern that intercepts attribute access (`.` or `@`) on a
+composite type and redirects it to a programmable handler — analogous to
+Python's descriptor protocol (`__get__`/`__set__`/`__delete__`). In Orthon,
+descriptors operate over `@`-prefixed metadata access as well as `.`
+attribute access, and are explicit rather than implicit.
+
+- **Source:** Phase 4 design (Derived Features)
+- **See also:** [Primitive Operation](#primitive-operation), [Language Pattern](#language-pattern)
+
 ### Deterministic Behavior
 
 The same source code must produce identical observable behavior across optimization levels and implementations. Only performance characteristics may differ.
@@ -317,6 +338,22 @@ resolvers. Externally it is a single step — the boundary between
 
 ## L
 
+### Lambda
+
+An anonymous function expression — a function value defined inline without a
+name. Lambdas are first-class values and share the same call syntax as named
+functions. Closure capture is explicit.
+
+```
+let double = fn (x: Int) -> Int
+    x * 2
+
+double(3)  // 6
+```
+
+- **Source:** `../how/concepts/research/essential/FUNCTIONS.md`
+- **See also:** [Canonical Form](#canonical-form), [Language Pattern](#language-pattern)
+
 ### Language Design Gate
 
 A quality checklist that every language design proposal must satisfy
@@ -479,6 +516,16 @@ The behaviour of a construct must match what a competent programmer intuitively 
 ---
 
 ## R
+
+### Reference
+
+A handle to data that provides indirection without implying ownership. Two
+forms: shared read-only reference and exclusive mutable reference. Reference
+is a Primitive Operation (Level 1) — it underlies class identity, borrowing,
+and delegate semantics.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Identity, `../how/architecture/ARCHITECTURE.md` § Semantic Dependency Architecture
+- **See also:** [Primitive Operation](#primitive-operation), [Representation](#representation), [Binding Identity](#binding-identity)
 
 ### Representation
 
