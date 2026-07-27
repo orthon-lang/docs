@@ -96,5 +96,5 @@
 
 | Date | Concept | Verdict | Rationale |
 |------|---------|---------|-----------|
-| 2026-07-19 | LLM_GENERABILITY_GATE | Added as 7th gate criterion | EDR-011 — LLM-native pillar requires explicit LLM generability validation for every language construct |
+| 2026-07-19 | LLM_GENERABILITY_GATE | Added as 7th gate criterion | EDR-014 — LLM-native pillar requires explicit LLM generability validation for every language construct |
 | 2026-07-21 | SEMANTIC_LAYER_CLASSIFICATION | Added as 1st gate criterion | EDR-012 — every concept must be classified into a Semantic Dependency Architecture level |

@@ -122,7 +122,7 @@ the Standard Library or Core.
 
 ## LLM Generability
 
-**Source:** [EDR-011](../decision_records/architecture/EDR-011-llm-generability-gate.md); [\_language-design.md](../gates/_language-design.md) — LLM generability criterion
+**Source:** [EDR-014](../decision_records/architecture/EDR-014-llm-generability-gate.md); [\_language-design.md](../gates/_language-design.md) — LLM generability criterion
 
 Every construct must be expressible in a machine-readable schema with no
 ambiguities that an LLM could misinterpret. The Static Analyser must be

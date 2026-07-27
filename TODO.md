@@ -211,7 +211,7 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 
 - [x] design: LLM_GENERABILITY_GATE — 7th gate for Decision Validation
       (`docs/notes/llm-generability-gate.md`, recorded in
-      `EDR-011-llm-generability-gate.md`)
+      `EDR-014-llm-generability-gate.md`)
   - **Owner:** Solo author
   - **Target:** Phase 2
 - [ ] research: what makes a grammar ML-friendly? (tokenizer alignment, ambiguity metrics)
