@@ -167,6 +167,20 @@ index at `decision_records/INDEX.md`.
 - **Source:** `../how/decision_records/process/EDR-001-edr-system.md`
 - **See also:** [Architecture](#architecture), [Decision Validation](#decision-validation)
 
+### Exclusive Access
+
+The requirement that mutation may only proceed when no other live
+reference can observe the value mid-mutation: many shared (read)
+borrows may coexist, but at most one exclusive (write) borrow may
+exist, and never both at once ("shared XOR mutable"). This is
+Semantic Invariant 2, viewed as the single access-control rule that
+both Ownership (borrowing) and Mutation (`proc` calls) enforce from
+their own angle — a `proc` call is only legal when the compiler can
+establish exclusive access to its receiver.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Semantic Invariants, § Ownership, § Mutation
+- **See also:** [Semantic Invariant](#semantic-invariant), [Declaration Kind (`fun` / `proc` / `new`)](#declaration-kind-fun--proc--new), [Binding Identity](#binding-identity)
+
 ### Execution Descriptor
 
 A declarative, first-class manifest of what a program requires to
