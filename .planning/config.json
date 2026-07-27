@@ -92,5 +92,6 @@
   "granularity": "standard",
   "intel": {
     "enabled": true
-  }
+  },
+  "response_language": "russian"
 }
