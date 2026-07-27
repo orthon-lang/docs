@@ -123,11 +123,23 @@ callable — rather than special syntax (`@` annotation).
 
 ### Descriptor
 
-A Language Pattern that intercepts attribute access (`.` or `@`) on a
-composite type and redirects it to a programmable handler — analogous to
-Python's descriptor protocol (`__get__`/`__set__`/`__delete__`). In Orthon,
-descriptors operate over `@`-prefixed metadata access as well as `.`
-attribute access, and are explicit rather than implicit.
+A handle that combines an identity (`id`) with a generation counter (`gen`)
+to track a specific version of a value — analogous to an ECS entity handle
+or a tagged pointer with versioning. The `gen` field detects use-after-free
+or stale references without full garbage collection. A Descriptor is distinct
+from a plain Reference in that it carries epoch metadata for safety
+verification.
+
+- **Source:** Phase 3 design (Primitive Blocks)
+- **See also:** [Reference](#reference), [Binding Identity](#binding-identity)
+
+### Metadata Protocol
+
+The `@`-prefixed protocol for intercepting metadata and special-method
+access on a type — analogous to Python's descriptor protocol but
+accessed through `@` notation rather than dunder methods. Examples:
+`obj@len()`, `type@name`, `obj@fields`. Metadata protocol handlers are
+explictly declared, never implicit.
 
 - **Source:** Phase 4 design (Derived Features)
 - **See also:** [Primitive Operation](#primitive-operation), [Language Pattern](#language-pattern)

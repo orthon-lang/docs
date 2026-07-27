@@ -59,12 +59,12 @@ Covers requirements: PRIM-01, PRIM-02, PRIM-03.
 - **Rationale (user clarification):** Lazy `emit` aligns with Sequence as a description of *what*, not *how*. Eager production is better served by constructing a collection and returning it — the distinction is explicit in the choice of mechanism.
 - **Consequence:** The Evaluation Policy for `emit` is settled as lazy. Phase 4 concepts (iterators, generators) are built on lazy `emit`.
 
-### D-07: `@` for Metadata Access — Not Dunder Methods
-- **Decision:** All metadata, protocol methods, and special operations are accessed via the `@` prefix notation, NOT via double-underscore conventions (`__len__`, `__getitem__`, etc.) or hidden method names.
+### D-07: `@` for Metadata Access (Metadata Protocol)
+- **Decision:** All metadata, protocol methods, and special operations are accessed via the `@` prefix notation, NOT via double-underscore conventions (`__len__`, `__getitem__`, etc.) or hidden method names. This is called the **Metadata Protocol**.
   - `list@len()` instead of `list.__len__()` or Python-style dunder methods
   - `obj@fields`, `type@name`, etc. for reflective/structural access
 - **Rationale:** `@` makes metadata access syntactically visible and distinct from regular attribute access (`.`). This is more LLM-generable (no memorisation of which methods are "special") and more explicit for human readers. The `@` prefix is a single, consistent marker for "this is a language-level operation on the type/object, not a user-defined method."
-- **Consequence:** System functions like `len()`, `sorted()`, `str()` are mapped to `@`-prefixed protocol methods. Free functions (`len(obj)`) may exist as syntactic sugar that compiles to `obj@len()` — this is a Phase 4/5 decision.
+- **Consequence:** System functions like `len()`, `sorted()`, `str()` are mapped to `@`-prefixed protocol methods (Metadata Protocol). Free functions (`len(obj)`) may exist as syntactic sugar that compiles to `obj@len()` — this is a Phase 4/5 decision.
 
 ### D-08: Free Functions Need Special Design Conditions
 - **Decision:** Free functions like `len(list)`, `sorted(iter)`, `str(obj)` are acknowledged as an open design problem, not assumed to work automatically. They require:
