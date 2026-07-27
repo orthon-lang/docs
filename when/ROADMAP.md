@@ -214,6 +214,17 @@ decomposed, the primitive set is incomplete.
 
 **Dependencies:** Phase 2 (Semantic Model defines what primitives mean).
 
+**Plans:** 2 plans
+
+```
+Plans:
+- [ ] 03-01-PLAN.md — Core primitive set definition: write PRIMITIVE_BLOCKS.md with all 9 primitives, composition rules, exclusions, D-10 resolutions, Metadata Protocol, and GLOSSARY update
+- [ ] 03-02-PLAN.md — Verification and EDR: verify all ~132 concept docs decompose onto primitive set, confirm minimality, write EDR accepting Primitive Blocks
+```
+
+Wave 1: 03-01 (defines the primitive set)
+Wave 2: 03-02 (depends on 03-01 — verification and EDR)
+
 ---
 
 ### Phase 4: Derived Features & Decision Pipeline ⬜
