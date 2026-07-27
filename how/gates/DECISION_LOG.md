@@ -279,17 +279,7 @@ complexity debt is accepted.
 
 ---
 
-### 7. `LLM_GENERABILITY_GATE` — Empirical Analysis
-
-> **Method-file gap.** `DECISION_VALIDATION.md` § Methods Overview
-> maps this gate to "Empirical Analysis" and links
-> `methods/EMPIRICAL_ANALYSIS_METHOD.md`, but that file does not exist
-> in `how/gates/methods/` (only six of the seven gates have a written
-> method document). This entry applies the gate's own inline method
-> definition instead — "structural analysis" plus "schema
-> round-trip," per `DECISION_VALIDATION.md` § `LLM_GENERABILITY_GATE`
-> — rather than a dedicated method file. The missing file is flagged
-> separately as a documentation gap, not silently worked around.
+### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
 
 **Structural analysis** (scan each dimension for known LLM-unfriendly
 patterns — ambiguity, special cases, context-dependent syntax):
