@@ -27,6 +27,9 @@
 | EDR-014 | Architecture | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 | — |
 | EDR-015 | Process | [Decision Log](process/EDR-015-decision-log.md) | Accepted | 2026-07-27 |
 | EDR-016 | Architecture | [Primitive Blocks — minimal orthogonal set of primitive operations](architecture/EDR-016-primitive-blocks.md) | Accepted | 2026-07-27 | — |
+| EDR-017 | Architecture | [Equality — Three-Operator Model (Value, Semantic, Identity)](architecture/EDR-017-equality.md) | Accepted | 2026-07-27 | — |
+| EDR-018 | Architecture | [Null Safety — Option Type Without Null Sentinel](architecture/EDR-018-null-safety.md) | Accepted | 2026-07-27 | — |
+| EDR-019 | Architecture | [Traits — Nominal Trait System for Polymorphic Behaviour](architecture/EDR-019-traits.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -50,6 +53,9 @@
 | EDR-013 | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 |
 | EDR-014 | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 |
 | EDR-016 | [Primitive Blocks](architecture/EDR-016-primitive-blocks.md) | Accepted | 2026-07-27 |
+| EDR-017 | [Equality — Three-Operator Model](architecture/EDR-017-equality.md) | Accepted | 2026-07-27 |
+| EDR-018 | [Null Safety — Option Type](architecture/EDR-018-null-safety.md) | Accepted | 2026-07-27 |
+| EDR-019 | [Traits — Nominal Trait System](architecture/EDR-019-traits.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |

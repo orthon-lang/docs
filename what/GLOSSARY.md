@@ -483,6 +483,36 @@ x->         == sequence(x)
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Operators and Named Functions, `../how/DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Named Before Symbolic](#named-before-symbolic)
 
+### Option Type
+
+The canonical representation of optional values in Orthon. A sum type with two variants: `Some(T)` (a value is present) and `None` (no value). There is no `null` sentinel — absence is always encoded in the type. The compiler enforces exhaustive matching: pattern matching on `Option` must cover both variants.
+
+```orthon
+user = db.find_user(42)     # returns Option<User>
+name = user?.name ?? "Guest" # chaining + fallback
+raw = user!                  # forced unwrap (panics if None)
+```
+
+Key operators: `?.` (elvis / optional chaining), `??` (unwrap or default), `!` (forced unwrap).
+
+- **Source:** `../what/concepts/NULL_SAFETY.md`
+- **See also:** [Representation](#representation), [Trait](#trait), [Orphan Rule](#orphan-rule)
+
+### Orphan Rule
+
+The coherence rule in Orthon's trait system: an implementation of a trait for a type must be defined in the same compilation unit as either the trait or the type. This prevents conflicting implementations of the same trait for the same type across different modules.
+
+```orthon
+// Allowed: trait defined here
+impl Printable for User { ... }
+
+// ERROR: orphan — neither trait nor type defined here
+// impl ForeignTrait for ForeignType { ... }
+```
+
+- **Source:** `../what/concepts/TRAITS.md` § Coherence: The Orphan Rule
+- **See also:** [Trait](#trait), [Trait Bound](#trait-bound)
+
 ### Orthogonality
 
 Each language construct solves exactly one problem and combines freely with other constructs. No special cases, no context-dependent syntax, no conflicting rules. What you learn in one part of the language transfers directly to every other part.
@@ -610,6 +640,21 @@ fifteen pairwise interactions.
 - **Source:** `../what/SEMANTIC_MODEL.md` § Semantic Dimensions
 - **See also:** [Semantic Invariant](#semantic-invariant), [Core Language](#core-language), [Orthogonality](#orthogonality)
 
+### Semantic Equality
+
+User-defined equality via the `==` operator, implemented through the `Eq` trait. Falls back to structural value equality (`===`) if not overridden. Enables domain-specific equivalence (e.g., two `Person` objects with the same ID are equal even if other fields differ).
+
+```orthon
+impl Eq for Person
+    fn ==(self, other: Person) -> Bool
+        self.id === other.id
+```
+
+Distinct from [Value Equality](#value-equality) (`===`, structural) and [Identity Equality](#identity-equality) (`is`, reference identity).
+
+- **Source:** `../what/concepts/EQUALITY.md` § Model
+- **See also:** [Value Equality](#value-equality), [Identity Equality](#identity-equality), [Structural Equality](#structural-equality)
+
 ### Semantic Invariant
 
 One of six cross-cutting rules that hold across all six Semantic
@@ -677,6 +722,44 @@ Identity question ("are these the same storage").
 
 ---
 
+## T
+
+### Trait
+
+A behavioural contract that types can implement. Traits define method signatures, associated types, and optionally provide default implementations. Traits support both static dispatch (via generics with `where T: Trait` bounds, monomorphised at compile time) and dynamic dispatch (via `dyn Trait`, vtable-based, opt-in).
+
+```orthon
+trait Printable
+    fn format(self) -> String
+
+impl Printable for User
+    fn format(self) -> String
+        return "User({self.name})"
+
+fn print_all[T: Printable](items: [T])
+    ...
+```
+
+Orthon's trait system is nominal (explicit `impl`), enforces coherence via the [Orphan Rule](#orphan-rule), supports [associated types](#associated-type) and default method implementations, and explicitly rejects [inheritance](#inheritance) in favour of composition via `where` clauses.
+
+- **Source:** `../what/concepts/TRAITS.md`
+- **See also:** [Trait Bound](#trait-bound), [Orphan Rule](#orphan-rule), [Declaration Kind (`fun` / `proc` / `new`)](#declaration-kind-fun--proc--new)
+
+### Trait Bound
+
+A constraint on a generic type parameter requiring that the type implements a given trait. Expressed via `where` clauses.
+
+```orthon
+fn sort[T](items: [T]) where T: Ordered + Printable
+```
+
+Multiple bounds are combined with `+`. Trait bounds enable static dispatch by default. The compiler verifies that all concrete types used in generic functions satisfy their required bounds.
+
+- **Source:** `../what/concepts/TRAITS.md` § Model
+- **See also:** [Trait](#trait), [Orphan Rule](#orphan-rule)
+
+---
+
 ## V
 
 ### Validation Gate
@@ -700,6 +783,19 @@ binding-identity question.
 
 - **Source:** `../what/SEMANTIC_MODEL.md` § Identity
 - **See also:** [Binding Identity](#binding-identity), [Structural Equality](#structural-equality)
+
+### Value Equality
+
+Structural comparison via the `===` operator: two values are equal if their data content is structurally equivalent (field-by-field, recursively). This is the default comparison for all data in Orthon. Falls back to the `Eq` trait's `==` if the trait is implemented for the type.
+
+```orthon
+a === b   # true iff a and b are structurally equal
+```
+
+Distinct from [Semantic Equality](#semantic-equality) (`==`, user-defined) and [Identity Equality](#identity-equality) (`is`, reference identity). Related to [Structural Equality](#structural-equality) which is the specific semantics of `==` for plain (non-reference) types.
+
+- **Source:** `../what/concepts/EQUALITY.md` § Model
+- **See also:** [Semantic Equality](#semantic-equality), [Identity Equality](#identity-equality), [Structural Equality](#structural-equality)
 
 ---
 
