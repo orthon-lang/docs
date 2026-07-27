@@ -55,6 +55,16 @@ that every Implementation Strategy must fulfill.
 - **Source:** `../how/architecture/ARCHITECTURE.md` § Core Language, `../how/DESIGN_PRINCIPLES.md` § Minimal Core
 - **See also:** [Architecture](#architecture), [Implementation Strategy](#implementation-strategy), [Standard Library](#standard-library)
 
+### Composition (of primitives)
+
+The process by which multiple primitive operations combine to produce a
+derived language feature. A feature is well-formed when its decomposition
+into primitives is unique and does not require additional semantics beyond
+what the primitives provide.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md` § Composition Rules
+- **See also:** [Primitive Block](#primitive-block), [Semantic Layer](#semantic-layer), [Dependency Flow](#dependency-flow)
+
 ---
 
 ## D
@@ -77,6 +87,28 @@ A construct that transforms data from one representation to another. Modifiers e
 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
+
+### Data Modifier Primitive
+
+A primitive block whose primary responsibility is transforming, accessing,
+or controlling data rather than constructing it. The six Data Modifier
+primitives are `assignment`, `function`, `call`, `attribute access`,
+`scope`, and `reference`. Distinguished from Data Primitives which
+produce or structure data.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md`
+- **See also:** [Data Primitive](#data-primitive), [Primitive Block](#primitive-block), [Data Modifier](#data-modifier)
+
+### Data Primitive
+
+A primitive block whose primary responsibility is producing or structuring
+data values. The three Data primitives are `literal` (value creation),
+`identifier` (value naming), and `pack/unpack` (value composition/
+decomposition). Distinguished from Data Modifier Primitives which transform
+or access data rather than constructing it.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md`
+- **See also:** [Data Modifier Primitive](#data-modifier-primitive), [Primitive Block](#primitive-block), [Data](#data)
 
 ### Decision Log
 
@@ -412,6 +444,16 @@ Complex language features should emerge from composition of simple primitives ra
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Minimal Core, `../why/MANIFESTO.md` § Minimal core, maximum expressiveness
 - **See also:** [Orthogonality](#orthogonality)
 
+### Metadata Protocol
+
+The `@`-prefixed convention for accessing metadata and protocol methods
+on types and values. Examples: `list@len()`, `obj@fields`, `type@name`.
+Distinct from attribute access (`.`); the `@` prefix makes metadata access
+syntactically visible per Semantic Purity.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md` § Metadata Protocol
+- **See also:** [Primitive Block](#primitive-block), [Semantic Purity](#semantic-purity), [Operator Equivalence](#operator-equivalence)
+
 ---
 
 ## N
@@ -451,6 +493,17 @@ Each language construct solves exactly one problem and combines freely with othe
 ---
 
 ## P
+
+### Primitive Block
+
+An irreducible atomic language operation from which all constructs are
+composed. Each primitive serves one or more Semantic Dimensions (Identity,
+Ownership, Mutation, Evaluation, Visibility, Lifetime) and must be
+orthogonal to all other primitives (no overlap in responsibility). The
+complete set is defined in `../what/PRIMITIVE_BLOCKS.md`.
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md`
+- **See also:** [Primitive Operation](#primitive-operation), [Composition (of primitives)](#composition-of-primitives), [Semantic Dimension](#semantic-dimension)
 
 ### Primitive Operation
 
