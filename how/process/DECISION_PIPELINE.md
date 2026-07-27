@@ -518,3 +518,324 @@ The following borderline concepts were evaluated per D-03 classification rules. 
 | Q10 | Is it worth adding at all? | **Yes, but deferred.** Representation modifiers solve a genuine problem. For v0.1, a PRIMITIVE_BLOCKS correction noting that representation annotations are orthogonal modifiers on primitives is sufficient. Full specification deferred beyond v0.1. |
 
 **Classification per D-03:** PRIMITIVE_BLOCKS correction. Representation modifiers are orthogonal annotations on existing primitives (`pack` and `reference`), not new primitives or a standalone Language feature. See [EDR-038](../decision_records/architecture/EDR-038-representation-modifiers.md).
+
+---
+
+### Important Tier — Wave 4
+
+#### ASYNC_AWAIT + ASYNC_AS_EXPLICIT_MODIFIER (combined)
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | How to perform blocking I/O without blocking the OS thread. Async/await transforms imperative code into state machines, letting the programmer write straight-line code while the compiler manages suspend/resume. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Async modifies function/proc/new semantics. The compiler must transform async functions into state machines. The `async` modifier, `await` keyword, `spawn`, and `scope` all require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. State machine transformation (coroutine compilation) is not expressible via the primitive set. `Future` as first-class type requires compiler-level suspension tracking. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicit Semantics (`async`/`await`/`spawn`/`scope` are syntactically visible), Minimal Core (modifier on existing kinds, not a new category), Orthogonality (async composes with `proc`/`fun`/`new`). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Stackless coroutine state machine, `await` suspension points, `Future` as first-class type, `spawn` for parallelism, `scope` for structured concurrency. |
+| Q6 | Can it be expressed through composition? | No. Coroutine transformation is a compiler-level operation. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Async defines new execution semantics (suspension, resumption). |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language doing I/O. Async/await is the proven model (Rust, JS, Python, C#). |
+
+**Classification per D-03:** Language. Async as orthogonal modifier on `proc`/`fun`/`new`. Compiler-level state machine transformation. Colourless model with Future as first-class value.
+
+**EDR:** [EDR-047](../decision_records/architecture/EDR-047-async-await.md)
+
+---
+
+#### CONCURRENCY
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Concrete concurrent execution patterns building on the delegate model — typed channels, select, supervision, timers, fan-out/fan-in. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Channels wrap delegate mailboxes. Select is a macro/function. Supervision is a delegate that monitors other delegates. All are implementable using existing constructs (EDR-033). |
+| Q3 | Can it be solved with existing primitives? | Yes — channels = delegate + mailbox; select = polling multiple channels; supervision = delegate lifecycle management; timers = delegates on a scheduler. |
+| Q4 | Does it violate any Design Principle? | No. StdLib classification preserves Minimal Core. All utilities are ordinary Orthon code. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** All utilities are function/method implementations, not new language constructs. |
+| Q6 | Can it be expressed through composition? | Yes — of `delegate`, `<-`, `$`, and existing primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all concurrency utilities are ordinary function calls. |
+| Q8 | Is this an optimisation, not semantics? | The utilities themselves are not optimisations. Scheduling (work-stealing, pinned-to-thread) is an optimisations. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Channels and select are essential for coordinating work across delegates. StdLib classification means zero language additions. |
+
+**Classification per D-03:** StdLib. Concrete async/concurrent patterns building on CONCURRENCY_MODEL (EDR-033). Channels, select, supervision, timers — all StdLib.
+
+**EDR:** [EDR-049](../decision_records/architecture/EDR-049-concurrency.md)
+
+---
+
+#### GENERATORS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Producers may need bidirectional communication with consumers (consumer sends values back to producer). Simple lazy sequences need concise inline syntax (generator expressions). |
+| Q2 | Is this a language problem or a library problem? | **Language.** `yield` is a bidirectional variant of `emit`, requiring compiler-level state machine modification (consumer send values). Generator expressions require compiler-level desugaring to generator functions. `yield from` requires delegation semantics. |
+| Q3 | Can it be solved with existing primitives? | No. Two-way communication via `yield` requires the state machine to accept consumer values — a new semantic dimension beyond EDR-021's one-way `emit`. |
+| Q4 | Does it violate any Design Principle? | No. Builds on LAZY_SEQUENCE_GENERATORS (EDR-021). Bidirectional yield preserves all existing invariants from EDR-021. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Bidirectional yield adds consumer-to-producer communication. Generator expressions add concise syntax. `yield from` adds delegation. |
+| Q6 | Can it be expressed through composition? | No — bidirectional state machine communication is not expressible via composition of primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Generator expressions are sugar over generator functions. Bidirectional yield requires state machine changes. |
+| Q8 | Is this an optimisation, not semantics? | No. Two-way communication is a semantic extension of the generator model. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Bidirectional yield enables interactive coroutine patterns. Generator expressions provide concise inline sequence syntax. Both are proven in Python. |
+
+**Classification per D-03:** Language. Bidirectional yield adds consumer-to-producer communication semantics beyond EDR-021. Generator expressions require compiler desugaring.
+
+**EDR:** [EDR-050](../decision_records/architecture/EDR-050-generators.md)
+
+---
+
+#### PUSH_STREAMS
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Push-based reactive streams — the dual of pull-based generators. The producer determines when values arrive; the consumer reacts. Needed for events, I/O, GUI, sensors, message brokers. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Push streams are implementable using the delegate model (EDR-033) and channels (EDR-049). The `Stream<T>` type wraps a delegate + channel; combinators are function compositions. |
+| Q3 | Can it be solved with existing primitives? | Yes — stream = delegate + channel; subscription = callback registration; backpressure = channel capacity; combinators = function compositions. |
+| Q4 | Does it violate any Design Principle? | No. StdLib classification preserves Minimal Core. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Streams are ordinary Orthon types with method implementations. |
+| Q6 | Can it be expressed through composition? | Yes — of delegates, channels, closures, and function calls. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — all stream operations are method calls. |
+| Q8 | Is this an optimisation, not semantics? | No. Stream semantics (push, subscribe, complete, error) are StdLib patterns, not optimisations. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Push streams address a universal need (event-driven programming). StdLib classification means zero language additions. |
+
+**Classification per D-03:** StdLib. Push-based reactive streams built on delegate model. No new language constructs.
+
+**EDR:** [EDR-051](../decision_records/architecture/EDR-051-push-streams.md)
+
+---
+
+#### EMIT_AS_INTERMEDIATE_RESULT
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | A function should be able to publish intermediate results during long-running computation while maintaining a final return value — without separate stream or callback abstractions. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `emit` keyword already exists (EDR-021). This is a semantic refinement clarifying that `emit` serves both lazy sequence production AND intermediate result publication. Adds `.final()` accessor specification. |
+| Q3 | Can it be solved with existing primitives? | Partially — the `emit` mechanism (EDR-021) already supports the pattern technically. The refinement is in specification language and the `.final()` accessor. |
+| Q4 | Does it violate any Design Principle? | No. The model is consistent with EDR-021. Adds clarity without changing core semantics. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **Semantic refinement.** No new runtime semantics — the compiler already supports this pattern. The `.final()` accessor is a minor extension. The change is to specification language: functions with `emit` can now document both intermediate and final results. |
+| Q6 | Can it be expressed through composition? | Yes — the `emit` + `return` pattern is already supported by EDR-021. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — this is a specification refinement of an existing mechanism. |
+| Q8 | Is this an optimisation, not semantics? | No. The refinement clarifies semantics that already exist. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Clarifying the dual use of `emit` (lazy sequence + intermediate result) improves specification clarity and programmer understanding. The `.final()` accessor fills a gap in EDR-021's model. |
+
+**Classification per D-03:** Language (semantic refinement). Builds on LAZY_SEQUENCE_GENERATORS (EDR-021). Clarifies that `emit` serves both lazy sequence production and intermediate-result publication.
+
+**EDR:** [EDR-052](../decision_records/architecture/EDR-052-emit-as-intermediate-result.md)
+
+---
+
+#### ITERATION_LOOP
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | How does a language express repeated execution over a sequence of values? The `for`/`while` loop constructs are fundamental to any language. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `for`, `while`, and `loop` keywords require compiler-level syntax, desugaring, and control-flow (break, continue). `for` desugars to ITERATOR_PROTOCOL (EDR-022). |
+| Q3 | Can it be solved with existing primitives? | No — loop constructs require compiler-level syntax and control-flow. `for` desugaring requires compiler recognition of `IntoIterator[T]`. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one iteration construct + `while`), Explicit Semantics (`break`/`continue` are visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Loop control flow (break, continue), `for` desugaring to iterator protocol, `while` condition evaluation, `loop` as infinite loop. |
+| Q6 | Can it be expressed through composition? | No — loop desugaring requires compiler support. |
+| Q7 | Can it be syntactic sugar over existing primitives? | `for` desugars to `IntoIterator` + `loop` + `match` + `next()`. The desugaring itself requires compiler support. |
+| Q8 | Is this an optimisation, not semantics? | No. Loop semantics are fundamental control flow. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language. The simplest, safest iteration model. |
+
+**Classification per D-03:** Language. `for`/`while`/`loop` constructs require compiler-level syntax and desugaring. `for` desugars to ITERATOR_PROTOCOL (EDR-022). No C-style `for (;;)`.
+
+**EDR:** [EDR-053](../decision_records/architecture/EDR-053-iteration-loop.md)
+
+---
+
+#### OBJECT_INITIALIZATION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Creating objects with many optional fields without telescoping constructors or boilerplate builder patterns. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** Named parameters and default values are already part of Orthon's general function call model. Copy-and-update syntax is sugar over `new` + field assignment. Builder auto-generation is an AST macro (EDR-029). No new language semantics. |
+| Q3 | Can it be solved with existing primitives? | Yes — named parameters are already in the function call model. Default values are already in the type declaration model. Copy-and-update desugars to `new` + field assignment. Builder is a macro. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (uses existing mechanisms), Explicit Semantics (named parameters are visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** All patterns are sugar over existing language mechanisms. |
+| Q6 | Can it be expressed through composition? | Yes — of existing function call, type declaration, and macro mechanisms. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — copy-and-update desugars to `new` + field assignments. Builder is a macro. |
+| Q8 | Is this an optimisation, not semantics? | No — initialization is a StdLib pattern, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Solves a genuine ergonomic problem (telescoping constructors, builder boilerplate). Zero language cost. |
+
+**Classification per D-03:** StdLib. Constructor patterns, builder patterns, copy-and-update syntax — all StdLib / macro features. No new language semantics.
+
+**EDR:** [EDR-054](../decision_records/architecture/EDR-054-object-initialization.md)
+
+---
+
+#### UNPACKING
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Concise extraction of values from compound data structures without verbose indexing. Explicit indexing is brittle and non-obvious. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Destructuring patterns require compiler-level parsing and desugaring to `pack`/`unpack` primitives. The syntax mirrors PATTERN_MATCHING (EDR-025). |
+| Q3 | Can it be solved with existing primitives? | Semantically, yes — `unpack(point)` already exists as a primitive. But destructuring syntax requires compiler-level pattern recognition and code generation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Representation Symmetry (construction and destruction share syntax), Minimal Core (desugars to existing primitives). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **Syntactic sugar.** All destructuring forms desugar to `pack`/`unpack` primitives. No new runtime semantics — only syntactic transformation. |
+| Q6 | Can it be expressed through composition? | Yes — `let (x, y) = point` desugars to `let x, y = unpack(point)`. |
+| Q7 | Can it be syntactic sugar over existing primitives? | **Yes** — destructuring is syntax over `pack`/`unpack`. |
+| Q8 | Is this an optimisation, not semantics? | No. Destructuring is a syntactic convenience, not an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for ergonomic data decomposition. Eliminates boilerplate indexing. Symmetric with `pack` construction syntax. |
+
+**Classification per D-03:** Language. Destructuring syntax matching pack/unpack symmetry (PRIMITIVE_BLOCKS). Compiler must resolve destructuring patterns. However, all forms desugar to `pack`/`unpack` primitives — no new runtime semantics.
+
+**EDR:** [EDR-055](../decision_records/architecture/EDR-055-unpacking.md)
+
+---
+
+### Important Tier — Wave 4
+
+The following 8 important-tier concepts were processed through the Decision Pipeline. See individual EDRs for Gate Validation and detailed reasoning.
+
+#### ALGEBRAIC_DATA_TYPES (combined with ENUM_ALTERNATIVES)
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Data that takes one of several known forms needs language-level support. Without ADTs, programmers use runtime casts (unsafe), inheritance (non-exhaustive), or manual tagged unions (error-prone). Enum alternatives (named constants, iota) are subsumed by ADTs. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `type Name = Variant(fields) | Variant(fields)` declaration form, automatic discriminant generation, recursive type checking, and sealed-variant exhaustiveness require compiler support. |
+| Q3 | Can it be solved with existing primitives? | No. Combined variant+field declaration (sum+product in one form) is not expressible via manual sealed trait + variant type declarations. Automatic discriminant generation is a new compiler operation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one sum-type mechanism replaces two: ADTs + enums), Orthogonality (variants compose freely with traits, generics, pattern matching), Explicitness (type declaration syntax is visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Combined variant+field declaration, automatic discriminant (tag), sealed exhaustiveness, recursive type termination checking. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Partial — ADT declaration could desugar to sealed trait + variant types, but automatic discriminant generation and recursive type checking require compiler support. |
+| Q8 | Is this an optimisation, not semantics? | No. Sum types are a semantic concept — what values a type can hold. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Builds on TRAITS (EDR-019) and PATTERN_MATCHING (EDR-025). |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language. ADTs are the proven mechanism for type-safe sum types (Rust, Haskell, OCaml, Swift, Kotlin sealed classes). Subsumes enum construct per "One concept — one syntax." |
+
+**Classification per D-03:** Language. ADTs add new semantics (combined sum/product declaration, automatic discriminant, sealed exhaustiveness) beyond TRAITS + PATTERN_MATCHING.
+
+**EDR:** [EDR-039](../decision_records/architecture/EDR-039-algebraic-data-types.md) — combined with ENUM_ALTERNATIVES (no separate EDR-040; ADTs subsume dedicated enums).
+
+---
+
+#### COLLECTION_LITERAL_SYNTAX
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Creating a collection and manually adding each element is verbose and encourages mutation. `[1, 2, 3]` is universally preferred over `list = List(); list.add(1); list.add(2); list.add(3)`. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** A collection literal desugars to a constructor call (e.g., `[1, 2, 3]` → `List(1, 2, 3)`). No new compiler-level semantics — the language already supports `literal`, `pack`, and `call` primitives. |
+| Q3 | Can it be solved with existing primitives? | Yes — each element is a `literal` or `identifier`, and the literal as a whole is a `call` to a collection constructor. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (StdLib classification), Intent Over Implementation (declare what, not how). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Collection literals are syntactic sugar for constructor calls. |
+| Q6 | Can it be expressed through composition? | Yes — of `literal` elements + `call` to collection constructor. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — `[1, 2, 3]` desugars to `List(1, 2, 3)`, fully expressible via primitive operations. |
+| Q8 | Is this an optimisation, not semantics? | The literal itself is syntax. Large-literal desugaring (builder pattern vs. variadic constructor) is an optimisation. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Syntax deferred to Phase 5. |
+| Q10 | Is it worth adding at all? | **Yes.** Universal ergonomic expectation. StdLib classification means zero language additions. Syntax deferred to Phase 5. |
+
+**Classification per D-03:** StdLib. Syntactic sugar for collection constructors. Syntax deferred to Phase 5.
+
+**EDR:** [EDR-041](../decision_records/architecture/EDR-041-collection-literal-syntax.md)
+
+---
+
+#### DATACLASSES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Boilerplate for passive data carriers — manual constructors, accessors, equality, hashing, string representation. `@derive(init, eq, repr, hash)` eliminates this. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** The `@derive` mechanism (EDR-029) already provides compile-time code generation. Dataclasses are a specific application of derives — no new language semantics. The `with` expression is a limited compiler intrinsic. |
+| Q3 | Can it be solved with existing primitives? | Yes — `@derive` (EDR-029) applied to a type declaration generates implementations for `init` (constructor), `eq` (structural equality per EDR-017), `repr` (string representation), `hash` (hashing). |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (reuses existing derive mechanism), Explicitness (`@derive` annotations are visible). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics** for `@derive(init, eq, repr, hash)` — all derives reuse existing mechanisms. The `with` expression adds limited new semantics (compiler-recognized copy-with-modify intrinsic). |
+| Q6 | Can it be expressed through composition? | Yes — each derive target maps to a registered macro function. |
+| Q7 | Can it be syntactic sugar over existing primitives? | Yes — `@derive(init)` desugars to a `@macro` invocation per EDR-029. |
+| Q8 | Is this an optimisation, not semantics? | No — code generation is semantic (constructor, equality, etc.). But uses existing mechanisms. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates the most common boilerplate in any codebase. Reuses existing `@derive` mechanism — no new keywords. |
+
+**Classification per D-03:** StdLib. Dataclass pattern via existing `@derive` mechanism (EDR-029). No dedicated keyword.
+
+**EDR:** [EDR-042](../decision_records/architecture/EDR-042-dataclasses.md)
+
+---
+
+#### LITERAL_TYPES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Modelling closed sets of string/number values without ADT declaration ceremony. A literal value `"GET"` is its own type, composing via `|` into `type Method = "GET" | "POST" | "PUT"`. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The compiler must track literal types as singleton types in the type system, apply widening rules (immutable preserves, mutable widens), and support narrowing in pattern matching. |
+| Q3 | Can it be solved with existing primitives? | No. The concept of a value being its own type is not expressible via the 9-primitive set. Singleton type tracking is a type-system operation. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Explicit Semantics (widening rule is one explicit rule), Minimal Core (one widening rule covers all cases). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Singleton types for literal values, widening rule, narrowing in pattern matching. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No. Type tracking is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for API boundaries and protocol constants (HTTP methods, status codes). Composes with union types (EDR-045) for closed-set modelling. |
+
+**Classification per D-03:** Language. Values as types require compiler-level literal type tracking, widening, and narrowing.
+
+**EDR:** [EDR-043](../decision_records/architecture/EDR-043-literal-types.md)
+
+---
+
+#### STRUCTURAL_TYPING
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Polymorphism without explicit declaration ceremony. Marker traits (`Show`, `Default`) require mechanical `impl` blocks even when the method shape is obvious from the type's structure. |
+| Q2 | Is this a language problem or a library problem? | **Language.** Structural trait resolution — checking method signatures at compile time — requires compiler support. The `structural` keyword on trait declarations is a new syntactic form with semantic consequences for trait resolution. |
+| Q3 | Can it be solved with existing primitives? | No. Structural method signature matching across types requires the type system to compare method shapes without an explicit `impl` declaration — not expressible via primitive composition. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Intent Over Implementation (type satisfies trait structurally without explicit `impl`), Explicitness (`structural` keyword makes the mode visible). Nominal-by-default preserves explicitness for semantically meaningful traits. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Structural matching: the compiler checks method signatures for compatibility without an explicit `impl` declaration. Priority rules: explicit `impl` > structural match. Ambiguity detection for conflicting structural matches. |
+| Q6 | Can it be expressed through composition? | No. Structural signature matching is a type-system operation. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Trait satisfaction determines what operations are legal on a type — this is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. Builds on TRAITS (EDR-019). |
+| Q10 | Is it worth adding at all? | **Yes.** Eliminates ceremony for marker traits. Nominal-by-default maintains explicitness for semantically meaningful contracts. |
+
+**Classification per D-03:** Language. Structural trait resolution adds compiler-level semantics (method signature matching, priority rules, conflict resolution) beyond nominal TRAITS (EDR-019).
+
+**EDR:** [EDR-044](../decision_records/architecture/EDR-044-structural-typing.md)
+
+---
+
+#### UNION_INTERSECTION_TYPES
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Ad-hoc composition of alternative types at point of use — `String | Int` for an ID that can be either — without ADT declaration ceremony. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `|` combinator introduces a new type former — an anonymous, untagged union of two or more types. Compiler must resolve union type operations (member checking, narrowing, assignment compatibility). |
+| Q3 | Can it be solved with existing primitives? | No. The concept of an anonymous union type is not expressible via the 9-primitive set. It requires new type-system operations. |
+| Q4 | Does it violate any Design Principle? | No. Aligns with Orthogonality (union types compose freely), Minimal Core (one combinator — `|` — for all union needs). Overlap with ADTs is accepted as different-level solution (ad-hoc vs. declared). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** Anonymous union type formation, narrowing via match/is, structural assignment compatibility. No exhaustiveness — unlike ADTs. |
+| Q6 | Can it be expressed through composition? | No — see Q3. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q3. |
+| Q8 | Is this an optimisation, not semantics? | No. Type formation is semantic. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes.** Essential for ad-hoc composition of alternative types. Restricted to named types (no anonymous structural shapes) limits complexity. Intersection types rejected for v0.1. |
+
+**Classification per D-03:** Language. Union types add new type-system combinator (`A | B`) with narrowing semantics. Intersection types NOT accepted for v0.1.
+
+**EDR:** [EDR-045](../decision_records/architecture/EDR-045-union-intersection-types.md)
+
+---
+
+#### TYPE_LEVEL_COMPUTATION
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Deriving new types from existing types — creating DTO types that omit sensitive fields, making all fields optional, extracting property names as a type — without manual parallel type declarations. |
+| Q2 | Is this a language problem or a library problem? | **Language (restricted intrinsic set).** The compiler must provide built-in type manipulation operations (`KeyOf`, `Pick`, `Omit`, `Partial`, etc.) — these are not implementable as library functions since they operate on type structures, not values. |
+| Q3 | Can it be solved with existing primitives? | No. Type-level operations that transform type shapes are not expressible via value-level primitives. |
+| Q4 | Does it violate any Design Principle? | No, with the restricted intrinsic set. A full type-level language would violate Minimal Core and LLM Generability. A closed set of 8 documented intrinsics aligns with Explicit Semantics (each has a fixed, documented meaning). |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics (intrinsics).** Each intrinsic defines a type-level transformation — new semantics for the type system. However, the set is closed and non-recursive. |
+| Q6 | Can it be expressed through composition? | No — type-level transformations are not expressible via value-level primitives. |
+| Q7 | Can it be syntactic sugar over existing primitives? | No — see Q6. |
+| Q8 | Is this an optimisation, not semantics? | No. Type transformation is semantic — it changes what types exist and how they relate. |
+| Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
+| Q10 | Is it worth adding at all? | **Yes, with the restricted intrinsic set.** The closed set covers the essential DTO-shaping use cases. No Turing-complete type-level language — eliminates compiler-hang failure modes. Derive/macro mechanism is the escape hatch for custom operations. |
+
+**Classification per D-03:** Language (restricted closed intrinsic set). Non-recursive compiler intrinsics for type transformation. NO user-extensible type-level programming language.
+
+**EDR:** [EDR-046](../decision_records/architecture/EDR-046-type-level-computation.md)

@@ -6,15 +6,19 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** 13 concepts accepted through Phase 4 Wave 2. Wave 3
-> (Policy-classified + borderline concepts) processed via Decision
-> Pipeline — see [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
+> **Status:** 18 concepts accepted through Phase 4. Waves 1–2 (essential
+> core: 13 concepts) plus Wave 4 (important tier: 5 concepts) accepted
+> via Decision Pipeline. Wave 3 (Policy-classified + borderline concepts)
+> processed via Decision Pipeline — see
+> [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
 > § Essential — Policy Level and § Essential — Derived Features (Wave 3).
 > Policy concepts (ALLOCATION, REGION_BASED_MEMORY, EXECUTION_PROGRAM)
 > are routed to `how/strategies/` area per D-04. Borderline concepts
 > (CONTEXT_PARAMETERS, REPRESENTATION_MODIFIERS) resolved as corrections
 > to existing documents — see [EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)
 > and [EDR-038](../how/decision_records/architecture/EDR-038-representation-modifiers.md).
+> Wave 5 concepts (ALGEBRAIC_DATA_TYPES through TYPE_LEVEL_COMPUTATION,
+> EDR-039–046) registered separately.
 >
 > **Last updated:** 2026-07-27
 
@@ -212,3 +216,144 @@
 | **Classification** | Language (D-03) |
 | **Summary** | Delegate-based concurrency model. `act` modifier for concurrent type declarations. `delegate` keyword creates isolated execution contexts. `<-` message operator for asynchronous communication. No shared-state threads — all concurrency through message passing. Explicit ownership transfer (`$`) across delegate boundaries. Error propagation via `Result<T,E>`. Trait dispatch on delegates. Implementation-independent — no dependency on specific threading/async runtime. Cross-ref with ERROR_HANDLING (EDR-020), TRAITS (EDR-019), and CONCURRENCY (Plan 04-06). |
 | **Primitive Decomposition** | `act` modifier → type declaration modifier (compiler-enforced isolation semantics); `delegate` → `reference` + isolated `scope` + message queue; `<-` operator → compiler-recognized message-send syntax; ownership transfer (`$`) → existing `reference` + ownership semantics across boundaries. The isolation guarantee, message ordering, and single-threaded processing per delegate add compiler-level semantics beyond primitive composition. |
+
+---
+
+## Wave 4 — Important Tier (Phase 4)
+
+### ALGEBRAIC_DATA_TYPES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md) |
+| **Specification** | [`concepts/ALGEBRAIC_DATA_TYPES.md`](concepts/ALGEBRAIC_DATA_TYPES.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Sum types via `type Name = Variant(fields) \| Variant(fields)` syntax. Automatic discriminant generation. Exhaustive pattern matching. Recursive types with termination checking. Generic ADTs. Subsumes dedicated enum construct — payload-free variants (`type Color = Red \| Green \| Blue`) serve the enum use case. Variant fields named by default. `@derive` compatible. Builds on TRAITS (EDR-019) + PATTERN_MATCHING (EDR-025). |
+| **Primitive Decomposition** | `type Name = Var(fields) \| Var(fields)` → sealed trait declaration (per TRAITS) + variant constructors; automatic discriminant → compiler-generated tag; exhaustiveness → PATTERN_MATCHING (EDR-025) sealed variant checking; recursive termination → compiler analysis beyond primitive composition. |
+
+### COLLECTION_LITERAL_SYNTAX
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-041](../how/decision_records/architecture/EDR-041-collection-literal-syntax.md) |
+| **Specification** | [`concepts/COLLECTION_LITERAL_SYNTAX.md`](concepts/COLLECTION_LITERAL_SYNTAX.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Collection literals as syntactic sugar for StdLib constructors. `[1, 2, 3]` desugars to `List(1, 2, 3)`. Immutable by default; `mut` qualifier for mutable variants. Concrete syntax deferred to Phase 5 (candidates: `[]` lists, `{}` maps, `{}` sets). No arbitrary size limits. |
+| **Primitive Decomposition** | Each element → `literal` or `identifier`; literal as whole → `call` to collection constructor. Fully expressible via primitive composition — no new compiler semantics. |
+
+### DATACLASSES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-042](../how/decision_records/architecture/EDR-042-dataclasses.md) |
+| **Specification** | [`concepts/DATACLASSES.md`](concepts/DATACLASSES.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Dataclass pattern via existing `@derive` mechanism (EDR-029). `@derive(init, eq, repr, hash)` generates constructor, structural equality, string representation, and hash. No dedicated keyword. Immutable by default. `with` expression for copy-with-modify (compiler intrinsic). StdLib provides derive implementations registered in the macro registry. |
+| **Primitive Decomposition** | Each derive target (`init`, `eq`, `repr`, `hash`) → `@macro` function invocation per EDR-029; `with` expression → field-by-field copy + selective reassignment (compiler intrinsic beyond primitive composition). |
+
+### LITERAL_TYPES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-043](../how/decision_records/architecture/EDR-043-literal-types.md) |
+| **Specification** | [`concepts/LITERAL_TYPES.md`](concepts/LITERAL_TYPES.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Literal values as singleton types. `let x = "GET"` → type `"GET"`; `var y = "GET"` → type `String` (widened). One explicit widening rule. Primitive scalars only (String, Int, Float, Bool). Composes with UNION_INTERSECTION_TYPES (EDR-045) for closed sets. Input to TYPE_LEVEL_COMPUTATION (EDR-046) `KeyOf<T>`. |
+| **Primitive Decomposition** | Singleton type → compiler-determined, not primitive-expressible; widening → type-system coercion rule (`let` preserves, `var` widens); narrowing → pattern matching (EDR-025) + compiler type tracking. The singleton type tracking adds compiler-level semantics beyond primitive composition. |
+
+### STRUCTURAL_TYPING
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-044](../how/decision_records/architecture/EDR-044-structural-typing.md) |
+| **Specification** | [`concepts/STRUCTURAL_TYPING.md`](concepts/STRUCTURAL_TYPING.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Structural trait satisfaction as opt-in via `structural` keyword on trait declaration. Nominal-by-default (explicit `impl` required for most traits). Explicit `impl` overrides structural matching. Static dispatch by default. `@derive` generates explicit `impl` blocks (priority over structural). Ambiguity detection for conflicting structural matches. Builds on TRAITS (EDR-019). |
+| **Primitive Decomposition** | `structural` trait keyword → trait declaration modifier (compiler-recognized); structural matching → method signature comparison (type-system operation); priority rule → explicit `impl` > structural match (compiler resolution). The structural matching and conflict resolution add compiler-level semantics beyond primitive composition. |
+
+### UNION_INTERSECTION_TYPES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-045](../how/decision_records/architecture/EDR-045-union-intersection-types.md) |
+| **Specification** | [`concepts/UNION_INTERSECTION_TYPES.md`](concepts/UNION_INTERSECTION_TYPES.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Structural union types via `A | B` combinator. Untagged — no discriminant at runtime. Narrowing via `match` or `is` checks (flow-sensitive per EDR-028). Named types or literal types only — no anonymous structural shapes. No exhaustiveness guarantee (unlike ADTs). Intersection types NOT accepted for v0.1 (redundant with product types). |
+| **Primitive Decomposition** | `A | B` type former → new syntax + type-system combinator; narrowing → match (EDR-025) + compiler type tracking (EDR-028); runtime representation → value itself (no tag, no boxing). The union type formation and narrowing semantics add compiler-level semantics beyond primitive composition. |
+
+### TYPE_LEVEL_COMPUTATION
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-046](../how/decision_records/architecture/EDR-046-type-level-computation.md) |
+| **Specification** | [`concepts/TYPE_LEVEL_COMPUTATION.md`](concepts/TYPE_LEVEL_COMPUTATION.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Closed set of 8 non-recursive compiler intrinsics: `KeyOf<T>`, `Pick<T, K>`, `Omit<T, K>`, `Partial<T>`, `Required<T>`, `Record<K, V>`, `Readonly<T>`, `ElementOf<T>`. NO user-extensible type-level language. NO recursion. NO `infer`. Composable (e.g., `Partial<Omit<User, "password">>`). Derive/macro mechanism (EDR-029) is the escape hatch for custom type-level operations. LLM-generable — fixed, documented semantics per intrinsic. |
+| **Primitive Decomposition** | Each intrinsic → compiler-evaluated type transformation (not expressible via value-level primitives). Intrinsics are built-in type-system operations — no decomposition path to user-visible primitives. |
+
+---
+
+## Wave 4 — Important Tier (Phase 4)
+
+### ASYNC_AWAIT
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-047](../how/decision_records/architecture/EDR-047-async-await.md) |
+| **Specification** | [`concepts/ASYNC_AWAIT.md`](concepts/ASYNC_AWAIT.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Async as orthogonal execution modifier on `proc`/`fun`/`new`, not a separate abstraction. Combined with ASYNC_AS_EXPLICIT_MODIFIER. Stackless coroutines with `await` suspension points. Colourless model — `Future<T>` as first-class value; `await` required only when result needed. `spawn` for explicit parallelism, `scope` for structured concurrency. `exclusive` modifier separates suspension from access serialisation. Task cancellation and timeouts. Async lambdas. |
+| **Primitive Decomposition** | `async` modifier → compiler-recognized execution modifier on `function`/`scope`; state machine transformation → compiler-level coroutine compilation; `Future<T>` → compiler-managed type + suspension/resumption; `spawn` + `scope` → compiler-enforced lifecycle management. The coroutine transformation and suspension tracking add compiler-level semantics beyond primitive composition. |
+
+### GENERATORS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-050](../how/decision_records/architecture/EDR-050-generators.md) |
+| **Specification** | [`concepts/GENERATORS.md`](concepts/GENERATORS.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Bidirectional `yield` — consumer can send values back to generator during iteration. `yield` without expression ≡ `emit` (EDR-021). Generator expressions — parenthesised inline syntax: `(x * x for x in 1..10)`. `yield from` for generator delegation. `BidirectionalGenerator[T, U]` trait. Builds on LAZY_SEQUENCE_GENERATORS (EDR-021). |
+| **Primitive Decomposition** | `yield` without expr → equivalent to `emit` (EDR-021); bidirectional `yield expr` → `emit` + consumer receive slot in state machine; generator expression → desugaring to anonymous generator function; `yield from` → `for` loop calling `emit` on sub-generator. The bidirectional state machine slot adds compiler-level semantics beyond EDR-021's one-way `emit`. |
+
+### EMIT_AS_INTERMEDIATE_RESULT
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-052](../how/decision_records/architecture/EDR-052-emit-as-intermediate-result.md) |
+| **Specification** | [`concepts/EMIT_AS_INTERMEDIATE_RESULT.md`](concepts/EMIT_AS_INTERMEDIATE_RESULT.md) |
+| **Classification** | Language (D-03) — semantic refinement of EDR-021 |
+| **Summary** | `emit` serves dual purpose: lazy sequence production (EDR-021) AND intermediate result publication. A function with `emit` + `return` produces intermediate values during computation and a final result accessible via `.final()`. No new syntax — the `emit` keyword already exists. Specification refinement of EDR-021. |
+| **Primitive Decomposition** | Same as EDR-021 — `emit` + `return` pattern already supported by generator state machine. `.final()` accessor stores and exposes the return value from the iterator. No new primitive operations. |
+
+### ITERATION_LOOP
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-053](../how/decision_records/architecture/EDR-053-iteration-loop.md) |
+| **Specification** | [`concepts/ITERATION_LOOP.md`](concepts/ITERATION_LOOP.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | `for item in sequence` — the only iteration construct. `while condition` — separate condition-based loop. `loop { }` — infinite loop with optional `break value`. No C-style `for (;;)`. `break` and `continue` in all loop forms. Destructuring in loop variables. Range syntax (`0..n`, `0..=n`). `for` desugars to ITERATOR_PROTOCOL (EDR-022). |
+| **Primitive Decomposition** | `for item in sequence` → `IntoIterator::iter()` + `loop` + `match` + `next()` per EDR-022; `while condition` → `loop` + conditional `break`; `loop` → primitive infinite loop; `break`/`continue` → primitive control flow. The `for` desugaring and range-to-iterator conversion add compiler-level semantics beyond primitive composition. |
+
+### UNPACKING
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-055](../how/decision_records/architecture/EDR-055-unpacking.md) |
+| **Specification** | [`concepts/UNPACKING.md`](concepts/UNPACKING.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Destructuring assignment matching pack/unpack symmetry (PRIMITIVE_BLOCKS). Tuple destructuring: `let (x, y) = point`. Record destructuring: `let {name, age} = person`. Rename syntax, rest patterns (`..rest`), ignore patterns (`_`), nested destructuring. Function parameter destructuring. `for` loop destructuring. All forms desugar to `pack`/`unpack` primitives — no new runtime semantics. |
+| **Primitive Decomposition** | All destructuring forms → `pack`/`unpack` + `identifier` + `call`. Fully expressible via primitive composition — desugaring is a syntactic transformation, not new runtime behaviour. |
+

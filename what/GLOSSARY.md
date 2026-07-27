@@ -7,6 +7,66 @@
 
 ## A
 
+### Algebraic Data Type (ADT)
+
+A type defined as a choice between named variants, where each variant
+carries its own fields. ADTs combine **sum types** ("this OR that") and
+**product types** ("this AND that") into a single declaration.
+
+```orthon
+type Shape = Circle(radius: Float)
+           | Rectangle(width: Float, height: Float)
+```
+
+The `|` separates variants. Variant fields are named by default (positional
+shorthand available for single-field variants). ADTs subsume dedicated enum
+constructs — payload-free variants (`type Color = Red | Green | Blue`)
+serve the enum use case with compiler-enforced exhaustiveness.
+
+ADTs compile to sealed trait hierarchies (EDR-019) with automatic
+discriminant generation. Pattern matching (EDR-025) on ADTs must cover
+all variants — the compiler enforces exhaustiveness.
+
+- **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md`, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
+- **See also:** [Sum Type](#sum-type), [Product Type](#product-type), [Tagged Union](#tagged-union), [Exhaustiveness](#exhaustiveness), [Pattern Matching](#pattern-matching)
+
+### Async
+
+A modifier on `proc`/`fun`/`new` indicating that the function may suspend
+execution at `await` points and resume later. `async` is an **execution
+modifier**, not a semantic category — it composes orthogonally with the
+three declaration kinds (`async proc`, `async fun`, `async new`). Async
+says nothing about parallelism or concurrent access; those are expressed
+via `spawn` (parallel execution) and `exclusive` (access serialisation).
+
+```orthon
+async fun fetch(url: Url) -> String
+    return await httpClient.get(url)
+```
+
+An `async` function returns `Future<T>`. Calling without `await` produces
+a `Future` without suspension (colourless model).
+
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
+- **See also:** [Await](#await), [Future](#future), [Spawn](#spawn), [Scope](#scope-structured-concurrency), [Exclusive Access](#exclusive-access)
+
+### Await
+
+The syntactic marker of a suspension point in an `async` function. `await`
+suspends execution until the awaited `Future<T>` resolves to a value of
+type `T`. `await` is the only yield point (cooperative scheduling).
+
+```orthon
+let result = await future   # suspend until future completes
+```
+
+`await` is required only when the current code needs the result value.
+Without `await`, an async function call produces a `Future<T>` without
+suspension.
+
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
+- **See also:** [Async](#async), [Future](#future)
+
 ### Allocation Policy
 
 An Implementation Policy that controls how memory is acquired and
@@ -23,6 +83,22 @@ EMBEDDED_STRATEGY: Allocation = Static
 
 - **Source:** `../how/IMPLEMENTATION_POLICIES.md` § Allocation Policy, [EDR-034](../how/decision_records/architecture/EDR-034-allocation.md)
 - **See also:** [Implementation Strategy](#implementation-strategy), [Policy](#policy), [Region-Based Memory](#region-based-memory)
+
+### Algebraic Data Type (ADT)
+
+A type defined as a choice between named variants, where each variant carries its own fields. ADTs combine **sum types** ("this OR that") and **product types** ("this AND that") into a single declaration.
+
+```orthon
+type Shape = Circle(radius: Float)
+           | Rectangle(width: Float, height: Float)
+```
+
+The `|` separates variants. Variant fields are named by default (positional shorthand available for single-field variants). ADTs subsume dedicated enum constructs — payload-free variants (`type Color = Red | Green | Blue`) serve the enum use case with compiler-enforced exhaustiveness.
+
+ADTs are declared with the `type` keyword and compile to sealed trait hierarchies (EDR-019) with automatic discriminant generation. Pattern matching (EDR-025) on ADTs must cover all variants — the compiler enforces exhaustiveness.
+
+- **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md`, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
+- **See also:** [Sum Type](#sum-type), [Product Type](#product-type), [Tagged Union](#tagged-union), [Exhaustiveness](#exhaustiveness), [Pattern Matching](#pattern-matching)
 
 ### Architecture
 
@@ -61,6 +137,20 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Documentation Principle
 - **See also:** [Operator Equivalence](#operator-equivalence)
+
+### Collection Literal
+
+A compact, readable syntax for constructing collections (lists, maps, sets)
+without create-then-mutate boilerplate. Collection literals are syntactic
+sugar over standard library constructor calls — they are classified as
+StdLib, not Language ([EDR-041](../how/decision_records/architecture/EDR-041-collection-literal-syntax.md)).
+
+Collection literals are **immutable by default**. Mutable variants require
+an explicit `mut` qualifier. Concrete syntax is deferred to Phase 5;
+candidates include `[]` for lists, `{}` for maps, and `{}`/`[]` for sets.
+
+- **Source:** `../what/concepts/COLLECTION_LITERAL_SYNTAX.md`, [EDR-041](../how/decision_records/architecture/EDR-041-collection-literal-syntax.md)
+- **See also:** [Combinator](#combinator), [Iterator Protocol](#iterator-protocol)
 
 ### Combinator
 
@@ -479,6 +569,26 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 ## F
 
+### For Loop
+
+The iteration construct in Orthon: `for item in sequence`. The only loop
+for consuming values from a sequence. Operates on any type implementing
+`IntoIterator[T]`. Desugars to the iterator protocol per EDR-022.
+
+```orthon
+for item in items:
+    process(item)
+
+for i in 0..len(array):     # index-based via range
+    process(array[i])
+```
+
+Key properties: no C-style `for (;;)` — index-based iteration uses range
+syntax; destructuring in loop variables; `break` and `continue` available.
+
+- **Source:** `../what/concepts/ITERATION_LOOP.md` (EDR-053)
+- **See also:** [Iterator Protocol](#iterator-protocol), [While Loop](#while-loop)
+
 ### Foreign Function Interface (FFI)
 
 A mechanism that allows Orthon programs to call functions written in
@@ -487,6 +597,25 @@ Orthon's type system and memory model and those of foreign languages.
 
 - **Source:** `../when/ROADMAP.md` § Milestone 8
 - **See also:** [Standard Library](#standard-library)
+
+### Future
+
+The return type of an `async` function. `Future<T>` represents a value
+of type `T` that may not be available yet. Futures are first-class values
+— they can be stored, passed, and combined without forcing evaluation.
+
+```orthon
+let f = async fetch(url)     # Future[String], no suspension
+let result = await f         # suspend, unwrap to String
+```
+
+Key properties: `await` resolves a `Future` to its value; calling an
+`async` function without `await` produces a `Future` without suspension
+(colourless model); `Future` is single-subscriber by default (one consumer
+can await it).
+
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
+- **See also:** [Async](#async), [Await](#await), [Spawn](#spawn)
 
 ### Flow-Sensitive Narrowing
 
@@ -565,8 +694,28 @@ and `return value ->`. Generators are lazy by default (values produced
 on demand) and support infinite sequences. Composition with iterator
 combinators does not allocate intermediate collections.
 
+**Bidirectional generators** (EDR-050) extend the model with `yield`,
+which optionally receives a value from the consumer.
+
 - **Source:** `../what/concepts/LAZY_SEQUENCE_GENERATORS.md`
-- **See also:** [Iterator Protocol](#iterator-protocol), [Lazy Sequence](#lazy-sequence)
+- **See also:** [Iterator Protocol](#iterator-protocol), [Lazy Sequence](#lazy-sequence), [Yield](#yield)
+
+### Generator Expression
+
+A parenthesised inline syntax for producing lazy sequences without
+writing a full generator function. Desugars to an anonymous generator
+function.
+
+```orthon
+let squares = (x * x for x in 1..10)
+let evens = (x for x in 1..100 if x % 2 == 0)
+```
+
+Generator expressions are lazy by default — they produce an
+`Iterator[T]` without materialising. Optional `if` filter clause.
+
+- **Source:** `../what/concepts/GENERATORS.md` (EDR-050)
+- **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence)
 
 ---
 
@@ -589,6 +738,18 @@ Context parameters are noted as a SEMANTIC_MODEL correction
 ([EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md))
 but full specification is deferred beyond v0.1.
 
+### Intersection Type
+
+A structural, purely compile-time type combinator that merges the shape of
+two types into a new anonymous type with all members of both
+(`A & B`). Intersection types produce no runtime object — they exist only
+in the type checker. **NOT accepted for Orthon v0.1** — intersection types
+are redundant with Orthon's product type mechanism (declaring a new named
+record type carrying all fields of both is more explicit).
+
+- **Source:** `../what/concepts/UNION_INTERSECTION_TYPES.md`, [EDR-045](../how/decision_records/architecture/EDR-045-union-intersection-types.md)
+- **See also:** [Union Type](#union-type), [Algebraic Data Type](#algebraic-data-type), [Product Type](#product-type)
+
 - **Source:** `../how/concepts/research/essential/CONTEXT_PARAMETERS.md`, [EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)
 - **See also:** [Given Resolution](#given-resolution), [Semantic Dimension](#semantic-dimension), [Evaluation Dimension](#evaluation-dimension)
 
@@ -609,6 +770,28 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Intent Over Implementation
 - **See also:** [Explicit Semantics](#explicit-semantics)
+
+### Intermediate Result
+
+A value produced by a function via `emit` during the course of a
+long-running computation, distinct from the final `return` value. A
+function with both `emit` and `return` produces an `Iterator[T]` of
+intermediate values; the final return value is accessible via
+`.final()`.
+
+```orthon
+fun process_dataset(data: Dataset) -> Iterator[BatchResult]
+    for batch in data.batches():
+        emit analyse(batch)
+    return compute_summary(data)
+```
+
+The intermediate-result model is a specification refinement of
+LAZY_SEQUENCE_GENERATORS (EDR-021): the `emit` keyword already supports
+this pattern technically; this concept documents the dual use explicitly.
+
+- **Source:** `../what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md` (EDR-052)
+- **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence), [Iterator Protocol](#iterator-protocol)
 
 ### IntoIterator
 
@@ -727,6 +910,29 @@ consumer controls termination via combinators like `.take(n)`.
 
 - **Source:** `../what/concepts/LAZY_SEQUENCE_GENERATORS.md` § Principles
 - **See also:** [Generator](#generator), [Iterator Protocol](#iterator-protocol)
+
+### Literal Type
+
+A singleton type inhabited by exactly one value — a specific string like
+`"GET"`, number like `42`, or boolean like `true`. Literal types compose
+with union types (`|`) into closed sets: `type Method = "GET" | "POST" | "PUT"`.
+
+Widening rule: immutable bindings preserve literal types (`let x = "GET"`
+→ type `"GET"`); mutable bindings widen to base type (`var y = "GET"`
+→ type `String`). This is a single, always-applicable rule — not
+context-dependent.
+
+Literal types are restricted to primitive scalars (`String`, `Int`,
+`Float`, `Bool`) in v0.1. They are input to type-level computation
+intrinsics like `KeyOf<T>`.
+
+```orthon
+let port: 80 | 443 = 80
+type Method = "GET" | "POST" | "PUT"
+```
+
+- **Source:** `../what/concepts/LITERAL_TYPES.md`, [EDR-043](../how/decision_records/architecture/EDR-043-literal-types.md)
+- **See also:** [Union Type](#union-type), [Widening](#widening), [Type-Level Computation](#type-level-computation), [Algebraic Data Type](#algebraic-data-type)
 
 ### LLM-Native
 
@@ -875,6 +1081,27 @@ Each language construct solves exactly one problem and combines freely with othe
 ### Policy
 
 See [Implementation Policy](#implementation-policy).
+
+### Product Type
+
+A type that combines multiple values into a single compound value ("this
+AND that"). In Orthon, product types are expressed through ADT variants
+with multiple fields, standalone record types, or tuples. Product types
+are the structural complement of sum types.
+
+```orthon
+# Product type as ADT variant with multiple fields
+type Point(x: Int, y: Int)
+
+# Product type as tuple (anonymous product)
+(42, "hello")  # type: (Int, String)
+```
+
+Field access is positional or named depending on the declaration form.
+Named fields are preferred for readability.
+
+- **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md`, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
+- **See also:** [Algebraic Data Type](#algebraic-data-type), [Sum Type](#sum-type), [Tuple](#tuple)
 
 ### Program Enricher
 
@@ -1138,6 +1365,27 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
 
+### Spawn
+
+A keyword that creates a new concurrent task running in parallel with
+the current one. `spawn` makes parallelism syntactically visible —
+without it, `async` functions execute sequentially in the current
+context.
+
+```orthon
+let t1 = spawn async loadImage("a.jpg")
+let t2 = spawn async loadImage("b.jpg")
+let img1 = await t1
+let img2 = await t2
+```
+
+`spawn` returns `Task<T>` (which is also a `Future<T>`). Tasks can be
+cancelled via `.cancel()`. Tasks within a `scope` block are
+automatically managed.
+
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
+- **See also:** [Async](#async), [Scope (Structured Concurrency)](#scope-structured-concurrency), [Future](#future)
+
 ### Stable Mental Model
 
 Programmers should reason about language semantics, not compiler internals. Users should never need to understand implementation details to predict program behaviour.
@@ -1163,6 +1411,47 @@ Identity question ("are these the same storage").
 
 - **Source:** `../what/SEMANTIC_MODEL.md` § Identity
 - **See also:** [Value Identity](#value-identity), [Data](#data)
+
+### Structural Typing
+
+A mode of trait satisfaction where a type satisfies a trait automatically
+if its method signatures match the trait's declaration — no explicit
+`impl Trait for Type` block required. In Orthon, structural typing is
+opt-in via the `structural` keyword on a trait declaration. Nominal
+(explicit `impl`) is the default.
+
+```orthon
+structural trait Show
+    fn show(self) -> String
+```
+
+Explicit `impl` blocks always take priority over structural matching.
+Ambiguity conflicts (a type matching two structural traits with
+conflicting signatures) produce a compile-time error.
+
+- **Source:** `../what/concepts/STRUCTURAL_TYPING.md`, [EDR-044](../how/decision_records/architecture/EDR-044-structural-typing.md)
+- **See also:** [Trait](#trait), [Trait Bound](#trait-bound), [Derive](#derive)
+
+### Sum Type
+
+A type whose values are exactly one of a fixed set of named variants
+("this OR that"). In Orthon, sum types are expressed through Algebraic
+Data Types (EDR-039). A sum type's variants are enumerated in the ADT
+declaration; the compiler enforces exhaustive matching via pattern
+matching (EDR-025).
+
+```orthon
+# Sum type — exactly one of Circle, Rectangle, or Triangle
+type Shape = Circle(radius: Float)
+           | Rectangle(width: Float, height: Float)
+           | Triangle(a: Float, b: Float, c: Float)
+```
+
+Orthon has exactly one sum-type mechanism (ADTs). No separate enum,
+named constant, or iota construct.
+
+- **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md`, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
+- **See also:** [Algebraic Data Type](#algebraic-data-type), [Product Type](#product-type), [Exhaustiveness](#exhaustiveness), [Tagged Union](#tagged-union)
 
 ---
 
@@ -1306,6 +1595,28 @@ Distinct from [Semantic Equality](#semantic-equality) (`==`, user-defined) and [
 
 ## U
 
+### Union Type
+
+A structural, untagged type combinator that forms an anonymous union of
+two or more types (`A | B`). Union types require no prior declaration and
+no discriminant — the runtime representation is the value itself.
+
+```orthon
+type ID = String | Int
+fun print_id(id: String | Int)
+    match id:
+        case s: String => print(s)
+        case i: Int    => print(i.to_string())
+```
+
+Union members must be named types or literal types (EDR-043) — no
+anonymous structural shapes in v0.1. Narrowing follows the same
+flow-sensitive rules as TYPE_LEVEL_NULL_SAFETY (EDR-028). There is no
+exhaustiveness guarantee (unlike ADTs).
+
+- **Source:** `../what/concepts/UNION_INTERSECTION_TYPES.md`, [EDR-045](../how/decision_records/architecture/EDR-045-union-intersection-types.md)
+- **See also:** [Literal Type](#literal-type), [Algebraic Data Type](#algebraic-data-type), [Intersection Type](#intersection-type), [Narrowing](#narrowing)
+
 ### Uniformity
 
 Equivalent concepts should be expressed in equivalent ways. Once a user learns a language pattern, the same pattern applies consistently throughout the language.
@@ -1344,6 +1655,76 @@ The four guiding aphorisms of the language:
 
 - **Source:** `../why/ZEN.md`
 - **See also:** [Orthogonality](#orthogonality)
+
+---
+
+### Unpacking (Destructuring)
+
+The syntactic extraction of values from compound data structures (tuples,
+records) into individual bindings using pattern syntax. Follows the
+`pack`/`unpack` symmetry principle (PRIMITIVE_BLOCKS) — the same syntax
+used to construct a value is used to decompose it.
+
+```orthon
+let (x, y) = point              # tuple destructuring
+let {name, age} = person        # record destructuring
+let {address: {city}} = user    # nested destructuring
+```
+
+All destructuring forms desugar to `pack`/`unpack` primitives — no new
+runtime semantics. Supports rest patterns (`..rest`), ignore patterns
+(`_`), rename syntax, function parameter destructuring, and `for` loop
+destructuring.
+
+- **Source:** `../what/concepts/UNPACKING.md` (EDR-055)
+- **See also:** [Primitive Block](#primitive-block), [Pattern Matching](#pattern-matching), [Representation Symmetry](#representation-symmetry)
+
+---
+
+## W
+
+### While Loop
+
+The condition-based looping construct in Orthon: `while condition`.
+Separate from the iteration construct (`for ... in`). Repeats the body
+as long as the condition evaluates to `true`.
+
+```orthon
+while queue.not_empty():
+    process(queue.dequeue())
+```
+
+`break` exits the loop early; `continue` skips to the next iteration.
+No C-style `for (;;)` — use `while` with explicit condition or `loop`
+for infinite loops.
+
+- **Source:** `../what/concepts/ITERATION_LOOP.md` (EDR-053)
+- **See also:** [For Loop](#for-loop), [Iterator Protocol](#iterator-protocol)
+
+---
+
+## Y
+
+### Yield
+
+A keyword in generators that produces a value and suspends execution.
+`yield` without a consumer interaction is equivalent to `emit` (one-way
+production). `yield expr` optionally receives a value from the consumer
+(bidirectional yield), enabling interactive coroutine patterns.
+
+```orthon
+# One-way (equivalent to emit)
+yield value
+
+# Bidirectional — receives value from consumer
+let response = yield value
+```
+
+Bidirectional `yield` requires the generator to implement
+`BidirectionalGenerator[T, U]` with a `send(value: U)` method.
+
+- **Source:** `../what/concepts/GENERATORS.md` (EDR-050)
+- **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence), [Intermediate Result](#intermediate-result)
 
 ---
 

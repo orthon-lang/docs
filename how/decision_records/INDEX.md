@@ -49,8 +49,17 @@
 | EDR-036 | Architecture | [Execution Program — Decoupling Semantics from Execution Strategy](architecture/EDR-036-execution-program.md) | Accepted | 2026-07-27 | — |
 | EDR-037 | Architecture | [Context Parameters — SEMANTIC_MODEL Correction for Implicit Context Flow](architecture/EDR-037-context-parameters.md) | Accepted | 2026-07-27 | — |
 | EDR-038 | Architecture | [Representation Modifiers — PRIMITIVE_BLOCKS Correction for Type Storage Annotations](architecture/EDR-038-representation-modifiers.md) | Accepted | 2026-07-27 | — |
+| EDR-047 | Architecture | [Async/Await with Async as Explicit Modifier](architecture/EDR-047-async-await.md) | Accepted | 2026-07-27 | — |
+| EDR-048 | Architecture | *(Skipped — combined with EDR-047)* | — | — | — |
+| EDR-049 | Architecture | [Concurrency — StdLib Utilities Built on Delegate Model](architecture/EDR-049-concurrency.md) | Accepted | 2026-07-27 | — |
+| EDR-050 | Architecture | [Generators — Bidirectional Yield and Generator Expressions](architecture/EDR-050-generators.md) | Accepted | 2026-07-27 | — |
+| EDR-051 | Architecture | [Push Streams — StdLib Observable-Style Reactive Streams](architecture/EDR-051-push-streams.md) | Accepted | 2026-07-27 | — |
+| EDR-052 | Architecture | [`emit` as Intermediate Result — Partial Results During Long-Running Computation](architecture/EDR-052-emit-as-intermediate-result.md) | Accepted | 2026-07-27 | — |
+| EDR-053 | Architecture | [Iteration Loop — `for`/`while` with Protocol-Based Iteration](architecture/EDR-053-iteration-loop.md) | Accepted | 2026-07-27 | — |
+| EDR-054 | Architecture | [Object Initialization — Named Parameters with Defaults and Builder Patterns](architecture/EDR-054-object-initialization.md) | Accepted | 2026-07-27 | — |
+| EDR-055 | Architecture | [Unpacking — Destructuring Assignment with Pattern Syntax](architecture/EDR-055-unpacking.md) | Accepted | 2026-07-27 | — |
 
-> **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
+> **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
 
 ## Gap Registry
@@ -94,6 +103,39 @@
 | EDR-036 | [Execution Program](architecture/EDR-036-execution-program.md) | Accepted | 2026-07-27 |
 | EDR-037 | [Context Parameters](architecture/EDR-037-context-parameters.md) | Accepted | 2026-07-27 |
 | EDR-038 | [Representation Modifiers](architecture/EDR-038-representation-modifiers.md) | Accepted | 2026-07-27 |
+| EDR-039 | Architecture | [Algebraic Data Types (subsumes ENUM_ALTERNATIVES)](architecture/EDR-039-algebraic-data-types.md) | Accepted | 2026-07-27 | EDR-040 (folded) |
+| EDR-040 | Architecture | [ENUM_ALTERNATIVES — folded into EDR-039](architecture/EDR-039-algebraic-data-types.md) | Skipped | — | — |
+| EDR-041 | Architecture | [Collection Literal Syntax](architecture/EDR-041-collection-literal-syntax.md) | Accepted | 2026-07-27 | — |
+| EDR-042 | Architecture | [Dataclasses — Derive-Based Data Carriers](architecture/EDR-042-dataclasses.md) | Accepted | 2026-07-27 | — |
+| EDR-043 | Architecture | [Literal Types — Values as Types](architecture/EDR-043-literal-types.md) | Accepted | 2026-07-27 | — |
+| EDR-044 | Architecture | [Structural Typing — Structural Trait Satisfaction](architecture/EDR-044-structural-typing.md) | Accepted | 2026-07-27 | — |
+| EDR-045 | Architecture | [Union and Intersection Types — Structural Type Combinators](architecture/EDR-045-union-intersection-types.md) | Accepted | 2026-07-27 | — |
+| EDR-046 | Architecture | [Type-Level Computation — Closed Set of Compiler Intrinsics](architecture/EDR-046-type-level-computation.md) | Accepted | 2026-07-27 | — |
+| EDR-039 | Architecture | [Algebraic Data Types (subsumes ENUM_ALTERNATIVES)](architecture/EDR-039-algebraic-data-types.md) | Accepted | 2026-07-27 | EDR-040 (folded) |
+| EDR-040 | Architecture | [ENUM_ALTERNATIVES — folded into EDR-039] | Skipped | — | — |
+| EDR-041 | Architecture | [Collection Literal Syntax](architecture/EDR-041-collection-literal-syntax.md) | Accepted | 2026-07-27 | — |
+| EDR-042 | Architecture | [Dataclasses — Derive-Based Data Carriers](architecture/EDR-042-dataclasses.md) | Accepted | 2026-07-27 | — |
+| EDR-043 | Architecture | [Literal Types — Values as Types](architecture/EDR-043-literal-types.md) | Accepted | 2026-07-27 | — |
+| EDR-044 | Architecture | [Structural Typing — Structural Trait Satisfaction](architecture/EDR-044-structural-typing.md) | Accepted | 2026-07-27 | — |
+| EDR-045 | Architecture | [Union and Intersection Types — Structural Type Combinators](architecture/EDR-045-union-intersection-types.md) | Accepted | 2026-07-27 | — |
+| EDR-046 | Architecture | [Type-Level Computation — Closed Set of Compiler Intrinsics](architecture/EDR-046-type-level-computation.md) | Accepted | 2026-07-27 | — |
+| EDR-039 | [Algebraic Data Types (subsumes ENUM_ALTERNATIVES)](architecture/EDR-039-algebraic-data-types.md) | Accepted | 2026-07-27 |
+| EDR-040 | [ENUM_ALTERNATIVES — folded into EDR-039](architecture/EDR-039-algebraic-data-types.md) | Skipped | — |
+| EDR-041 | [Collection Literal Syntax](architecture/EDR-041-collection-literal-syntax.md) | Accepted | 2026-07-27 |
+| EDR-042 | [Dataclasses — Derive-Based Data Carriers](architecture/EDR-042-dataclasses.md) | Accepted | 2026-07-27 |
+| EDR-043 | [Literal Types — Values as Types](architecture/EDR-043-literal-types.md) | Accepted | 2026-07-27 |
+| EDR-044 | [Structural Typing — Structural Trait Satisfaction](architecture/EDR-044-structural-typing.md) | Accepted | 2026-07-27 |
+| EDR-045 | [Union and Intersection Types — Structural Type Combinators](architecture/EDR-045-union-intersection-types.md) | Accepted | 2026-07-27 |
+| EDR-046 | [Type-Level Computation — Closed Set of Compiler Intrinsics](architecture/EDR-046-type-level-computation.md) | Accepted | 2026-07-27 |
+| EDR-047 | [Async/Await with Async as Explicit Modifier](architecture/EDR-047-async-await.md) | Accepted | 2026-07-27 |
+| EDR-048 | *(Skipped — combined with EDR-047)* | — | — |
+| EDR-049 | [Concurrency — StdLib Utilities Built on Delegate Model](architecture/EDR-049-concurrency.md) | Accepted | 2026-07-27 |
+| EDR-050 | [Generators — Bidirectional Yield and Generator Expressions](architecture/EDR-050-generators.md) | Accepted | 2026-07-27 |
+| EDR-051 | [Push Streams — StdLib Observable-Style Reactive Streams](architecture/EDR-051-push-streams.md) | Accepted | 2026-07-27 |
+| EDR-052 | [`emit` as Intermediate Result](architecture/EDR-052-emit-as-intermediate-result.md) | Accepted | 2026-07-27 |
+| EDR-053 | [Iteration Loop — `for`/`while` with Protocol-Based Iteration](architecture/EDR-053-iteration-loop.md) | Accepted | 2026-07-27 |
+| EDR-054 | [Object Initialization — Named Parameters with Defaults](architecture/EDR-054-object-initialization.md) | Accepted | 2026-07-27 |
+| EDR-055 | [Unpacking — Destructuring Assignment with Pattern Syntax](architecture/EDR-055-unpacking.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -121,11 +163,11 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 31 |
+| Accepted | 38 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |
 
 ---
 
-*Last updated: 2026-07-27* (EDR-034 through EDR-038 added)
+*Last updated: 2026-07-27* (EDR-047 through EDR-055 added — Wave 4 important-tier concepts)
