@@ -25,7 +25,8 @@
 | EDR-012 | Architecture | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 | — |
 | EDR-013 | Architecture | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 | — |
 | EDR-014 | Architecture | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 | — |
-| EDR-015 | Process | [Decision Log](process/EDR-015-decision-log.md) | Accepted | 2026-07-27 | — |
+| EDR-015 | Process | [Decision Log](process/EDR-015-decision-log.md) | Accepted | 2026-07-27 |
+| EDR-016 | Architecture | [Primitive Blocks — minimal orthogonal set of primitive operations](architecture/EDR-016-primitive-blocks.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -48,6 +49,7 @@
 | EDR-012 | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 |
 | EDR-013 | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 |
 | EDR-014 | [LLM Generability Gate](architecture/EDR-014-llm-generability-gate.md) | Accepted | 2026-07-19 |
+| EDR-016 | [Primitive Blocks](architecture/EDR-016-primitive-blocks.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -75,7 +77,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 13 |
+| Accepted | 14 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |

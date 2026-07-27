@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
 status: planning
-last_updated: "2026-07-27T12:15:00.000Z"
+last_updated: "2026-07-27T18:30:00.000Z"
 last_activity: 2026-07-27
 progress:
   total_phases: 10
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
-  percent: 30
+  completed_phases: 4
+  total_plans: 8
+  completed_plans: 8
+  percent: 40
 ---
 
 # Project State
@@ -20,38 +20,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-20)
 
 **Core value:** A complete, self-consistent Orthon v0.1 specification — every concept accepted (no DRAFT), core architecture specs (IR, Parser, Type System, Name Resolution) filled in, all cross-references valid, and a final review confirming the result coheres as a real language specification.
-**Current focus:** Phase 03 — primitive blocks identify the minimal orthogonal set of prim
+**Current focus:** Phase 04 — Derived Features & Decision Pipeline
 
 ## Current Position
 
-Phase: 03
-Plan: 03-01 complete
-Status: Ready for Plan 03-02 (decomposition verification + EDR)
+Phase: 03 ✅ Complete
+Plan: 03-01 ✅ (PRIMITIVE_BLOCKS.md), 03-02 ✅ (verification + EDR-016)
+Status: All Phase 3 requirements satisfied (PRIM-01, PRIM-02, PRIM-03)
 Last activity: 2026-07-27
 
-Progress: [██████████] 100%
+Progress: [████████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 1
-- Average duration: - min
-- Total execution time: 0 hours
+- Total plans completed: 2
+- Phase 3: 2 plans (PRIMITIVE_BLOCKS.md write + verification/EDR)
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 02 | 1 | - | - |
-
-**Recent Trend:**
-
-- Last 5 plans: -
-- Trend: -
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 01 | 1 | ✅ |
+| 01.1 | 4 | ✅ |
+| 02 | 1 | ✅ |
+| 03 | 2 | ✅ |
 
 *Updated after each plan completion*
-| Phase 02 P02 | 120min | 14 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -65,7 +61,13 @@ Recent decisions affecting current work:
 - Roadmap (2026-07-21): GSD roadmap restructured to mirror `when/ROADMAP.md`'s 8-phase architectural design pipeline (adopted 2026-07-21, commit `3ec6c8a`). Old Phase 2 (Foundations/Process/Vision) became inserted Phase 1.1 (Foundation Completion). Old Phase 3 (Language Inventory, Anti-Pattern Research & Concept Design Review) was split three ways: Phase 2 (Semantic Model), Phase 3 (Primitive Blocks), Phase 4 (Derived Features & Decision Pipeline). Two new phases were added that didn't exist before: Phase 5 (Syntax Design) and Phase 7 (Execution & Optimization Model). Old Phase 4 (Cross-Cutting Review) became Phase 6; old Phase 5 (Freeze & Naming) became Phase 8 (Evolution Model & Freeze). See ROADMAP.md's Overview note and REQUIREMENTS.md's 2026-07-21 changelog entry for the full requirement-ID remapping.
 - Roadmap: former ANTIPAT-11 (Concept Design Review of all 22 concepts) retired in favor of DERIV-03 in Phase 4, same intent (zero DRAFT headers, all EDR-accepted), cleaner ID scheme under the new phase split.
 - Quick task 260726-s6t: Reclassified CONTEXT_PARAMETERS.md and REPRESENTATION_MODIFIERS.md from important/ to essential/ tier — both describe semantic bedrock rather than ergonomic sugar, correcting a tier-classification mistake before Phase 4 planning treats the split as ground truth.
-- [Phase ?]: Six semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) adopted as Orthon's complete Core-Language semantic contract via EDR-013; Ownership's concrete transfer syntax deferred to Phase 5
+- Six semantic dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) adopted as Orthon's complete Core-Language semantic contract via EDR-013; Ownership's concrete transfer syntax deferred to Phase 5
+- **Phase 3 D-01 through D-10** (2026-07-27): Primitive set scope and granularity settled — 9 primitives (3 Data, 6 Data Modifier); pack/unpack as symmetric pair; function + call separate; operator definition, struct, class, delegate, namespace excluded with decomposition paths. See `03-CONTEXT.md` for full decision record.
+- **Phase 3 D-06** (2026-07-27): `emit` is lazy by default — corrects Phase 2 D-04's assumption of eager emit. Eager production uses `return` with aggregate collection.
+- **Phase 3 D-07** (2026-07-27): Metadata Protocol uses `@` prefix — all metadata and protocol methods accessed via `@`, not dunder methods.
+- **Phase 3 D-09** (2026-07-27): `{ }` blocks require explicit `return` for value production — expression-oriented model applies only to `if`/`match`/`when`.
+- **Phase 3 D-10** (2026-07-27): Interior mutability = derived (not primitive); closures immutable capture by default; one `mut` keyword for both binding-level and reference-level mutation marking.
+- **EDR-016** (2026-07-27): Primitive Blocks set formally accepted — 9-primitive set as Level 1 of Semantic Dependency Architecture. Verified complete and minimal against ~132 concept research files.
 
 ### Pending Todos
 
@@ -73,10 +75,9 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 1.1 must complete (Design Principles locked, Vision consolidated, Decision Process finalized) before Phase 2 (Semantic Model) begins — Phase 2 explicitly depends on Phase 1.1.
-- Phase 2 (Semantic Model) and Phase 3 (Primitive Blocks) must both complete before Phase 4 (Derived Features) can decompose any concept — this is a stricter gate than the old roadmap's single "Phase 3" catch-all.
-- 18 of 22 concept documents are currently DRAFT with no prior acceptance process — Phase 4 carries the bulk of the project's content-authoring work (26 of 66 requirements).
-- The 8-phase pipeline's own target artifacts (`SEMANTIC_MODEL.md`, `PRIMITIVE_BLOCKS.md`, `SYNTAX.md`, etc.) already exist on disk but are DRAFT placeholders only — no actual design content yet; don't mistake their existence for progress.
+- Phase 4 (Derived Features & Decision Pipeline) is the largest phase in the project — 26 of 66 requirements, ~112 concept files to process. Most essential-tier concepts are currently DRAFT with no prior acceptance process.
+- Phase 3 (Primitive Blocks) is now complete; Phase 4 can proceed.
+- Phase 1.1, Phase 2, and Phase 3 — all prerequisite phases — are now complete. No structural blockers remain for Phase 4.
 
 ### Quick Tasks Completed
 
@@ -113,6 +114,7 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-27T12:15:00.000Z
-Stopped at: Plan 03-01 complete (PRIMITIVE_BLOCKS.md written, GLOSSARY.md updated)
-Resume file: .planning/phases/03-primitive-blocks-identify-the-minimal-orthogonal-set-of-prim/03-01-SUMMARY.md
+Last session: 2026-07-27T18:30:00.000Z
+Stopped at: Phase 03 complete — all 3 requirements satisfied (PRIM-01, PRIM-02, PRIM-03)
+Resume file: .planning/phases/03-primitive-blocks-identify-the-minimal-orthogonal-set-of-prim/03-02-SUMMARY.md
+Next phase: Phase 04 — Derived Features & Decision Pipeline (requires discussion/planning)
