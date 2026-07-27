@@ -38,6 +38,7 @@ what priority.
 - **Tier 3 decisions** → EDR in `how/decision_records/process/`
 - **Tier 4 decisions** → inline `> **Decision:**` note in the relevant document
 - All EDRs indexed in [`how/decision_records/INDEX.md`](../decision_records/INDEX.md)
+- **Tier 1–2 decisions that ran through the Validation gates** additionally get a detailed, per-gate reasoning trail in [`gates/DECISION_LOG.md`](../gates/DECISION_LOG.md) (established by EDR-014) — the worked application of each gate's method, distinct from the artifact's own terse Validation summary and from the Decision Journal's one-row-per-decision index
 
 ## Guiding Rules
 

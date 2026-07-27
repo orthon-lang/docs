@@ -62,7 +62,9 @@ This repository contains the language design documentation — the *why*,
 
 This project is designed to be navigated and contributed to by AI agents.
 See [AGENTS.md](AGENTS.md) for the agent protocol, document map, and
-contribution workflow.
+contribution workflow. See [Exploring the Docs](how/EXPLORING_THE_DOCS.md)
+for how to use `graphify` to build a queryable knowledge graph of this
+repository when orienting or researching cross-references.
 
 ## License
 
