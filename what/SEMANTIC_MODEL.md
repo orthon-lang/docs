@@ -691,6 +691,38 @@ characterize what an Orthon program means.
 
 ---
 
+## Validation
+
+The completed Semantic Model — six dimensions, six cross-cutting
+invariants, and the Cross-Dimension Consistency and Design Principles
+sections above — is run as a whole through all seven gates of
+[`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md)'s
+Gate Catalogue. Per that document's Gate Selection table, a new Core
+Language semantic ("New language construct") requires all seven gates;
+this section records each gate's verdict for the model as a whole,
+citing evidence already established above rather than re-deriving it.
+
+| Gate | Verdict | Justification |
+|---|---|---|
+| `USER_VALUE_GATE` | Pass | The model answers a problem stated in user terms: without a fixed answer to "what does an Orthon program mean," Phase 3 (Primitive Blocks), Phase 4 (Derived Features), and Phase 5 (Syntax Design) have no stable ground to decompose or derive against — this is not a compiler-implementer-only concern, it is the precondition for every subsequent design decision a programmer-facing feature will rest on. It is directly justified by `../why/VISION.md`'s Architectural Integrity and LLM Readiness pillars, and every dimension includes a realistic code example (see each dimension's fenced example above) grounding the concept in program text a programmer actually writes. |
+| `LOGICAL_CONSISTENCY_GATE` | Pass | Every term used across the six dimensions is precisely defined at first use (e.g. Binding Identity vs. Value Identity in Identity; `fun`/`proc`/`new` in Mutation) and used consistently thereafter. No self-referential paradox exists — each Semantic Invariant is checked against the dimension that specializes it, not against itself. Composition with every other dimension is documented exhaustively: the [Cross-Dimension Consistency](#cross-dimension-consistency) table above resolves all fifteen pairwise interactions, satisfying this gate's "Composition ... documented for all existing concepts" Pass criterion directly rather than by inference. |
+| `CONCEPTUAL_SIMPLICITY_GATE` | Pass | The [Relationship to Design Principles](#relationship-to-design-principles) section's Minimal Core check already tested composition explicitly: two candidate seventh dimensions (Aliasing, Concurrency) were evaluated and rejected as fully expressible through composition of the existing six, satisfying this gate's central "expressible through composition" fail condition in the negative — nothing here was retained that composition could already produce. Each dimension solves exactly one question (see each dimension's opening italic question), and no dimension introduces a new keyword beyond what its Source research already proposed. |
+| `ARCHITECTURAL_INTEGRITY_GATE` | Pass | The model occupies exactly Level 0/1 (Data Model / Primitive Operations) of the Semantic Dependency Architecture (per [EDR-013](../how/decision_records/architecture/EDR-013-semantic-model.md) § Relationship to Other Records) and never references the Standard Library or a specific Implementation Strategy — see each dimension's explicit "Implementation freedom" callouts (Identity, Ownership, Lifetime). No dimension is privileged over another: all six receive identical treatment (Model, example, Source) in the Semantic Dimensions section, and the Cross-Dimension Consistency table identifies exactly one non-trivial coupling (Ownership ↔ Mutation, pair 6), documented as a shared invariant by design rather than a special case requiring a workaround. |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | Pass | Every dimension explicitly separates its semantic contract from its enforcement/implementation mechanism: Identity permits CoW/SSA/NRVO/register promotion so long as observable behavior is unchanged; Ownership deliberately does not prescribe a borrow checker vs. escape analysis vs. any other enforcement strategy; Lifetime treats regions/arenas/stack/heap as Allocation Policy choices, not semantics. No dimension's observable behavior changes by Implementation Strategy — only performance characteristics do, consistent with `DESIGN_PRINCIPLES.md` § Semantics Before Optimization, cited throughout the dimension sections above. |
+| `LONG_TERM_MAINTAINABILITY_GATE` | Pass | Both open items — Ownership's concrete transfer syntax (`@ownership` / `$` / `move`) and whether `pub` on a type implies `pub` on its members — already have a documented evolution path: explicit deferral to Phase 5's own validation cycle, not an unresolved gap with no plan (see [Relationship to Design Principles](#relationship-to-design-principles) § Net Flags). The decision is reversible in the sense that matters: no enforcement mechanism or concrete syntax is locked in yet, so Phase 5 retains full freedom among the candidate forms without needing to unwind a Phase 2 commitment. Six dimensions is a floor tested against Minimal Core, not a ceiling — a future dimension remains addable if a genuine seventh question is ever identified, without invalidating the existing six. |
+| `LLM_GENERABILITY_GATE` | Flag | Same root cause as the two Flags already recorded in the [Relationship to Design Principles](#relationship-to-design-principles) table: Ownership's transfer must be visible at the transfer site (the semantic requirement, fully schema-serializable today), but the concrete marker is not yet chosen, so no canonical Orthon code example yet exists to exercise the schema round-trip criterion for that one case end-to-end. Every other dimension passes cleanly — Identity's opt-in-only reference semantics, Mutation's three-keyword declaration kinds, Evaluation's uniform expression-orientation, Visibility's three explicit levels, and Lifetime's scope-derived destruction each remove, rather than introduce, a class of generation ambiguity (see the per-dimension LLM Generability column above). This is the same flag, not a new one: it resolves when Phase 5 resolves it, per `DECISION_VALIDATION.md`'s rule that "a Flag may proceed but the flagged issue must be resolved before the final gate." |
+
+**Overall verdict:** Six gates Pass outright; one gate
+(`LLM_GENERABILITY_GATE`) Flags on the single already-tracked
+Ownership-syntax open item. Per `DECISION_VALIDATION.md`'s Gate Flow
+rules, a Flag "may proceed" — the model is accepted (EDR-013) with this
+one flagged issue explicitly deferred to Phase 5's own validation
+cycle, exactly as already recorded in this document's Net Flags note
+above. No gate returned Fail; no revision is required before Phase 3
+proceeds.
+
+---
+
 ## EDR
 
 - **[EDR-013](../how/decision_records/architecture/EDR-013-semantic-model.md):**
