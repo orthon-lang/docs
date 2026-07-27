@@ -75,7 +75,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 12 |
+| Accepted | 13 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |

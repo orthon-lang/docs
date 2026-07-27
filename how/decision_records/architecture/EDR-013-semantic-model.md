@@ -70,9 +70,9 @@ specification lives in `what/SEMANTIC_MODEL.md`; summarized here:
 
 2. **Ownership** — Every value has exactly one owner at any point.
    Ownership applies wherever exclusive responsibility exists (not only
-   "external resources") — in practice, ~95% of ordinary-value code
-   never needs to reason about it, because plain value semantics
-   eliminates the question. Move transfers ownership and invalidates
+   "external resources") — in practice, the large majority of
+   ordinary-value code never needs to reason about it, because plain
+   value semantics eliminates the question. Move transfers ownership and invalidates
    the source; borrowing grants temporary shared-XOR-mutable access.
    Transfer must be syntactically explicit; the concrete marker
    (`@ownership` / `$` / `move`) is deferred to Phase 5. No GC, no RC by
@@ -110,10 +110,10 @@ specification lives in `what/SEMANTIC_MODEL.md`; summarized here:
 
 All fifteen pairwise interactions between these six dimensions were
 checked for orthogonality (`what/SEMANTIC_MODEL.md` § Cross-Dimension
-Consistency); the one non-trivial coupling identified — Ownership and
-Mutation both instantiating a single shared invariant (exclusive access)
-from two angles — is accepted as intentional, not as an orthogonality
-violation. All seven `how/gates/DECISION_VALIDATION.md` gates were run
+Consistency); the sharpest of several documented couplings — Ownership
+and Mutation both instantiating a single shared invariant (exclusive
+access) from two angles — is accepted as intentional, not as an
+orthogonality violation. All seven `how/gates/DECISION_VALIDATION.md` gates were run
 against the completed model (`what/SEMANTIC_MODEL.md` § Validation); no
 gate failed.
 
