@@ -75,20 +75,11 @@ documentation convention, or fitness function.
 
 ### Gate Validation
 
-> **Required for all EDRs in categories: Architecture, Technology, Data, AI, Quality, Security, Governance, Product.**
-> Process-category EDRs may omit this section.
-> See `DECISION_VALIDATION.md` § Gate Selection for gate applicability rules.
-
-| Gate | Method | Verdict | Notes |
-|------|--------|---------|-------|
-| `USER_VALUE_GATE` | [Working Backwards](../gates/methods/WORKING_BACKWARDS_METHOD.md) | Pass / Fail / Flag | |
-| `LOGICAL_CONSISTENCY_GATE` | [Socratic Method](../gates/methods/SOCRATIC_METHOD.md) | Pass / Fail / Flag | |
-| `CONCEPTUAL_SIMPLICITY_GATE` | [Scientific Method](../gates/methods/SCIENTIFIC_METHOD.md) | Pass / Fail / Flag | |
-| `ARCHITECTURAL_INTEGRITY_GATE` | [Logical Analysis](../gates/methods/LOGICAL_ANALYSIS_METHOD.md) | Pass / Fail / Flag | |
-| `IMPLEMENTATION_INDEPENDENCE_GATE` | [TRIZ](../gates/methods/TRIZ_METHOD.md) | Pass / Fail / Flag | |
-| `LONG_TERM_MAINTAINABILITY_GATE` | [Einstein's Method](../gates/methods/EINSTEIN_METHOD.md) | Pass / Fail / Flag | |
-| `LLM_GENERABILITY_GATE` | [Empirical Analysis](../gates/methods/EMPIRICAL_ANALYSIS_METHOD.md) | Pass / Fail / Flag | |
-
-**Gates not applied:** [list with rationale, referencing DECISION_VALIDATION.md § Gate Selection]
-
-**Detailed reasoning:** See `DECISION_LOG.md` entry for this EDR for per-gate reasoning trail.
+> Every EDR **must** pass a set of validation gates appropriate to its
+> category. The specific set of required gates is defined in the
+> category-specific template (see `_edr-architecture.md`,
+> `_edr-process.md`, or use the base template for categories without
+> a dedicated variant).
+>
+> See `DECISION_VALIDATION.md` § Gate Selection for gate applicability
+> rules and methodology references.
