@@ -22,7 +22,7 @@ A complete, self-consistent Orthon v0.1 specification — every concept accepted
 
 Roadmap restructured 2026-07-21 to mirror `when/ROADMAP.md`'s 8-phase architectural design pipeline (an 11-level engineering design hierarchy), replacing the prior 5-milestone breakdown:
 
-- [ ] Phase 3 — Primitive Blocks: identify the minimal orthogonal set of primitive building blocks every derived feature decomposes into
+- [x] Phase 3 — Primitive Blocks: identify the minimal orthogonal set of primitive building blocks every derived feature decomposes into
 - [ ] Phase 4 — Derived Features & Decision Pipeline: design the 13 outstanding concepts (Pattern Matching, Error Handling, Ownership, Generics/Traits, Async/Await, Object Initialization, Concurrency/Actors, Literate Programming, Sorting Stability, Unpacking/Destructuring, Generators/Yield, Metaobjects, Span/Memory View) via the 10-question Decision Pipeline; complete the 10 `imperative-crutch-*` anti-pattern research topics; classify each concept Language/StdLib/External; accept via EDR
 - [ ] Phase 5 — Syntax Design: derive syntax from the semantic model for every accepted concept; update `PARSER.md` with concrete grammar
 - [ ] Phase 6 — Cross-Cutting Review: finalize the Interaction Matrix format and build the full pairwise interaction analysis; resolve all conflicts

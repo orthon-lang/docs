@@ -34,9 +34,9 @@ completed Phase 1 (Concerns Remediation) below.
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Concerns Remediation** - Fill the four empty architecture specs and resolve the tech-debt items flagged in CONCERNS.md
-- [ ] **Phase 1.1: Foundation Completion** (INSERTED) - Consolidate Vision, lock Design Principles as constitutional, build process infrastructure
+- [x] **Phase 1.1: Foundation Completion** (INSERTED) - Consolidate Vision, lock Design Principles as constitutional, build process infrastructure
 - [x] **Phase 2: Semantic Model** - Define identity, ownership, mutation, evaluation, visibility, and lifetime as one unified model (completed 2026-07-27)
-- [ ] **Phase 3: Primitive Blocks** - Identify the minimal orthogonal set of primitive building blocks
+- [x] **Phase 3: Primitive Blocks** - Identify the minimal orthogonal set of primitive building blocks
 - [ ] **Phase 4: Derived Features & Decision Pipeline** - Design every outstanding concept through the Decision Pipeline and accept via EDR
 - [ ] **Phase 5: Syntax Design** - Derive syntax from the semantic model for every accepted concept
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
@@ -68,8 +68,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ---
 
-### Phase 1.1: Foundation Completion (INSERTED)
+### Phase 1.1: Foundation Completion (INSERTED) ✅
 
+**Status**: Complete (executed and verified 2026-07-21 — see `.planning/phases/01.1-foundation-completion-consolidate-vision-lock-design-princip/01.1-04-SUMMARY.md`)
 **Goal**: The remaining "Foundation" work from `when/ROADMAP.md` Phase 1 — beyond concerns remediation, which is already done — is complete: Vision is consolidated into one canonical block, Design Principles are locked as the project's constitution, and process infrastructure (a one-page decision authority, a collapsed review pipeline, and throughput fitness functions) exists — so Phase 2 (Semantic Model) has a stable foundation and Phase 4 (Derived Features) has a defined, lightweight acceptance gate instead of stalling on undefined process.
 **Depends on**: Phase 1
 **Requirements**: PROC-01, PROC-02, PROC-03, PROC-04, PROC-05, VISION-01, VISION-02, VISION-03, PRINC-01, FITNESS-01
@@ -95,8 +96,9 @@ Plans:
 
 ---
 
-### Phase 2: Semantic Model
+### Phase 2: Semantic Model ✅
 
+**Status**: Complete (executed and verified 2026-07-27 — see `.planning/phases/02-semantic-model-define-identity-ownership-mutation-evaluation/02-02-SUMMARY.md`)
 **Goal**: Define *what a program means* at the foundational level — identity, ownership, mutation, evaluation, visibility, lifetime — as a single unified, internally consistent model in `what/SEMANTIC_MODEL.md`, replacing its current DRAFT placeholder. This is the most expensive part of language design to get wrong; every derived feature in Phase 4 depends on it being settled first.
 **Depends on**: Phase 1.1 (Design Principles locked, Vision consolidated)
 **Requirements**: SEM-01, SEM-02, SEM-03
@@ -106,12 +108,18 @@ Plans:
   2. Cross-dimension conflicts are checked and resolved (e.g., ownership × mutation, evaluation × lifetime), and the model is validated against every Design Principle with no contradictions found.
   3. An EDR (Architecture category) accepts the Semantic Model.
 
-**Plans**: TBD
+**Plans**: 1 plan (executed)
+
+```
+Plans:
+- [x] 02-PLAN.md — Write SEMANTIC_MODEL.md and accept via EDR
+```
 
 ---
 
-### Phase 3: Primitive Blocks
+### Phase 3: Primitive Blocks ✅
 
+**Status**: Complete (executed and verified 2026-07-27 — see `.planning/phases/03-primitive-blocks-identify-the-minimal-orthogonal-set-of-prim/03-01-SUMMARY.md` and `03-02-SUMMARY.md`)
 **Goal**: Identify the minimal orthogonal set of primitive building blocks in `what/PRIMITIVE_BLOCKS.md`, replacing its current DRAFT placeholder. Every derived feature designed in Phase 4 must decompose into these; if a feature cannot be decomposed, the primitive set is incomplete and must be revisited before Phase 4 proceeds.
 **Depends on**: Phase 2 (primitives are defined in terms of the Semantic Model)
 **Requirements**: PRIM-01, PRIM-02, PRIM-03
@@ -121,7 +129,13 @@ Plans:
   2. Every concept research doc across all tiers (`how/concepts/research/{essential,important,deferrable,reject}/`, ~132 files) is verified to decompose onto the primitive set; the set is confirmed minimal — removing any primitive makes some known feature inexpressible.
   3. An EDR (Architecture category) accepts the Primitive Blocks set.
 
-**Plans**: TBD
+**Plans**: 2 plans (executed)
+
+```
+Plans:
+- [x] 03-01-PLAN.md — Write PRIMITIVE_BLOCKS.md (PRIM-01)
+- [x] 03-02-PLAN.md — Verification run + EDR-016 (PRIM-02, PRIM-03)
+```
 
 ---
 

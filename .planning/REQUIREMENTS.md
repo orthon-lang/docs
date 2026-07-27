@@ -49,11 +49,11 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 - [x] **SEM-02**: Cross-dimension conflicts across the 10 source files checked and resolved; validated against every Design Principle
 - [x] **SEM-03**: EDR accepting the Semantic Model, recording how each of the 10 source files' proposals were merged, modified, or superseded
 
-### Primitive Blocks — Phase 3
+### Primitive Blocks — Phase 3 ✅
 
-- [ ] **PRIM-01**: `what/PRIMITIVE_BLOCKS.md` synthesizes the 10 essential-tier source files identified as Primitive-Block raw material (`how/concepts/research/essential/FOUNDATIONAL_ABSTRACTIONS.md`, `EXCLUSIVE_DECLARATIONS.md`, `STRUCT_AS_VALUE_TYPE.md`, `CLASS_WITH_ACT.md`, `ACT_AS_FUNCTION.md`, `FUNCTIONS.md`, `FINAL_BY_DEFAULT.md`, `NAMESPACES.md`, `DELEGATE.md`, `COMPOSITION_OVER_INHERITANCE.md`) into the minimal orthogonal primitive set plus composition rules, replacing the current DRAFT placeholder
-- [ ] **PRIM-02**: Every concept research doc across all tiers (`how/concepts/research/{essential,important,deferrable,reject}/`, ~132 files) verified to decompose onto the primitive set; set confirmed minimal
-- [ ] **PRIM-03**: EDR accepting the Primitive Blocks set, recording how each of the 10 source files' proposals were merged, modified, or superseded
+- [x] **PRIM-01**: `what/PRIMITIVE_BLOCKS.md` synthesizes the 10 essential-tier source files identified as Primitive-Block raw material (`how/concepts/research/essential/FOUNDATIONAL_ABSTRACTIONS.md`, `EXCLUSIVE_DECLARATIONS.md`, `STRUCT_AS_VALUE_TYPE.md`, `CLASS_WITH_ACT.md`, `ACT_AS_FUNCTION.md`, `FUNCTIONS.md`, `FINAL_BY_DEFAULT.md`, `NAMESPACES.md`, `DELEGATE.md`, `COMPOSITION_OVER_INHERITANCE.md`) into the minimal orthogonal primitive set plus composition rules, replacing the current DRAFT placeholder
+- [x] **PRIM-02**: Every concept research doc across all tiers (`how/concepts/research/{essential,important,deferrable,reject}/`, ~132 files) verified to decompose onto the primitive set; set confirmed minimal
+- [x] **PRIM-03**: EDR accepting the Primitive Blocks set, recording how each of the 10 source files' proposals were merged, modified, or superseded
 
 ### Derived Features & Decision Pipeline — Phase 4
 
