@@ -628,7 +628,7 @@ observe different intermediate states under different Implementation
 Strategies, which `DESIGN_PRINCIPLES.md` § Deterministic Behavior
 forbids.
 
-**Detail: Visibility ↔ Ownership (pair 8).** The `priv`-type-in-`pub`-
+**Detail: Ownership ↔ Visibility (pair 8).** The `priv`-type-in-`pub`-
 signature edge case is not a defect requiring reconciliation between the
 two dimensions — it is the expected, desired outcome of true
 orthogonality. Visibility's scope is "can this name be written in this
