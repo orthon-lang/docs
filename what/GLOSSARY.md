@@ -21,6 +21,21 @@ strategy.
 
 ---
 
+## B
+
+### Binding Identity
+
+Whether two *names* currently refer to the same storage location — a
+compiler/runtime aliasing concern (borrow tracking, aliasing analysis),
+not a first-class equality operator exposed on ordinary values. Distinct
+from Value Identity; the Semantic Model's Identity dimension exists
+partly to keep the two from being conflated.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Identity
+- **See also:** [Value Identity](#value-identity), [Semantic Dimension](#semantic-dimension), [Orthogonality](#orthogonality)
+
+---
+
 ## C
 
 ### Canonical Form
@@ -76,6 +91,20 @@ A construct that transforms data from one representation to another. Modifiers e
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
 
+### Declaration Kind (`fun` / `proc` / `new`)
+
+The three mutually exclusive function-declaration kinds that carry
+Orthon's Mutation contract at the declaration site rather than the call
+site: **`fun`** (read-only, never mutates `self`, always returns a
+value), **`proc`** (mutates `self`, identity preserved, may return a
+value or nothing), and **`new`** (never mutates `self`, always produces
+a distinct value). There is no `mut` modifier and no caller-side
+annotation — the contract lives entirely in which of the three keywords
+a declaration uses.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Mutation
+- **See also:** [Explicit Semantics](#explicit-semantics), [Semantic Dimension](#semantic-dimension)
+
 ### Declaration Model (Unified)
 
 Variables, functions, types, classes, and modules follow the same declaration principles and modifier system. No special-case declaration syntax for different kinds of entities.
@@ -93,13 +122,28 @@ The same source code must produce identical observable behavior across optimizat
 
 ## D (cont.)
 
+### Decision Log
+
+The detailed, per-gate reasoning trail behind a Tier 1–2 decision —
+one entry per validated decision, one subsection per gate applied,
+each working through that gate's method against the actual proposal
+and recording the verdict it produces. Distinct from an artifact's own
+terse Validation summary (verdict + citation only) and from the
+Decision Journal (a one-row-per-decision index); the Decision Log is
+where the reasoning that produced a verdict is actually recorded, not
+just its conclusion.
+
+- **Source:** `../how/gates/DECISION_LOG.md`, established by
+  [EDR-014](../how/decision_records/process/EDR-014-decision-log.md)
+- **See also:** [Decision Validation](#decision-validation), [Validation Gate](#validation-gate)
+
 ### Decision Validation
 
-A framework of six independent validation gates that every language
+A framework of seven independent validation gates that every language
 design decision must pass. Each gate examines the proposal from a
 different perspective: user value, logical consistency, conceptual
 simplicity, architectural integrity, implementation independence,
-and long-term maintainability.
+long-term maintainability, and LLM generability.
 
 - **Source:** `../how/gates/DECISION_VALIDATION.md`
 - **See also:** [Language Design Gate](#language-design-gate), [Validation Gate](#validation-gate)
@@ -222,6 +266,19 @@ Orthon's type system and memory model and those of foreign languages.
 
 - **Source:** `../when/ROADMAP.md` § Milestone 8
 - **See also:** [Standard Library](#standard-library)
+
+### Fresh-Value Exemption
+
+The rule that an unbound temporary — a literal, a constructor call, or
+any expression result not yet bound to a name — has no prior owner and
+no aliasable Binding Identity, and so may be passed directly into an
+ownership-consuming context (e.g. `delegate(List())`) without an
+explicit transfer marker. Once a value is bound to a name, the
+exemption no longer applies and any subsequent transfer must be
+syntactically explicit.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Identity, § Ownership
+- **See also:** [Binding Identity](#binding-identity), [Semantic Dimension](#semantic-dimension)
 
 ---
 
@@ -457,6 +514,35 @@ pack*    → Values
 
 ## S
 
+### Semantic Dimension
+
+One of six independent, orthogonal facets a Semantic Model uses to
+fully characterize what an Orthon program means: **Identity** (what
+does "the same" mean), **Ownership** (who is accountable for a value),
+**Mutation** (how and when values change), **Evaluation** (when
+expressions are evaluated), **Visibility** (what is reachable from
+where), and **Lifetime** (how long a value lives). Each dimension
+answers exactly one question, is defined independent of syntax and
+Implementation Strategy, and composes orthogonally with the other five
+— see `SEMANTIC_MODEL.md`'s Cross-Dimension Consistency section for all
+fifteen pairwise interactions.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Semantic Dimensions
+- **See also:** [Semantic Invariant](#semantic-invariant), [Core Language](#core-language), [Orthogonality](#orthogonality)
+
+### Semantic Invariant
+
+One of six cross-cutting rules that hold across all six Semantic
+Dimensions at once, rather than belonging to any single dimension —
+for example, "every value has exactly one owner at any point in the
+program" or "mutation requires exclusive access; read access may be
+shared." Semantic Invariants are the semantic floor every
+Implementation Strategy must guarantee; a Strategy may choose its own
+enforcement mechanism but may never relax an invariant.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Semantic Invariants
+- **See also:** [Semantic Dimension](#semantic-dimension), [Implementation Strategy](#implementation-strategy)
+
 ### Semantic Layer
 
 A level in the Semantic Dependency Architecture hierarchy. Each
@@ -483,18 +569,43 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
 
+### Structural Equality
+
+The `==` comparison semantics for value-typed data: two values are
+equal exactly when their structure (fields/contents) matches,
+regardless of storage location. The default, and only, meaning of `==`
+for plain (non-reference) types in Orthon — it is never overloaded to
+mean identity comparison, and never silently answers the Binding
+Identity question ("are these the same storage").
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Identity
+- **See also:** [Value Identity](#value-identity), [Data](#data)
+
 ---
 
 ## V
 
 ### Validation Gate
 
-One of six independent perspectives used in [Decision Validation](#decision-validation)
+One of seven independent perspectives used in [Decision Validation](#decision-validation)
 to assess a language design proposal. Each gate has its own criteria,
 pass/fail conditions, and scope of examination.
 
 - **Source:** `../how/gates/DECISION_VALIDATION.md`
 - **See also:** [Decision Validation](#decision-validation), [Language Design Gate](#language-design-gate)
+
+### Value Identity
+
+Whether two values are considered the same persistent entity across
+time, independent of their current structural content. Meaningful only
+for explicit, opt-in shared/reference types — a plain (structural)
+value has no Value Identity beyond its structure. Distinct from
+Binding Identity; Structural Equality (`==`) always answers the
+value-identity question in value-semantics terms, never the
+binding-identity question.
+
+- **Source:** `../what/SEMANTIC_MODEL.md` § Identity
+- **See also:** [Binding Identity](#binding-identity), [Structural Equality](#structural-equality)
 
 ### Stable Mental Model
 

@@ -15,13 +15,13 @@ A complete, self-consistent Orthon v0.1 specification — every concept accepted
 ### Validated
 
 - [x] Phase 1 — Concerns Remediation: all 17 DEBT requirements resolved and verified (2026-07-20) — empty architecture specs filled (`IR.md`, `PARSER.md`, `TYPE_SYSTEM.md`, `NAME_RESOLUTION.md`), deprecated `_adr.md`/`EXECUTION_IMAGE.md` archived, date stamps added, fitness functions catalogued, template audit completed, ownership/link audit done, glossary/versioning/IA plans documented.
+- [x] Phase 1.1 — Foundation Completion: Vision consolidated, Design Principles locked as constitutional, process infrastructure finalized (Decision Process, collapsed Concept Design Review, throughput fitness functions).
+- [x] Phase 2 — Semantic Model: all 6 dimensions (Identity, Ownership, Mutation, Evaluation, Visibility, Lifetime) defined as one unified model in `what/SEMANTIC_MODEL.md`, synthesizing the 10 essential-tier source files; cross-dimension conflicts resolved; validated against all 7 Decision Validation gates; accepted via EDR-013 (2026-07-27).
 
 ### Active
 
 Roadmap restructured 2026-07-21 to mirror `when/ROADMAP.md`'s 8-phase architectural design pipeline (an 11-level engineering design hierarchy), replacing the prior 5-milestone breakdown:
 
-- [ ] Phase 1.1 — Foundation Completion: consolidate Vision into one canonical block, lock Design Principles as constitutional, finalize process infrastructure (Decision Process, collapsed Concept Design Review, throughput fitness functions), validate criteria-based algorithm selection idea
-- [ ] Phase 2 — Semantic Model: define identity, ownership, mutation, evaluation, visibility, and lifetime as one unified model
 - [ ] Phase 3 — Primitive Blocks: identify the minimal orthogonal set of primitive building blocks every derived feature decomposes into
 - [ ] Phase 4 — Derived Features & Decision Pipeline: design the 13 outstanding concepts (Pattern Matching, Error Handling, Ownership, Generics/Traits, Async/Await, Object Initialization, Concurrency/Actors, Literate Programming, Sorting Stability, Unpacking/Destructuring, Generators/Yield, Metaobjects, Span/Memory View) via the 10-question Decision Pipeline; complete the 10 `imperative-crutch-*` anti-pattern research topics; classify each concept Language/StdLib/External; accept via EDR
 - [ ] Phase 5 — Syntax Design: derive syntax from the semantic model for every accepted concept; update `PARSER.md` with concrete grammar
@@ -79,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-20 after initialization*
+*Last updated: 2026-07-27 after Phase 2 (Semantic Model) completion*

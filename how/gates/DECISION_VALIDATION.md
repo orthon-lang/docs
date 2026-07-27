@@ -419,4 +419,4 @@ gates.
 
 | Date | Proposal | Gates Applied | Verdict | Notes |
 |------|----------|---------------|---------|-------|
-|      |          |               |         |       |
+| 2026-07-27 | [Semantic Model](../../what/SEMANTIC_MODEL.md) ([EDR-013](../decision_records/architecture/EDR-013-semantic-model.md)) | All 7 | 6 Pass, 1 Flag (`LLM_GENERABILITY_GATE`) | Flag root cause: Ownership's concrete transfer syntax deferred to Phase 5. Full per-gate reasoning: [`DECISION_LOG.md` § Semantic Model](DECISION_LOG.md#entry-semantic-model-edr-013). |

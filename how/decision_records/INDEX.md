@@ -23,6 +23,8 @@
 | EDR-010 | Architecture | [Layered Architecture](architecture/EDR-010-layered-architecture.md) | Accepted | 2026-07-18 | TDR-009 |
 | EDR-011 | Process | [Process Inventory](process/EDR-011-process-inventory.md) | Accepted | 2026-07-18 | TDR-010 |
 | EDR-012 | Architecture | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 | — |
+| EDR-013 | Architecture | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 | — |
+| EDR-014 | Process | [Decision Log](process/EDR-014-decision-log.md) | Accepted | 2026-07-27 | — |
 
 > **Note:** EDR-008 and EDR-009 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -43,6 +45,7 @@
 |----|-------|--------|------|
 | EDR-010 | [Layered Architecture](architecture/EDR-010-layered-architecture.md) | Accepted | 2026-07-18 |
 | EDR-012 | [Semantic Dependency Architecture](architecture/EDR-012-semantic-dependency-architecture.md) | Accepted | 2026-07-21 |
+| EDR-013 | [Orthon Semantic Model](architecture/EDR-013-semantic-model.md) | Accepted | 2026-07-27 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -54,6 +57,7 @@
 | EDR-006 | [Policies & Strategies](process/EDR-006-policies-and-strategies.md) | Accepted | 2026-07-18 |
 | EDR-007 | [Concept Design Review](process/EDR-007-concept-design-review.md) | Accepted | 2026-07-18 |
 | EDR-011 | [Process Inventory](process/EDR-011-process-inventory.md) | Accepted | 2026-07-18 |
+| EDR-014 | [Decision Log](process/EDR-014-decision-log.md) | Accepted | 2026-07-27 |
 
 ### Quality
 | ID | Title | Status | Date |
@@ -69,11 +73,11 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 10 |
+| Accepted | 11 |
 | Proposed | 0 |
 | Deprecated | 0 |
 | Superseded | 0 |
 
 ---
 
-*Last updated: 2026-07-20*
+*Last updated: 2026-07-27*
