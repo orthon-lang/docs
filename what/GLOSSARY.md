@@ -122,6 +122,21 @@ The same source code must produce identical observable behavior across optimizat
 
 ## D (cont.)
 
+### Decision Log
+
+The detailed, per-gate reasoning trail behind a Tier 1–2 decision —
+one entry per validated decision, one subsection per gate applied,
+each working through that gate's method against the actual proposal
+and recording the verdict it produces. Distinct from an artifact's own
+terse Validation summary (verdict + citation only) and from the
+Decision Journal (a one-row-per-decision index); the Decision Log is
+where the reasoning that produced a verdict is actually recorded, not
+just its conclusion.
+
+- **Source:** `../how/gates/DECISION_LOG.md`, established by
+  [EDR-014](../how/decision_records/process/EDR-014-decision-log.md)
+- **See also:** [Decision Validation](#decision-validation), [Validation Gate](#validation-gate)
+
 ### Decision Validation
 
 A framework of seven independent validation gates that every language
