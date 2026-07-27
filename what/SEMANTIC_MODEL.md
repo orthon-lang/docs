@@ -176,9 +176,8 @@ but never implicitly duplicated. This holds universally, but its
 - **Ordinary values** (`Int`, `String`, `Point`, `List`, `Map`, and
   similar plain data) use pure value semantics (see [Identity](#identity)).
   Assignment copies; there is nothing to "own" beyond the copy itself.
-  The vast majority of Orthon code — an estimated 95% — never needs to
-  reason about ownership explicitly, because copying eliminates the
-  question.
+  The large majority of ordinary-value code never needs to reason
+  about ownership explicitly, because copying eliminates the question.
 - **Resources** — anything with **exclusive responsibility**: a value
   representing a file handle, a network socket, a unique in-memory
   buffer, or any entity where duplication would be meaningless or unsafe

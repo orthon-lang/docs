@@ -70,9 +70,9 @@ specification lives in `what/SEMANTIC_MODEL.md`; summarized here:
 
 2. **Ownership** — Every value has exactly one owner at any point.
    Ownership applies wherever exclusive responsibility exists (not only
-   "external resources") — in practice, ~95% of ordinary-value code
-   never needs to reason about it, because plain value semantics
-   eliminates the question. Move transfers ownership and invalidates
+   "external resources") — in practice, the large majority of
+   ordinary-value code never needs to reason about it, because plain
+   value semantics eliminates the question. Move transfers ownership and invalidates
    the source; borrowing grants temporary shared-XOR-mutable access.
    Transfer must be syntactically explicit; the concrete marker
    (`@ownership` / `$` / `move`) is deferred to Phase 5. No GC, no RC by
