@@ -336,6 +336,103 @@ The same source code must produce identical observable behavior across optimizat
 
 ---
 
+### Declaration by Assignment
+
+A variable declaration model where the first assignment to an identifier
+introduces the variable. No separate `let`/`var`/`Type name` keyword is
+needed for initial declaration. The type is inferred from the initializer.
+Shadowing requires an explicit `let` keyword. Read-before-write is a
+compile-time error via definite assignment analysis. Variables are
+immutable by default — `mut` required for reassignment. No implicit
+globals — assignment inside a function always creates a local variable.
+
+```orthon
+x = 42               # declaration by first assignment, type inferred as Int
+mut counter = 0      # mutable variable
+let x = transform(x) # shadowing: new variable (explicit let)
+```
+
+- **Source:** `../what/concepts/DECLARATION_BY_ASSIGNMENT.md` (EDR-074)
+- **See also:** [Definite Assignment Analysis](#definite-assignment-analysis), [Type Inference](#type-inference), [Shadowing](#shadowing)
+
+### Declarative Construct
+
+A language or StdLib pattern where the programmer specifies *what* the
+result should be, and the language/StdLib determines *how* to achieve
+it. Orthon provides declarative constructs for common data
+transformations: collection operations (map/filter/reduce), resource
+management (using), sorting (sorted-by-key), derived serialization, and
+derived structural methods (eq/hash/copy). Every declarative construct
+has a documented desugaring to imperative primitives. Query expressions
+are deferred to v0.2.
+
+```orthon
+let adults = users.filter(u -> u.age >= 18).map(u -> u.name)
+```
+
+Five synthesis-friendliness criteria: single intent, deterministic
+output, type-checked inputs, canonical form, LLM-guessable name.
+
+- **Source:** `../what/concepts/DECLARATIVE_CONSTRUCTS.md` (EDR-073)
+- **See also:** [Combinator](#combinator), [Iterator Protocol](#iterator-protocol)
+
+### Declarative Multi-Key Sort
+
+A StdLib API for sorting by multiple fields using key paths, without
+manual comparator chains. Builds on stable sort (SORTING) and the `Ord`
+trait (EQUALITY). Supports direction modifiers (`asc`/`desc`).
+
+```orthon
+let sorted = users.sorted(by: .last_name, .first_name)
+let by_age_then_salary = users.sorted(by: .age, desc(.salary))
+```
+
+All forms desugar to lexicographic `Ord` comparisons on tuples. No new
+language semantics.
+
+- **Source:** `../what/concepts/DECLARATIVE_MULTI_KEY_SORT.md` (EDR-067)
+- **See also:** [Sorting](#sorting-stable), [Equality](#semantic-equality), [Ord](#ord-trait)
+
+### Definite Assignment Analysis
+
+A compiler-level analysis that verifies every variable is assigned on all
+possible execution paths before any read occurs. Read-before-write in any
+path is a compile-time error. Tracks assignment across control flow
+(if/else, loop, match arms). Conservative — if the compiler cannot prove
+assignment, the read is an error. Part of Orthon's Declaration by
+Assignment model (EDR-074).
+
+```orthon
+# x = compute()    # Error: read before write on some paths
+if condition:
+    x = 1
+else:
+    x = 2
+print(x)            # OK: assigned on all paths
+```
+
+- **Source:** `../what/concepts/DECLARATION_BY_ASSIGNMENT.md` (EDR-074)
+- **See also:** [Declaration by Assignment](#declaration-by-assignment), [Flow-Sensitive Narrowing](#flow-sensitive-narrowing)
+
+### Derive Serialization
+
+The automatic generation of serialization/deserialization code for a
+type via the `@derive(Serialize, Deserialize)` macro. Format-agnostic —
+JSON, binary, and custom formats implement `Encoder`/`Decoder` traits.
+Declarative annotations for field customization (`@name`, `@skip`).
+Deserialization returns `Result<T>` (never panics). Cyclic reference
+tracking deferred to v0.2.
+
+```orthon
+@derive(Serialize, Deserialize)
+struct User:
+    name: String
+    @name("email_address") email: String
+```
+
+- **Source:** `../what/concepts/DERIVE_SERIALIZATION.md` (EDR-070)
+- **See also:** [Derive](#derive), [Macro](#macro), [Result Type](#result-type)
+
 ## E
 
 ### EDR (Engineering Decision Record)
@@ -738,6 +835,40 @@ Context parameters are noted as a SEMANTIC_MODEL correction
 ([EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md))
 but full specification is deferred beyond v0.1.
 
+### Immutable Date-Time
+
+A set of immutable, value-semantics date/time types in the Standard
+Library: `Instant`, `LocalDate`, `LocalTime`, `LocalDateTime`,
+`ZonedDateTime`, `Duration`, `Period`, `Offset`. All types are
+immutable — "modification" methods return new instances. Formatters
+are immutable objects. Parsing returns `Result<T>`. Thread-safe by
+construction.
+
+```orthon
+let now = ZonedDateTime.now()
+let tomorrow = now.plusDays(1)    # new instance, now unchanged
+let parsed = LocalDate.parse("2026-07-27")
+```
+
+- **Source:** `../what/concepts/IMMUTABLE_DATE_TIME.md` (EDR-068)
+- **See also:** [Result Type](#result-type), [Value Semantics](#value-semantics)
+
+### Immutable Marker Trait
+
+A compiler-recognized trait (`Immutable`) that guarantees values of the
+implementing type cannot be mutated. The compiler uses this marker for
+optimisations (eliding copies, allowing hash-key usage, safe concurrent
+sharing). No methods — purely a guarantee. Accepted in v0.1 as an
+interface contract; full persistent collection implementations deferred
+to v0.2.
+
+```orthon
+trait Immutable    # marker trait, no methods
+```
+
+- **Source:** `../what/concepts/PERSISTENT_DATA_STRUCTURES.md` (EDR-069)
+- **See also:** [Persistent Data Structure](#persistent-data-structure), [Value Semantics](#value-semantics)
+
 ### Intersection Type
 
 A structural, purely compile-time type combinator that merges the shape of
@@ -1012,6 +1143,23 @@ syntactically visible per Semantic Purity.
 
 ## N
 
+### Named and Optional Parameters
+
+A call-site convention where function arguments can be specified by
+parameter name (in any order) and parameters can declare default values
+(reducing overload explosion). In Orthon, this is a StdLib/macro
+feature — named arguments desugar to positional calls via the macro
+layer (EDR-029). Default values are ordinary expressions evaluated at
+call time.
+
+```orthon
+fn connect(host: String, port: Int = 80, useSsl: Bool = false)
+connect(host: "example.com", useSsl: true)    # named, skip port
+```
+
+- **Source:** `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065)
+- **See also:** [Derive](#derive), [Macro](#macro), [Object Initialization](#object-initialization)
+
 ### Named Before Symbolic
 
 Every symbolic operator must have an equivalent named function. Symbols improve brevity; named functions improve readability. Both express the same semantics.
@@ -1077,6 +1225,27 @@ Each language construct solves exactly one problem and combines freely with othe
 ---
 
 ## P
+
+### Policy
+
+See [Implementation Policy](#implementation-policy).
+
+### Persistent Data Structure
+
+An immutable collection that shares internal structure across "modified"
+versions, making snapshots cheap (O(log n) or O(1) amortised per
+operation). Orthon's `Immutable` marker trait is accepted in v0.1 as a
+forward contract; concrete persistent collection types (`PersistentList`,
+`PersistentMap`, `PersistentSet`) are deferred to v0.2. v0.1 uses Tuple
++ Copy-on-Write for immutable data.
+
+```orthon
+trait Immutable    # marker trait — no methods, purely a guarantee
+# v0.2: type PersistentList[T] is Immutable
+```
+
+- **Source:** `../what/concepts/PERSISTENT_DATA_STRUCTURES.md` (EDR-069)
+- **See also:** [Immutable Marker Trait](#immutable-marker-trait), [Copy-on-Write](#copy-on-write-cow), [Value Semantics](#value-semantics)
 
 ### Policy
 
@@ -1491,6 +1660,23 @@ Multiple bounds are combined with `+`. Trait bounds enable static dispatch by de
 - **Source:** `../what/concepts/TRAITS.md` § Model
 - **See also:** [Trait](#trait), [Orphan Rule](#orphan-rule)
 
+### Tagged Union
+
+The default memory layout for Algebraic Data Types (ADTs): a discriminant
+(tag) followed by the variant's fields. The tag identifies which variant
+is active at runtime, enabling pattern matching to select the correct
+arm. The compiler optimises layout by packing the tag into padding bytes
+where possible (niche optimisation).
+
+Tagged union layout is an Implementation Strategy concern — the
+semantics of ADTs are defined independently of layout; tagged union is
+the default strategy but flat layout (no tag when variants are
+distinguishable by field types) and niche optimisation are permitted
+alternatives.
+
+- **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md` § Default Strategy, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
+- **See also:** [Algebraic Data Type](#algebraic-data-type), [Sum Type](#sum-type), [Pattern Matching](#pattern-matching)
+
 ### Type Inference
 
 The compiler's ability to determine the type of an expression from its
@@ -1512,6 +1698,31 @@ are inspectable via the Schema Provider.
 
 - **Source:** `../what/concepts/TYPE_INFERENCE.md` (EDR-027)
 - **See also:** [Generics](#generics), [Trait Bound](#trait-bound), [Schema Provider](#schema-provider)
+
+### Type-Level Computation
+
+The ability to derive new types from existing types through built-in
+compiler intrinsics. Orthon provides a closed set of 8 non-recursive
+intrinsics:
+
+| Intrinsic | Semantics |
+|-----------|----------|
+| `KeyOf<T>` | Union of literal property-name types of `T` |
+| `Pick<T, K>` | Type with only keys `K` from `T` |
+| `Omit<T, K>` | Type with all keys except `K` from `T` |
+| `Partial<T>` | All keys of `T` become optional |
+| `Required<T>` | All keys of `T` become required |
+| `Record<K, V>` | Type with keys `K` and values `V` |
+| `Readonly<T>` | All keys read-only |
+| `ElementOf<T>` | Element type of a collection type |
+
+NO user-extensible type-level language. NO recursion. NO `infer`.
+Intrinsics are composable (e.g., `Partial<Omit<User, "password">>`).
+For custom type-level operations beyond the intrinsic set, use the
+derive/macro mechanism (EDR-029).
+
+- **Source:** `../what/concepts/TYPE_LEVEL_COMPUTATION.md`, [EDR-046](../how/decision_records/architecture/EDR-046-type-level-computation.md)
+- **See also:** [Literal Type](#literal-type), [Derive](#derive), [Comptime](#comptime)
 
 ### Type-Level Null Safety
 
@@ -1640,11 +1851,171 @@ separation.
 - **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine, `../how/architecture/ARCHITECTURE.md` § Execution Program Pipeline
 - **See also:** [Execution Engine](#execution-engine), [Execution Program](#execution-program)
 
+### Widening
+
+The process by which a literal type widens to its base type. In Orthon,
+the widening rule is a single, always-applicable rule: **immutable
+bindings preserve literal types; mutable bindings widen to base types.**
+
+```orthon
+let x = "GET"    # type: "GET" (literal preserved)
+var y = "GET"    # type: String (widened)
+```
+
+This rule is simpler than TypeScript's context-dependent widening
+(`let` widens, `const`/`as const` preserves). The single rule is
+LLM-generable and eliminates hidden conversions.
+
+- **Source:** `../what/concepts/LITERAL_TYPES.md`, [EDR-043](../how/decision_records/architecture/EDR-043-literal-types.md)
+- **See also:** [Literal Type](#literal-type), [Union Type](#union-type)
+
+---
+
+## C (continued)
+
+### Contract (Design by Contract)
+
+A verifiable assertion embedded in a function signature that specifies preconditions (`requires`), postconditions (`ensures`), and type/module invariants (`invariant`). Contracts are part of Orthon's function declaration syntax — they are not comments or library annotations.
+
+```orthon
+fun sqrt(x: Float) -> Float
+    requires x >= 0.0
+    ensures result * result ≈ x
+```
+
+Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: subtypes may weaken preconditions and strengthen postconditions.
+
+- **Source:** `../what/concepts/CONTRACTS.md` (EDR-056)
+- **See also:** [Function Contract](#function-contract), [Verification Layer](#verification-layer)
+
+---
+
+## D (continued)
+
+### Delegation (StdLib)
+
+A composition pattern where a type implements a trait by forwarding method calls to a contained instance, or where a property delegates getter/setter behaviour to a helper object. Orthon provides delegation via the `@delegate` macro (EDR-029) and StdLib delegate protocols (`lazy`, `observable`, `vetoable`, `map`).
+
+```orthon
+@delegate(List[T]) to inner
+# Compiler generates forwarding for all List methods
+```
+
+**Note:** DELEGATION (this concept) is distinct from DELEGATE (the concurrency execution policy from EDR-036). The execution `delegate` creates concurrent execution contexts; delegation pattern composes types orthogonally.
+
+- **Source:** `../what/concepts/DELEGATION.md` (EDR-057)
+- **See also:** [Macro](#macro), [Trait](#trait), [Property](#property)
+
+---
+
+## E (continued)
+
+### Extension Function
+
+A function defined outside its receiver type but called with method-call syntax: `expr.method()`. Extension functions are resolved at compile time based on the **static type** of the receiver (static dispatch). They cannot access private members of the receiver type.
+
+```orthon
+# Definition
+fun String.isEmail() -> Bool:
+    contains("@")
+
+# Callsite
+email = user.email_address.isEmail()
+```
+
+Extension functions from other packages must be explicitly imported. Member functions always take precedence over extension functions of the same name.
+
+- **Source:** `../what/concepts/EXTENSION_FUNCTIONS.md` (EDR-058)
+- **See also:** [Trait](#trait), [Static Dispatch](#static-dispatch)
+
+---
+
+## G (continued)
+
+### Gradual Typing
+
+A type system where type annotations are optional — the programmer may start with unannotated code and add types incrementally. Orthon uses gradual typing with global inference: types are inferred for all expressions, explicit annotations are never required but always accepted.
+
+```orthon
+name = "Alice"       # type inferred
+fun greet(person: Person) -> String:
+    "Hello, {person.name}!"
+```
+
+Boundary checks are inserted at typed/untyped function interfaces. The compiler runs a global consistency pass as an optional lint. No separate declaration files — type information lives alongside code. Critical for LLM adoption.
+
+- **Source:** `../what/concepts/GRADUAL_TYPING.md` (EDR-059)
+- **See also:** [Type Inference](#type-inference), [Boundary Check](#boundary-check)
+
+---
+
+## N (continued)
+
+### Narrowing
+
+See [Flow-Sensitive Narrowing](#flow-sensitive-narrowing), [Smart Cast](#smart-cast).
+
+---
+
+## P (continued)
+
+### Property
+
+A named value on a type that unifies stored field access and computed access behind a uniform `.name` interface. Every field in a type declaration is implicitly a property with a getter and optional setter. Computed properties specify the getter body explicitly.
+
+```orthon
+struct Person:
+    name: String                  # implicit getter, no setter
+    var age: Int                  # implicit getter + setter
+    is_adult: Bool                # computed property
+        get: self.age >= 18
+```
+
+Callers use `.name` syntax uniformly — stored and computed properties are indistinguishable at the call site. Changing a stored property to a computed one never changes the call site.
+
+- **Source:** `../what/concepts/PROPERTIES.md` (EDR-062)
+- **See also:** [Attribute Access](#attribute-access), [Delegation](#delegation-stdlib)
+
+---
+
+## S (continued)
+
+### Smart Cast
+
+The compiler's ability to automatically narrow the type of a variable based on control flow — after a type check, the variable's type is refined within the relevant scope without requiring an explicit cast.
+
+```orthon
+if value is String:
+    print(value.length)      # smart cast — no explicit cast needed
+```
+
+Smart cast applies after `is`/`isnt` checks, `when` branches, and short-circuit operators (`&&`, `||`). Only applies to effectively-immutable variables. Conservative — if the compiler cannot prove safety, the wider type is retained. Partially subsumed by PATTERN_MATCHING (EDR-025).
+
+- **Source:** `../what/concepts/SMART_CAST.md` (EDR-060)
+- **See also:** [Flow-Sensitive Narrowing](#flow-sensitive-narrowing), [Pattern Matching](#pattern-matching), [Option Type](#option-type)
+
+---
+
+## C (continued)
+
+### Copy-on-Write (CoW)
+
+A memory optimisation technique where assignment of a value shares the underlying data, and mutation triggers a copy only when the data is shared by multiple references. CoW is transparent to the programmer — they write value-semantics code.
+
+```orthon
+data = [1, 2, 3]
+data2 = data              # shares buffer (no copy)
+data2[0] = 99             # clone happens here if shared
+```
+
+CoW is the DEFAULT_STRATEGY's mechanism for implementing value semantics on standard collections. The `shared` keyword provides explicit reference semantics (RC-based sharing). CoW avoids the need for a borrow checker in common patterns.
+
+- **Source:** `../what/concepts/COPY_ON_WRITE.md` (EDR-061)
+- **See also:** [Value Semantics](#value-semantics), [Shared Keyword](#shared-keyword)
+
 ---
 
 ## Z
-
-### Zen of Orthon
 
 The four guiding aphorisms of the language:
 

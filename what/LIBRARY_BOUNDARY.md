@@ -142,4 +142,4 @@ Per D-04: Policy-level concepts route to `how/strategies/` area.
 
 ## Decision Pipeline Reference
 
-Every concept above ran through the 10-question Decision Pipeline defined in [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md). The pipeline log for each concept is recorded in that document's Pipeline Application section.
+Every concept above ran through the 10-question Decision Pipeline defined in [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md). The pipeline log for each concept is recorded in [`how/gates/DECISION_LOG.md`](../how/gates/DECISION_LOG.md) — one entry per concept with full Q&A, classification, and primitive decomposition.

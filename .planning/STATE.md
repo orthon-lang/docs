@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
-current_phase: 03
-status: planning
-stopped_at: Completed 04-09 aggregation plan
+current_phase: 04
+status: complete
+stopped_at: Phase 04 — Derived Features & Decision Pipeline complete
 last_updated: "2026-07-27T20:00:06.576Z"
 last_activity: 2026-07-27
 progress:
   total_phases: 9
-  completed_phases: 2
-  total_plans: 17
-  completed_plans: 8
+  completed_phases: 4
+  total_plans: 26
+  completed_plans: 26
 ---
 
 # Project State
@@ -21,23 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-20)
 
 **Core value:** A complete, self-consistent Orthon v0.1 specification — every concept accepted (no DRAFT), core architecture specs (IR, Parser, Type System, Name Resolution) filled in, all cross-references valid, and a final review confirming the result coheres as a real language specification.
-**Current focus:** Phase 04 — Derived Features & Decision Pipeline
+**Current focus:** Phase 05 — Syntax Design
 
 ## Current Position
 
-Phase: 03 ✅ Complete
-Plan: 03-01 ✅ (PRIMITIVE_BLOCKS.md), 03-02 ✅ (verification + EDR-016)
-Status: All Phase 3 requirements satisfied (PRIM-01, PRIM-02, PRIM-03)
+Phase: 04 ✅ Complete
+Plan: 04-01 ✅ (6 foundational essential), 04-02 ✅ (6 type/pattern), 04-03 ✅ (5 metaprogramming/concurrency), 04-04 ✅ (3 Policy + 2 borderline), 04-05 ✅ (8 data/type extensions), 04-06 ✅ (9 control flow/async), 04-07 ✅ (19 remaining important), 04-08 ✅ (4 rejections + 50 deferrals), 04-09 ✅ (aggregation)
+Status: All Phase 4 requirements satisfied (DERIV-01, DERIV-02, DERIV-03, CONCEPT-ESS-01, CONCEPT-IMP-01, CONCEPT-DEFER-01, CONCEPT-REJECT-01)
 Last activity: 2026-07-27
 
-Progress: [█████░░░░░] 47%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 2
-- Phase 3: 2 plans (PRIMITIVE_BLOCKS.md write + verification/EDR)
+- Total plans completed: 26
+- Phase 4: 9 plans (6 waves, ~58 concepts processed across all tiers)
 
 **By Phase:**
 
@@ -47,6 +47,12 @@ Progress: [█████░░░░░] 47%
 | 01.1 | 4 | ✅ |
 | 02 | 1 | ✅ |
 | 03 | 2 | ✅ |
+| 04 | 9 | ✅ |
+| 05 | - | ⏳ |
+| 06 | - | ⏳ |
+| 07 | - | ⏳ |
+| 08 | - | ⏳ |
+
 
 *Updated after each plan completion*
 
@@ -76,8 +82,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 4 (Derived Features & Decision Pipeline) is the largest phase in the project — 26 of 66 requirements, ~112 concept files to process. Most essential-tier concepts are currently DRAFT with no prior acceptance process.
-- Phase 3 (Primitive Blocks) is now complete; Phase 4 can proceed.
+- Phase 5 (Syntax Design) is the next phase — derives concrete syntax from accepted semantics. Requires familiarity with all Phase 4 concept docs.
+- Phase 4 is now complete: 58 concepts processed through Decision Pipeline, 61 EDRs created (EDR-017 through EDR-079), 48 concept docs in `what/concepts/`, 4 rejection EDRs, 50 deferrable concepts documented, LIBRARY_BOUNDARY.md created.
 - Phase 1.1, Phase 2, and Phase 3 — all prerequisite phases — are now complete. No structural blockers remain for Phase 4.
 
 ### Quick Tasks Completed
