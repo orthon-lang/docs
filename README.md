@@ -39,7 +39,13 @@ consistent rules, and explicit semantics — make it uniquely suited for
 AI-generated code. Every language construct must pass an LLM Generability
 Gate that validates whether an LLM can reliably produce correct code
 using it.
-
+```
+Engineering → Orthogonality → Semantic Clarity → Verifiability → Lower Complexity → Human × Compiler × AI
+```
+*The Design Value Chain: engineering discipline enables orthogonality, which produces semantically clear
+abstractions; clarity makes verification tractable; verifiable designs yield lower complexity; and low
+complexity — finally — serves all three audiences equally: humans who read code, compilers that process it,
+and LLMs that generate it.*
 This repository contains the language design documentation — the *why*,
 *how*, and *what* of Orthon. There is no compiler or runtime here yet.
 
