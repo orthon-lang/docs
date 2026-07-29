@@ -33,7 +33,30 @@
 > for the full classification summary and [`EDR-079`](../how/decision_records/architecture/EDR-079-aggregating-p4.md)
 > for the aggregating acceptance record.
 >
-> **Last updated:** 2026-07-27
+> **Last updated:** 2026-07-29
+
+---
+
+## Open Questions Tracking
+
+Accepted concepts may have post-acceptance open questions —
+unresolved details discovered after pipeline completion. Such
+questions are tracked via an optional `Open Questions` field in
+the concept's registry entry (resolved → `Resolved Questions`).
+The resolution process is defined in
+[`how/CONCEPT_PIPELINE.md`](../how/CONCEPT_PIPELINE.md) § Post-Acceptance Gaps (Type B).
+
+**Field format (optional, appears only when unresolved questions exist):**
+
+```
+| **Open Questions** | • Question 1 (see `notes/{NAME}-open-questions.md`) |
+```
+
+**When resolved:**
+
+```
+| **Resolved Questions** | • Question 1 → `what/concepts/{NAME}.md` § X (Tier 4 inline) |
+```
 
 ---
 

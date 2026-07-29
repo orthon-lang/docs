@@ -101,6 +101,16 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
 │ what/CORE_CONCEPTS.md       │  ◄── REGISTRY
 │                             │      Final entry: accepted, validated,
 │                             │      cross-checked concept
+└──────────┬──────────────────┘
+           │
+           │ gap discovered?
+           │  ├── Type A (missing concept) → research/ (full pipeline)
+           │  ├── Type B (unresolved detail) → notes/ (lightweight)
+           │  └── Type C (cross-concept) → CONFLICT_REGISTRY
+           ▼
+┌─────────────────────────────┐
+│ Post-Acceptance Gap         │  ◄── ITERATIVE REFINEMENT
+│ Resolution (Stage 10)       │      See § Stage 10 for full procedure
 └─────────────────────────────┘
 ```
 
@@ -255,7 +265,52 @@ This is the first "official" Orthon artifact for the concept.
 
 ---
 
-### 10. Cross-Cutting Review (Phase 6)
+### 10. Post-Acceptance Gaps
+
+**Purpose:** Handle open questions and unresolved details discovered
+in concepts that have already passed through the full pipeline and been
+accepted. The pipeline is linear, but language design is iterative —
+gaps emerge after acceptance, and the process must accommodate them
+without re-running the entire pipeline.
+
+**Trigger:** An accepted concept (registered in `CORE_CONCEPTS.md`) has an
+unresolved detail, boundary ambiguity, or missing sub-concept.
+
+**Resolution by gap type:**
+
+| Gap Type | Description | Resolution Path | Artifact |
+|----------|-------------|-----------------|----------|
+| **Type A — Missing concept** | A concept not present in any pipeline wave | Full pipeline from Stage 1 (Research Inbox) | `research/` file → Decision Pipeline → EDR |
+| **Type B — Unresolved detail** | An open question within an already-accepted concept | Lightweight: document → decide → record | `notes/{CONCEPT}-open-questions.md` → inline decision or EDR amendment |
+| **Type C — Cross-concept conflict** | Interaction issue between two+ accepted concepts | Route to CONFLICT_REGISTRY → resolve in Phase 6 | CONFLICT_REGISTRY entry → resolution EDR |
+
+#### Type B Procedure (lightweight)
+
+1. **Document** the open question in `notes/{CONCEPT}-open-questions.md`
+   — what exactly is undefined, why it matters, what options exist
+2. **Classify** the decision tier:
+   - **Tier 4** (inline) — small detail within one concept → record inline in
+     the concept's specification document
+   - **Tier 2** (language concept amendment) — affects semantics or boundary
+     → create an EDR that supersedes/amends the original concept EDR
+3. **Record** the resolution — either as inline `> **Decision:**` note,
+   or as EDR with `Supersedes:` field linking to original
+4. **Update CORE_CONCEPTS.md** — move the entry from "Open Questions" to
+   "Resolved" (see [`CORE_CONCEPTS.md`](../what/CORE_CONCEPTS.md) § Open Questions Tracking)
+
+**Type B does NOT require:**
+- Re-running the Decision Pipeline (the concept is already accepted)
+- Re-doing the Concept Design Review (the core design is stable)
+- Re-running all 7 Validation Gates (only the affected gates, if any)
+
+**Implementation note:** The Type B path is deliberately lightweight.
+Its purpose is to prevent accepted concepts from accumulating
+unresolved ambiguity without imposing the overhead of a full
+pipeline pass.
+
+---
+
+### 11. Cross-Cutting Review (Phase 6)
 
 **Documents:** [`what/CROSS_CUTTING.md`](../what/CROSS_CUTTING.md),
 [`what/CONFLICT_REGISTRY.md`](../what/CONFLICT_REGISTRY.md),
@@ -271,7 +326,7 @@ reapplied at the interaction level.
 
 ---
 
-### 11. Registry Entry
+### 12. Registry Entry
 
 **Location:** `what/CORE_CONCEPTS.md`
 
