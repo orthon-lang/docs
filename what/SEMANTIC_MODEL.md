@@ -30,6 +30,19 @@ to *"What does a program mean?"* It is distinct from:
 - **Execution Model** — how programs are executed (see [`EXECUTION_MODEL.md`](EXECUTION_MODEL.md))
 - **Optimization Model** — what is guaranteed vs. optimised (see [`OPTIMIZATION_MODEL.md`](OPTIMIZATION_MODEL.md))
 
+> **Nondeterminism is outside this model's scope.** The semantic model
+> defines *what a program means* under the assumption that a correct
+> implementation of the same specification produces the same observable
+> results (per `DESIGN_PRINCIPLES.md` § Deterministic Behavior).
+> Nondeterminism introduced by external service calls (LLM, RPC, etc.)
+> is a property of the **delegate implementation**, not of the core
+> language semantics. See
+> [`LLM_AS_DELEGATE_IMPL.md`](../how/concepts/research/important/LLM_AS_DELEGATE_IMPL.md)
+> § Disadvantages for the architectural rationale, and
+> [`notes/nondeterminism-gaps.md`](../notes/nondeterminism-gaps.md) for
+> the three remaining open concerns (transitivity, testing, execution
+> model integration).
+
 ---
 
 ## Semantic Invariants
@@ -412,6 +425,17 @@ This is a semantic commitment, not an optimization detail: per
 `DESIGN_PRINCIPLES.md` § Deterministic Behavior, the same source must
 produce the same observable order of side effects regardless of
 Implementation Strategy or optimization level.
+
+> **Note on nondeterministic delegates.** The Deterministic Behavior
+> principle guarantees that the *same source* produces the *same
+> observable side-effect order* — it does not guarantee that a delegate
+> implementation returns the same value on every invocation. An `impl
+> llm` delegate may return different results for identical inputs; this
+> is consistent with the semantic model because the delegate's
+> implementation contract (its `act` signature) is deterministic, while
+> its execution backend is not. See
+> [`LLM_AS_DELEGATE_IMPL.md`](../how/concepts/research/important/LLM_AS_DELEGATE_IMPL.md)
+> for the full treatment.
 
 **Side-effect visibility within expressions.** Because expressions can
 appear nested arbitrarily deeply (an `if` inside a function argument
