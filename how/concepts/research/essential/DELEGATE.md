@@ -14,8 +14,8 @@
 > **Reference:** [../../../notes/actor-implementation-taxonomy.md](../../../notes/actor-implementation-taxonomy.md) —
 > taxonomy of 12 actor implementation approaches catalogued during design-space exploration.
 > **See also:** [`SINGLETON_PATTERN_ANALYSIS.md`](../../deferrable/SINGLETON_PATTERN_ANALYSIS.md) —
-> `delegate` serves as the thread-safe singleton primitive via `let x = delegate(move T(...))`.
-
+> `delegate` serves as the thread-safe singleton primitive via `let x = delegate(move T(...))`.[`LLM_AS_DELEGATE_IMPL.md`](../../important/LLM_AS_DELEGATE_IMPL.md) —
+LLM as a delegate implementation kind (not a language concept).
 ---
 
 ## Issue (Why)
@@ -540,6 +540,10 @@ lst.append(5)                   // OK (List restored)
   `move` concept used throughout this hypothesis. If adopted, `delegate(move
   lst)` becomes `delegate($lst)` and `release(move lst)` becomes
   `release($lst)`. The underlying semantics are unchanged.
+- **`LLM_AS_DELEGATE_IMPL.md`** — LLM invocation as a delegate implementation
+  kind (`impl llm`). The delegate model extends naturally to AI backends:
+  an `act` with typed inputs/outputs, an `llm` delegate with a prompt
+  template, and the same calling convention as any other delegate.
 
 ---
 
