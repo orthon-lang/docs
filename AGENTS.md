@@ -225,7 +225,9 @@ When assigned a task in this project, follow this protocol:
 1. **Assert language.** Before any other step, assert: *"All file content I produce will be in English."* Chat responses to the user may match the user's language. The project language is English (§10.9).
 2. **Read the relevant layer first.** If the task is about a concrete feature, start with `how/concepts/research/` (concept research). `what/CORE_CONCEPTS.md` is the acceptance destination but is currently empty — no concepts have been accepted yet. If it is about a principle decision, start with `why/VISION.md` and `how/DESIGN_PRINCIPLES.md`.
 
-2a. **Place new concept research in the correct tier directory.** When adding a
+2a. **Read module headers first.** Before reading any implementation file or searching for import statements, read the module header (`module ... use ... effects ...`). The header is the semantic index of the module — it declares dependencies, effects, and public API. Do not grep for imports across files; the header is the single source of truth for a module's dependencies.
+
+2b. **Place new concept research in the correct tier directory.** When adding a
     new concept research document to `how/concepts/research/`, do NOT place it
     directly in the root. Instead, put it in the appropriate tier subdirectory
     (`essential/`, `important/`, `deferrable/`) based on how foundational the
