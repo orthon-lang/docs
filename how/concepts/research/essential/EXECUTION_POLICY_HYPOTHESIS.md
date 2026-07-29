@@ -53,22 +53,35 @@ There is no:
 - delegate send
 - parallel spawn
 - async / await
+- coroutine
 
-There is only **Invocation**. The operator determines the **Execution Policy**.
+There is only **Invocation**. A context constructor + operator selects
+the **Execution Policy**.
 
 ```
-fn<.(url)   — Immediate          — выполнить сейчас
-fn<~(url)   — Deferred           — отложить (замыкание)
-fn<-(url)   — Delegated          — делегировать владельцу (требуется delegate)
-fn<=(url)   — Parallel           — независимое исполнение (требуется parallel)
-fn<@(url)   — Remote             — удалённое исполнение (требуется remote)
+fn(args)                  — Immediate         — выполнить сейчас (без контекста)
+ctx = defer(obj)                                 корутина
+ctx  <~ method(params)    — Deferred            отложить на контексте
+await(ctx)                                       материализация
+
+ctx = delegate(obj)                              mailbox
+ctx  <- method(params)    — Delegated            делегировать владельцу
+await(ctx)
+
+ctx = parallel()                                 пул потоков
+ctx  <= method(params)    — Parallel             независимое исполнение
+await(ctx)
+
+ctx = remote(url)                                удалённый узел
+ctx  <@ method(params)    — Remote               удалённое исполнение
+await(ctx)
 ```
 
 Invocation becomes **two-dimensional**:
 
 ```
-Что вызвать?    →  функция
-Как выполнить?  →  оператор политики
+Что вызвать?    →  метод / функция
+Как выполнить?  →  контекст + оператор
 ```
 
 The function answers only the first question. The operator answers only
@@ -76,34 +89,67 @@ the second.
 
 ---
 
-### Syntax Pattern
+### Key Insight: Context Required
 
-```
-target < OPERATOR (args)
-```
+Only **Immediate** execution is available without a context. All other
+policies require an **explicit execution context**.
 
-Where:
-- `<` is the invocation marker — visually reads as "send call to target"
-- `OPERATOR` selects the execution policy
-- `(args)` is the argument container
-
-| Operator | Policy | Meaning | Requires |
-|----------|--------|---------|----------|
-| `.` | Immediate | Execute now, produce value | Nothing |
-| `~` | Deferred | Delay execution, produce closure/callable | Nothing — closure construction |
-| `-` | Delegated | Delegate execution to owner | `delegate` context (mailbox, actor) |
-| `=` | Parallel | Execute independently | Parallel runtime (thread pool, scheduler) |
-| `@` | Remote | Execute on remote node | Remote execution infrastructure |
-
-Full forms:
+The programmer must create the context first:
 
 ```orthon
-fetch<.(url)      # Immediate — call fetch with url now
-fetch<~(url)      # Deferred — produce closure: () => fetch(url)
-owner<-fetch(url) # Delegated — execute fetch on owner's context
-fetch<=(url)      # Parallel — execute fetch independently
-fetch<@(url)      # Remote — execute fetch on remote node
+let ctx = defer(obj)       # create a deferred/coroutine context
+ctx <~ method(params)      # invoke method on this context
 ```
+
+This mirrors the natural pattern: you create a tool, then use it.
+`defer(...)`, `delegate(...)`, `parallel()`, `remote(url)` are all
+**context constructors** — they create an execution context with the
+desired policy.
+
+---
+
+### Syntax Design Principle
+
+A critical observation from design exploration:
+
+> The `<` operator feels foreign when placed **between** the function name
+> and its argument list: `fn<OP(args)`. It feels natural when placed
+> **between a context and a call**: `ctx <- fn(args)`.
+
+| Position | Example | Feels |
+|----------|---------|-------|
+| Between name and args | `fn<OP(args)` | ❌ Инородно — разрывает естественную связь |
+| Between context and call | `ctx <- fn(args)` | ✅ Нативно — соединяет контекст и действие |
+| No operator needed | `fn(args)` | ✅ Нативно — имя и args рядом |
+
+**Immediate** is the base case — no context, no operator. The standard
+call syntax `fn(args)` is Immediate by default.
+
+**Contextual policies** use a binary operator `<OP` between the execution
+context and the call. This mirrors natural language: "context performs action."
+
+---
+
+### Syntax Table
+
+| Form | Policy | Meaning |
+|------|--------|---------|
+| `fn(args)` | Immediate | Execute now, produce value |
+| `ctx <~ fn(args)` | Deferred | Defer execution on coroutine context |
+| `ctx <- fn(args)` | Delegated | Delegate to owner's mailbox |
+| `ctx <= fn(args)` | Parallel | Execute on thread pool |
+| `ctx <@ fn(args)` | Remote | Execute on remote node |
+| `ctx <# fn(args)` | GPU | Execute on GPU device |
+
+**Context constructors:**
+
+| Constructor | Creates | Operator |
+|-------------|---------|----------|
+| `defer(obj)` | Deferred/coroutine context | `<~` |
+| `delegate(obj)` | Delegated/mailbox context | `<-` |
+| `parallel()` | Parallel thread pool | `<=` |
+| `remote(url)` | Remote execution node | `<@` |
+| — | Immediate (no context needed) | (none) |
 
 ---
 
@@ -112,20 +158,26 @@ fetch<@(url)      # Remote — execute fetch on remote node
 #### `async` / `await` — eliminated
 
 `async` is not a modifier on the function. The function is colourless.
-`<~` (Deferred) replaces `async fn` — it produces a `Future<T>` (or
-equivalent) at the call site without modifying the function declaration.
-
-`await` is not needed because materialising a deferred result is just
-reading the value from the future:
+`defer(obj)` creates a coroutine context; `<~` invokes on it.
 
 ```orthon
-let future = fetch<~(url)   # Deferred — Future<String>
-let data = future.()         # Materialise — block/await until ready
+# Before:
+async fn fetch(url) -> String
+    return await httpClient.get(url)
+let data = await fetch(url)
+
+# After:
+fun fetch(url) -> String           # colourless function
+    return httpClient.get(url)
+
+let ctx = defer()                   # create deferred context
+ctx <~ fetch(url)                   # invoke on context
+let data = await(ctx)               # materialise result
 ```
 
-Materialisation is a separate operation on `Future<T>`, not a language
-keyword. The execution context (immediate, delegated, parallel) determines
-whether materialisation blocks or yields.
+`await(...)` is a regular function that reads a result from any execution
+context. It is not a keyword — it blocks or yields depending on the
+context type and the ambient execution environment.
 
 #### `spawn` — eliminated
 
@@ -135,8 +187,10 @@ let t1 = spawn async loadImage("a.jpg")
 let t2 = spawn async loadImage("b.jpg")
 
 # After:
-let t1 = loadImage<=(image("a.jpg"))
-let t2 = loadImage<=(image("b.jpg"))
+let pool = parallel()
+pool <= loadImage("a.jpg")
+pool <= loadImage("b.jpg")
+let results = await(pool)
 ```
 
 #### `delegate send` — unified
@@ -147,16 +201,18 @@ let counter = delegate(Counter(0))
 counter <- increment()
 
 # After:
-let counter = Counter()      # ordinary object
-# ... create delegate context for counter ...
-counter<-increment()         # delegated invocation
+let counter = delegate(Counter())   # create delegate context
+counter <- increment()               # invoke on context
 ```
 
-Or, with method syntax:
+#### Method calls in context
 
 ```orthon
-counter.increment<-(())      # method .increment, policy <-, no args
-counter.append<-(item)       # method .append, policy <-, item as arg
+list.append(item)              # Immediate — standard method call (no context)
+
+ctx = delegate(lst)
+ctx <- list.append(item)       # Delegated — method call on delegate context
+ctx <- item                    # standalone message to context
 ```
 
 ---
@@ -164,25 +220,32 @@ counter.append<-(item)       # method .append, policy <-, item as arg
 ### Colourless Functions
 
 A key consequence: **functions have no colour.** There is no `async fn`
-vs `fn`. A function is just a computation. The caller decides whether
-it runs immediately, is deferred, delegated, or parallelised.
+vs `fn`. A function is just a computation. The caller creates the
+appropriate context and invokes with the matching operator.
 
 ```orthon
 fun fetch(url: Url) -> String
-    # Contains I/O, but the function doesn't know or care
-    # about the execution policy — that's the caller's choice
     return httpClient.get(url)
 
 # All valid, same function:
-let a = fetch<.(url)          # Immediate — blocks
-let b = fetch<~(url)          # Deferred — produces Future
-let c = owner<-fetch(url)     # Delegated — on owner's context
-let d = fetch<=(url)          # Parallel — on thread pool
-let e = fetch<@(url)          # Remote — on remote node
-```
+let a = fetch(url)                          # Immediate — blocks
 
-This eliminates the sync/async bifurcation that fragments language
-ecosystems (the "function colouring" problem).
+let d = defer()
+d <~ fetch(url)                             # Deferred
+let b = await(d)
+
+let g = delegate()
+g <- fetch(url)                             # Delegated
+let c = await(g)
+
+let p = parallel()
+p <= fetch(url)                             # Parallel
+let d = await(p)
+
+let r = remote("https://worker.node")
+r <@ fetch(url)                             # Remote
+let e = await(r)
+```
 
 ---
 
@@ -190,18 +253,31 @@ ecosystems (the "function colouring" problem).
 
 **Creating an execution context** is distinct from **invoking with a policy**:
 
-| Operation | Current | Hypothesis |
-|-----------|---------|------------|
-| Create delegate | `delegate(Counter())` | Still needed — `counter<-(...)` requires a context |
-| Create parallel runtime | Implicit | Still needed — `fn<=(x)` requires a scheduler |
-| Materialise future | `await future` | `future.()` or `+future` |
+| Operation | Construct | Notes |
+|-----------|-----------|-------|
+| Create deferred | `defer(obj?)` | Creates coroutine context |
+| Create delegate | `delegate(obj)` | Allocates mailbox, starts processor |
+| Create parallel pool | `parallel()` | Creates thread pool / scheduler |
+| Create remote node | `remote(url)` | Establishes remote connection |
+| Materialise result | `await(ctx)` | Blocks or yields until result ready |
 
 The hypothesis separates:
-1. **Context construction** — allocating a mailbox, thread pool, remote connection
-2. **Invocation policy** — selecting which context to use at the call site
+1. **Context construction** — allocating a mailbox, thread pool, coroutine
+2. **Invocation operator** — `<OP` selects how the call enters the context
+3. **Result materialisation** — `await(...)` reads the result from the context
 
-Context construction is an implementation concern; invocation policy is
-a language syntax concern.
+---
+
+### Naming Note: `defer` vs `async`
+
+The constructor is named `defer(...)`, not `async(...)`. Rationale:
+
+- `async` carries heavy baggage from other languages (coloured functions,
+  syntax viruses, ecosystem splits).
+- `defer` is fresh — it means "defer execution to a context" with no
+  preconceptions about how the context works internally.
+- The context may use coroutines, fibers, green threads, or OS threads —
+  the constructor name does not commit to an implementation model.
 
 ---
 
@@ -209,112 +285,143 @@ a language syntax concern.
 
 ### Syntax
 
-- `()` ceases to be the call operator. `()` is the argument container.
-- Invocation is always `target < OPERATOR (args)`.
-- `fn(x)` becomes either `fn<.(x)` (explicit immediate) or remains as
-  syntactic sugar for `fn<.(x)`.
+- `fn(args)` is Immediate by default — no context, no operator.
+- Contextual invocation is always `ctx <OP method(args)`.
+- `await(ctx)` is a regular function, not a keyword.
+- `obj.method(args)` — remains natural, unchanged.
+- `ctx <- obj.method(args)` — contextual method call, natural.
 
 ### Primitive Set
 
 If accepted, `call` (PRIMITIVE_BLOCKS.md §3.2.3) must be revisited:
 
 - `call` is no longer "invocation of a declared function" — it is
-  **Invocation**, parameterised by Execution Policy.
-- The primitive may split into:
+  **Invocation**, parameterised by Execution Context + Policy.
+- The primitive may decompose into:
   - **Invocation** — the operation of calling a target with arguments
-  - **Execution Policy** — the how of invocation, selected by operator
+  - **Execution Context** — the environment that executes the call
+  - **Execution Policy** — the how of invocation, selected by `<OP`
 
-### `delegate` keyword
+### Context Constructors
 
-The current `delegate` keyword serves two roles:
-1. **Creating** a delegated execution context: `delegate(Counter())`
-2. **Calling** into it: `counter <- msg(args)`
+Each context constructor is a distinct operation. Some may be language
+keywords; others may be StdLib functions. The line is drawn by whether
+the constructor requires compiler-level semantics:
 
-Under the hypothesis, role 2 becomes the `<-` policy operator. Role 1
-(creating the context) still needs a construct — possibly a renamed
-keyword or a policy constructor.
+| Constructor | Likely classification | Reason |
+|-------------|----------------------|--------|
+| `defer(obj)` | Language | Coroutine state machine requires compiler support |
+| `delegate(obj)` | Language | Isolation guarantees, mailbox semantics |
+| `parallel()` | StdLib | Thread pool is an implementation detail |
+| `remote(url)` | StdLib | Network protocol is an implementation detail |
+| `await(ctx)` | StdLib | Blocking/yielding behaviour depends on context |
 
 ### Current Documents Affected
 
 | Document | Change |
 |----------|--------|
-| [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Execution Policy |
-| [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, not call mechanism |
+| [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context + Policy |
+| [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the operator |
 | [`CONCURRENCY_MODEL.md`] | Absorbed into policy table |
-| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution policies and their semantics |
+| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, policies, `await()` |
 | [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section |
-| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, add `Invocation`, `Execution Policy`, remove `Spawn`, `Async` |
+| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, add `Invocation`, `Execution Context`, `Execution Policy`, remove `Spawn`, `Async` |
 | [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
-| [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section — all invocations use `<OP` syntax |
+| [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section |
 
 ---
 
 ## Open Questions
 
-### 1. Attribute access vs Immediate
-
-Currently `.` is attribute access (`obj.field`). If `.` is also an
-execution policy marker inside `fn<.(x)`, there's no ambiguity — `<.`
-is an atomic operator. But what about `obj.method<.(x)` — is that
-attribute access + invocation, or a single operation?
-
-**Possible answer:** `obj.method` is attribute access (gets the method
-value), then `<.(x)` invokes it. Two separate operations composed
-sequentially, consistent with the current model.
-
-### 2. Materialisation syntax
-
-If `await` is eliminated, how does the programmer materialise a future?
-
-Options:
-- `future.()` — read with implicit block (consistent with `.` immediate)
-- `+future` — unary prefix operator
-- Implicit coercion when `Future<T>` is used in a position expecting `T`
-
-### 3. Owner context for `<-`
-
-How is the owner (delegate context) created and associated?
+### 1. What does `defer(...)` wrap?
 
 ```orthon
-let counter = Counter()
-let dc = delegate(counter)    # create delegate context
-dc<-increment()                # invoke on delegate context
+let ctx = defer()              # bare context — invoke on nothing
+ctx <~ fetch(url)
 
-# Or:
-let counter = delegate(Counter())
-counter<-increment()
+let ctx = defer(obj)           # context wrapping an object
+ctx <~ obj.method(params)
 ```
 
-Is `delegate(...)` still the constructor, or is there a policy
-constructor like `counter := Counter() <-`?
+Does `defer()` always require an initial value, or can it be empty and
+receive invocations dynamically? What does the context *own* — just the
+execution state (stack, program counter) or also domain state?
 
-### 4. What is `()` without `<OP`?
+**Possible answer:** `defer()` creates a coroutine context with no state.
+`defer(obj)` creates a coroutine context that owns `obj` — all invocations
+on that context share `obj`'s state, serialised through the coroutine.
+This mirrors `delegate(obj)` but with cooperative scheduling instead of
+mailbox-based preemption.
 
-If `fn(x)` is sugar for `fn<.(x)`, the language may support both.
-But if bare `()` is banned outside `<OP`, all existing call syntax
-changes. Migration cost vs. clarity gain?
+### 2. Return type of contextual invocation
+
+```orthon
+ctx <~ fn(args)       # returns Future<T>?
+ctx <- fn(args)       # returns Future<T>?
+ctx <= fn(args)       # returns Task<T>?
+```
+
+Does every contextual invocation return a future/task, or does the
+operator determine the return type? If `ctx <- fn(args)` returns
+`Future<T>`, then `await(ctx)` must know which invocation to wait for.
+
+**Possible answer:** Each contextual invocation returns a handle
+(`Future<T>`), and `await(handle)` materialises that specific result.
+`await(ctx)` without a handle waits for all pending invocations on
+the context. This distinguishes "wait for this specific call" from
+"drain the context."
+
+### 3. Context creation vs context binding
+
+```orthon
+let ctx = delegate(Counter())   # creates context + binds object
+ctx <- increment()               # invoke on the bound object
+```
+
+What about creating a context and binding an object later?
+
+```orthon
+let ctx = delegate()             # create empty delegate context
+ctx <- Counter()                 # initialise the context with an object
+ctx <- increment()               # now invoke on it
+```
+
+Is this allowed? Or must the context always be created with its owner?
+
+### 4. `await(...)` semantics
+
+Is `await(ctx)` blocking or non-blocking?
+
+- In an Immediate context: blocks the calling thread.
+- Inside a deferred context (`<~`): yields to the coroutine scheduler.
+- Inside a delegated context (`<-`): the delegate is single-threaded,
+  so `await` would process the next mailbox message.
+
+The behaviour of `await` depends on **where** it is called, not just
+**what** context it reads from. This is the ambient policy question.
 
 ### 5. Composition with ownership
 
 DELEGATE.md establishes that `delegate` applies to **state owners**,
 not arbitrary code. The `<-` policy inherits this — it serialises
 access to the owner's state. But `<=` (parallel) applies to any
-stateless or owned function. How does the type system distinguish?
+stateless function. How does the type system distinguish?
 
 **Possible answer:** The function's type signature reveals whether it
 captures mutable state. `<=` on a state-capturing closure without
 delegate context is a compile error.
 
-### 6. What about `await` inside function bodies?
+### 6. Ambient policy inside contexts
 
-If a function calls `fetch<.(url)` (immediate, blocks) inside its body,
-and the function itself is running in a delegated context, does it
-block the entire delegate or just yield?
+If a deferred function calls `fn(args)` (Immediate) inside its body,
+does that block the deferred context or yield?
 
-**Possible answer:** The execution policy is ambient — the function
-inherits the policy of its caller. `fetch<.(url)` inside a delegated
-context yields rather than blocks, because `<.` means "materialise now"
-which, in a delegated context, is "yield until result ready."
+**Possible answer:** The execution policy is ambient. Inside a
+delegated context, `fn(args)` (Immediate) means "execute in this
+context synchronously" — it processes the call inline without
+blocking the caller's thread. Inside a deferred context, `fn(args)`
+means "eagerly evaluate within the current coroutine." The unmarked
+`fn(args)` is policy-aware, not context-independent.
 
 ---
 
@@ -324,37 +431,43 @@ which, in a delegated context, is "yield until result ready."
 
 - **Orthogonal.** Function (what) and policy (how) are independent axes.
   Any policy composes with any function.
-- **Minimal.** One concept (Invocation) replaces `call` + `delegate` +
-  `spawn` + `async`/`await`. Policies are a table, not new language
-  constructs.
+- **Minimal.** One concept (Invocation) + context constructors replace
+  `call` + `delegate` + `spawn` + `async`/`await`. Policies are
+  operators, not new language concepts.
 - **Explicit.** The execution policy is visible at every call site.
-  `fetch<.()` vs `fetch<~()` vs `fetch<=()` — the difference is
-  syntactic and obvious.
+  `ctx <- fn()` vs `ctx <= fn()` — the difference is syntactic and
+  obvious.
 - **Extensible.** New policies (`<#` for GPU, `<@` for remote) can be
-  added without changing the language — they're new operators, not new
-  concepts.
+  added as new context constructors + operators.
 - **Colourless functions.** No sync/async bifurcation. Any function
   can be invoked with any policy.
+- **Natural base case.** `fn(args)` is Immediate by default — no
+  operator clutter on the most common invocation form. `obj.method(args)`
+  remains completely unchanged.
+- **Context = tool metaphor.** Create the tool, then use it. Matches
+  how programmers think about resources.
 
 ### Open Risks
 
-- **Syntax verbosity.** `fn<.(x)` is more characters than `fn(x)`.
-  The visual weight of `<` on every invocation may be fatiguing.
-- **Bare `()` ambiguity.** If `fn(x)` is still valid as sugar, when
-  do programmers use it vs `fn<.(x)`? Two ways to say the same thing.
-- **Materialisation ergonomics.** Without `await`, every future read
-  needs an explicit operation. This may be verbose in deeply async
-  code unless good sugar exists.
-- **Delegated context creation.** The hypothesis is clean about
-  *invocation* but doesn't fully resolve how delegated contexts are
-  *created* — this is where the complexity migrates.
+- **Context boilerplate.** Creating a context before every non-immediate
+  call adds verbosity. May need sugar for one-shot contexts.
+- **`await(...)` as StdLib.** If `await` is not a keyword, can it be
+  implemented efficiently? Does the compiler need intrinsic support?
+- **Context lifecycle.** When is a context destroyed? `defer()`,
+  `delegate()`, `parallel()` create resources — who owns them and
+  when are they cleaned up?
+- **Policy proliferation.** With extensible policies, could every
+  library define its own `ctx <OP fn()` operator, reducing consistency?
 
 ---
 
 ## Decision History
 
-- **2026-07-29:** Hypothesis formulated during design exploration.
-  This document created to capture the model, implications, and open
-  questions.
-- **Status:** Exploratory — not accepted. Requires resolution of open
-  questions before EDR.
+| Date | Event |
+|------|-------|
+| 2026-07-29 | Hypothesis formulated: `fn<OP(args)` syntax with `<` between name and args |
+| 2026-07-29 | Refined: `<` between name and args feels foreign. Model changed to prefix `~fn(args)` for deferred + binary `ctx <OP fn(args)` for other policies. |
+| 2026-07-29 | Refined: `~` prefix removed. All non-immediate policies require an **explicit context** created by a constructor (`defer`, `delegate`, `parallel`, `remote`). Operator `<OP` works on context. `await(ctx)` is a regular function. |
+
+**Status:** Exploratory — not accepted. Requires resolution of open
+questions before EDR.
