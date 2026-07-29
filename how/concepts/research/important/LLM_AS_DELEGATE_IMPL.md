@@ -120,6 +120,20 @@ computational model.
    calling convention, error model, and lifetime as any other delegate.
    Callers do not know or care which backend executes the contract.
 
+   > **⚠️ Determinism carve-out.** The calling convention is uniform, but
+   > the *determinism guarantee* is not. Pure-language delegates (`native`,
+   > `mock`) satisfy Orthon's Deterministic Behavior principle (§
+   > `DESIGN_PRINCIPLES.md`): the same inputs always produce the same
+   > observable output. An `llm` delegate does not — two calls with
+   > identical arguments may return different results. This is an inherent
+   > property of LLM inference and is not fixable at the language level.
+   >
+   > **Consequence for callers:** Code that depends on deterministic
+   > behaviour (e.g., idempotent retry, memoisation, repeatable
+   > computation) should not assume `act` calls are deterministic unless
+   > the delegate kind is known to be so. This is a semantic constraint
+   > that lives at the call site, not in the type system.
+
 4. **Testability by substitution.** Replacing an `llm` delegate with a
    `mock` or `native` delegate requires changing only the `impl` block —
    not the call sites.
@@ -231,6 +245,99 @@ The default strategy for `llm` delegates:
 
 ---
 
+## Nondeterminism Semantic Consequences
+
+This section documents what nondeterminism means for code that calls an
+`llm` delegate — and what the language and tooling should provide in
+response.
+
+### Relationship to Orthon's Deterministic Behavior Principle
+
+Orthon's [`DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md) states:
+
+> **Deterministic Behavior** — The same source code should behave
+> identically across optimization levels and implementations.
+
+The `llm` delegate model creates a **carve-out** to this principle:
+pure-language code (expressions, control flow, native delegates) remains
+fully deterministic. Nondeterminism is confined to `llm` delegate
+invocations, which are gated behind an explicit `impl llm` declaration.
+The principle applies to **language semantics**; LLM inference is an
+**external service call** whose behaviour is outside the language's
+semantic guarantees.
+
+This carve-out has precedent in the project: `PARALLELISM_EXECUTOR_MODEL.md`
+already identifies intra-task determinism vs. inter-task nondeterminism
+as a necessary qualification to the principle.
+
+### For Calling Code
+
+- **Idempotency is not automatic.** The same `act` call with the same
+  arguments may return different results on retry. Code that needs
+  idempotent LLM calls must use application-level deduplication
+  (e.g., content hashing, external idempotency keys).
+- **Memoisation requires explicit opt-in.** A generic cache keyed by
+  input arguments alone is unsound. The application must decide whether
+  variant results are acceptable, or use a semantic similarity check.
+- **Composition does not amplify nondeterminism.** If an `act` calls
+  another `act` that happens to be an `llm` delegate, the outer call
+  is not *more* nondeterministic — but it inherits the inner call's
+  nondeterminism. Replacing an inner `llm` with a `native` or `mock`
+  delegate restores determinism at that level. This is the key advantage
+  of the delegate model: nondeterminism is bounded by the `impl` block.
+
+### For Testing
+
+The delegate model enables three testing strategies with escalating
+semantic guarantees:
+
+1. **Mock substitution — deterministic correctness.** Replace `impl llm`
+   with `impl mock` for unit tests. Tests validate type conformance,
+   control flow, and error handling — they do not test LLM behaviour.
+   This is the default and cheapest strategy.
+
+2. **Replay testing — deterministic snapshots.** Record real LLM
+   responses (inputs, prompt, output) in a snapshot file. Replay the
+   snapshot deterministically in CI. Fails if the code changes the
+   prompt or expected schema — guards against regressions without
+   calling the LLM.
+
+3. **Live testing — nondeterminism-aware assertions.** For integration
+   tests that do call the LLM, traditional `assert result == expected`
+   is insufficient because the result is inherently variable. The
+   language should support testing patterns that acknowledge this:
+   - **Range assertions:** `assert result.confidence > 0.8`
+   - **Structural validation:** `assert result matches Sentiment`
+   - **Quorum tests:** run N times, assert that >= K results satisfy
+     a predicate (inspired by BAML's `test ... with quorum`).
+
+   > **Note:** Quorum tests and nondeterminism-aware assertions are not
+   > yet part of Orthon's language-level testing model (which does not
+   > exist yet — see Gap #5 in `notes/baml-concepts-orthon-gap-analysis.md`).
+   > This section establishes the *requirement*; the testing model
+   > concept will define the concrete syntax.
+
+### For Tracing and Observability
+
+BAML's philosophy is *"trace nondeterminism"* — make the variability
+visible in tooling. The `llm` delegate model should provide:
+
+- **Variance tracking per call site.** The execution trace records not
+  just latency and tokens, but also the *output distribution* across
+  repeated calls: how often does the same input produce different
+  outputs, and how divergent are those outputs?
+- **Nondeterminism propagation markers.** When an `act` transitively
+  calls an `llm` delegate, the trace marks the entire call chain as
+  nondeterministic-influenced. This mirrors BAML's insight: an LLM call
+  anywhere in the call graph makes everything above it consequential
+  for nondeterminism.
+- **Replay-aware tracing.** The trace format distinguishes between a
+  live LLM call (nondeterministic, sampled) and a replayed call
+  (deterministic, from snapshot). This prevents false conclusions when
+  comparing traces across environments.
+
+---
+
 ## Alternative Strategies
 
 ### LLM as a Native Language Function
@@ -301,8 +408,18 @@ area.
   language level.
 
 - **Non-determinism remains a property of the implementation.** Two calls
-  with the same inputs may produce different outputs. This is visible in
-  replay testing but cannot be eliminated.
+  with the same inputs may produce different outputs. This is structural
+  nondeterminism (the LLM samples from a probability distribution), not
+  merely implementation variance (e.g., hash order or timing). It:
+  - **Breaks idempotency assumptions** — retrying after a failure may
+    produce a semantically different (though well-typed) result.
+  - **Invalidates memoisation by default** — caching by input arguments
+    alone is incorrect unless the application explicitly accepts stale
+    or variant results.
+  - **Affects testing strategy** — `assert output == expected` is
+    insufficient; quorum tests, range assertions, and statistical
+    validation are required instead (see § Nondeterminism Semantic
+    Consequences).
 
 - **A separate runtime or framework is needed for production-quality
   support.** Caching, retries, model selection, cost tracking, rate
@@ -352,6 +469,13 @@ This concept does **not** cover:
   delegate could stream tokens. This is a delegate-kind extension, not a
   language change.
 
+**Within scope:** Nondeterminism semantics — see
+[§ Nondeterminism Semantic Consequences](#nondeterminism-semantic-consequences).
+This section defines what nondeterminism means for calling code, testing,
+and tracing. It does *not* propose changes to Orthon's Deterministic
+Behavior principle (which requires a Tier 1 EDR); it documents the
+carve-out that `llm` delegates create.
+
 ---
 
 ## Open Questions
@@ -381,6 +505,22 @@ This concept does **not** cover:
    property of the `llm` delegate (making it the delegate's responsibility
    to manage history)?
 
+6. **Should the contract surface nondeterminism to the type system?** An
+   `act` hides its delegate kind from callers — call sites cannot tell
+   whether a call is deterministic (`native`, `mock`) or nondeterministic
+   (`llm`). This is by design (§ Principles — uniform execution model),
+   but it means the compiler cannot warn when a nondeterministic call is
+   used in a context that assumes determinism (e.g., a pure function, a
+   compile-time evaluation, a `const` initialiser). Options:
+   - **No annotation** (current design). Callers assume nothing about
+     determinism. The burden is on the application to test appropriately.
+   - **Explicit effect annotation.** Add `@nondeterministic` (or similar)
+     to the `impl llm` block. The compiler propagates it to all transitive
+     callers, catching accidental use in deterministic contexts.
+   - **Delegate kind leak.** Make the delegate kind part of the `act`'s
+     type signature (e.g., `act ... impl llm`), sacrificing uniformity
+     for visibility.
+
 ---
 
 ## Conclusion
@@ -391,12 +531,31 @@ implementation kind for `act`**. This preserves language purity, provides a
 uniform execution model, and enables AI integration without modifying
 Orthon's base semantics.
 
+The delegate model isolates nondeterminism behind the `act`/`delegate`
+boundary, containing it without eliminating it. This is a deliberate
+trade-off: Orthon preserves its deterministic core and avoids
+LLM-specific semantics entering the language, at the cost of making
+nondeterminism invisible at the type level. The carve-out to Principle 3
+(§ Principles) and the tracing/testing strategies (§ Nondeterminism
+Semantic Consequences) provide the visibility that the type system
+deliberately withholds.
+
 ---
 
 ### Affected Documents
 
-- [ ] `DELEGATE.md` — add `llm` to the list of delegate kinds
-- [ ] `IMPLEMENTATION_POLICIES.md` — add LLM Delegate Policy
-- [ ] `IMPLEMENTATION_STRATEGIES.md` — add LLM delegate to execution strategies
-- [ ] `GLOSSARY.md` — add `llm delegate` term
+- [ ] `DELEGATE.md` — add `llm` to the list of delegate kinds; document
+      determinism carve-out
+- [ ] `IMPLEMENTATION_POLICIES.md` — add LLM Delegate Policy; add
+      Nondeterminism Policy or cross-reference
+- [ ] `IMPLEMENTATION_STRATEGIES.md` — add LLM delegate to execution
+      strategies
+- [ ] `GLOSSARY.md` — add `llm delegate` term; add `nondeterminism`
+      (delegate-level) term
 - [ ] `what/CORE_CONCEPTS.md` — no change (LLM is not a core concept)
+- [ ] `DESIGN_PRINCIPLES.md` — **no change required** (document is locked;
+      the determinism carve-out is documented here, not in the principles
+      document itself)
+- [ ] `notes/baml-concepts-orthon-gap-analysis.md` — update status of Gap #7
+      (Nondeterminism) from "no action" to "addressed by LLM_AS_DELEGATE_IMPL.md
+      § Nondeterminism Semantic Consequences"
