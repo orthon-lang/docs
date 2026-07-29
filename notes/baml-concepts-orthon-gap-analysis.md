@@ -59,14 +59,19 @@ class Ticket {
 An agent sampling tokens will eventually produce an invalid state. If
 that state cannot compile, it cannot ship.
 
-**Orthon status:** `LITERAL_TYPES` is accepted in the Important tier
-(EDR-042), but not elevated to a design *philosophy*. For an LLM-native
-language, this should arguably be Essential-tier — it's a direct
-mitigation of LLM nondeterminism.
+**Orthon status:** `LITERAL_TYPES` is accepted (EDR-043), but the
+"undesirable states unrepresentable" philosophy was not previously named
+as an explicit cross-cutting concern. Research file created at
+`how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md`
+(2026-07-29) to document the pattern and its relationship to EDR-039
+(ADTs), EDR-043 (Literal Types), EDR-018/028 (Null Safety), and
+EDR-045 (Union Types).
 
-**Recommendation:** Elevate literal/singleton types to Essential-tier and
-adopt "undesired states unrepresentable" as an explicit design principle
-in `DESIGN_PRINCIPLES.md`.
+**Recommendation (updated):** Keep the pattern as a documented
+cross-cutting concern in `essential/`. Elevating it to a design principle
+in `DESIGN_PRINCIPLES.md` would require a Tier 1 EDR, since that document
+is locked. The current approach — a dedicated research file linking the
+relevant EDRs — is the correct intermediate step.
 
 ---
 
