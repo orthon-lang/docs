@@ -587,6 +587,12 @@ specification).
 | 9.1 | Build System | Build system & package manager design |
 | 9.2 | Tooling | Formatter, linter, LSP (Language Server Protocol) |
 
+> **Tooling requirements collected during M1 design phases** are
+> catalogued in [`how/tooling/`](../how/tooling/README.md). Each entry
+> includes priority, language feature dependencies, and spec impact.
+> Review this catalogue during M3 planning — it is the input for the
+> Tooling milestone.
+
 **Dependencies:** M1 (tooling depends on the frozen specification).
 
 ---
@@ -623,6 +629,7 @@ milestone.
 | `HIGH_PERFORMANCE_STRATEGY.md` | High-performance strategy profile |
 | `LLM_STRATEGY.md` | LLM strategy profile — maximum LLM assistance during development |
 | `PROCESS_INVENTORY.md` | Process-lens catalogue of all tools, methods, and approaches |
+| `how/tooling/` | Forward-looking tooling requirements collected during language design |
 
 > Concept-specific architecture documents (Parser, Type System, Name
 > Resolution, IR) are initial stubs and will be designed through

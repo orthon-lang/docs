@@ -32,6 +32,7 @@ specific failure mode each one prevents.
 | Tools Decision Records (TDR) | Record | EDR-001 | Process tools without documented rationale | Process becomes unexamined ritual |
 | Layered Architecture | Architecture | EDR-010 | Cross-layer coupling | Changes in one layer ripple unpredictably to others |
 | Process Inventory | Inventory | EDR-011 | No map of process tools | Onboarding friction; tool blind spots |
+| Tooling Requirements | Artifact | — | Implementation requirements lost between spec freeze and implementation | Tooling ideas from design phase forgotten by M3 |
 
 ---
 
@@ -49,6 +50,8 @@ flowchart TD
     EDR-005["EDR-005: Fitness Functions"] --> EDR-007
     EDR-006 --> EDR-007
     EDR-007 --> EDR-001["EDR-001: EDR System"]
+    EDR-007 --> TLR["Tooling Requirements"]
+    TLR -.-> ROADMAP["ROADMAP.md § M3"]
     EDR-001 --> EDR-011["EDR-011: Process Inventory"]
     EDR-001 -.-> EDR-011
     EDR-002 -.-> EDR-011
@@ -58,6 +61,7 @@ flowchart TD
     EDR-006 -.-> EDR-011
     EDR-007 -.-> EDR-011
     EDR-010 -.-> EDR-011
+    TLR -.-> EDR-011
 ```
 
 Solid arrows: direct dependency (tool B requires tool A).
@@ -73,13 +77,14 @@ Which tools are active at each milestone:
 |-----------|-------------|
 | **M0 — Vision** | EDR-002 (Gates), EDR-003 (Methods), EDR-004 (Checklist), EDR-005 (Fitness Functions), EDR-006 (Policies), EDR-001 (EDR System), EDR-010 (Architecture) |
 | **M1 — Inventory** | All M0 tools + EDR-011 (Process Inventory) |
-| **M2 — Concept Design** | EDR-007 (Concept Design Review), all Gates (EDR-002), all Methods (EDR-003), Checklist (EDR-004), Fitness Functions (EDR-005), Policies (EDR-006), EDR (EDR-001) |
+| **M2 — Concept Design** | EDR-007 (Concept Design Review), all Gates (EDR-002), all Methods (EDR-003), Checklist (EDR-004), Fitness Functions (EDR-005), Policies (EDR-006), EDR (EDR-001), **Tooling Requirements** (collection starts) |
 | **M3 — Cross-cutting** | `ARCHITECTURAL_INTEGRITY_GATE`, `LOGICAL_CONSISTENCY_GATE` (from EDR-002) |
 | **M4 — Consistency** | `CONCEPTUAL_SIMPLICITY_GATE`, `LONG_TERM_MAINTAINABILITY_GATE` (from EDR-002) |
 | **M5 — Specification** | Fitness Functions (EDR-005) — guarding against late design changes |
 | **M6 — Validation** | Fitness Functions (EDR-005) |
 | **M7 — Freeze** | Fitness Functions (EDR-005) |
 | **M8–M10** | Architecture (EDR-010), Policies (EDR-006) |
+| **M3 (post-M1)** | **Tooling Requirements** (consumed — reviewed and actioned) |
 
 ---
 

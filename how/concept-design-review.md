@@ -57,7 +57,7 @@ concepts that pass all gates and satisfy the checklist are accepted.
 
 ---
 
-## 5-Step Procedure
+## 6-Step Procedure
 
 Each concept goes through the following 5 steps in order. Procedure steps
 capture the creative design work; the deliverable (EDR + concept document)
@@ -69,7 +69,8 @@ is handled separately in the Output section below.
 | 2 | Minimal Solution | What is the simplest valid solution? | Solution sketch |
 | 3 | Principle Check | Which Design Principles does it satisfy? | Principle mapping |
 | 4 | Examples | Show all canonical forms | Examples list |
-| 5 | EDR | Record the decision with rationale | EDR file |
+| 5 | Tooling Implications | Does this concept imply tooling requirements? | Tooling requirement(s) or "none" |
+| 6 | EDR | Record the decision with rationale | EDR file |
 
 ### Step Details
 
@@ -109,12 +110,32 @@ feature. Follow the *Show All Canonical Forms* principle from
 **Output:** Code examples demonstrating minimal, typical, edge case,
 and incorrect usage categories.
 
-#### 5. EDR
+#### 5. Tooling Implications
+
+Before finalising the concept, check whether it has implications
+for developer tooling, LLM agent tooling, or the implementation repo
+architecture. Consider:
+
+- Does this concept enable a new tool? (e.g., queryable AST →
+  `orthon describe`, function-as-entry-point → `orthon run`)
+- Does this concept require tooling support to be usable?
+- Does this concept constrain the implementation repo architecture?
+
+If yes, create a Tooling Requirement in `how/tooling/` using the
+[`_tooling-requirement.md`](tooling/_tooling-requirement.md) template.
+
+**Output:** Optional — one `.md` file in `how/tooling/` per implication.
+
+> **Note:** Tooling Requirements are not language concepts. They inform
+> the spec but are implemented post-freeze (M2–M4). See
+> [`how/tooling/README.md`](tooling/README.md) for the full process.
+
+#### 6. EDR
 
 Create an Engineering Decision Record (Architecture category) accepting
 the concept. Use the [`_edr-architecture.md`](templates/_edr-architecture.md)
 template. The EDR must cite the Problem, Solution, and Principle Check
-from steps 1-3.
+from steps 1-4.
 
 **Output:** One `decision_records/architecture/EDR-NNN-concept-name.md` file.
 
@@ -146,7 +167,9 @@ The deliverables of a Concept Design Review are:
    template for the required structure).
 2. **EDR** in `docs/how/decision_records/architecture/` — records the decision, rationale, and
    alternatives considered (Architecture category).
-3. **CORE_CONCEPTS.md registration** — the concept is entered into the
+3. **CORE_CONCEPTS.md registration** — the concept is en
+4. **Tooling Requirement(s)** (optional) — in `docs/how/tooling/` if the
+   concept has tooling implications (see Step 5).tered into the
    accepted-concept registry at `what/CORE_CONCEPTS.md`.
 
 ---
@@ -161,7 +184,7 @@ The transition from **DRAFT** (concept research in `how/concepts/research/`) to
 | Criteria | Requirement |
 |----------|-------------|
 | **Owner** | Solo author (per `TODO.md` convention) |
-| **Procedure** | All 5 Concept Design Review steps completed |
+| **Procedure** | All 6 Concept Design Review steps completed |
 | **EDR** | Architecture-category EDR filed in `decision_records/architecture/` |
 | **Gate validation** | Passes all 7 Decision Validation gates (`DECISION_VALIDATION.md`) |
 | **LLM Generability Gate** | Passes the 5-criteria LLM Generability Gate check — see [`llm-native-concept-shortlist.md`](../notes/llm-native-concept-shortlist.md) § LLM Generability Gate Requirement |
