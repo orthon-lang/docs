@@ -87,6 +87,21 @@
 - [ ] research Span / Memory View concept (`docs/how/concepts/research/SPAN.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
+- [ ] research Discriminated Unions with discriminator field concept
+      (`docs/how/concepts/research/important/DISCRIMINATED_UNIONS.md`)
+  - **Owner:** Solo author
+  - **Target:** Phase 3
+  - **Ref:** Pydantic `DiscriminatedUnion(discriminator='kind')` — явный дискриминатор для union types; LLM-native: LLM точно знает, какое поле писать
+- [ ] research Strict/Lax Modality concept
+      (`docs/how/concepts/research/deferrable/STRICT_LAX_MODALITY.md`)
+  - **Owner:** Solo author
+  - **Target:** Phase 3
+  - **Ref:** Pydantic `model_config(strict=True)` — явный выбор строгого/либерального режима на уровне типа/модуля; пересекается с Execution Model и TYPE_SYSTEM.md
+- [ ] research Dual-Use Schema concept (validation + serialization + prompt generation)
+      (`docs/how/concepts/research/deferrable/DUAL_USE_SCHEMA.md`)
+  - **Owner:** Solo author
+  - **Target:** Phase 3
+  - **Ref:** Pydantic одна модель → `model_validate_json()` + `model_dump()` + JSON Schema; Orthon разделяет эти concerns — нужно исследовать unified подход
 
 ## Milestone 2 — Anti-pattern & Declarative Design Analysis
 
@@ -229,4 +244,9 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 - [ ] decide: structured error format for LLM consumption (JSON schema)
   - **Owner:** Solo author
   - **Target:** Phase 3
+- [ ] research: Dependency Injection for AI agents — PydanticAI `Dep()` pattern
+      (`docs/how/concepts/research/important/AGENT_DEPENDENCY_INJECTION.md`)
+  - **Owner:** Solo author
+  - **Target:** Phase 3
+  - **Ref:** PydanticAI `Dep()` / `RunContext[Deps]`; пересекается с Execution Program Model (семантика программы отделена от стратегии получения ресурсов)
 
