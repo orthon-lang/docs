@@ -290,6 +290,55 @@ ctx <- list.append(item)       # Submit — method call on delegate context
 ctx <- item                    # Standalone message to context
 ```
 
+#### `using` / context manager — unified
+
+Resource management (Python's `with`, C#'s `using`, Java's
+`try-with-resources`) is not a separate language feature. It is the
+same pattern — **create a context, submit invocations, materialise
+results** — with one additional property: the context's destructor
+guarantees cleanup of the wrapped resource.
+
+```orthon
+# Before (Python-style):
+with open("data.txt") as file:
+    content = file.read()
+    process(content)
+
+# After — explicit context:
+let ctx = delegate(open("data.txt"))
+ctx <- file.read()
+let content = await(ctx)
+process(content)
+# ctx destroyed at scope exit → file.close() called automatically
+
+# After — using sugar (desugars to the above):
+using file = open("data.txt")
+    content = file.read()
+    process(content)
+```
+
+The `using` construct desugars to:
+1. Create an execution context wrapping the resource
+2. Bind the resource to a name within the block scope
+3. Submit invocations via ordinary `call` (immediate inside the context)
+4. Destroy the context at scope exit, triggering resource cleanup
+
+`using` introduces **no new semantics** — it is syntactic sugar for
+the common pattern of "context wrapping a resource with a
+deterministic destructor." The resource's cleanup is the context's
+destructor, not a separate `close()` call the programmer must
+remember.
+
+**Why `resource(...)` is not a separate constructor.** An earlier
+candidate considered adding a dedicated `resource(obj)` context
+constructor for resource management. This was rejected: every
+execution context (`delegate`, `defer`, `parallel`, `remote`)
+already has a lifecycle — a constructor that wraps an object is
+naturally a context whose destructor cleans up that object.
+`delegate(open("data.txt"))` is already a resource-managing context;
+no new constructor type is needed. The `using` sugar simply makes
+this pattern more concise.
+
 ---
 
 ### Colourless Functions
@@ -354,6 +403,110 @@ The constructor is named `defer(...)`, not `async(...)`. Rationale:
 
 ---
 
+## Context Manager as Syntactic Sugar
+
+The model above eliminates `async`/`await`, `spawn`, and `delegate send`
+as separate features. The **context manager** (`with`/`using`) follows
+the same trajectory: it is syntactic sugar over the Execution Context +
+Scope pattern, not a separate language feature.
+
+### The Pattern
+
+Every resource that needs scoped cleanup follows the same three-step
+structure:
+
+```orthon
+{
+    let ctx = delegate(openResource())   # 1. create context wrapping resource
+    ctx <- useResource()                  # 2. submit operations
+    let result = await(ctx)               # 3. materialise final result
+}                                         # ctx destroyed → resource cleaned up
+```
+
+The `using` sugar collapses this to:
+
+```orthon
+using resource = openResource()
+    result = useResource()
+```
+
+### Desugaring Rules
+
+| `using` form | Desugars to |
+|---|---|
+| `using x = expr` | `let __ctx = delegate(expr); __ctx <- ...; await(__ctx)` |
+| `using x = expr` with `finally` | `let __ctx = delegate(expr); try ... finally { release(__ctx) }` |
+| `using x = expr1, y = expr2` | Nesting: `using x = expr1 { using y = expr2 { ... } }` |
+
+### Relationship to Ownership
+
+`using` is consistent with Orthon's ownership model
+([`SEMANTIC_MODEL.md`](../../what/SEMANTIC_MODEL.md) § Ownership):
+
+- The resource (file, socket, handle) is a **resource-typed value** —
+  it has exclusive responsibility and cannot be silently duplicated.
+- `using` transfers the resource into the context's ownership at
+  construction. The context becomes the owner and is responsible for
+  destruction.
+- The bound name inside the `using` block is a **borrow** of the
+  resource held by the context — the programmer can invoke operations
+  on it, but the context retains ownership.
+- At scope exit, the context's destructor runs, which closes/releases
+  the resource. This is deterministic and guaranteed, regardless of
+  how the block is exited (normal return, error, early break).
+
+### Semantic Dimensions Involved
+
+| Dimension | Role in `using` |
+|-----------|-----------------|
+| **Lifetime** | Primary — scope-bound destruction is the core guarantee |
+| **Ownership** | Transfer of resource ownership to context; borrow inside block |
+| **Evaluation** | Operations inside the block execute in the context's policy (immediate by default) |
+| **Mutation** | `proc` operations on the resource are serialised through the context |
+
+### Comparison with Alternatives
+
+| Mechanism | How it works | Orthon equivalent |
+|-----------|-------------|-------------------|
+| Python `with` | Context manager protocol (`__enter__`/`__exit__`) | `using` desugars to context constructor + scope |
+| Go `defer` | Statement-level, not scope-level | `using` is scope-level, deterministic |
+| Rust RAII | Ownership-based, destructor on drop | Same principle: context destructor = resource cleanup |
+| Java `try-with-resources` | Closeable interface, try-block syntax | `using` block with desugaring to context |
+
+### Why Not RAII-only?
+
+Orthon's ownership model already supports RAII: a resource-typed value
+with a destructor is cleaned up when it goes out of scope. Why add
+`using` at all?
+
+Because **RAII only works when the resource has a single owner that
+stays in scope**. Two patterns break pure RAII:
+
+1. **Shared ownership** — a resource held by a delegate that outlives
+   the creating scope: `let shared = delegate(resource)` — the context
+   owns the resource, not the creating scope.
+2. **Conditional cleanup** — a resource may or may not outlive its
+   creating scope depending on a runtime path (lend to a parallel
+   worker vs. close immediately).
+
+`using` provides an explicit, scope-anchored guarantee that is
+independent of ownership topology. It is the **declarative form** of
+RAII: "this resource is scoped to this block."
+
+### Relationship to `SCOPED_RESOURCE_LIFECYCLE.md`
+
+The earlier research in
+[`SCOPED_RESOURCE_LIFECYCLE.md`](../essential/SCOPED_RESOURCE_LIFECYCLE.md)
+posed three open questions. The Execution Context model answers them:
+
+| Question | Answer |
+|----------|--------|
+| RAII or explicit scope blocks? | Both. RAII is the semantic foundation (ownership + destructor). `using` is the explicit scope block — syntactic sugar over the context pattern. They compose: use RAII for single-owner resources, `using` for context-wrapped resources. |
+| Resources that outlive their scope? | Move the context: `let shared = delegate(file); return shared` — the context (and its resource) outlives the creating scope. The context is the owner; its lifecycle is decoupled from the creating scope. |
+| Built-in or library? | The context constructors (`delegate`, `defer`) are language-level because they require compiler support. `using` is a syntax-level desugaring — it could be language or library sugar (Phase 5 decision). The key semantic commitment (context destructor → resource cleanup) is language-level because it ties into the Lifetime dimension's scope-based destruction guarantee. |
+
+---
+
 ## Implications for Orthon
 
 ### Syntax
@@ -363,6 +516,7 @@ The constructor is named `defer(...)`, not `async(...)`. Rationale:
 - `await(ctx)` is a regular function, not a keyword.
 - `obj.method(args)` — remains natural, unchanged.
 - `ctx <- obj.method(args)` — contextual method call, natural.
+- `using x = expr` — desugars to context construction + scope-bound destructor.
 
 ### Primitive Set
 
@@ -387,6 +541,7 @@ the constructor requires compiler-level semantics:
 | `delegate(obj)` | Language | Isolation guarantees, mailbox semantics |
 | `parallel()` | StdLib | Thread pool is an implementation detail |
 | `remote(url)` | StdLib | Network protocol is an implementation detail |
+| `using` | Language (sugar) | Syntactic sugar over `delegate(obj)` + scope + destructor |
 | `await(ctx)` | StdLib | Blocking/yielding behaviour depends on context |
 
 ### Current Documents Affected
@@ -396,11 +551,13 @@ the constructor requires compiler-level semantics:
 | [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context |
 | [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the submit operator |
 | [`CONCURRENCY_MODEL.md`] | Absorbed into context model |
-| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `return()` |
-| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — single `<-` |
-| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, add `Invocation`, `Execution Context`, remove `Spawn`, `Async` |
+| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `return()`, resource lifecycle via context destructor |
+| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — single `<-`; add `using` sugar |
+| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, add `Invocation`, `Execution Context`, `using`, remove `Spawn`, `Async` |
 | [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
 | [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section |
+| [`SCOPED_RESOURCE_LIFECYCLE.md`](../essential/SCOPED_RESOURCE_LIFECYCLE.md) | Superseded — absorbed into context model. `using` is syntactic sugar over context + scope, not a separate mechanism. |
+| [`DECLARATIVE_CONSTRUCTS.md`](../../important/DECLARATIVE_CONSTRUCTS.md) | Update § Resource Management — replace standalone `using` analysis with desugaring to Execution Context pattern. |
 
 ---
 
@@ -502,6 +659,36 @@ above their first use. Naming conventions (`pool`, `worker`, `counter`)
 communicate intent. The type system guarantees correctness. This is a
 conscious trade-off: less syntax for slightly less local explicitness.
 
+### 8. Context destructor contract
+
+Does every context automatically clean up its wrapped resource when
+destroyed, or is cleanup the programmer's responsibility?
+
+```orthon
+let ctx = delegate(open("data.txt"))
+ctx <- read_all()
+# ctx goes out of scope — is file.close() called automatically?
+```
+
+**Option A (default):** Contexts clean up their wrapped resources by
+default. Consistent with the Lifetime dimension's scope-based
+destruction (Semantic Invariant 3) and Ownership's single-owner model.
+The context owns the resource; when the context is destroyed, it calls
+the resource's destructor. `using` is pure sugar over `{ ctx =
+delegate(obj); ... }`.
+
+**Option B (explicit):** Contexts do NOT automatically clean up
+wrapped resources. The programmer must call `release(ctx)` or
+`close(resource)` explicitly before the context is destroyed. `using`
+adds semantics beyond sugar — it guarantees cleanup that bare context
+usage does not.
+
+**Possible answer:** Option A. Automatic cleanup is consistent with
+the Principle of Least Astonishment: a file handle created inside a
+context should not leak when the context is destroyed. `using` remains
+pure sugar, and the context destructor contract is uniform across all
+context types.
+
 ---
 
 ## Evaluation
@@ -554,6 +741,7 @@ conscious trade-off: less syntax for slightly less local explicitness.
 | 2026-07-30 | Rejected: reverse `<-` for extraction — creates operator ambiguity (direction depends on operand types). |
 | 2026-07-30 | Confirmed: `await(ctx)` and `return(ctx)` as named functions for result extraction. No new operators. |
 | 2026-07-30 | Renamed: `EXECUTION_POLICY_HYPOTHESIS.md` → `EXECUTION_CONTEXT_INVOCATION.md`. Old file deprecated. |
+| 2026-07-30 | Integrated Context Manager (`using`) as syntactic sugar over Execution Context + Scope. `using` desugars to `delegate(obj)` + block + scope-bound destructor. No new semantics. `SCOPED_RESOURCE_LIFECYCLE.md` superseded. |
 
 **Status:** Exploratory — not accepted. Requires resolution of open
 questions before EDR.
