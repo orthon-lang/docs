@@ -1,18 +1,17 @@
 # Execution Policy Hypothesis — Unifying Invocation
 
-> **⚠️ DRAFT — Exploratory hypothesis.**
-> This document captures a design hypothesis under active exploration.
-> It proposes removing the distinction between `call`, `delegate`, `spawn`,
-> and `async`/`await`, replacing them with a single **Invocation** operation
-> whose **execution policy** is selected by a syntactic operator at the
-> call site.
+> **⚠️ DEPRECATED — Superseded by [`EXECUTION_CONTEXT_INVOCATION.md`](EXECUTION_CONTEXT_INVOCATION.md).**
 >
-> **Status:** Exploratory — not accepted.
-> **Related:** [`DELEGATE.md`](DELEGATE.md) (current execution policy model),
-> [`CALL_PRIMITIVE.md`](CALL_PRIMITIVE.md) (if exists), [`FUNCTIONS.md`](FUNCTIONS.md),
-> [`CONCURRENCY_MODEL.md`](CONCURRENCY_MODEL.md) (current concurrency model, superseded if hypothesis accepted),
-> [`EXECUTION_PROGRAM.md`](EXECUTION_PROGRAM.md)
-> **See also:** [`../../what/PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) § 3.2.3 `call`
+> This document captured the initial design hypothesis (multiple operators per context
+> type). The model has since been refined into **Execution Context Invocation** — a
+> single operator `<-` for all contexts, with context constructors determining the
+> execution policy rather than distinct operators.
+>
+> This file is preserved for historical reference (Decision History, design
+> trajectory). All new work should reference the new document.
+>
+> **Status:** Deprecated.
+> **Superseded by:** [`EXECUTION_CONTEXT_INVOCATION.md`](EXECUTION_CONTEXT_INVOCATION.md)
 
 ---
 
