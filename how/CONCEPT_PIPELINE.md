@@ -43,12 +43,16 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
            ▼
 ┌─────────────────────────────┐
 │ Concept Design Review       │  ◄── DETAILED DESIGN
-│ (5 steps)                   │      1. Idea/Problem
+│ (6 steps)                   │      1. Idea/Problem
 │ how/concept-design-review.md│      2. Minimal Solution
-└──────────┬──────────────────┘      3. Principle Check
-           │                         4. Examples
-           │                         5. EDR
-           ▼
+│                             │      3. Principle Check
+│                             │      4. Examples
+│               ▲             │      5. Convergence Check ★
+│               │ iteration   │      6. EDR (only when baked)
+│               │             │
+└───────────────┼─────────────┘
+                │ (pass)
+                ▼
 ┌─────────────────────────────┐
 │ Decision Validation Gates   │  ◄── VALIDATION
 │ 7 gates                     │      Each gate = binary verdict or flag
@@ -189,17 +193,53 @@ composition formula. See EDR-012 for the full classification rule.
 
 ---
 
-### 5. Concept Design Review (5 Steps)
+### 5. Concept Design Review (6 Steps)
 
 **Document:** [`how/concept-design-review.md`](concept-design-review.md)
 
-The core design workflow. Each concept undergoes 5 steps in order —
+The core design workflow. Each concept undergoes these steps in order —
 see [`concept-design-review.md`](concept-design-review.md) for the full
 procedure with step descriptions and gate mappings.
 
-**Step 5 (EDR)** creates the Architecture-category EDR file.
+```
+  1. Idea/Problem
+  2. Minimal Solution
+  3. Principle Check
+  4. Examples
+      │
+      ▼  ← iteration loop (if check fails)
+  5. Convergence Check ◄── NEW
+      │
+      ▼
+  6. EDR
+```
+
+**Step 5 — Convergence Check (pre-EDR gate).** Before writing the EDR,
+verify the design is "baked". This is a lightweight checklist, not a
+full validation gate — it prevents premature formalisation:
+
+- [ ] **Syntax reviewed** — no conflicts with existing syntax (Semantic Purity,
+      `()` as call, occupied keywords, naming collisions)
+- [ ] **Edge cases probed** — counterexamples considered: composition with
+      existing concepts, mutation, boundary values, error paths
+- [ ] **Desugaring verified** — if Level 2 (Language Pattern), the composition
+      formula is shown and confirmed correct
+- [ ] **User/stakeholder agrees** — design feels natural; no open
+      "а что если..." / "what about..." questions remain
+- [ ] **No remaining ambiguity** — all terms defined; no "decide later"
+      items that could change fundamental semantics
+
+If any item fails → return to step 2 (Minimal Solution) and iterate.
+Do NOT proceed to the EDR until all items pass. EDR is a **record**
+of a stable decision, not a draft for iteration.
+
+Convergence typically requires 1-3 dialogue cycles: first analysis
+reveals surface-level issues, user probing reveals deeper constraints,
+final review confirms no surprises remain.
+
+**Step 6 (EDR)** creates the Architecture-category EDR file.
 Interactions analysis is deferred to Phase 6 (Cross-Cutting Review)
-and is not part of the individual 5-step Concept Design Review.
+and is not part of the individual Concept Design Review.
 
 ---
 
