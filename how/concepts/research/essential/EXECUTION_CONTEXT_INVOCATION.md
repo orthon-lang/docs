@@ -68,11 +68,11 @@ ctx <- method(params)      — submit to coroutine
 ctx = delegate(obj)        — mailbox context
 ctx <- method(params)      — submit to mailbox
 
-ctx = parallel()           — thread pool context
-ctx <- method(params)      — submit to pool
+ctx = spawn()              — thread context
+ctx <- method(params)      — submit to thread pool
 
-ctx = remote(url)          — remote context
-ctx <- method(params)      — submit to remote node
+ctx = fork()               — process context
+ctx <- method(params)      — submit to process pool
 ```
 
 Invocation becomes **two-dimensional**:
@@ -99,7 +99,7 @@ semantics at the call site. `ctx <~ fn()` signals "coroutine yield" to the reade
 type of `ctx` to understand what happens to the caller.
 
 **Argument for a single operator:** The context already knows its policy.
-`delegate(Counter)` is a different type from `parallel()`. The operator's only
+`delegate(Counter)` is a different type from `spawn()`. The operator's only
 job is to transfer execution to the context — what the context does with it is the
 context's responsibility. This is more orthogonal: the *what* (invocation) is
 separated from the *how* (context), and the syntax does not duplicate information
@@ -164,12 +164,14 @@ opposite dataflow directions depending on operand types — also loss of local r
 **Decision:** Extraction uses named functions, not operators:
 
 ```orthon
-result = await(ctx)      # Materialise result from any context
-owner = return(ctx)      # Extract owner, terminate delegate
+result = await(ctx)      # Defer — yield scheduler, resume when ready
+owner = take(ctx)        # Delegate — extract owner, terminate context
 ```
 
-`await` and `return` are regular functions (with possible compiler intrinsic support).
-Their semantics are polymorphic on context type — no new operators needed.
+`await` and `take` are context-specific named functions (with possible compiler
+intrinsic support). Each context type defines its own extraction vocabulary.
+For `spawn`/`fork`, extraction uses the generator protocol (`next()`/`stop()`).
+`grab`/`gather` are StdLib sugar over the generator.
 
 ---
 
@@ -186,7 +188,7 @@ ctx <- method(params)      # submit invocation to this context
 ```
 
 This mirrors the natural pattern: you create a tool, then use it.
-`defer(...)`, `delegate(...)`, `parallel()`, `remote(url)` are all
+`defer(...)`, `delegate(...)`, `spawn()`, `fork()` are all
 **context constructors** — they create an execution context with the
 desired policy.
 
@@ -221,10 +223,10 @@ call syntax `fn(args)` is Immediate by default.
 | Constructor | Creates | Execution policy |
 |-------------|---------|------------------|
 | `defer(obj)` | Coroutine context | Cooperative, suspending |
-| `delegate(obj)` | Mailbox context | Sequential, non-blocking |
-| `parallel()` | Thread pool context | Parallel, non-blocking |
-| `remote(url)` | Remote execution context | Network, non-blocking |
-| — | Immediate (no context needed) | Synchronous, blocking |
+| `delegate(obj)` | Mailbox context | Sequential, ownership-scoped |
+| `spawn()` | Thread context | Parallel, shared memory |
+| `fork()` | Process context | Parallel, isolated memory |
+| — | Immediate | Synchronous, blocking |
 
 ---
 
@@ -254,18 +256,39 @@ let data = await(ctx)               # materialise result
 context. It is not a keyword — it blocks or yields depending on the
 context type and the ambient execution environment.
 
-#### `spawn` — eliminated
+#### `spawn` / `fork` — unified
+
+The old `spawn` keyword splits into two context constructors with different
+memory models:
+
+```orthon
+# Threading (shared memory):
+let pool = spawn()
+pool <- loadImage("a.jpg")
+pool <- loadImage("b.jpg")
+let results = gather(pool)     # StdLib: next() in a loop
+
+# Parallelism (isolated memory):
+let cluster = fork()
+cluster <- processChunk(data, 0..100)
+cluster <- processChunk(data, 100..200)
+let first = grab(cluster)       # StdLib: next() + stop()
+```
+
+Extraction for `spawn`/`fork` uses the **generator protocol**:
+`next() -> Option<T>` (blocking, returns `none` when depleted)
+and `stop()` (cancel pending, clean up resources).
+
+#### `delegate send` — unified
 
 ```orthon
 # Before:
-let t1 = spawn async loadImage("a.jpg")
-let t2 = spawn async loadImage("b.jpg")
+let counter = delegate(Counter(0))
+counter <- increment()
 
 # After:
-let pool = parallel()
-pool <- loadImage("a.jpg")
-pool <- loadImage("b.jpg")
-let results = await(pool)
+let counter = delegate(Counter())   # create delegate context
+counter <- increment()              # submit to context
 ```
 
 #### `delegate send` — unified
@@ -278,6 +301,7 @@ counter <- increment()
 # After:
 let counter = delegate(Counter())   # create delegate context
 counter <- increment()              # submit to context
+let result = take(counter)          # extract owner, terminate context
 ```
 
 #### Method calls in context
@@ -332,7 +356,7 @@ remember.
 **Why `resource(...)` is not a separate constructor.** An earlier
 candidate considered adding a dedicated `resource(obj)` context
 constructor for resource management. This was rejected: every
-execution context (`delegate`, `defer`, `parallel`, `remote`)
+execution context (`delegate`, `defer`, `spawn`, `fork`)
 already has a lifecycle — a constructor that wraps an object is
 naturally a context whose destructor cleans up that object.
 `delegate(open("data.txt"))` is already a resource-managing context;
@@ -360,15 +384,16 @@ let b = await(d)
 
 let g = delegate()
 g <- fetch(url)                             # Delegated
-let c = await(g)
+let c = take(g)
 
-let p = parallel()
-p <- fetch(url)                             # Parallel
-let d = await(p)
+let pool = spawn()
+pool <- fetch(url)                          # Thread
+let first = fetch(pool.next())              # Generator: next()
+pool.stop()
 
-let r = remote("https://worker.node")
-r <- fetch(url)                             # Remote
-let e = await(r)
+let cluster = fork()
+cluster <- fetch(url)                       # Process
+let all = gather(cluster)                   # StdLib: next() loop
 ```
 
 ---
@@ -379,14 +404,15 @@ Three distinct operations, two syntactic mechanisms:
 
 | Operation | Mechanism | Notes |
 |-----------|-----------|-------|
-| Create context | Constructor: `defer(obj)`, `delegate(obj)`, `parallel()`, `remote(url)` | Allocates resources, establishes policy |
+| Create context | Constructor: `defer(obj)`, `delegate(obj)`, `spawn()`, `fork()` | Allocates resources, establishes policy |
 | Submit invocation | Operator: `ctx <- call` | Single operator for all contexts |
-| Materialise result | Function: `await(ctx)`, `return(ctx)` | Polymorphic on context type |
+| Materialise result | Context-specific: `await(ctx)`, `take(ctx)`, `next()/stop()` | Per-context vocabulary |
 
 The model separates:
-1. **Context construction** — allocating a mailbox, thread pool, coroutine
+1. **Context construction** — allocating a coroutine, mailbox, thread pool, process pool
 2. **Invocation submission** — `<-` transfers execution to the context
-3. **Result materialisation** — `await(...)` / `return(...)` reads the result
+3. **Result materialisation** — context-specific extraction (`await` for defer,
+   `take` for delegate, `next()`/`stop()` generator for spawn/fork)
 
 ---
 
@@ -539,25 +565,26 @@ the constructor requires compiler-level semantics:
 |-------------|----------------------|--------|
 | `defer(obj)` | Language | Coroutine state machine requires compiler support |
 | `delegate(obj)` | Language | Isolation guarantees, mailbox semantics |
-| `parallel()` | StdLib | Thread pool is an implementation detail |
-| `remote(url)` | StdLib | Network protocol is an implementation detail |
+| `spawn()` | Language | Thread semantics, cancellation require runtime support |
+| `fork()` | Language | Process isolation requires OS-level support |
 | `using` | Language (sugar) | Syntactic sugar over `delegate(obj)` + scope + destructor |
-| `await(ctx)` | StdLib | Blocking/yielding behaviour depends on context |
+| `await(ctx)` | StdLib | Yield/resume behaviour depends on context |
+| `next()`/`stop()` | Language | Generator protocol on spawn/fork contexts |
 
 ### Current Documents Affected
 
 | Document | Change |
 |----------|--------|
-| [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context |
-| [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the submit operator |
-| [`CONCURRENCY_MODEL.md`] | Absorbed into context model |
-| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `return()`, resource lifecycle via context destructor |
-| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — single `<-`; add `using` sugar |
-| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, add `Invocation`, `Execution Context`, `using`, remove `Spawn`, `Async` |
+| [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context; add generator protocol |
+| [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the submit operator, `take()` extraction |
+| [`CONCURRENCY_MODEL.md`](../important/CONCURRENCY_MODEL.md) | Absorbed into context model — replaced by spawn/fork contexts |
+| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `take()`, generator `next()`/`stop()`, resource lifecycle via context destructor |
+| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — single `<-`; add `using` sugar; generator syntax (deferred to Phase 5) |
+| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, `Spawn`; add `Invocation`, `Execution Context`, `using`, `take`, generator protocol; remove `Async`, `parallel` |
 | [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
 | [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section |
 | [`SCOPED_RESOURCE_LIFECYCLE.md`](../essential/SCOPED_RESOURCE_LIFECYCLE.md) | Superseded — absorbed into context model. `using` is syntactic sugar over context + scope, not a separate mechanism. |
-| [`DECLARATIVE_CONSTRUCTS.md`](../../important/DECLARATIVE_CONSTRUCTS.md) | Update § Resource Management — replace standalone `using` analysis with desugaring to Execution Context pattern. |
+| [`DECLARATIVE_CONSTRUCTS.md`](../important/DECLARATIVE_CONSTRUCTS.md) | Update § Resource Management — replace standalone `using` analysis with desugaring to Execution Context pattern. |
 
 ---
 
@@ -615,27 +642,52 @@ ctx <- increment()               # now invoke on it
 
 Is this allowed? Or must the context always be created with its owner?
 
-### 4. `await(...)` semantics
+### 4. `await(...)` semantics — **RESOLVED**
 
-Is `await(ctx)` blocking or non-blocking?
+Each context type uses its own extraction vocabulary, eliminating the
+ambient policy problem.
 
-- In an Immediate context: blocks the calling thread.
-- Inside a deferred context: yields to the coroutine scheduler.
-- Inside a delegated context: the delegate is single-threaded,
-  so `await` would process the next mailbox message.
+### OQ4 Resolution — Context-Specific Extraction Vocabulary
 
-The behaviour of `await` depends on **where** it is called, not just
-**what** context it reads from. This is the ambient policy question.
+The following matrix was adopted on 2026-07-30 through the Concept
+Design Review (Convergence Check) process.
+
+| # | Lens | Constructor | Extraction | Underlying model |
+|---|------|-------------|------------|------------------|
+| 1 | **Direct** | — | `fn(args)` | Immediate call |
+| 2 | **Async** | `defer(obj)` | `await(ctx)` | Coroutine (cooperative, suspending) |
+| 3 | **Delegation** | `delegate(obj)` | `take(ctx)` | Actor (ownership transfer, mailbox) |
+| 4 | **Threading** | `spawn()` | `next()` / `stop()` | Thread (shared memory, parallel) |
+| 5 | **Parallelism** | `fork()` | `next()` / `stop()` | Process (isolated memory, parallel) |
+
+**Key decisions:**
+
+1. **`defer`** — constructor stays. `async` rejected (baggage, coloured functions).
+2. **`await`** — only for `defer`. Each context uses its own extraction word.
+3. **`yield`** — removed from concept. Runtime yields on `await` automatically.
+4. **`take`** — replaces `return` for delegate. Owner extraction + context termination.
+5. **`spawn` vs `fork`** — separate contexts. `spawn` = threads (shared memory),
+   `fork` = processes (isolated memory). Not merged into `delegate`.
+6. **Generator protocol** — primary extraction for `spawn`/`fork`:
+   `next() -> Option[T]` (blocks until next result, `none` when depleted),
+   `stop()` (cancel pending, clean up resources).
+7. **`grab`/`gather`** — StdLib sugar over the generator, not language
+   primitives. `grab` = `next()` + `stop()`, `gather` = `next()` loop.
+8. **`peek`** — deferred to v0.2 (non-blocking check without extraction).
+9. **Generator syntax** (e.g., `for-in` loop, `while(pool)`, expression form
+   `f(x) for x in pool`) — deferred to Phase 5 (Syntax Design).
 
 ### 5. Composition with ownership
 
 `delegate` applies to **state owners**, not arbitrary code. The `<-`
-operator serialises access to the owner's state. But `parallel()`
-applies to any stateless function. How does the type system distinguish?
+operator serialises access to the owner's state. But `spawn()`/`fork()`
+apply to any stateless function. How does the type system distinguish?
 
 **Possible answer:** The function's type signature reveals whether it
-captures mutable state. `ctx <- fn()` on a parallel context with a
-state-capturing closure is a compile error.
+captures mutable state. `ctx <- fn()` on a spawn context with a
+state-capturing closure is a compile error. `fork()` additionally
+requires that all captured state is `Send`-compatible (serialisable
+across process boundaries).
 
 ### 6. Ambient policy inside contexts
 
@@ -698,7 +750,7 @@ context types.
 - **Orthogonal.** Function (what) and context (how) are independent axes.
   Any context composes with any function.
 - **Minimal.** One concept (Invocation) + context constructors replace
-  `call` + `delegate` + `spawn` + `async`/`await`.
+  `call` + `delegate send` + `spawn`/`fork` + `async`/`await`.
 - **Single operator.** `<-` means exactly one thing: submit to context.
   No operator-per-policy proliferation.
 - **Extensible.** New context types (GPU, cluster) require only a new
@@ -723,8 +775,8 @@ context types.
 - **`await(...)` as StdLib.** If `await` is not a keyword, can it be
   implemented efficiently? Does the compiler need intrinsic support?
 - **Context lifecycle.** When is a context destroyed? `defer()`,
-  `delegate()`, `parallel()` create resources — who owns them and
-  when are they cleaned up?
+  `delegate()`, `spawn()`, `fork()` create resources — who owns them
+  and when are they cleaned up?
 
 ---
 
@@ -742,6 +794,7 @@ context types.
 | 2026-07-30 | Confirmed: `await(ctx)` and `return(ctx)` as named functions for result extraction. No new operators. |
 | 2026-07-30 | Renamed: `EXECUTION_POLICY_HYPOTHESIS.md` → `EXECUTION_CONTEXT_INVOCATION.md`. Old file deprecated. |
 | 2026-07-30 | Integrated Context Manager (`using`) as syntactic sugar over Execution Context + Scope. `using` desugars to `delegate(obj)` + block + scope-bound destructor. No new semantics. `SCOPED_RESOURCE_LIFECYCLE.md` superseded. |
+| 2026-07-30 | **OQ4 resolved.** Context-specific extraction vocabulary adopted. `defer`/`await`, `delegate`/`take`, `spawn`/`fork` with generator protocol (`next()`/`stop()`). `yield` removed — runtime yields on `await` automatically. `grab`/`gather` as StdLib sugar. Generator syntax deferred to Phase 5. `parallel()` and `remote()` replaced by `spawn()` and `fork()`. |
 
 **Status:** Exploratory — not accepted. Requires resolution of open
 questions before EDR.
