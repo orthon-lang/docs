@@ -33,7 +33,7 @@
 > for the full classification summary and [`EDR-079`](../how/decision_records/architecture/EDR-079-aggregating-p4.md)
 > for the aggregating acceptance record.
 >
-> **Last updated:** 2026-07-29
+> **Last updated:** 2026-07-30
 
 ---
 
@@ -609,4 +609,17 @@ The resolution process is defined in
 | **Classification** | Language (D-03) |
 | **Summary** | First assignment creates the variable — no `let`/`var` for initial declaration. Type inferred from initializer (optional explicit annotation). Read-before-write is compile-time error (definite assignment analysis). Shadowing requires `let` keyword. No implicit globals. `mut` required for reassignment. |
 | **Primitive Decomposition** | First-assignment declaration → `assignment` + `identifier` (binding creation); type inference → compiler-determined per EDR-027; definite assignment → compiler-level flow analysis beyond primitive composition; `let` for shadowing → `identifier` + `scope` with explicit marker semantics. Definite assignment analysis adds compiler-level semantics beyond primitive composition. |
+
+## Post-Phase 4 Additions
+
+### CONSTRAINED_TYPES
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-080](../how/decision_records/architecture/EDR-080-constrained-types.md) |
+| **Specification** | [`concepts/CONSTRAINED_TYPES.md`](concepts/CONSTRAINED_TYPES.md) |
+| **Classification** | Language Pattern (Level 2 — D-03) |
+| **Summary** | Runtime-constrained types — syntactic sugar over `struct` + contract on constructor. `type Age = Int(0..150)` desugars to struct with single immutable field and `requires`/`ensures` on `new`. Nominal identity (`Age ≠ Int`). Constraint follows Contract Enforcement Policy (runtime check in debug, elision in release). Literal values checked at compile time. Schema Provider exposes constraint in machine-readable form. |
+| **Primitive Decomposition** | Fully decomposable: `type X = Base(constr)` → `struct` (via `pack` + `identifier` + `scope`) + `new` constructor (via `function` + `assignment`) + `requires`/`ensures` (contracts per EDR-056). No new primitives introduced. See [`CONSTRAINED_TYPES.md`](concepts/CONSTRAINED_TYPES.md) § Desugaring for the complete mapping. |
 

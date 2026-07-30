@@ -5234,3 +5234,153 @@ All applied gates Pass outright.
 | `LLM_GENERABILITY_GATE` | Empirical Analysis | Pass | LLMs already generate `x = 1` patterns — no new syntax to learn. |
 
 **Overall:** Pass. All 7 gates clear. Declaration by assignment provides minimal ceremony with compiler-enforced safety. Concrete syntax deferred to Phase 5.
+
+---
+
+## Entry: CONSTRAINED_TYPES (EDR-080)
+
+**Date:** 2026-07-30
+**Artifact validated:** [`what/concepts/CONSTRAINED_TYPES.md`](../../what/concepts/CONSTRAINED_TYPES.md)
+**Decision recorded as:** [EDR-080](../decision_records/architecture/EDR-080-constrained-types.md)
+**Pipeline applied:** Full 10-question Decision Pipeline per `DECISION_PIPELINE.md`
+
+### Pipeline Q&A
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem? | Type-level constraints vs. function-level contracts. No ergonomic way to say "this type only holds values from a subset" at declaration level. |
+| Q2 | Language/StdLib/Policy? | **Language Pattern (Level 2).** Syntactic sugar over `struct` + contract on constructor. Runtime validation — not compile-time proof. |
+| Q3 | Existing primitives? | Yes — full decomposition to `struct` + `pack` + contract on `new`. No new primitives needed. |
+| Q4 | Violates principle? | No. Composition over addition. Minimal Core satisfied. |
+| Q5 | New semantics? | **No new semantics.** Pure syntactic sugar. Constraint follows Contract Enforcement Policy. |
+| Q6 | Composition? | Yes — `struct` + contract compose to produce constrained types. |
+| Q7 | Sugar over primitives? | **Yes** — `type Age = Int(0..150)` desugars to `struct` + `requires` + `ensures`. |
+| Q8 | Optimisation? | No. Constraint checking follows contract enforcement rules — same mechanism. |
+| Q9 | Backward compat? | N/A — pre-v1.0. |
+| Q10 | Worth adding? | **Yes.** LLM generability benefit (schema-visible constraints) + boilerplate elimination for domain primitives. |
+
+**Classification per D-03:** Language Pattern (Level 2). Full decomposition to struct + contract. No compiler-level changes required beyond desugaring.
+
+### Gate Validation
+
+**Gates applied:** All 7 per `DECISION_VALIDATION.md` § Gate Selection (new language construct).
+
+#### 1. `USER_VALUE_GATE` — [Working Backwards](../../gates/methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer modelling domain primitives, I want to say `type Email = String(matches: email_pattern)` instead of writing a 6-line struct with hand-written contracts. As an LLM generating code, I want to see `Email{base: String, constraint: matches}` in the schema so I know what values are valid.
+
+**Press release.** *Orthon introduces constrained types — a one-line declaration that turns `Int` into `Age`, `String` into `Email`, and any primitive into a self-validating domain type. No boilerplate, no special compiler passes, just syntactic sugar over existing constructs. LLMs see the constraint in the schema and generate correct values.*
+
+**FAQ.**
+- *How is this different from writing a struct?* — It's the same thing, but in one line instead of six. The compiler generates the struct, the constructor, and the contract.
+- *Is this checked at compile time?* — Literals are. Runtime values are checked at construction, following the same rules as contracts.
+- *What about mutation?* — The backing field is immutable. Once constructed, the value is always valid.
+
+**Verdict: Pass.** The problem is concrete (boilerplate + LLM schema gap), the solution is minimal (syntax sugar), and the benefit is clear.
+
+---
+
+#### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](../../gates/methods/SOCRATIC_METHOD.md)
+
+**Define all terms.**
+- **Constrained type:** a nominal type whose singleton field wraps a base type with a predicate
+- **Constraint expression:** a pure expression, checked at construction, following contract expression rules
+- **Backing field:** the single immutable field holding the constrained value
+
+**Test with counterexamples.**
+- *What happens when you mutate the backing field?* — You cannot. The field is immutable (struct with immutable field). Constraint cannot be bypassed.
+- *What about `Age` and `Score` both wrapping `Int`?* — They are distinct nominal types. No subtyping. `fn(x: Age)` does not accept `Score`.
+- *What if the constraint is a complex expression?* — Same rules as contract expressions. Purity is enforced by the compiler.
+
+**Follow the contradiction.** Apparent tension: "constraint lives at the type level" vs. "checked at runtime, not compile time." Resolved: the type *declares* the constraint; enforcement follows Contract Enforcement Policy. The constraint is part of the type *documentation* (visible in Schema) and *runtime behaviour*, not the type *proof system*.
+
+**Verdict: Pass.** No internal contradictions. One Flag: mutation guard must be explicitly specified in the concept draft.
+
+---
+
+#### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](../../gates/methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** Constrained types are fully expressible as composition of existing primitives (struct + contract).
+
+**Observations.**
+```
+type Age = Int(0..150)
+    → struct Age { value: Int }
+    → new(v) requires v >= 0 && v <= 150
+    → ensures result.value == v
+```
+
+**Prediction.** Any constrained type can be mechanically desugared to a struct with a single immutable field and a contract-bound constructor — no special compiler logic.
+
+**Test.** Try compound constraints: `Int(v > 0 && v % 2 == 0)` → desugars to `requires v > 0 && v % 2 == 0`. Try pattern: `String(matches: p)` → desugars to `requires matches(v, p)`. All pass.
+
+**Alternative hypothesis (falsified).** Constrained types require a new primitive (type-level predicate). Falsified: the predicate lives in the contract expression, not in the type checker.
+
+**Verdict: Pass.** Complete decomposition to Level 0–1 primitives. Zero new semantics.
+
+---
+
+#### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](../../gates/methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**State the premises.**
+1. Constrained types desugar to Level 2 (Language Pattern) constructs
+2. The constraint uses the existing contract expression language
+3. The backing field follows struct semantics
+
+**Deductions.**
+- No change to Data Model (Level 0) — `Int(0..150)` is not a new representation
+- No change to Primitive Operations (Level 1) — no new atomic operation
+- No change to Implementation Strategies — constraint checking follows existing Contract Enforcement Policy
+- Composes freely with generics: `Option<Age>`, `[Email]`, `fn(x: Age)` all work
+- No privileged position: any primitive type can be the base
+
+**Verdict: Pass.** Fits cleanly in Level 2. No layer violations.
+
+---
+
+#### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](../../gates/methods/TRIZ_METHOD.md)
+
+**Apparent contradiction.** Constraint checking must happen somewhere (seems to require runtime support), but must be strategy-independent (any strategy must support it).
+
+**Apply separation.** The *enforcement mechanism* is strategy-dependent (elision in release is a policy choice). The *semantic rule* — "value is validated at construction" — is strategy-independent. All strategies can implement construction validation; they differ only in whether they check it.
+
+**Verdict: Pass.** Constraint semantics are strategy-agnostic. Enforcement follows Contract Enforcement Policy which already handles strategy separation.
+
+---
+
+#### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](../../gates/methods/EINSTEIN_METHOD.md)
+
+**One sentence:** *A constrained type wraps a primitive with a validation rule — like a struct with a contract, but you write it in one line.*
+
+**Evolution path:**
+- Future SMT integration would strengthen enforcement without changing syntax
+- Constraint forms can be extended without breaking existing types
+- Deprecation path: keep the struct + contract form, desugar manually
+
+**Conceptual debt:** None. The entire semantic weight is carried by already-accepted Level 0–1 primitives.
+
+**Verdict: Pass.** Reversible, extensible, zero debt.
+
+---
+
+#### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](../../gates/methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Structural analysis:** `type Name = Base(constraint)` is a simple, single-syntax form.
+
+| Criterion | Verdict | Basis |
+|---|---|---|
+| Schema-serializable | Pass | `{base: Int, constraint: {range: [0, 150]}}` — fully expressible |
+| Predictable generation (≥90%) | Pass | Pattern matches Python type alias + Pydantic — LLMs know it |
+| No hallucination surface | Pass | Single form per constraint type; no ambiguity |
+| Strategy-aware default | Pass | Follows Contract Enforcement Policy — implicit, not annotation-required |
+| Self-correctable | Pass | Literal out of range → compile error; type mismatch → type error |
+
+**Verdict: Pass.**
+
+---
+
+### Overall
+
+All seven gates Pass outright. One Flag (mutation guard) resolved in concept draft.
+
+**Gates not applied:** None.

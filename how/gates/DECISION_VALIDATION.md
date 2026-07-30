@@ -420,3 +420,4 @@ gates.
 | Date | Proposal | Gates Applied | Verdict | Notes |
 |------|----------|---------------|---------|-------|
 | 2026-07-27 | [Semantic Model](../../what/SEMANTIC_MODEL.md) ([EDR-013](../decision_records/architecture/EDR-013-semantic-model.md)) | All 7 | 6 Pass, 1 Flag (`LLM_GENERABILITY_GATE`) | Flag root cause: Ownership's concrete transfer syntax deferred to Phase 5. Full per-gate reasoning: [`DECISION_LOG.md` § Semantic Model](DECISION_LOG.md#entry-semantic-model-edr-013). |
+| 2026-07-30 | [Runtime-Constrained Types](../../what/concepts/CONSTRAINED_TYPES.md) ([EDR-080](../decision_records/architecture/EDR-080-constrained-types.md)) | All 7 | 7 Pass, 1 Flag | Flag: mutation guard on backing field must be explicitly specified. Full per-gate reasoning: [`DECISION_LOG.md` § CONSTRAINED_TYPES](DECISION_LOG.md#entry-constrained-types-edr-080). |

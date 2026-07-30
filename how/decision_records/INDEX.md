@@ -82,6 +82,7 @@
 | EDR-077 | Architecture | [Reject Dynamic Typing](architecture/EDR-077-reject-dynamic-typing.md) | **Rejected** | 2026-07-27 | — |
 | EDR-078 | Architecture | [Reject Class or Structure as Primary Composition Unit](architecture/EDR-078-reject-class-or-structure-as-primary-composition.md) | **Rejected** | 2026-07-27 | — |
 | EDR-079 | Architecture | [Phase 4 — Derived Features & Decision Pipeline](architecture/EDR-079-aggregating-p4.md) | Accepted | 2026-07-27 | — |
+| EDR-080 | Architecture | [Runtime-Constrained Types — Language Pattern Over Struct + Contract](architecture/EDR-080-constrained-types.md) | Accepted | 2026-07-30 | — |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.

@@ -143,6 +143,18 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 A compact, readable syntax for constructing collections (lists, maps, sets)
 without create-then-mutate boilerplate. Collection literals are syntactic
 sugar over standard library constructor calls — they are classified as
+
+### Constrained Type
+
+A nominal type that wraps a primitive base type with a validation predicate,
+ensuring values satisfy the constraint at construction time. Constrained types
+are syntactic sugar over `struct` + contract on constructor — no new semantics.
+Example: `type Age = Int(0..150)` creates a type `Age` distinct from `Int`,
+where values are validated to be in range 0–150.
+
+- **Source:** `what/concepts/CONSTRAINED_TYPES.md`
+- **Accepted:** EDR-080
+- **See also:** [Contract](../how/concepts/research/important/CONTRACTS.md), [Struct](../how/concepts/research/important/STRUCT_AS_NOMINAL_PRODUCT_TYPE.md)
 StdLib, not Language ([EDR-041](../how/decision_records/architecture/EDR-041-collection-literal-syntax.md)).
 
 Collection literals are **immutable by default**. Mutable variants require
