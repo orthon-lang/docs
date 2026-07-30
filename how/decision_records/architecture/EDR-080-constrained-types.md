@@ -6,7 +6,7 @@
 
 **Category:** Architecture
 
-**Scope:** Language Pattern (Level 2)
+**Scope:** Language Pattern (Level 2) — type-level constraint predicate decomposed via `struct` + `Callable` trait.
 
 ---
 
@@ -29,56 +29,56 @@ Three concrete pain points:
 
 ## Decision
 
-Orthon introduces **Runtime-Constrained Types** as a **Language Pattern (Level 2)** — syntactic sugar that desugars to `struct` + contract on constructor.
+Orthon introduces **Runtime-Constrained Types** as a **Language Pattern (Level 2)** — a nominal type with a compiler-enforced predicate, decomposed via `struct` + `Callable` trait. The constraint lives **only on the type**, not on consuming functions.
 
 ### Core form
 
 ```orthon
-type Age = Int(0..150)
-```
-
-Desugars to:
-
-```orthon
-struct Age
-    value: Int
-
-    new(v: Int) -> Age
-        requires v >= 0 && v <= 150
-        ensures result.value == v
-```
-
-### General form
-
-```orthon
-type Name = BaseType(constraint_expr)
+type Age = Int requires v >= 0 && v <= 150
 ```
 
 Where:
-- `Name` — new nominal type (distinct from `BaseType`)
-- `BaseType` — any primitive type (`Int`, `Float`, `String`, `Char`, etc.)
-- `constraint_expr` — pure expression referencing the value (implicit `v`), supported forms:
-  - Range: `0..150`, `0.0..1.0`
-  - Predicate: `matches(email_pattern)`, `min_length(1)`, `max_length(50)`
-  - Compound: `v >= 0 && v <= 150`
+- `Age` — new nominal type (distinct from `Int`)
+- `Int` — base type
+- `requires v >= 0 && v <= 150` — constraint predicate (pure expression, implicit `v`)
 
-### Semantics
+### Desugaring
 
-1. **Type identity** — nominal. `Age` and `Int` are distinct types. `fn(x: Int)` does not accept `Age`.
-2. **Construction** — `Age(v)` checks the constraint at runtime (following Contract Enforcement Policy). Violation produces the same error mechanism as contract violation.
-3. **Immutability** — the backing field is immutable by default (consistent with SEMANTIC_MODEL.md § Mutation). No mutation bypass.
-4. **Static analysis** — literal values are checked at compile time: `let x = Age(200)` → compile-time error.
-5. **Schema exposure** — the constraint is visible in the Schema Provider: `{base: Int, constraint: {range: [0, 150]}}`.
+```orthon
+// Nominal wrapper (struct with single immutable field)
+struct Age
+    value: Int
+
+// Compiler generates Callable(Int) -> Age
+// Construction: Age(42) calls this trait method
+impl Callable(Int) -> Age for Age
+    fun call(v: Int) -> Age
+        // implicit constraint check follows Contract Enforcement Policy
+        // debug: runtime assertion v >= 0 && v <= 150
+        // release: elided unless --enable-contracts
+        return Age{value: v}
+```
+
+### Key semantic rules
+
+1. **Constraint lives on the type, not on methods.** `fn greet(age: Age)` does NOT carry `requires` — the `Age` type already guarantees validity. This avoids duplicating constraints across every consuming function.
+2. **Boundary enforcement.** The constraint is checked at every point where a raw base value enters the constrained type:
+   - Explicit construction: `Age(42)`
+   - Type ascription: `let a: Age = some_int`
+   - Parameter passing with implicit conversion
+3. **No implicit subtyping.** `Age ≠ Int`. A function expecting `Int` does NOT accept `Age`. Conversion is one-way: `Int → Age` (checked at boundary).
+4. **Construction via `Callable` trait**, consistent with Orthon's uniform call syntax (Semantic Purity: `()` is call). Not via `new`/`make` — the type itself is callable.
+5. **Immutability** — the backing field is immutable by default (consistent with SEMANTIC_MODEL.md § Mutation). No mutation bypass.
+6. **Static analysis** — literal values are checked at compile time: `let a: Age = 200` → compile-time error.
+7. **Schema exposure** — the constraint is visible in the Schema Provider: `{base: Int, constraint: {range: [0, 150]}}`.
 
 ### Constraint forms
 
 | Form | Example | Semantics |
 |------|---------|-----------|
-| Range | `Int(0..150)` | `v >= 0 && v <= 150` |
-| Min/Max | `Int(min=0, max=150)` | Same semantics, named form |
-| Pattern | `String(matches: email_pattern)` | Regex/pattern match |
-| Length | `String(min_length=1)` | `v.length >= 1` |
-| Compound | `Int(v > 0 && v < 1000)` | Arbitrary pure expression |
+| Direct predicate | `Int requires v >= 0 && v <= 150` | `v >= 0 && v <= 150` |
+| Named predicate | `String requires matches(v, email)` | Referencing a named predicate function |
+| Compound | `Int requires v > 0 && v % 2 == 0` | Arbitrary pure expression |
 
 ## Consequences
 
@@ -90,18 +90,20 @@ Where:
   - Reversible — can be deprecated without ecosystem breakage (users keep the desugared form)
 
 - **Negative:**
-  - Adds syntax surface area (`type X = Base(constr)`) despite being sugar
+  - Adds syntax surface area (`type X = Base requires pred`) despite being sugar
   - Constraint checked at runtime for non-literal values — not compile-time proven
-  - Limited to single-field structs wrapping primitives (not general purpose refinement)
+  - Limited to single-base-type constrained wrappers (not general purpose refinement)
+  - Requires compiler to recognize boundary points for implicit constraint insertion
 
 ## Compliance
 
 Verification that this decision is followed:
 
-1. Every constrained type must desugar to `struct` + contract — no special compiler transformations
+1. Every constrained type must desugar to `struct` + `Callable` impl — no special compiler transformations beyond standard trait machinery
 2. Constraint expressions must be pure (no side effects, no I/O)
-3. Schema Provider must expose constraints in machine-readable format
-4. Backing field must be immutable (no `var` on the wrapped value)
+3. Constraint is declared once on the type — never duplicated on consuming functions
+4. Schema Provider must expose constraints in machine-readable format
+5. Backing field must be immutable (no `var` on the wrapped value)
 
 ## Alternatives Considered
 
@@ -109,7 +111,7 @@ Verification that this decision is followed:
 |-------------|-------------------------|
 | **Full refinement types (SMT)** | Compile-time SMT-proven refinement types. Rejected for v0.1: violates Minimal Core, requires Z3 or equivalent solver dependency. Viable for future milestone as enhanced enforcement. |
 | **Pure library (`Bounded<T>`)** | Generic wrapper type without nominal identity — `Bounded<Int>` does not distinguish `Age` from `Score`. No special syntax. |
-| **Contracts-only** | No change needed — use `struct + requires` manually. Rejected: boilerplate cost is real, LLM generability benefit is lost without schema exposure. |
+| **Contracts-only** | No change needed — use `struct` + manual validation. Rejected: boilerplate cost is real, LLM generability benefit is lost without schema exposure. |
 | **Property wrappers** | Field-level validation without creating a new type. Rejected: does not solve the type identity problem (`Email` vs `String`). |
 
 ## Gate Validation

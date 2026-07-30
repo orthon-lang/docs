@@ -146,11 +146,16 @@ sugar over standard library constructor calls — they are classified as
 
 ### Constrained Type
 
-A nominal type that wraps a primitive base type with a validation predicate,
-ensuring values satisfy the constraint at construction time. Constrained types
-are syntactic sugar over `struct` + contract on constructor — no new semantics.
-Example: `type Age = Int(0..150)` creates a type `Age` distinct from `Int`,
-where values are validated to be in range 0–150.
+A nominal type that wraps a primitive base type with a validation predicate
+declared at the type level. The constraint is checked at every boundary where
+a raw value enters the type (construction, assignment, parameter passing with
+implicit conversion). Constraint lives **only on the type** — consuming
+functions carry no duplicate `requires`. Construction uses the `Callable`
+trait (consistent with uniform call syntax), not a dedicated `new`/`make`
+keyword.
+
+Example: `type Age = Int requires v >= 0 && v <= 150` creates a type `Age`
+distinct from `Int`, where values are validated at every entry boundary.
 
 - **Source:** `what/concepts/CONSTRAINED_TYPES.md`
 - **Accepted:** EDR-080

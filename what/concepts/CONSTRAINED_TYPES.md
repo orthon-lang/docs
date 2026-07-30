@@ -1,7 +1,7 @@
 # Runtime-Constrained Types
 
 > **✅ ACCEPTED — EDR-080.**
-> Language Pattern (Level 2) — syntactic sugar over `struct` + contract on constructor.
+> Language Pattern (Level 2) — nominal type with type-level constraint predicate, decomposed via `struct` + `Callable` trait.
 >
 > **Status:** Accepted 2026-07-30.
 > **See also:** [`CONTRACTS.md`](../../how/concepts/research/important/CONTRACTS.md),
@@ -16,12 +16,12 @@
 
 A function signature describes what types flow in and out, but not what subset of values they contain. The programmer must encode domain constraints either in documentation (ignored by compiler) or in contracts on every consuming function (duplicated, caller-dependent).
 
-For LLMs generating code, this gap is especially costly: an LLM given `fn set_age(a: Int)` has no information that valid ages are 0–150 and may generate nonsensical calls. A type that carries its constraint — `type Age = Int(0..150)` — eliminates this ambiguity at the schema level.
+For LLMs generating code, this gap is especially costly: an LLM given `fn set_age(a: Int)` has no information that valid ages are 0–150 and may generate nonsensical calls. A type that carries its constraint — `type Age = Int requires v >= 0 && v <= 150` — eliminates this ambiguity at the schema level.
 
 Three concrete problems:
 
 1. **No type-level constraint** — `Int` allows any integer. `Age`, `PositiveInt`, `Percentage` must be documented, not enforced.
-2. **Boilerplate repetition** — Every domain primitive requires `struct` + `new` + `requires` + `ensures` (≈6 lines). The pattern is mechanical.
+2. **Boilerplate repetition** — Every domain primitive requires a wrapper struct with manual validation. The pattern is mechanical.
 3. **LLM schema gap** — Without machine-readable constraints, LLMs rely on naming conventions and documentation, which are unreliable.
 
 ## Principles
@@ -30,7 +30,8 @@ Three concrete problems:
 2. **Nominal identity** — `Age ≠ Int`. A constrained type is a distinct type, not a subtype.
 3. **Immutability by default** — The backing value cannot be mutated after construction (consistent with SEMANTIC_MODEL.md § Mutation).
 4. **Schema exposure** — Constraints are visible in machine-readable form (Schema Provider).
-5. **Runtime enforcement** — Constraints are checked at construction time following Contract Enforcement Policy. Static analysis for literals is an optimisation, not a guarantee.
+5. **Single declaration** — The constraint is declared once on the type and enforced at every boundary where a raw value enters the type. Consuming functions need no additional `requires`.
+6. **Runtime enforcement** — Constraints are checked at construction/assignment boundaries following Contract Enforcement Policy. Static analysis for literals is an optimisation, not a guarantee.
 
 ## Policy Footprint
 
@@ -42,38 +43,40 @@ Three concrete problems:
 
 ## Model (What)
 
-### Syntax
+### Syntax (abstract — final form deferred to Phase 5)
 
 ```orthon
-// Range constraint
-type Age = Int(0..150)
+// Direct predicate
+type Age = Int requires v >= 0 && v <= 150
 
-// Named form
-type Percentage = Int(min=0, max=100)
-
-// Pattern constraint
-type Email = String(matches: email_pattern)
-
-// Length constraint
-type NonEmptyString = String(min_length=1)
+// Named predicate
+type Email = String requires matches(v, email_pattern)
 
 // Compound expression
-type PositiveInt = Int(v > 0)
+type NonEmptyString = String requires v.length >= 1
 ```
 
 ### Desugaring
 
 ```
-type Age = Int(0..150)
+type Age = Int requires v >= 0 && v <= 150
 
     ↓ desugars to
 
 struct Age
     value: Int
 
-    new(v: Int) -> Age
-        requires v >= 0 && v <= 150
-        ensures result.value == v
+// Construction via Callable trait — not new/make
+impl Callable(Int) -> Age for Age
+    fun call(v: Int) -> Age
+        // compiler inserts constraint check:
+        // debug: runtime assertion v >= 0 && v <= 150
+        // release: elided unless --enable-contracts
+        return Age{value: v}
+
+// No requires/ensures on consuming functions — constraint lives on the type:
+fn register(age: Age)       // ✅ Age already guarantees 0..150
+    ...
 ```
 
 ### Type Identity
@@ -81,10 +84,10 @@ struct Age
 Constrained types are **nominally distinct** from their base type and from each other:
 
 ```orthon
-type Age = Int(0..150)
-type Score = Int(0..100)
+type Age = Int requires v >= 0 && v <= 150
+type Score = Int requires v >= 0 && v <= 100
 
-let a: Age = Age(42)       // ✅ ok
+let a: Age = Age(42)       // ✅ ok — Callable(Int) -> Age, constraint passes
 let s: Score = Score(85)    // ✅ ok
 let x: Age = Score(85)      // ❌ type error: Score ≠ Age
 let y: Int = Age(42)        // ❌ type error: Age ≠ Int
@@ -121,16 +124,11 @@ Constraint expressions are **pure** — same rules as contract expressions:
 
 ### Constraint Forms Reference
 
-| Form | Syntax | Equivalent Contract | Notes |
-|------|--------|---------------------|-------|
-| Range | `Int(0..150)` | `v >= 0 && v <= 150` | Closed range |
-| Min | `Int(min=0)` | `v >= 0` | Half-open |
-| Max | `Int(max=100)` | `v <= 100` | Half-open |
-| Min+Max | `Int(min=0, max=100)` | `v >= 0 && v <= 100` | Closed range |
-| Pattern | `String(matches: p)` | `matches(v, p)` | Regex/pattern |
-| Min length | `String(min_length=1)` | `v.length >= 1` | String only |
-| Max length | `String(max_length=50)` | `v.length <= 50` | String only |
-| Compound | `Int(v > 0 && v % 2 == 0)` | `v > 0 && v % 2 == 0` | Any pure expression |
+| Form | Syntax | Semantics | Notes |
+|------|--------|-----------|-------|
+| Direct predicate | `Int requires v >= 0 && v <= 150` | `v >= 0 && v <= 150` | Pure expression with implicit `v` |
+| Named predicate | `String requires matches(v, p)` | `matches(v, p)` | References a named pure function |
+| Compound | `Int requires v > 0 && v % 2 == 0` | `v > 0 && v % 2 == 0` | Any pure expression |
 
 ## Default Strategy
 
@@ -154,7 +152,7 @@ Literal values are checked at compile time regardless of mode.
 
 ## Open Questions
 
-1. Should constrained types support generic base types (e.g., `type Positive<T: Numeric> = T(v > 0)`)? Currently deferred — Phase 5 syntax scope.
+1. Should constrained types support generic base types (e.g., `type Positive<T: Numeric> = T requires v > 0`)? Currently deferred — Phase 5 syntax scope.
 2. Should compound constraint expressions use `v` or allow any parameter name? Current design uses `v` for consistency with contract `result` and `old`.
 3. Should constraint expressions be referentially transparent within the Schema Provider (i.e., can the LLM see the actual expression)? Yes — the constraint AST should be serialized into the schema.
 
@@ -162,7 +160,9 @@ Literal values are checked at compile time regardless of mode.
 
 | Decision | Date | Rationale |
 |----------|------|-----------|
-| Accepted as Language Pattern (Level 2) | 2026-07-30 | Fully decomposable to struct + contract. No new primitives. |
+| Accepted as Language Pattern (Level 2) | 2026-07-30 | Fully decomposable to struct + Callable trait. No new primitives. |
+| Constraint on type, not on methods | 2026-07-30 | Boundary enforcement avoids duplicating constraints across consuming functions. Simpler compiler. |
+| Construction via Callable trait | 2026-07-30 | Consistent with uniform call syntax (Semantic Purity). No new/make keyword needed. |
 | Immutable backing field | 2026-07-30 | Consistent with SEMANTIC_MODEL.md § Mutation. Prevents constraint bypass. |
 | Nominal identity (no subtyping) | 2026-07-30 | Consistent with struct semantics. `Age ≠ Int` is the source of type safety. |
 

@@ -5249,12 +5249,12 @@ All applied gates Pass outright.
 | Q# | Question | Answer |
 |----|----------|--------|
 | Q1 | What problem? | Type-level constraints vs. function-level contracts. No ergonomic way to say "this type only holds values from a subset" at declaration level. |
-| Q2 | Language/StdLib/Policy? | **Language Pattern (Level 2).** Syntactic sugar over `struct` + contract on constructor. Runtime validation — not compile-time proof. |
-| Q3 | Existing primitives? | Yes — full decomposition to `struct` + `pack` + contract on `new`. No new primitives needed. |
+| Q2 | Language/StdLib/Policy? | **Language Pattern (Level 2).** Nominal type with type-level constraint predicate, decomposed via `struct` + `Callable` trait. Runtime validation — not compile-time proof. |
+| Q3 | Existing primitives? | Yes — full decomposition to `struct` + `pack` + `Callable` impl. No new primitives needed. |
 | Q4 | Violates principle? | No. Composition over addition. Minimal Core satisfied. |
 | Q5 | New semantics? | **No new semantics.** Pure syntactic sugar. Constraint follows Contract Enforcement Policy. |
 | Q6 | Composition? | Yes — `struct` + contract compose to produce constrained types. |
-| Q7 | Sugar over primitives? | **Yes** — `type Age = Int(0..150)` desugars to `struct` + `requires` + `ensures`. |
+| Q7 | Sugar over primitives? | **Yes** — `type Age = Int requires v >= 0 && v <= 150` desugars to `struct` + `Callable` impl with boundary check. |
 | Q8 | Optimisation? | No. Constraint checking follows contract enforcement rules — same mechanism. |
 | Q9 | Backward compat? | N/A — pre-v1.0. |
 | Q10 | Worth adding? | **Yes.** LLM generability benefit (schema-visible constraints) + boilerplate elimination for domain primitives. |
@@ -5267,13 +5267,14 @@ All applied gates Pass outright.
 
 #### 1. `USER_VALUE_GATE` — [Working Backwards](../../gates/methods/WORKING_BACKWARDS_METHOD.md)
 
-**User story.** As an Orthon programmer modelling domain primitives, I want to say `type Email = String(matches: email_pattern)` instead of writing a 6-line struct with hand-written contracts. As an LLM generating code, I want to see `Email{base: String, constraint: matches}` in the schema so I know what values are valid.
+**User story.** As an Orthon programmer modelling domain primitives, I want to say `type Email = String requires matches(v, pattern)` instead of writing a wrapper struct with manual validation. As an LLM generating code, I want to see `Email{base: String, constraint: matches}` in the schema so I know what values are valid.
 
-**Press release.** *Orthon introduces constrained types — a one-line declaration that turns `Int` into `Age`, `String` into `Email`, and any primitive into a self-validating domain type. No boilerplate, no special compiler passes, just syntactic sugar over existing constructs. LLMs see the constraint in the schema and generate correct values.*
+**Press release.** *Orthon introduces constrained types — a one-line declaration that turns `Int` into `Age`, `String` into `Email`, and any primitive into a self-validating domain type. The constraint is declared once on the type and enforced at every boundary where a raw value enters. Consuming functions carry no duplicate `requires`. LLMs see the constraint in the schema and generate correct values.*
 
 **FAQ.**
-- *How is this different from writing a struct?* — It's the same thing, but in one line instead of six. The compiler generates the struct, the constructor, and the contract.
-- *Is this checked at compile time?* — Literals are. Runtime values are checked at construction, following the same rules as contracts.
+- *How is this different from writing a struct?* — The constraint is declared once on the type, not duplicated on every consuming function.
+- *How is it constructed?* — Via the `Callable` trait — `Age(42)` works like any other call. Not via `new`/`make`.
+- *Is this checked at compile time?* — Literals are. Runtime values are checked at the type boundary, following the same rules as contracts.
 - *What about mutation?* — The backing field is immutable. Once constructed, the value is always valid.
 
 **Verdict: Pass.** The problem is concrete (boilerplate + LLM schema gap), the solution is minimal (syntax sugar), and the benefit is clear.
