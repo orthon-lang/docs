@@ -5385,3 +5385,33 @@ type Age = Int(0..150)
 All seven gates Pass outright. One Flag (mutation guard) resolved in concept draft.
 
 **Gates not applied:** None.
+
+---
+
+### Post-Acceptance Amendment (Type B — 2026-07-30)
+
+**Trigger:** Design review uncovered three refinements to the accepted model.
+
+**Gap type:** Type B (unresolved detail) per `CONCEPT_PIPELINE.md` § 10.
+
+**Changes applied (in-place edit of EDR-080, CONSTRAINED_TYPES.md, CORE_CONCEPTS.md, GLOSSARY.md):**
+
+| Before | After | Rationale |
+|--------|-------|-----------|
+| `type Age = Int(0..150)` | `type Age = Int requires v >= 0 && v <= 150` | `()` is call syntax (Semantic Purity). `Int(0..150)` reads as call, not type constraint. `requires` reuses existing contract keyword — consistent with function-level contracts. |
+| Desugar to `struct` + `new` + `requires`/`ensures` on constructor | Desugar to `struct` + `Callable(Int) -> Age` impl + boundary check | `new` is reserved for transforming constructors. `Callable` trait is consistent with uniform call syntax: `Age(42)` is a call, not a factory. Constraint lives on the type, not on a constructor function. |
+| Constraint duplicated on constructor and consuming functions | Constraint **only on the type** — checked at every `Int → Age` boundary | Eliminates redundancy. `fn greet(age: Age)` needs no `requires` — `Age` already guarantees validity. Simpler compiler: one check point (boundary), not N (constructor + every consumer). |
+
+**Gate impact assessment:** All 7 validation gates were re-evaluated against the amended model. No verdict changed:
+
+| Gate | Original | Amended | Why unchanged |
+|------|----------|---------|---------------|
+| `USER_VALUE_GATE` | Pass | Pass | Problem (domain primitives with schema-visible constraints) is identical. Solution is cleaner (no duplication). |
+| `LOGICAL_CONSISTENCY_GATE` | Pass | Pass | `Callable` trait + boundary enforcement removes the `new`/`make` ambiguity. No new contradictions. |
+| `CONCEPTUAL_SIMPLICITY_GATE` | Pass | Pass | Same decomposition to existing primitives. `Callable` replaces `new` — fewer keywords, not more. |
+| `ARCHITECTURAL_INTEGRITY_GATE` | Pass | Pass | `Callable` is already an accepted trait. No layer violations. |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | Pass | Pass | Boundary checks follow Contract Enforcement Policy — same mechanism, same strategy independence. |
+| `LONG_TERM_MAINTAINABILITY_GATE` | Pass | Pass | Model is strictly simpler. Less conceptual debt, same evolution path. |
+| `LLM_GENERABILITY_GATE` | Pass | Pass | `Int requires v >= 0` is less ambiguous for LLMs than `Int(0..150)` (no confusion with call syntax). |
+
+**Procedure:** Per `CONCEPT_PIPELINE.md` § 10 (Type B), the decision pipeline, concept design review, and validation gates were NOT re-run. Only the affected gates were re-assessed against the delta. Rationale: the core decision (Level 2 Language Pattern, runtime enforcement, nominal identity) did not change — only the syntactic form and decomposition mechanism were refined.
