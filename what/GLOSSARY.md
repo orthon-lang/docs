@@ -262,6 +262,19 @@ counter <- increment()    # asynchronous message send
 - **Source:** `../what/concepts/CONCURRENCY_MODEL.md`, EDR-033
 - **See also:** [Exclusive Access](#exclusive-access), [Foreign Function Interface (FFI)](#foreign-function-interface-ffi)
 
+### Deferred Invocation
+
+The suspendable computation returned by submitting an invocation to a
+`defer` execution context (`ctx <- fn(...)` with `ctx = defer(obj)`).
+It is the unit of work scheduled into the coroutine context — semantically
+a coroutine-like suspendable computation, distinct from the context itself.
+Awaiting it (`await(ctx)`) yields until the computation is ready. The exact
+type name is deferred to Phase 5; the Core Language commits to the concept,
+not the name.
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (OQ2 Resolution)
+- **See also:** [Delegate](#delegate), [Await](#await), [Future](#future)
+
 ### Data Primitive
 
 A primitive block whose primary responsibility is producing or structuring

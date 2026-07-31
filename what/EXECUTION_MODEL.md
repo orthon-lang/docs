@@ -40,6 +40,17 @@ a self-contained, semantically complete artifact.
 | WASM | WebAssembly target | Embedded |
 | Container | Container-native execution | Default |
 
+## Invocation Semantics (research)
+
+The return type of contextual invocation is **context-defined** — per the
+Execution Context Invocation concept (OQ2 Resolution,
+[`EXECUTION_CONTEXT_INVOCATION.md`](../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md)):
+a `delegate` submission returns `void` (a message; the owner's state is
+read via `take`), a `defer` submission returns a **deferred invocation**
+(a suspendable computation, awaited via `await(ctx)`), and `spawn`/`fork`
+submissions return `void` and join the generator stream (`next()`/`stop()`).
+This section is filled during Phase 7 upon concept acceptance.
+
 ## EDR
 
 - **EDR-NNN:** Execution Model acceptance

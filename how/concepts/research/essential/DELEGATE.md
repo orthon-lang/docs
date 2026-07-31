@@ -484,6 +484,12 @@ lst <- append(4)       // delegated call — method on List via mailbox
 
 No name conflict: `.` and `<-` route to different namespaces.
 
+**Submission return (OQ2 Resolution, [`EXECUTION_CONTEXT_INVOCATION.md`](EXECUTION_CONTEXT_INVOCATION.md)):**
+a delegated submission `lst <- append(4)` returns **`void`** — it is a
+message, not a call result. The meaningful result is the owner's state,
+read by extracting the owner (`release`/`take`), never a per-message
+handle.
+
 ### Release: Returning Ownership
 
 Ownership is returned via `release`:
