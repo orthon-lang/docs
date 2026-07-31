@@ -846,7 +846,13 @@ question is largely removed by the two operators; the remainder is
 mitigated and is a deliberate simplicity trade-off (less syntax, slightly
 less local policy detail).
 
-### 8. Context destructor contract
+### 8. Context destructor contract — **RESOLVED (see OQ8 Resolution)**
+
+> The destructor contract is resolved in two parts: the wrapped object
+> drops automatically as a consequence of ownership + lifetime (not a
+> new rule), and pending `spawn`/`fork` work requires explicit
+> resolution before destruction. The speculative body below is retained
+> for traceability.
 
 Does every context automatically clean up its wrapped resource when
 destroyed, or is cleanup the programmer's responsibility?
@@ -870,11 +876,68 @@ wrapped resources. The programmer must call `release(ctx)` or
 adds semantics beyond sugar — it guarantees cleanup that bare context
 usage does not.
 
-**Possible answer:** Option A. Automatic cleanup is consistent with
-the Principle of Least Astonishment: a file handle created inside a
-context should not leak when the context is destroyed. `using` remains
-pure sugar, and the context destructor contract is uniform across all
-context types.
+**Possible answer (superseded by OQ8 Resolution):** Option A. Automatic
+cleanup is consistent with the Principle of Least Astonishment: a file
+handle created inside a context should not leak when the context is
+destroyed. `using` remains pure sugar, and the context destructor
+contract is uniform across all context types.
+
+### OQ8 Resolution — Context Destructor Contract
+
+Adopted on 2026-07-31 through the Concept Design Review (Convergence
+Check) process.
+
+**Question:** Does destroying a context automatically clean up its
+wrapped resource, or is cleanup the programmer's responsibility?
+
+**Answer (two parts):**
+
+1. **Wrapped object — automatic, as a consequence of ownership, not a
+   new rule.** `delegate(obj)`/`defer(obj)` move the object into the
+   context; the context is its single owner (OQ5 Resolution). Destruction
+   at the context's final scope exit therefore drops the wrapped object
+   exactly as any owned value is dropped (Semantic Invariant 1 + 3,
+   [`SEMANTIC_MODEL.md`](../../../../what/SEMANTIC_MODEL.md) § Lifetime —
+   Deterministic destruction). `take(ctx)` moves the object back out —
+   destruction happens once, at the new owner (Ownership ↔ Lifetime
+   pairing). `using` remains pure sugar. There is no "explicit release"
+   alternative for the wrapped object: making the context not drop its
+   owned value would violate the ownership model.
+
+2. **Pending work on `spawn()`/`fork()` — no safe automatic behaviour
+   exists; explicit resolution is required.** Silent cancellation loses
+   work, silent joining blocks, silent detaching leaks — none is a safe
+   default. The developer must resolve pending work explicitly before
+   the context is destroyed (materialise via `next()`/`gather()`, or
+   cancel via `stop()`, per OQ4 Resolution). Destroying a `spawn`/`fork`
+   context with unresolved work is a program error — never silent loss,
+   blocking, or leak. The manner of worker shutdown (graceful drain,
+   cooperative cancel, immediate kill) is a `DEFAULT_STRATEGY` decision
+   (Phase 7), not a Core Language semantic. Enforcement (runtime check
+   vs. static liveness) follows the Ownership precedent: the semantic
+   contract is Core; the enforcement mechanism is Implementation
+   Strategy.
+
+3. **`delegate`/`defer` pending messages need no separate guard.** The
+   mailbox/coroutine state is owned machinery; destruction mid-life is
+   ordinary drop of the owned object, and unprocessed invocations die
+   with it — consistent with the ownership model, not a silent-loss
+   case.
+
+**Scope of the guard:** the explicit-resolution requirement applies to
+`spawn()`/`fork()` only — contexts that dispatch to stateless workers
+whose results are materialised via the generator protocol.
+
+**Conscious consequence:** fire-and-forget (submit work, discard the
+context, let the worker run to completion) is not expressible without a
+`detach()` mechanism. This is tracked as a separate research hypothesis
+(see [`../important/DETACHED_EXECUTION.md`](../important/DETACHED_EXECUTION.md)),
+not resolved here.
+
+**Consequence for OQ2:** the return-type question (handle vs. void)
+remains open; this resolution assumes each submission yields a
+resolvable unit of work that can be materialised or cancelled before
+destruction.
 
 ---
 
@@ -936,6 +999,7 @@ context types.
 | 2026-07-31 | **OQ6 resolved.** Fixed inline call semantics adopted. `fn(args)` is context-independent — always synchronous inline; never blocks or yields by itself (the callee may suspend at an explicit extraction point). No self-delegation (`this <- fn(...)`); long computations are submitted to a stateless-worker context via the distribution operator (`pool |> fn(...)`) and materialised through the generator protocol (OQ4/OQ5). Actor threading deferred to `DEFAULT_STRATEGY`. |
 | 2026-07-31 | **OQ5 resolved.** Single operator superseded by a **two-operator family by ownership axis**: `<-` = single owner (`delegate`, `defer`; both always wrap an object), distribution = stateless workers (`spawn`, `fork`). `Send`/`Move` marker traits check captured data at compile time. `<=` rejected as distribution glyph (comparison conflict); `<||`/`|>` candidates, glyph deferred to Phase 5. |
 | 2026-07-31 | **OQ7 resolved.** Local-reasoning concern addressed by the two-operator family: the ownership relationship (`<-` vs. distribution) is visible at the call site; residual per-policy ambiguity (yield vs. block vs. dispatch) accepted as a conscious trade-off with proximity, naming, and type-system mitigation. |
+| 2026-07-31 | **OQ8 resolved.** Context destructor contract: the wrapped object drops automatically as a consequence of ownership + lifetime (not a new rule); `take(ctx)` = move-out; `using` remains pure sugar. For `spawn`/`fork`, no safe automatic behaviour for pending work exists — explicit resolution (materialise via `next()`/`gather()`, or cancel via `stop()`) is required before destruction; destroying a context with unresolved work is a program error. Worker-shutdown manner and enforcement are Implementation Strategy concerns (Phase 7). Fire-and-forget is not expressible without `detach()` — deferred to a separate research hypothesis (`../important/DETACHED_EXECUTION.md`). |
 
 **Status:** Exploratory — not accepted. Requires resolution of open
 questions before EDR.
