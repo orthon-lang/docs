@@ -12,7 +12,7 @@
 > [`FUNCTIONS.md`](FUNCTIONS.md),
 > [`CONCURRENCY_MODEL.md`](CONCURRENCY_MODEL.md) (current concurrency model, superseded if this concept accepted),
 > [`EXECUTION_PROGRAM.md`](EXECUTION_PROGRAM.md)
-> **See also:** [`../../what/PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) § 3.2.3 `call`
+> **See also:** [`../../../../what/PRIMITIVE_BLOCKS.md`](../../../../what/PRIMITIVE_BLOCKS.md) § 3.2.3 `call`
 
 ---
 
@@ -493,7 +493,7 @@ using resource = openResource()
 ### Relationship to Ownership
 
 `using` is consistent with Orthon's ownership model
-([`SEMANTIC_MODEL.md`](../../what/SEMANTIC_MODEL.md) § Ownership):
+([`SEMANTIC_MODEL.md`](../../../../what/SEMANTIC_MODEL.md) § Ownership):
 
 - The resource (file, socket, handle) is a **resource-typed value** —
   it has exclusive responsibility and cannot be silently duplicated.
@@ -548,7 +548,7 @@ RAII: "this resource is scoped to this block."
 ### Relationship to `SCOPED_RESOURCE_LIFECYCLE.md`
 
 The earlier research in
-[`SCOPED_RESOURCE_LIFECYCLE.md`](../essential/SCOPED_RESOURCE_LIFECYCLE.md)
+[`SCOPED_RESOURCE_LIFECYCLE.md`](SCOPED_RESOURCE_LIFECYCLE.md)
 posed three open questions. The Execution Context model answers them:
 
 | Question | Answer |
@@ -602,15 +602,15 @@ the constructor requires compiler-level semantics:
 
 | Document | Change |
 |----------|--------|
-| [`PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context; add generator protocol |
+| [`PRIMITIVE_BLOCKS.md`](../../../../what/PRIMITIVE_BLOCKS.md) | `call` primitive revisited — becomes Invocation + Context; add generator protocol |
 | [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the submit operator, `take()` extraction |
-| [`CONCURRENCY_MODEL.md`](../important/CONCURRENCY_MODEL.md) | Absorbed into context model — replaced by spawn/fork contexts |
-| [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `take()`, generator `next()`/`stop()`, resource lifecycle via context destructor |
-| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — two-operator family (`<-` single owner, distribution glyph TBD); add `using` sugar; generator syntax (deferred to Phase 5) |
-| [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, `Spawn`; add `Invocation`, `Execution Context`, `using`, `take`, generator protocol; remove `Async`, `parallel` |
-| [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
-| [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section |
-| [`SCOPED_RESOURCE_LIFECYCLE.md`](../essential/SCOPED_RESOURCE_LIFECYCLE.md) | Superseded — absorbed into context model. `using` is syntactic sugar over context + scope, not a separate mechanism. |
+| [`CONCURRENCY_MODEL.md`](../../../../what/concepts/CONCURRENCY_MODEL.md) | Absorbed into context model — replaced by spawn/fork contexts |
+| [`EXECUTION_MODEL.md`](../../../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `take()`, generator `next()`/`stop()`, resource lifecycle via context destructor |
+| [`SYNTAX.md`](../../../../what/SYNTAX.md) | Update invocation syntax section — two-operator family (`<-` single owner, distribution glyph TBD); add `using` sugar; generator syntax (deferred to Phase 5) |
+| [`GLOSSARY.md`](../../../../what/GLOSSARY.md) | Update `Delegate`, `Spawn`; add `Invocation`, `Execution Context`, `using`, `take`, generator protocol; remove `Async`, `parallel` |
+| [`CORE_CONCEPTS.md`](../../../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
+| [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md) | Update Uniformity section |
+| [`SCOPED_RESOURCE_LIFECYCLE.md`](SCOPED_RESOURCE_LIFECYCLE.md) | Superseded — absorbed into context model. `using` is syntactic sugar over context + scope, not a separate mechanism. |
 | [`DECLARATIVE_CONSTRUCTS.md`](../important/DECLARATIVE_CONSTRUCTS.md) | Update § Resource Management — replace standalone `using` analysis with desugaring to Execution Context pattern. |
 
 ---
@@ -640,7 +640,9 @@ on that context share `obj`'s state, serialised through the coroutine.
 This mirrors `delegate(obj)` but with cooperative scheduling instead of
 mailbox-based preemption.
 
-### 2. Return type of contextual invocation
+### 2. Return type of contextual invocation — **RESOLVED (see OQ2 Resolution)**
+
+> The speculative body below is retained for traceability.
 
 ```orthon
 ctx <- fn(args)       # returns Future<T>? or void?
@@ -649,11 +651,72 @@ ctx <- fn(args)       # returns Future<T>? or void?
 Does every contextual invocation return a handle, or is the return
 discarded and `await(ctx)` drains all pending results?
 
-**Possible answer:** Each contextual invocation returns a handle
-(`Future<T>`), and `await(handle)` materialises that specific result.
-`await(ctx)` without a handle waits for all pending invocations on
-the context. This distinguishes "wait for this specific call" from
-"drain the context."
+**Possible answer (superseded by OQ2 Resolution):** Each contextual
+invocation returns a handle (`Future<T>`), and `await(handle)`
+materialises that specific result. `await(ctx)` without a handle waits
+for all pending invocations on the context. This distinguishes "wait for
+this specific call" from "drain the context."
+
+### OQ2 Resolution — Context-Defined Submission Return
+
+Adopted on 2026-07-31 through the Concept Design Review (Convergence
+Check) process.
+
+**Question:** Does `ctx <- fn(args)` return a handle to a specific result,
+or is the return discarded with materialisation only at the context level?
+
+**Answer:** The submission return is **defined by the context**
+(Variant C). The operator family is uniform in semantics — it submits an
+Invocation — but the caller-visible return is part of each context's
+contract:
+
+| Context | Submission returns | Materialisation |
+|---------|--------------------|-----------------|
+| `delegate(obj)` | `void` — a message | `take(ctx)` — extract owner |
+| `defer(obj)` | a **deferred invocation** (suspendable computation) | `await(ctx)` — yield until ready |
+| `spawn()` / `fork()` | `void` — joins the result stream | `next()` / `stop()`, `grab` / `gather` |
+
+**Key decisions:**
+
+1. **Variant C accepted.** Return is context-defined, completing OQ4's
+   per-context extraction vocabulary and OQ8's destructor contract without
+   rework.
+2. **`delegate` is a message.** Submissions return `void`; the meaningful
+   result is the owner's state, read via `take(ctx)`. No per-message
+   handles — avoids artificial `Handle<void>` noise and preserves actor
+   semantics.
+3. **`defer` returns a deferred invocation.** The transport object is the
+   suspended computation scheduled into the coroutine context —
+   semantically a coroutine-like suspendable unit of work, *not* a generic
+   handle. It is distinct from the context itself (the coroutine created
+   by `defer(obj)`). Awaiting (`await(ctx)`, per OQ4) yields until that
+   computation is ready.
+4. **`spawn`/`fork` join the stream.** Submissions return `void`; each
+   contributes one element to the generator stream (`next()` / `stop()`,
+   `grab` / `gather`). This keeps OQ8's "each submission yields a
+   resolvable unit of work" true at the stream-element level.
+5. **Type name deferred to Phase 5.** The exact name of the `defer`
+   transport type (candidates: `Coroutine`, `Future`, `Deferred`, `Task`)
+   is an internal / type-system detail and is deferred. The Core Language
+   commits to the concept — a *deferred invocation* — not the name (see
+   OQ2 Naming Note).
+6. **Out-of-order wait deferred to v0.2.** A per-submission handle for
+   `spawn`/`fork` (awaiting a specific result out of stream order) is not
+   needed for v0.1 and is additive — no design change required later.
+
+### OQ2 Naming Note — Task / Future / Deferred
+
+The exact type name of the `defer` transport is deferred to Phase 5 (type
+system / syntax). A working taxonomy, adopted for discussion only:
+
+| Name | Meaning | Applies to |
+|------|---------|------------|
+| `Task` | a function without a result (unit work) | candidate for `spawn`/`fork` stream units |
+| `Future` | a function whose result arrives later | candidate for the `defer` submission result |
+| `Deferred` | a control wrapper around a callback | not currently needed |
+
+All three are realisations of one underlying concept: **a deferred
+invocation**. The Core Language commits to the concept, not the name.
 
 ### 3. Context creation vs context binding — **RESOLVED (see OQ5)**
 
@@ -934,9 +997,13 @@ context, let the worker run to completion) is not expressible without a
 (see [`../important/DETACHED_EXECUTION.md`](../important/DETACHED_EXECUTION.md)),
 not resolved here.
 
-**Consequence for OQ2:** the return-type question (handle vs. void)
-remains open; this resolution assumes each submission yields a
-resolvable unit of work that can be materialised or cancelled before
+**Consequence for OQ2 (resolved 2026-07-31):** the return-type question
+was resolved by the OQ2 Resolution — submission return is context-defined
+(Variant C): `delegate` returns `void`, `defer` returns a deferred
+invocation, `spawn`/`fork` return `void` and each submission joins the
+generator stream. The OQ8 assumption holds: for `spawn`/`fork`, each
+submission yields a resolvable unit of work (a stream element) that can
+be materialised (`next()`/`gather()`) or cancelled (`stop()`) before
 destruction.
 
 ---
@@ -1000,6 +1067,7 @@ destruction.
 | 2026-07-31 | **OQ5 resolved.** Single operator superseded by a **two-operator family by ownership axis**: `<-` = single owner (`delegate`, `defer`; both always wrap an object), distribution = stateless workers (`spawn`, `fork`). `Send`/`Move` marker traits check captured data at compile time. `<=` rejected as distribution glyph (comparison conflict); `<||`/`|>` candidates, glyph deferred to Phase 5. |
 | 2026-07-31 | **OQ7 resolved.** Local-reasoning concern addressed by the two-operator family: the ownership relationship (`<-` vs. distribution) is visible at the call site; residual per-policy ambiguity (yield vs. block vs. dispatch) accepted as a conscious trade-off with proximity, naming, and type-system mitigation. |
 | 2026-07-31 | **OQ8 resolved.** Context destructor contract: the wrapped object drops automatically as a consequence of ownership + lifetime (not a new rule); `take(ctx)` = move-out; `using` remains pure sugar. For `spawn`/`fork`, no safe automatic behaviour for pending work exists — explicit resolution (materialise via `next()`/`gather()`, or cancel via `stop()`) is required before destruction; destroying a context with unresolved work is a program error. Worker-shutdown manner and enforcement are Implementation Strategy concerns (Phase 7). Fire-and-forget is not expressible without `detach()` — deferred to a separate research hypothesis (`../important/DETACHED_EXECUTION.md`). |
+| 2026-07-31 | **OQ2 resolved.** Submission return is context-defined (Variant C): `delegate` returns `void` (a message; owner state read via `take(ctx)`), `defer` returns a deferred invocation (a suspendable computation — semantically coroutine-like, distinct from the context itself), `spawn`/`fork` return `void` and each submission joins the generator stream (`next()`/`stop()`, `grab`/`gather`). Type name of the `defer` transport deferred to Phase 5 (OQ2 Naming Note: Task/Future/Deferred — all realisations of "deferred invocation"). Out-of-order wait for `spawn`/`fork` deferred to v0.2 (additive). |
 
 **Status:** Exploratory — not accepted. Requires resolution of open
 questions before EDR.
