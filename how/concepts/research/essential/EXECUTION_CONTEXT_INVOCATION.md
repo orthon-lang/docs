@@ -2,8 +2,9 @@
 
 > **⚠️ DRAFT — Concept research.**
 > This document proposes a unified invocation model: a single **Invocation**
-> operation submitted to an **Execution Context** via one operator `<-`.
-> The context constructor determines the execution policy, not the operator.
+> operation submitted to an **Execution Context** via a two-operator family.
+> The operator encodes the ownership relationship (single owner vs.
+> distribution); the context constructor determines the execution policy.
 >
 > **Status:** Exploratory — not accepted.
 > **Supersedes:** [`EXECUTION_POLICY_HYPOTHESIS.md`](EXECUTION_POLICY_HYPOTHESIS.md) (earlier hypothesis with per-context operators)
@@ -39,8 +40,9 @@ still has three separate invocation mechanisms:
 | `spawn` | `spawn fn(args)` | Parallel execution |
 
 **Proposal:** All three are the same operation — **Invocation** — submitted to
-an **Execution Context** via a single operator `<-`. The context, not the operator,
-determines the execution policy.
+an **Execution Context** via a two-operator family (`<-` for single owner,
+distribution for stateless workers). The operator encodes the ownership
+relationship; the context determines the execution policy.
 
 ---
 
@@ -56,7 +58,8 @@ There is no:
 - coroutine
 
 There is only **Invocation**. A context constructor creates an execution context.
-The single operator `<-` submits invocations to that context. The context
+A two-operator family submits invocations to that context. The operator encodes
+the ownership relationship (single owner vs. distribution); the context
 determines how they execute.
 
 ```orthon
@@ -68,11 +71,11 @@ ctx <- method(params)      — submit to coroutine
 ctx = delegate(obj)        — mailbox context
 ctx <- method(params)      — submit to mailbox
 
-ctx = spawn()              — thread context
-ctx <- method(params)      — submit to thread pool
+ctx = spawn()              — thread context (no owner)
+ctx |> method(params)      — distribute to thread pool
 
-ctx = fork()               — process context
-ctx <- method(params)      — submit to process pool
+ctx = fork()               — process context (no owner)
+ctx |> method(params)      — distribute to process pool
 ```
 
 Invocation becomes **two-dimensional**:
@@ -83,11 +86,24 @@ How to execute?  →  context (created by constructor, not encoded in operator)
 ```
 
 The function answers only the first question. The context answers only the second.
-The operator `<-` does one thing: **submit invocation to context**.
+The operator family does one thing: **submit invocation to context** — the
+member operator encodes the ownership relationship (`<-` for single owner,
+distribution for stateless workers).
+
+> The distribution operator's concrete glyph is a Phase 5 decision. Examples in
+> this document use `|>` provisionally; `<||` is the leading candidate (see OQ5
+> Resolution).
 
 ---
 
 ### Why One Operator, Not Many
+
+> **Superseded (2026-07-31, OQ5 Resolution).** The model moved from a single
+> operator to a **two-operator family** grouped by ownership relationship
+> (`<-` = single owner; distribution = stateless workers). The rejection of
+> per-context-policy operators stands — the two operators are members of one
+> Submission family, not one-operator-per-policy. The historical rationale
+> below is retained for traceability.
 
 An earlier version of this proposal (see [`EXECUTION_POLICY_HYPOTHESIS.md`](EXECUTION_POLICY_HYPOTHESIS.md))
 proposed distinct operators per context type (`<~`, `<-`, `<=`, `<@`, `<#`). This was
@@ -105,13 +121,16 @@ context's responsibility. This is more orthogonal: the *what* (invocation) is
 separated from the *how* (context), and the syntax does not duplicate information
 already present in the type system.
 
-**Decision:** Single operator `<-`. The context constructor determines the policy.
-This is consistent with Orthon's orthogonality principle: one concept, one
-mechanism. If the reader needs to understand what `ctx <- fn()` does, they look at
-how `ctx` was constructed — typically on the line immediately above.
+**Decision (superseded):** A single operator `<-` was adopted on 2026-07-30. The
+OQ5 Resolution (2026-07-31) superseded it with a two-operator family: `<-` (single
+owner) and the distribution operator (stateless workers). The context constructor
+still determines the policy; the operator now also encodes the ownership
+relationship. If the reader needs to understand what `ctx <- fn()` does, they look
+at how `ctx` was constructed — typically on the line immediately above.
 
-**Extensibility benefit:** A new context type (GPU, cluster, quantum) requires only
-a new constructor — no new operator. The syntax surface does not grow.
+**Extensibility benefit (preserved):** A new context type (GPU, cluster, quantum)
+requires only a new constructor — no new operator. The new context resolves to one
+of the two operators by whether it owns state. The syntax surface does not grow.
 
 ---
 
@@ -216,17 +235,18 @@ call syntax `fn(args)` is Immediate by default.
 | Form | Meaning |
 |------|---------|
 | `fn(args)` | Immediate — execute now, produce value |
-| `ctx <- fn(args)` | Submit to context — context determines how |
+| `ctx <- fn(args)` | Submit to single owner — serialised |
+| `ctx |> fn(args)` | Distribute to stateless workers — parallel (glyph provisional, Phase 5) |
 
 **Context constructors:**
 
-| Constructor | Creates | Execution policy |
-|-------------|---------|------------------|
-| `defer(obj)` | Coroutine context | Cooperative, suspending |
-| `delegate(obj)` | Mailbox context | Sequential, ownership-scoped |
-| `spawn()` | Thread context | Parallel, shared memory |
-| `fork()` | Process context | Parallel, isolated memory |
-| — | Immediate | Synchronous, blocking |
+| Constructor | Creates | Execution policy | Operator |
+|-------------|---------|------------------|----------|
+| `defer(obj)` | Coroutine context | Cooperative, suspending | `<-` |
+| `delegate(obj)` | Mailbox context | Sequential, ownership-scoped | `<-` |
+| `spawn()` | Thread context | Parallel, shared memory | distribution |
+| `fork()` | Process context | Parallel, isolated memory | distribution |
+| — | Immediate | Synchronous, blocking | — |
 
 ---
 
@@ -235,7 +255,8 @@ call syntax `fn(args)` is Immediate by default.
 #### `async` / `await` — eliminated
 
 `async` is not a modifier on the function. The function is colourless.
-`defer(obj)` creates a coroutine context; `<-` submits invocations to it.
+The caller picks a context: `defer(obj)`/`delegate(obj)` for owner state
+(`<-`), `spawn()`/`fork()` for stateless work (distribution).
 
 ```orthon
 # Before:
@@ -247,9 +268,9 @@ let data = await fetch(url)
 fun fetch(url) -> String           # colourless function
     return httpClient.get(url)
 
-let ctx = defer()                   # create deferred context
-ctx <- fetch(url)                   # submit to context
-let data = await(ctx)               # materialise result
+let pool = spawn()                  # create a worker context
+pool |> fetch(url)                  # distribute to workers
+let data = grab(pool)               # materialise result
 ```
 
 `await(...)` is a regular function that reads a result from any execution
@@ -264,14 +285,14 @@ memory models:
 ```orthon
 # Threading (shared memory):
 let pool = spawn()
-pool <- loadImage("a.jpg")
-pool <- loadImage("b.jpg")
+pool |> loadImage("a.jpg")
+pool |> loadImage("b.jpg")
 let results = gather(pool)     # StdLib: next() in a loop
 
 # Parallelism (isolated memory):
 let cluster = fork()
-cluster <- processChunk(data, 0..100)
-cluster <- processChunk(data, 100..200)
+cluster |> processChunk(data, 0..100)
+cluster |> processChunk(data, 100..200)
 let first = grab(cluster)       # StdLib: next() + stop()
 ```
 
@@ -368,49 +389,54 @@ this pattern more concise.
 ### Colourless Functions
 
 A key consequence: **functions have no colour.** There is no `async fn`
-vs `fn`. A function is just a computation. The caller creates the
-appropriate context and submits invocations with `<-`.
+vs `fn`. A function is just a computation. The caller chooses the context:
+an operation tied to an owner's state goes to `delegate`/`defer` (`<-`); a
+stateless computation goes to `spawn`/`fork` (distribution).
 
 ```orthon
 fun fetch(url: Url) -> String
     return httpClient.get(url)
 
-# All valid, same function:
+# Stateless computation — immediate or distribution:
 let a = fetch(url)                          # Immediate — blocks
 
-let d = defer()
-d <- fetch(url)                             # Deferred
-let b = await(d)
-
-let g = delegate()
-g <- fetch(url)                             # Delegated
-let c = take(g)
-
 let pool = spawn()
-pool <- fetch(url)                          # Thread
+pool |> fetch(url)                          # Thread
 let first = fetch(pool.next())              # Generator: next()
 pool.stop()
 
 let cluster = fork()
-cluster <- fetch(url)                       # Process
+cluster |> fetch(url)                       # Process
 let all = gather(cluster)                   # StdLib: next() loop
+
+# Operations tied to an owner — single-owner contexts:
+let counter = delegate(Counter())
+counter <- increment()                      # Delegated, serialised
+let result = take(counter)
 ```
+
+A function is not tied to a context kind in its declaration — it is
+colourless. The context constructor (and its paired operator) determines
+the execution policy. Because `spawn`/`fork` require `Send`/`Move`
+captured data, a stateless function like `fetch` is trivially valid in
+both distribution contexts.
 
 ---
 
 ### What Remains Separate
 
-Three distinct operations, two syntactic mechanisms:
+Three distinct operations, two operator glyphs (one family):
 
 | Operation | Mechanism | Notes |
 |-----------|-----------|-------|
 | Create context | Constructor: `defer(obj)`, `delegate(obj)`, `spawn()`, `fork()` | Allocates resources, establishes policy |
-| Submit invocation | Operator: `ctx <- call` | Single operator for all contexts |
+| Submit invocation | Operators: `ctx <- call` (single owner), `ctx |> call` (distribution) | Two-operator family by ownership relationship |
 | Materialise result | Context-specific: `await(ctx)`, `take(ctx)`, `next()/stop()` | Per-context vocabulary |
 
 The model separates:
 1. **Context construction** — allocating a coroutine, mailbox, thread pool, process pool
-2. **Invocation submission** — `<-` transfers execution to the context
+2. **Invocation submission** — the operator family transfers execution to the
+   context; the member operator encodes the ownership relationship
 3. **Result materialisation** — context-specific extraction (`await` for defer,
    `take` for delegate, `next()`/`stop()` generator for spawn/fork)
 
@@ -538,7 +564,8 @@ posed three open questions. The Execution Context model answers them:
 ### Syntax
 
 - `fn(args)` is Immediate by default — no context, no operator.
-- Contextual invocation is always `ctx <- call`.
+- Contextual invocation uses the operator family: `ctx <- call` (single
+  owner) or `ctx |> call` (distribution, glyph provisional).
 - `await(ctx)` is a regular function, not a keyword.
 - `obj.method(args)` — remains natural, unchanged.
 - `ctx <- obj.method(args)` — contextual method call, natural.
@@ -579,7 +606,7 @@ the constructor requires compiler-level semantics:
 | [`DELEGATE.md`](DELEGATE.md) | Rewrite — `delegate` becomes context constructor, `<-` is the submit operator, `take()` extraction |
 | [`CONCURRENCY_MODEL.md`](../important/CONCURRENCY_MODEL.md) | Absorbed into context model — replaced by spawn/fork contexts |
 | [`EXECUTION_MODEL.md`](../../what/EXECUTION_MODEL.md) | Substantial update — define execution contexts, `await()`, `take()`, generator `next()`/`stop()`, resource lifecycle via context destructor |
-| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — single `<-`; add `using` sugar; generator syntax (deferred to Phase 5) |
+| [`SYNTAX.md`](../../what/SYNTAX.md) | Update invocation syntax section — two-operator family (`<-` single owner, distribution glyph TBD); add `using` sugar; generator syntax (deferred to Phase 5) |
 | [`GLOSSARY.md`](../../what/GLOSSARY.md) | Update `Delegate`, `Spawn`; add `Invocation`, `Execution Context`, `using`, `take`, generator protocol; remove `Async`, `parallel` |
 | [`CORE_CONCEPTS.md`](../../what/CORE_CONCEPTS.md) | Update CONCURRENCY_MODEL entry |
 | [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md) | Update Uniformity section |
@@ -590,7 +617,10 @@ the constructor requires compiler-level semantics:
 
 ## Open Questions
 
-### 1. What does `defer(...)` wrap?
+### 1. What does `defer(...)` wrap? — **RESOLVED (see OQ5)**
+
+> Bare `defer()` does not exist: like `delegate`, `defer` always wraps an
+> object. The speculative body below is retained for traceability.
 
 ```orthon
 let ctx = defer()              # bare context — invoke on nothing
@@ -625,7 +655,11 @@ discarded and `await(ctx)` drains all pending results?
 the context. This distinguishes "wait for this specific call" from
 "drain the context."
 
-### 3. Context creation vs context binding
+### 3. Context creation vs context binding — **RESOLVED (see OQ5)**
+
+> A context is always created with its owner; late binding
+> (`let ctx = delegate()` then `ctx <- Counter()`) does not exist.
+> The speculative body below is retained for traceability.
 
 ```orthon
 let ctx = delegate(Counter())   # creates context + binds object
@@ -677,17 +711,57 @@ Design Review (Convergence Check) process.
 9. **Generator syntax** (e.g., `for-in` loop, `while(pool)`, expression form
    `f(x) for x in pool`) — deferred to Phase 5 (Syntax Design).
 
-### 5. Composition with ownership
+### 5. Composition with ownership — **RESOLVED**
 
-`delegate` applies to **state owners**, not arbitrary code. The `<-`
-operator serialises access to the owner's state. But `spawn()`/`fork()`
-apply to any stateless function. How does the type system distinguish?
+### OQ5 Resolution — Two-Operator Submission Family
 
-**Possible answer:** The function's type signature reveals whether it
-captures mutable state. `ctx <- fn()` on a spawn context with a
-state-capturing closure is a compile error. `fork()` additionally
-requires that all captured state is `Send`-compatible (serialisable
-across process boundaries).
+Adopted on 2026-07-31 through the Concept Design Review (Convergence
+Check) process. The single-operator model (`<-` for all contexts) is
+superseded by a **two-operator family** that partitions contexts by
+their **ownership relationship**. The operator encodes the ownership
+relationship; the context constructor still determines the execution
+policy.
+
+| Operator | Relationship | Contexts | Type-system check |
+|----------|--------------|----------|-------------------|
+| `<-` | Submit to the context's **single owned state** — serialised, in order | `delegate(obj)`, `defer(obj)` | Compatible with the owner's type; may capture/mutate owner state |
+| distribution | **Distribute** to stateless workers — independent, parallel | `spawn()`, `fork()` | Captured data must satisfy `Send` (`spawn`) or `Move` (`fork`) |
+
+**Key decisions:**
+
+1. **Two operators, not one.** `<-` is reserved for contexts that own a
+   single state object. A second operator (distribution) is used for
+   contexts that dispatch to stateless workers. The operator set is
+   **closed (2)**; the constructor set is **open** — a new context type
+   resolves to one of the two by whether it owns state.
+2. **`<-` = single owner.** `delegate(obj)` and `defer(obj)` both wrap
+   and own exactly one object; invocations are serialised against it.
+   Both **always require an object** — bare contexts (`delegate()`,
+   `defer()`) do not exist. This consequently resolves OQ1 and OQ3.
+3. **Distribution = stateless workers.** `spawn()` (threads, shared
+   memory) and `fork()` (processes, isolated memory) dispatch
+   invocations to independent workers. Functions submitted to these
+   contexts must not depend on a single owner's mutable state.
+4. **`Send` / `Move` marker traits (Variant B).** The type system checks
+   captured data at compile time, Rust-style auto-traits: `spawn`
+   requires all captured values be `Send` (safe to transfer across
+   threads); `fork` requires `Move` = `Send` + serialisable (transferable
+   across process boundaries). Stateless functions are trivially `Send`
+   and `Move`. Errors surface at compile time, not runtime.
+5. **Binary axis.** Submission is one of exactly two relationships:
+   serialised-to-owner or distributed-to-workers. Candidate third
+   contexts (lock/shared-state, channel, reduce/aggregate, actor pool,
+   reactive push) each resolve to one of the two — respectively as `<-`,
+   as a data structure, as extraction, as composition, or as a
+   materialisation vocabulary — so no third operator is required.
+6. **`<=` rejected as the distribution glyph.** `<=` is already Orthon's
+   less-than-or-equal comparison (e.g. `requires v >= 0 && v <= 150`),
+   violating `SYNTAX.md`'s "one symbol → one meaning". The family-
+   coherent candidate `<||` (shared `<` prefix = "submit into context";
+   suffix encodes the relationship) is the leading alternative; `|>` is
+   the maximally-distinct alternative. The concrete glyph is deferred
+   to Phase 5 (Syntax Design); examples in this document use `|>`
+   provisionally.
 
 ### 6. Ambient policy inside contexts
 
@@ -701,15 +775,41 @@ blocking the caller's thread. Inside a deferred context, `fn(args)`
 means "eagerly evaluate within the current coroutine." The unmarked
 `fn(args)` is policy-aware, not context-independent.
 
-### 7. One operator: loss of local reasoning?
+### 7. Local reasoning — **RESOLVED**
 
-With a single `<-`, the reader must know the type of `ctx` to understand
-whether `ctx <- fn()` blocks, yields, or dispatches. Is this acceptable?
+### OQ7 Resolution — Ownership-Level Signal Restored
 
-**Mitigation:** Contexts are typically created on the line immediately
-above their first use. Naming conventions (`pool`, `worker`, `counter`)
-communicate intent. The type system guarantees correctness. This is a
-conscious trade-off: less syntax for slightly less local explicitness.
+Adopted 2026-07-31 through the Concept Design Review (Convergence
+Check) process.
+
+**Question:** Must the reader know the context type to understand what
+`ctx <- fn()` does to the caller (block, yield, or continue)?
+
+**Answer:** The two-operator family (OQ5 Resolution) restores the
+ownership-level signal at the call site. `<-` visibly means "message to
+a single owner" (serialised); the distribution operator visibly means
+"dispatch to stateless workers" (parallel). The reader no longer needs
+the context type to know *which relationship* is in play.
+
+The residual ambiguity — the exact policy *within* each operator (yield
+vs. block vs. dispatch) — is accepted as a conscious trade-off,
+mitigated by:
+
+1. **Proximity.** Contexts are typically created on the line immediately
+   above their first use (`let ctx = delegate(obj); ctx <- ...`).
+2. **Naming.** Conventional context names (`pool`, `worker`, `counter`,
+   `mailbox`) communicate intent.
+3. **Type-system guarantee.** The operator-context pairing is checked at
+   compile time; the reader can never observe the wrong policy.
+4. **Ownership precedes policy.** The ownership relationship is the
+   load-bearing distinction for correctness; the exact scheduling policy
+   is an implementation detail the programmer rarely needs to pin down
+   at the call site.
+
+**Conclusion:** Acceptable. The local-reasoning loss that motivated the
+question is largely removed by the two operators; the remainder is
+mitigated and is a deliberate simplicity trade-off (less syntax, slightly
+less local policy detail).
 
 ### 8. Context destructor contract
 
@@ -751,8 +851,10 @@ context types.
   Any context composes with any function.
 - **Minimal.** One concept (Invocation) + context constructors replace
   `call` + `delegate send` + `spawn`/`fork` + `async`/`await`.
-- **Single operator.** `<-` means exactly one thing: submit to context.
-  No operator-per-policy proliferation.
+- **Two-operator family, not per-policy proliferation.** `<-` (single owner)
+  and the distribution operator (stateless workers) are two members of one
+  Submission family. The operator set is closed (2); the constructor set is
+  open.
 - **Extensible.** New context types (GPU, cluster) require only a new
   constructor — no new syntax.
 - **Colourless functions.** No sync/async bifurcation. Any function
@@ -766,10 +868,11 @@ context types.
 
 ### Open Risks
 
-- **Loss of local reasoning.** `ctx <- fn()` does not visually signal
-  whether the caller blocks, yields, or continues. The reader must
-  know the context type. Mitigated by typical proximity of context
-  construction to first use.
+- **Loss of local reasoning (partially mitigated).** The two operators now
+  distinguish "message to a single owner" from "distribution to workers" at
+  the call site. Within each operator the reader still must know the context
+  type for the exact policy (yield vs. block vs. dispatch). Mitigated by
+  typical proximity of context construction to first use.
 - **Context boilerplate.** Creating a context before every non-immediate
   call adds verbosity. May need sugar for one-shot contexts.
 - **`await(...)` as StdLib.** If `await` is not a keyword, can it be
@@ -795,6 +898,8 @@ context types.
 | 2026-07-30 | Renamed: `EXECUTION_POLICY_HYPOTHESIS.md` → `EXECUTION_CONTEXT_INVOCATION.md`. Old file deprecated. |
 | 2026-07-30 | Integrated Context Manager (`using`) as syntactic sugar over Execution Context + Scope. `using` desugars to `delegate(obj)` + block + scope-bound destructor. No new semantics. `SCOPED_RESOURCE_LIFECYCLE.md` superseded. |
 | 2026-07-30 | **OQ4 resolved.** Context-specific extraction vocabulary adopted. `defer`/`await`, `delegate`/`take`, `spawn`/`fork` with generator protocol (`next()`/`stop()`). `yield` removed — runtime yields on `await` automatically. `grab`/`gather` as StdLib sugar. Generator syntax deferred to Phase 5. `parallel()` and `remote()` replaced by `spawn()` and `fork()`. |
+| 2026-07-31 | **OQ5 resolved.** Single operator superseded by a **two-operator family by ownership axis**: `<-` = single owner (`delegate`, `defer`; both always wrap an object), distribution = stateless workers (`spawn`, `fork`). `Send`/`Move` marker traits check captured data at compile time. `<=` rejected as distribution glyph (comparison conflict); `<||`/`|>` candidates, glyph deferred to Phase 5. |
+| 2026-07-31 | **OQ7 resolved.** Local-reasoning concern addressed by the two-operator family: the ownership relationship (`<-` vs. distribution) is visible at the call site; residual per-policy ambiguity (yield vs. block vs. dispatch) accepted as a conscious trade-off with proximity, naming, and type-system mitigation. |
 
 **Status:** Exploratory — not accepted. Requires resolution of open
 questions before EDR.
