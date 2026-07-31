@@ -763,17 +763,52 @@ policy.
    to Phase 5 (Syntax Design); examples in this document use `|>`
    provisionally.
 
-### 6. Ambient policy inside contexts
+### 6. Ambient policy inside contexts — **RESOLVED**
 
 If a function submitted to a deferred context calls `fn(args)` (Immediate)
 inside its body, does that block the deferred context or yield?
 
-**Possible answer:** The execution policy is ambient. Inside a
-delegated context, `fn(args)` (Immediate) means "execute in this
-context synchronously" — it processes the call inline without
-blocking the caller's thread. Inside a deferred context, `fn(args)`
-means "eagerly evaluate within the current coroutine." The unmarked
-`fn(args)` is policy-aware, not context-independent.
+The execution policy is **not** ambient. The unmarked call `fn(args)`
+is context-independent with fixed semantics.
+
+### OQ6 Resolution — Fixed Inline Call Semantics
+
+Adopted on 2026-07-31 through the Concept Design Review (Convergence
+Check) process.
+
+**Answer to the question:** `fn(args)` inside a deferred context
+neither blocks the context nor yields — it executes synchronously
+inline, in the current execution environment. It suspends only if the
+callee itself hits an explicit extraction point (`await`, `take`,
+`next`).
+
+**Key decisions:**
+
+1. **Fixed call semantics.** `fn(args)` is context-independent: always
+   a synchronous, inline call. A context affects only the
+   *capabilities* available inside it (which extraction operations,
+   which state is reachable), never the semantics of the call itself.
+   This preserves local reasoning and orthogonality.
+2. **No self-delegation.** There is no `this <- fn(...)` / `yield
+   from` mechanism. Submitting an invocation to one's own context is
+   not a language feature.
+3. **Long computations go to another context.** The uniform idiom for
+   work that may run long inside a context is cross-context submission
+   to a stateless-worker context: `pool |> fn(...)` (distribution
+   operator, OQ5), materialised via the generator protocol
+   (`next()`/`stop()`, or StdLib `grab`/`gather`, OQ4). No self-
+   submission, no special casing, and no automatic yield points.
+4. **Cooperative model, accepted.** Inside a `defer` coroutine, a long
+   inline call with no extraction points occupies the coroutine's
+   thread until it returns. This is the accepted cooperative trade-off;
+   the remedy is cross-context submission, not preemption.
+5. **Actor serialisation is local.** Inside a `delegate` actor, an
+   inline call runs in the actor, serialised via its inbox. A long
+   inline call causes head-of-line blocking *within the actor* only —
+   it does not starve other actors.
+6. **Actor threading is a strategy concern.** Whether a `delegate`
+   actor runs on its own thread or shares a pool is a
+   `DEFAULT_STRATEGY` decision, not a language-semantic guarantee.
 
 ### 7. Local reasoning — **RESOLVED**
 
@@ -898,6 +933,7 @@ context types.
 | 2026-07-30 | Renamed: `EXECUTION_POLICY_HYPOTHESIS.md` → `EXECUTION_CONTEXT_INVOCATION.md`. Old file deprecated. |
 | 2026-07-30 | Integrated Context Manager (`using`) as syntactic sugar over Execution Context + Scope. `using` desugars to `delegate(obj)` + block + scope-bound destructor. No new semantics. `SCOPED_RESOURCE_LIFECYCLE.md` superseded. |
 | 2026-07-30 | **OQ4 resolved.** Context-specific extraction vocabulary adopted. `defer`/`await`, `delegate`/`take`, `spawn`/`fork` with generator protocol (`next()`/`stop()`). `yield` removed — runtime yields on `await` automatically. `grab`/`gather` as StdLib sugar. Generator syntax deferred to Phase 5. `parallel()` and `remote()` replaced by `spawn()` and `fork()`. |
+| 2026-07-31 | **OQ6 resolved.** Fixed inline call semantics adopted. `fn(args)` is context-independent — always synchronous inline; never blocks or yields by itself (the callee may suspend at an explicit extraction point). No self-delegation (`this <- fn(...)`); long computations are submitted to a stateless-worker context via the distribution operator (`pool |> fn(...)`) and materialised through the generator protocol (OQ4/OQ5). Actor threading deferred to `DEFAULT_STRATEGY`. |
 | 2026-07-31 | **OQ5 resolved.** Single operator superseded by a **two-operator family by ownership axis**: `<-` = single owner (`delegate`, `defer`; both always wrap an object), distribution = stateless workers (`spawn`, `fork`). `Send`/`Move` marker traits check captured data at compile time. `<=` rejected as distribution glyph (comparison conflict); `<||`/`|>` candidates, glyph deferred to Phase 5. |
 | 2026-07-31 | **OQ7 resolved.** Local-reasoning concern addressed by the two-operator family: the ownership relationship (`<-` vs. distribution) is visible at the call site; residual per-policy ambiguity (yield vs. block vs. dispatch) accepted as a conscious trade-off with proximity, naming, and type-system mitigation. |
 
