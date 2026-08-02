@@ -38,6 +38,48 @@ Success Criteria
     • Execution portability — same program runs identically in any conforming Engine
 ```
 
+## The Pain of This Era
+
+Programming languages have historically answered the dominant
+engineering challenge of their time — C solved portability, C++ solved
+complexity at scale, Java solved platform dependence, Go solved slow
+compilation, Rust solved memory safety without a garbage collector
+(see [`DESIGN_INFLUENCES.md`](DESIGN_INFLUENCES.md) for the full
+evolutionary chain).
+
+Orthon is designed for the dominant pains of *this* era. Three
+problems define it:
+
+**1. Languages grew by accretion, not by engineering.** Most mainstream
+languages accumulated features, special cases, and implicit behaviors
+over decades. They were never architected — they evolved. The result
+is a growing gap between the discipline we expect from the software
+we build and the discipline applied to the languages we build it with.
+Programmers spend more cognitive effort deciphering accidental
+complexity than solving actual problems.
+
+**2. Programs are incomplete artifacts.** A program today is just
+source code. Its dependencies, runtime version, resource requirements,
+and permissions live outside the artifact — in Dockerfiles, CI configs,
+deployment scripts, and institutional knowledge. Reproducibility is a
+pipeline problem, portability a configuration problem, and debugging
+requires reconstructing the environment from scattered clues. The
+artifact you test is not the artifact you ship.
+
+**3. Languages were not designed for the LLM era.** Every special case,
+implicit conversion, and context-dependent rule in a language expands
+the prediction space for an LLM and multiplies the chance of generated
+errors. Languages designed before LLMs existed were optimized for human
+memorization, not for reliable machine generation. The next decade's
+dominant code producers — LLMs — were not a design consideration.
+
+Orthon answers each of these: a language architected with the same
+SOLID discipline it expects from its users (Pain 1); an Execution
+Program model where the artifact is fully defined — source, context,
+and execution contract — not just source code (Pain 2); and an
+orthogonal, explicit-semantics core designed from the start for both
+human understanding and reliable LLM generation (Pain 3).
+
 ## Language Designed Like Software
 
 The language should be architected like well-designed software.
