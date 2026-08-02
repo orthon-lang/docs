@@ -47,6 +47,14 @@ compilation, Rust solved memory safety without a garbage collector
 (see [`DESIGN_INFLUENCES.md`](DESIGN_INFLUENCES.md) for the full
 evolutionary chain).
 
+The chain ended in a pendulum. Python bought expressiveness by
+surrendering control; Rust and Zig bought control by raising the
+cognitive price of entry. Neither pole reconciled the two. The pain of
+this era is the missing synthesis — a language as expressive as Python
+and as controllable as Rust, redefined for the LLM era: expressiveness
+through composition, not sugar; control through explicit semantics,
+not ceremony.
+
 Orthon is designed for the dominant pains of *this* era. Three
 problems define it:
 
