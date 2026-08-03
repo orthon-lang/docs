@@ -570,6 +570,13 @@ interface.
 | 8.2 | FFI & Interoperability | C ABI, embedding API |
 | 8.3 | LLM Toolchain | Schema Provider, Code Completer, Code Generator, Static Analyser implementation |
 
+> **C ABI consideration (deferred from M1):** C-interoperability problems
+> and proposed solutions — platform C ABI as native ABI, native C-header
+> parsing, C-header emission for own exports — are captured in
+> [`../notes/c-abi-interop-consideration.md`](../notes/c-abi-interop-consideration.md).
+> Deliberately deferred until this milestone; not semantic-core or syntax
+> design.
+
 **Dependencies:** M1 (stdlib and FFI depend on the complete language
 specification).
 
