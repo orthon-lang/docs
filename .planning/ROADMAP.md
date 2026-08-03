@@ -88,10 +88,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ```
 Plans:
+
 - [x] 01.1-01-PLAN.md — Wave 1: Vision consolidation (review evidence, algorithm selection, LLM-native shortlist)
 - [x] 01.1-02-PLAN.md — Wave 1: Principles lock and throughput fitness functions
 - [x] 01.1-03-PLAN.md — Wave 2: Concept review collapse, acceptance gate, process doc finalization
 - [x] 01.1-04-PLAN.md — Wave 3: TODO.md edit (depends on D-01/D-03/D-10 landing)
+
 ```
 
 ---
@@ -112,7 +114,9 @@ Plans:
 
 ```
 Plans:
+
 - [x] 02-PLAN.md — Write SEMANTIC_MODEL.md and accept via EDR
+
 ```
 
 ---
@@ -133,8 +137,10 @@ Plans:
 
 ```
 Plans:
+
 - [x] 03-01-PLAN.md — Write PRIMITIVE_BLOCKS.md (PRIM-01)
 - [x] 03-02-PLAN.md — Verification run + EDR-016 (PRIM-02, PRIM-03)
+
 ```
 
 ---
@@ -155,6 +161,7 @@ Plans:
 
 ```
 Plans:
+
 - [ ] 04-01-PLAN.md — Wave 1: Essential Core — Semantic Foundation (EQUALITY, NULL_SAFETY, TRAITS, ERROR_HANDLING, LAZY_SEQUENCE_GENERATORS, ITERATOR_PROTOCOL)
 - [ ] 04-02-PLAN.md — Wave 2: Essential Core — Type System & Pattern Matching (GENERICS, PATTERN_MATCHING, TYPE_INFERENCE, TYPE_LEVEL_NULL_SAFETY, PATTERN_MATCHING_DISPATCH, ERROR_UNION) [depends on 04-01]
 - [ ] 04-03-PLAN.md — Wave 2: Essential — Remaining Core (AST_MACROS, COMPILER_AS_STATIC_ANALYZER, COMPILE_TIME_EXECUTION, COMPOSABLE_COLLECTION_OPS, CONCURRENCY_MODEL) [depends on 04-01]
@@ -164,9 +171,21 @@ Plans:
 - [ ] 04-07-PLAN.md — Wave 4: Important Tier — Remaining (19 concepts: CONTRACTS, DELEGATION, EXTENSION_FUNCTIONS, GRADUAL_TYPING, SMART_CAST, COPY_ON_WRITE, PROPERTIES, SLOTS, SPAN, NAMED_PARAMS, SORTING, MULTI_KEY_SORT, DATE_TIME, PERSISTENT_DATA, DERIVE_SERIALIZATION, COMMAND_PATTERN, CONTEXT_MODULES, DECLARATIVE, DECLARATION_BY_ASSIGNMENT)
 - [ ] 04-08-PLAN.md — Wave 5: Rejections + Deferrals (4 rejection EDRs + 54 deferral rationales)
 - [ ] 04-09-PLAN.md — Wave 6: Finalization (LIBRARY_BOUNDARY.md, aggregating EDR, pipeline log completion, human verification checkpoint)
+
 ```
 
 ---
+
+### Phase 04.1: Concepts Human's Verification (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 04.1 to break down)
 
 ### Phase 5: Syntax Design
 

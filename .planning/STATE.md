@@ -5,7 +5,7 @@ milestone_name: milestone
 current_phase: 04
 status: complete
 stopped_at: Phase 04 — Derived Features & Decision Pipeline complete
-last_updated: "2026-07-27T20:00:06.576Z"
+last_updated: "2026-08-03T17:20:04.441Z"
 last_activity: 2026-07-27
 progress:
   total_phases: 9
@@ -52,7 +52,6 @@ Progress: [████████░░] 80%
 | 06 | - | ⏳ |
 | 07 | - | ⏳ |
 | 08 | - | ⏳ |
-
 
 *Updated after each plan completion*
 
@@ -107,6 +106,7 @@ None yet.
 ### Roadmap Evolution
 
 - 2026-07-21: Full roadmap restructure — replaced old 5-phase structure with the 8-phase pipeline (+ inserted Phase 1.1) from `when/ROADMAP.md`, via `/gsd-phase` (phase.remove ×4, phase.insert ×1, phase.add ×7). Phase 1 preserved unchanged (already complete). See Decisions above for the full old→new phase mapping.
+- Phase 04.1 inserted after Phase 4: Concepts Human's Verification (URGENT)
 
 ## Deferred Items
 
