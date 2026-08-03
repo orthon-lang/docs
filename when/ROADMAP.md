@@ -4,6 +4,12 @@
 > Each milestone represents a stage in the design process, from Vision
 > to Language Specification Freeze.
 
+> **Status contract:** This document is the **design contract** — it defines
+> *what* each phase must deliver and *in what order*. It intentionally carries
+> **no completion status**. Live status (done / current / next) is tracked
+> exclusively in [`../.planning/ROADMAP.md`](../.planning/ROADMAP.md) and
+> [`../.planning/STATE.md`](../.planning/STATE.md).
+
 ---
 
 ## Overview
@@ -29,7 +35,7 @@ implementation) begin after the language specification is frozen.
 
 ---
 
-## M1 — Orthon Language Spec (v0.1) ⬜
+## M1 — Orthon Language Spec (v0.1)
 
 **Goal:** Deliver a frozen, self-consistent v0.1 language specification —
 designed through a rigorous architectural pipeline: from vision and principles,
@@ -67,7 +73,7 @@ Phase 5 — Syntax   Phase 6 — Cross-Cutting
 
 ---
 
-### Phase 1: Foundation ⬜
+### Phase 1: Foundation
 
 **Goal:** Fix architecture stubs, consolidate Vision into one coherent block,
 lock Design Principles as the constitutional level. Establish process
@@ -101,15 +107,15 @@ infrastructure so subsequent phases have a defined acceptance procedure.
 
 **Vision & Philosophy deliverables:**
 
-| Area | Deliverables | Status |
-|------|-------------|--------|
-| **Vision & Philosophy** | `VISION.md` (consolidated), `MANIFESTO.md`, `ZEN.md`, `GOALS.md` | 🔄 In Progress |
-| **Design Method** | `WORKING_BACKWARDS.md` | 🔄 In Progress |
-| **Design Principles** | `DESIGN_PRINCIPLES.md` — locked as constitution | 🔄 In Progress |
-| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 | 🔄 In Progress |
-| **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein | 🔄 In Progress |
-| **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template | 🔄 In Progress |
-| **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy | 🔄 In Progress |
+| Area | Deliverables |
+|------|-------------|
+| **Vision & Philosophy** | `VISION.md` (consolidated), `MANIFESTO.md`, `ZEN.md`, `GOALS.md` |
+| **Design Method** | `WORKING_BACKWARDS.md` |
+| **Design Principles** | `DESIGN_PRINCIPLES.md` — locked as constitution |
+| **Decision Infrastructure** | `DECISION_VALIDATION.md`, `_language-design.md`, `IMPLEMENTATION_POLICIES.md`, TDR-001–TDR-009 |
+| **Validation Methods** | Socratic, Scientific, Logical Analysis, TRIZ, Einstein |
+| **Templates** | EDR templates (Architecture, Process, base), Design review template, Concept template |
+| **Meta** | `README.md`, `AGENTS.md`, `GLOSSARY.md`, Documentation Principles, Philosophy |
 
 **New artifacts:**
 - `VISION.md` — consolidated (Vision · Mission · Non-goals · Audience · Success Criteria)
@@ -125,7 +131,7 @@ infrastructure so subsequent phases have a defined acceptance procedure.
 
 ---
 
-### Phase 2: Semantic Model ⬜
+### Phase 2: Semantic Model
 
 **Goal:** Define *what a program means* at the foundational level — identity,
 ownership, mutation, evaluation, visibility, lifetime — as a single unified
@@ -169,7 +175,7 @@ is extremely costly.
 
 ---
 
-### Phase 3: Primitive Blocks ⬜
+### Phase 3: Primitive Blocks
 
 **Goal:** Identify the minimal orthogonal set of primitive building blocks.
 Every derived feature must decompose into these. If a feature cannot be
@@ -214,20 +220,11 @@ decomposed, the primitive set is incomplete.
 
 **Dependencies:** Phase 2 (Semantic Model defines what primitives mean).
 
-**Plans:** 2 plans
-
-```
-Plans:
-- [ ] 03-01-PLAN.md — Core primitive set definition: write PRIMITIVE_BLOCKS.md with all 9 primitives, composition rules, exclusions, D-10 resolutions, Metadata Protocol, and GLOSSARY update
-- [ ] 03-02-PLAN.md — Verification and EDR: verify all ~132 concept docs decompose onto primitive set, confirm minimality, write EDR accepting Primitive Blocks
-```
-
-Wave 1: 03-01 (defines the primitive set)
-Wave 2: 03-02 (depends on 03-01 — verification and EDR)
+**Execution plans:** tracked in [`../.planning/ROADMAP.md`](../.planning/ROADMAP.md) (Phase 3).
 
 ---
 
-### Phase 4: Derived Features & Decision Pipeline ⬜
+### Phase 4: Derived Features & Decision Pipeline
 
 **Goal:** Design every language feature through a rigorous pipeline — each one
 decomposed to primitives, run through the 10-question Decision Pipeline,
@@ -304,7 +301,7 @@ classified as language/stdlib/external, and accepted via EDR.
 
 ---
 
-### Phase 5: Syntax Design ⬜
+### Phase 5: Syntax Design
 
 **Goal:** Design syntax as the *external interface* of the semantic model —
 not as an independent creative exercise. Syntax is derived from semantics,
@@ -348,7 +345,7 @@ not the reverse.
 
 ---
 
-### Phase 6: Cross-Cutting Review ⬜
+### Phase 6: Cross-Cutting Review
 
 **Goal:** Verify that all accepted concepts work together without conflicts.
 Produce the Interaction Matrix and resolve all concept-boundary conflicts.
@@ -396,7 +393,7 @@ Produce the Interaction Matrix and resolve all concept-boundary conflicts.
 
 ---
 
-### Phase 7: Execution & Optimization Model ⬜
+### Phase 7: Execution & Optimization Model
 
 **Goal:** Define the boundary between language semantics and implementation.
 Document what is guaranteed by the language vs. what is an optimisation choice.
@@ -443,7 +440,7 @@ Document what is guaranteed by the language vs. what is an optimisation choice.
 
 ---
 
-### Phase 8: Evolution Model & Freeze ⬜
+### Phase 8: Evolution Model & Freeze
 
 **Goal:** Define how the language evolves over time, then freeze v0.1.
 
@@ -526,7 +523,7 @@ Phase 4 (concepts designed).
 
 ---
 
-### Phase 9: Onboarding Material (post-Freeze, pre-M2) ⬜
+### Phase 9: Onboarding Material (post-Freeze, pre-M2)
 
 **Goal:** Produce developer-facing learning materials so that someone
 encountering Orthon for the first time can read, write, and understand
@@ -562,7 +559,7 @@ idiomatic programs without reading the full specification.
 
 ---
 
-## M2 — Standard Library & FFI (post-Freeze) ⬜
+## M2 — Standard Library & FFI (post-Freeze)
 
 **Goal:** Define the standard library architecture and foreign-function
 interface.
@@ -578,7 +575,7 @@ specification).
 
 ---
 
-## M3 — Build System & Tooling (post-Freeze) ⬜
+## M3 — Build System & Tooling (post-Freeze)
 
 **Goal:** Design the developer toolchain.
 
@@ -597,7 +594,7 @@ specification).
 
 ---
 
-## M4 — Implementation (post-Freeze) ⬜
+## M4 — Implementation (post-Freeze)
 
 **Goal:** Build the compiler / runtime (separate repository).
 

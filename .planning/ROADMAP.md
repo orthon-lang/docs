@@ -37,7 +37,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1.1: Foundation Completion** (INSERTED) - Consolidate Vision, lock Design Principles as constitutional, build process infrastructure
 - [x] **Phase 2: Semantic Model** - Define identity, ownership, mutation, evaluation, visibility, and lifetime as one unified model (completed 2026-07-27)
 - [x] **Phase 3: Primitive Blocks** - Identify the minimal orthogonal set of primitive building blocks
-- [ ] **Phase 4: Derived Features & Decision Pipeline** - Design every outstanding concept through the Decision Pipeline and accept via EDR
+- [x] **Phase 4: Derived Features & Decision Pipeline** - Design every outstanding concept through the Decision Pipeline and accept via EDR
 - [ ] **Phase 5: Syntax Design** - Derive syntax from the semantic model for every accepted concept
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
 - [ ] **Phase 7: Execution & Optimization Model** - Define the boundary between language semantics and implementation
@@ -150,6 +150,7 @@ Plans:
 **Goal**: Every outstanding language concept is fully designed — run through the 10-question Decision Pipeline (`how/process/DECISION_PIPELINE.md`), decomposed onto Primitive Blocks, classified as Language/Standard Library/External, and accepted via EDR — informed by anti-pattern research into imperative crutches and Phase 1.1's LLM-native concept shortlist. Zero `DRAFT` headers remain in `how/concepts/research/` when this phase completes.
 **Depends on**: Phase 3 (Primitive Blocks must exist to decompose into)
 **Requirements**: DERIV-01, DERIV-02, DERIV-03, CONCEPT-ESS-01, CONCEPT-IMP-01, CONCEPT-DEFER-01, CONCEPT-REJECT-01, ANTIPAT-01, ANTIPAT-02, ANTIPAT-03, ANTIPAT-04, ANTIPAT-05, ANTIPAT-06, ANTIPAT-07, ANTIPAT-08, ANTIPAT-09, ANTIPAT-10
+**Status**: Complete (executed and verified 2026-07-27 — see `.planning/phases/04-derived-features-and-decision-pipeline-run-every-outstanding/04-09-SUMMARY.md`)
 **Success Criteria** (what must be TRUE):
 
   1. `how/process/DECISION_PIPELINE.md` (the 10-question pipeline) is finalized and applied, essential-tier first per `SEED-001`'s sequencing, to the real ~112-file Phase 4 input: the 22 essential-tier concepts not already consumed by Phase 2/3 (`CONCEPT-ESS-01`), all important-tier concepts (`CONCEPT-IMP-01`, ~36 files), all deferrable-tier concepts explicitly deferred to v0.2/v0.3 with documented rationale (`CONCEPT-DEFER-01`, ~54 files), and the 4 principle-contradicting concepts evaluated for formal rejection via EDR (`CONCEPT-REJECT-01`) — replacing the prior hardcoded 13-concept list scoped when `how/concepts/research/` held ~22 files total; see `.planning/notes/2026-07-26-tier-vs-phase-mapping.md` and `.planning/REQUIREMENTS.md`'s Phase 4 section for the full file-to-requirement mapping.
@@ -162,15 +163,15 @@ Plans:
 ```
 Plans:
 
-- [ ] 04-01-PLAN.md — Wave 1: Essential Core — Semantic Foundation (EQUALITY, NULL_SAFETY, TRAITS, ERROR_HANDLING, LAZY_SEQUENCE_GENERATORS, ITERATOR_PROTOCOL)
-- [ ] 04-02-PLAN.md — Wave 2: Essential Core — Type System & Pattern Matching (GENERICS, PATTERN_MATCHING, TYPE_INFERENCE, TYPE_LEVEL_NULL_SAFETY, PATTERN_MATCHING_DISPATCH, ERROR_UNION) [depends on 04-01]
-- [ ] 04-03-PLAN.md — Wave 2: Essential — Remaining Core (AST_MACROS, COMPILER_AS_STATIC_ANALYZER, COMPILE_TIME_EXECUTION, COMPOSABLE_COLLECTION_OPS, CONCURRENCY_MODEL) [depends on 04-01]
-- [ ] 04-04-PLAN.md — Wave 3: Policy-Level + Borderline Concepts (ALLOCATION, REGION_BASED_MEMORY, EXECUTION_PROGRAM, CONTEXT_PARAMETERS, REPRESENTATION_MODIFIERS) [depends on 04-01/02/03]
-- [ ] 04-05-PLAN.md — Wave 4: Important Tier — Data & Type System (8 concepts: ADTs, ENUM_ALTERNATIVES, COLLECTION_LITERAL_SYNTAX, DATACLASSES, LITERAL_TYPES, STRUCTURAL_TYPING, UNION_INTERSECTION_TYPES, TYPE_LEVEL_COMPUTATION)
-- [ ] 04-06-PLAN.md — Wave 4: Important Tier — Control & Async (9 concepts: ASYNC_AWAIT, ASYNC_MODIFIER, CONCURRENCY, GENERATORS, PUSH_STREAMS, EMIT_INTERMEDIATE, ITERATION_LOOP, OBJECT_INIT, UNPACKING)
-- [ ] 04-07-PLAN.md — Wave 4: Important Tier — Remaining (19 concepts: CONTRACTS, DELEGATION, EXTENSION_FUNCTIONS, GRADUAL_TYPING, SMART_CAST, COPY_ON_WRITE, PROPERTIES, SLOTS, SPAN, NAMED_PARAMS, SORTING, MULTI_KEY_SORT, DATE_TIME, PERSISTENT_DATA, DERIVE_SERIALIZATION, COMMAND_PATTERN, CONTEXT_MODULES, DECLARATIVE, DECLARATION_BY_ASSIGNMENT)
-- [ ] 04-08-PLAN.md — Wave 5: Rejections + Deferrals (4 rejection EDRs + 54 deferral rationales)
-- [ ] 04-09-PLAN.md — Wave 6: Finalization (LIBRARY_BOUNDARY.md, aggregating EDR, pipeline log completion, human verification checkpoint)
+- [x] 04-01-PLAN.md — Wave 1: Essential Core — Semantic Foundation (EQUALITY, NULL_SAFETY, TRAITS, ERROR_HANDLING, LAZY_SEQUENCE_GENERATORS, ITERATOR_PROTOCOL)
+- [x] 04-02-PLAN.md — Wave 2: Essential Core — Type System & Pattern Matching (GENERICS, PATTERN_MATCHING, TYPE_INFERENCE, TYPE_LEVEL_NULL_SAFETY, PATTERN_MATCHING_DISPATCH, ERROR_UNION) [depends on 04-01]
+- [x] 04-03-PLAN.md — Wave 2: Essential — Remaining Core (AST_MACROS, COMPILER_AS_STATIC_ANALYZER, COMPILE_TIME_EXECUTION, COMPOSABLE_COLLECTION_OPS, CONCURRENCY_MODEL) [depends on 04-01]
+- [x] 04-04-PLAN.md — Wave 3: Policy-Level + Borderline Concepts (ALLOCATION, REGION_BASED_MEMORY, EXECUTION_PROGRAM, CONTEXT_PARAMETERS, REPRESENTATION_MODIFIERS) [depends on 04-01/02/03]
+- [x] 04-05-PLAN.md — Wave 4: Important Tier — Data & Type System (8 concepts: ADTs, ENUM_ALTERNATIVES, COLLECTION_LITERAL_SYNTAX, DATACLASSES, LITERAL_TYPES, STRUCTURAL_TYPING, UNION_INTERSECTION_TYPES, TYPE_LEVEL_COMPUTATION)
+- [x] 04-06-PLAN.md — Wave 4: Important Tier — Control & Async (9 concepts: ASYNC_AWAIT, ASYNC_MODIFIER, CONCURRENCY, GENERATORS, PUSH_STREAMS, EMIT_INTERMEDIATE, ITERATION_LOOP, OBJECT_INIT, UNPACKING)
+- [x] 04-07-PLAN.md — Wave 4: Important Tier — Remaining (19 concepts: CONTRACTS, DELEGATION, EXTENSION_FUNCTIONS, GRADUAL_TYPING, SMART_CAST, COPY_ON_WRITE, PROPERTIES, SLOTS, SPAN, NAMED_PARAMS, SORTING, MULTI_KEY_SORT, DATE_TIME, PERSISTENT_DATA, DERIVE_SERIALIZATION, COMMAND_PATTERN, CONTEXT_MODULES, DECLARATIVE, DECLARATION_BY_ASSIGNMENT)
+- [x] 04-08-PLAN.md — Wave 5: Rejections + Deferrals (4 rejection EDRs + 54 deferral rationales)
+- [x] 04-09-PLAN.md — Wave 6: Finalization (LIBRARY_BOUNDARY.md, aggregating EDR, pipeline log completion, human verification checkpoint)
 
 ```
 
