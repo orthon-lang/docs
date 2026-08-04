@@ -17,7 +17,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 86 (VB6+VB7+VB9+VB11+VB14) | 7 | 2 |
-| 4 | VB12, VB16 | 7 | -- | -- | -- |
+| 4 | VB12, VB16 | 7 | 16 (VB12) | 4 (VB12) | 0 |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
 for completed batches (currently VB1 only).*
@@ -417,3 +417,33 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
 
 **Batch verdict:** 12 PASS / 3 WARN / 0 FAIL. Contracts/declarative cluster is coherent;
 3 WARNs are header-template gaps (CONTRACTS, DECLARATIVE_CONSTRUCTS, DECLARATION_BY_ASSIGNMENT) for governance. Wave 3 complete.
+
+---
+
+## VB12 — Data Structures (StdLib) (Wave 4)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| SORTING | PB Decomposition | PASS | — |
+| SORTING | Intra-batch consistency | PASS | Stable-by-default foundation for DECLARATIVE_MULTI_KEY_SORT (guaranteed stability) |
+| SORTING | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-066 linked only in Decision History); add header for template consistency before Phase 5 |
+| SORTING | EDR Alternatives | PASS | EDR-066 lists 2 substantive alternatives (unstable by default, implementation-defined stability) |
+| SORTING | DESIGN_PRINCIPLES alignment | PASS | Deterministic Behavior (stability guaranteed), Correctness Before Performance |
+| DECLARATIVE_MULTI_KEY_SORT | PB Decomposition | PASS | Syntactic sugar over sorting comparator — no new semantics |
+| DECLARATIVE_MULTI_KEY_SORT | Intra-batch consistency | PASS | Builds directly on SORTING; consistent |
+| DECLARATIVE_MULTI_KEY_SORT | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-067 linked only in Decision History); add header for template consistency before Phase 5 |
+| DECLARATIVE_MULTI_KEY_SORT | EDR Alternatives | PASS | EDR-067 lists 2 substantive alternatives (manual comparator chains, builder pattern) |
+| DECLARATIVE_MULTI_KEY_SORT | DESIGN_PRINCIPLES alignment | PASS | Declarative (by-key API), Minimal Core (sugar over comparator) |
+| IMMUTABLE_DATE_TIME | PB Decomposition | PASS | — |
+| IMMUTABLE_DATE_TIME | Intra-batch consistency | PASS | Value-semantics types consistent with value-semantics model and COPY_ON_WRITE |
+| IMMUTABLE_DATE_TIME | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-068 linked only in Decision History); add header for template consistency before Phase 5 |
+| IMMUTABLE_DATE_TIME | EDR Alternatives | PASS | EDR-068 lists 2 substantive alternatives (mutable legacy, single God object) |
+| IMMUTABLE_DATE_TIME | DESIGN_PRINCIPLES alignment | PASS | Data First (immutable by default), Thread-safe by construction |
+| DERIVE_SERIALIZATION | PB Decomposition | PASS | Uses existing @derive mechanism (EDR-029) — no new semantics |
+| DERIVE_SERIALIZATION | Intra-batch consistency | PASS | Consistent with DATACLASSES and AST_MACROS (derive-based); value-type serialization |
+| DERIVE_SERIALIZATION | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-070 linked only in Decision History); add header for template consistency before Phase 5 |
+| DERIVE_SERIALIZATION | EDR Alternatives | PASS | EDR-070 lists 2 substantive alternatives (manual serialization, runtime reflection) |
+| DERIVE_SERIALIZATION | DESIGN_PRINCIPLES alignment | PASS | Declarative With Static Guarantees (parse-time validation), No hidden magic (declarative annotations) |
+
+**Batch verdict:** 16 PASS / 4 WARN / 0 FAIL. StdLib data-structure cluster is coherent;
+4 WARNs are header-template gaps (all VB12 concepts) for governance.
