@@ -58,8 +58,8 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 ### Derived Features & Decision Pipeline — Phase 4
 
 - [ ] **DERIV-01**: `how/process/DECISION_PIPELINE.md` (10-question pipeline) finalized and applied to every outstanding concept
-- [ ] **CONCEPT-ESS-01**: The 22 essential-tier concepts not consumed by Phase 2 or Phase 3 pass the Decision Pipeline first, per SEED-001's essential-first sequencing, each reaching EDR-accepted or explicitly-rejected status — 17 core concepts (`how/concepts/research/essential/AST_MACROS.md`, `COMPILER_AS_STATIC_ANALYZER.md`, `COMPILE_TIME_EXECUTION.md`, `COMPOSABLE_COLLECTION_OPS.md`, `CONCURRENCY_MODEL.md`, `EQUALITY.md`, `ERROR_HANDLING.md`, `ERROR_UNION.md`, `GENERICS.md`, `ITERATOR_PROTOCOL.md`, `LAZY_SEQUENCE_GENERATORS.md`, `NULL_SAFETY.md`, `PATTERN_MATCHING.md`, `PATTERN_MATCHING_DISPATCH.md`, `TRAITS.md`, `TYPE_INFERENCE.md`, `TYPE_LEVEL_NULL_SAFETY.md`), plus 3 Policy-level pocket concepts processed here pending relocation (`ALLOCATION.md`, `REGION_BASED_MEMORY_MANAGEMENT.md`, `EXECUTION_PROGRAM.md` — see `.planning/todos/pending/move-policy-level-essential-concepts-out-of-pipeline.md`), plus 2 concepts a concurrent task moved from `important/` into `essential/` mid-cycle without a Phase assignment (`CONTEXT_PARAMETERS.md`, `REPRESENTATION_MODIFIERS.md` — commit `bf0f10a`; still pending a Phase 2 vs. Phase 3 vs. Phase 4 call, tracked here as unclassified rather than guessed)
-- [ ] **CONCEPT-IMP-01**: All important-tier concepts (`how/concepts/research/important/`, 36 files as of 2026-07-26) pass the Decision Pipeline as a second pass, after CONCEPT-ESS-01 completes. One borderline file flagged for a future separate judgment call rather than moved: `DECLARATION_BY_ASSIGNMENT.md` is arguably Phase 5 (Syntax) material
+- [x] **CONCEPT-ESS-01**: The 22 essential-tier concepts not consumed by Phase 2 or Phase 3 pass the Decision Pipeline first, per SEED-001's essential-first sequencing, each reaching EDR-accepted or explicitly-rejected status — 17 core concepts (`how/concepts/research/essential/AST_MACROS.md`, `COMPILER_AS_STATIC_ANALYZER.md`, `COMPILE_TIME_EXECUTION.md`, `COMPOSABLE_COLLECTION_OPS.md`, `CONCURRENCY_MODEL.md`, `EQUALITY.md`, `ERROR_HANDLING.md`, `ERROR_UNION.md`, `GENERICS.md`, `ITERATOR_PROTOCOL.md`, `LAZY_SEQUENCE_GENERATORS.md`, `NULL_SAFETY.md`, `PATTERN_MATCHING.md`, `PATTERN_MATCHING_DISPATCH.md`, `TRAITS.md`, `TYPE_INFERENCE.md`, `TYPE_LEVEL_NULL_SAFETY.md`), plus 3 Policy-level pocket concepts processed here pending relocation (`ALLOCATION.md`, `REGION_BASED_MEMORY_MANAGEMENT.md`, `EXECUTION_PROGRAM.md` — see `.planning/todos/pending/move-policy-level-essential-concepts-out-of-pipeline.md`), plus 2 concepts a concurrent task moved from `important/` into `essential/` mid-cycle without a Phase assignment (`CONTEXT_PARAMETERS.md`, `REPRESENTATION_MODIFIERS.md` — commit `bf0f10a`; still pending a Phase 2 vs. Phase 3 vs. Phase 4 call, tracked here as unclassified rather than guessed)
+- [x] **CONCEPT-IMP-01**: All important-tier concepts (`how/concepts/research/important/`, 36 files as of 2026-07-26) pass the Decision Pipeline as a second pass, after CONCEPT-ESS-01 completes. One borderline file flagged for a future separate judgment call rather than moved: `DECLARATION_BY_ASSIGNMENT.md` is arguably Phase 5 (Syntax) material
 - [ ] **CONCEPT-DEFER-01**: All deferrable-tier concepts (`how/concepts/research/deferrable/`, 54 files as of 2026-07-26) explicitly deferred to v0.2/v0.3 with a documented one-paragraph rationale per concept, except the 4 files covered by CONCEPT-REJECT-01
 - [ ] **CONCEPT-REJECT-01**: The 4 concepts flagged in SEED-001 as contradicting Orthon's stated principles — `PROTOTYPE.md`, `SIGNIFICANT_WHITESPACE.md`, `DYNAMIC_TYPING.md`, `CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION.md` (currently in `how/concepts/research/deferrable/`) — evaluated for formal rejection via EDR; rejected files moved to `how/concepts/research/reject/`
 - [ ] **ANTIPAT-01**: Collections & Loops anti-pattern research completed
@@ -72,7 +72,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 - [ ] **ANTIPAT-08**: Multi-key sorting anti-pattern research completed
 - [ ] **ANTIPAT-09**: Metaprogramming & reflection anti-pattern research completed
 - [ ] **ANTIPAT-10**: Serialization anti-pattern research completed
-- [ ] **DERIV-02**: `what/LIBRARY_BOUNDARY.md` documents language-vs-stdlib-vs-external classification for every feature
+- [x] **DERIV-02**: `what/LIBRARY_BOUNDARY.md` documents language-vs-stdlib-vs-external classification for every feature
 - [x] **DERIV-03**: Every "Language"-classified feature has an accepted EDR and moves to `what/concepts/`; zero DRAFT headers remain in `how/concepts/research/` (supersedes former ANTIPAT-11)
 
 ### Syntax Design — Phase 5
@@ -186,8 +186,8 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | PRIM-02 | Phase 3 | Pending |
 | PRIM-03 | Phase 3 | Pending |
 | DERIV-01 | Phase 4 | Pending |
-| CONCEPT-ESS-01 | Phase 4 | Pending |
-| CONCEPT-IMP-01 | Phase 4 | Pending |
+| CONCEPT-ESS-01 | Phase 4 | Complete |
+| CONCEPT-IMP-01 | Phase 4 | Complete |
 | CONCEPT-DEFER-01 | Phase 4 | Pending |
 | CONCEPT-REJECT-01 | Phase 4 | Pending |
 | ANTIPAT-01 | Phase 4 | Pending |
@@ -200,7 +200,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | ANTIPAT-08 | Phase 4 | Pending |
 | ANTIPAT-09 | Phase 4 | Pending |
 | ANTIPAT-10 | Phase 4 | Pending |
-| DERIV-02 | Phase 4 | Pending |
+| DERIV-02 | Phase 4 | Complete |
 | DERIV-03 | Phase 4 | Complete |
 | SYNTAX-01 | Phase 5 | Pending |
 | SYNTAX-02 | Phase 5 | Pending |
