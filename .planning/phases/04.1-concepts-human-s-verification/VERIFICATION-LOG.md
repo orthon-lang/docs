@@ -16,7 +16,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
-| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 24 (VB6) | 1 (VB6) | 0 |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 34 (VB6+VB7) | 1 | 0 |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
@@ -307,3 +307,23 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17. Wave 2 co
 **Batch verdict:** 24 PASS / 1 WARN / 0 FAIL. Type-system cluster is coherent;
 G2 (CONSTRAINED_TYPES unregistered in LIBRARY_BOUNDARY) flagged for governance. Note:
 EDR-039/043/045/046 are among the unindexed EDRs flagged in VB4 (INDEX gap).
+
+---
+
+## VB7 — Type Inference and Static Analysis (Wave 3)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| TYPE_INFERENCE | PB Decomposition | PASS | — |
+| TYPE_INFERENCE | Intra-batch consistency | PASS | Bidirectional inference (within functions, explicit at boundaries) is consistent with GENERICS and GRADUAL_TYPING |
+| TYPE_INFERENCE | Cross-batch references | PASS | See-also to EQUALITY, GENERICS — resolve |
+| TYPE_INFERENCE | EDR Alternatives | PASS | EDR-027 lists 3 substantive alternatives (global inference, full annotation, gradual inference) |
+| TYPE_INFERENCE | DESIGN_PRINCIPLES alignment | PASS | Explicitness (annotated API boundaries), LLM Readability (concision inside bodies) |
+| COMPILER_AS_STATIC_ANALYZER | PB Decomposition | PASS | — |
+| COMPILER_AS_STATIC_ANALYZER | Intra-batch consistency | PASS | Compiler pipeline layers complement TYPE_INFERENCE; no conflict |
+| COMPILER_AS_STATIC_ANALYZER | Cross-batch references | PASS | See-also to GLOSSARY, DESIGN_PRINCIPLES, SEMANTIC_MODEL — resolve |
+| COMPILER_AS_STATIC_ANALYZER | EDR Alternatives | PASS | EDR-030 lists 3 substantive alternatives (minimal compiler + external linters, dependent types, sound types only) |
+| COMPILER_AS_STATIC_ANALYZER | DESIGN_PRINCIPLES alignment | PASS | Declarative With Static Guarantees, LLM Readiness (machine-readable diagnostics) |
+
+**Batch verdict:** 10 PASS / 0 WARN / 0 FAIL. Both essential-tier static-analysis
+concepts are coherent and mutually reinforcing.
