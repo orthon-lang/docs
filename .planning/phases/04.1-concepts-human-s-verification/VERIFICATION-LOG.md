@@ -14,7 +14,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
-| 1 | VB1-VB4 | 13 | 29 (VB1+VB2) | 1 | 0 |
+| 1 | VB1-VB4 | 13 | 39 (VB1-VB3) | 1 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | -- | -- | -- |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
@@ -71,3 +71,23 @@ are consistent with the locked semantic model and the primitive set.
 
 **Batch verdict:** 14 PASS / 1 WARN / 0 FAIL. Null-safety cluster is coherent;
 SMART_CAST needs a template-consistency fix (WARN, non-blocking per D-01).
+
+---
+
+## VB3 — Error Handling (Wave 1)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| ERROR_HANDLING | PB Decomposition | PASS | — |
+| ERROR_HANDLING | Intra-batch consistency | PASS | Coexists with ERROR_UNION — `Result<T,E>` for payload errors, `!T` for tag-only |
+| ERROR_HANDLING | Cross-batch references | PASS | — |
+| ERROR_HANDLING | EDR Alternatives | PASS | EDR-020 lists 6 substantive alternatives (checked/unchecked exceptions, error codes, algebraic effects, Go multi-return, optional-only) with rejection reasons |
+| ERROR_HANDLING | DESIGN_PRINCIPLES alignment | PASS | Explicitness (fallibility in signature), Declarative With Static Guarantees (unhandled Result = compile error), Minimal Core (no try/catch) |
+| ERROR_UNION | PB Decomposition | PASS | — |
+| ERROR_UNION | Intra-batch consistency | PASS | Explicit coexistence with ERROR_HANDLING (EDR-020); shared `?` operator, no semantic conflict |
+| ERROR_UNION | Cross-batch references | PASS | See-also to ERROR_HANDLING, GLOSSARY — all resolve |
+| ERROR_UNION | EDR Alternatives | PASS | EDR-023 lists 5 substantive alternatives (Result-only, union-only, unified payload, try/catch, no inference) with rejection reasons |
+| ERROR_UNION | DESIGN_PRINCIPLES alignment | PASS | Intent Over Implementation (inferred error sets), Explicit Semantics (tag-only vs payload distinction), One Concept One Syntax |
+
+**Batch verdict:** 10 PASS / 0 WARN / 0 FAIL. Error-handling pair is consistent —
+ERROR_UNION is a complementary mechanism, not a replacement for Result.
