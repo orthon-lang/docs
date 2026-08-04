@@ -592,6 +592,18 @@ index at `decision_records/INDEX.md`.
 - **Source:** `../how/decision_records/process/EDR-001-edr-system.md`
 - **See also:** [Architecture](#architecture), [Decision Validation](#decision-validation)
 
+### Emergence
+
+The property by which system-level capabilities arise from the
+composition of orthogonal primitives rather than being explicitly
+added as special cases. Emergence is the adequacy test for Orthon's
+architecture: a capability that must be engineered in — rather than
+emerging from composition — signals either an inadequate design or an
+incomplete primitive set.
+
+- **Source:** `../how/architecture/FITNESS_FUNCTIONS.md` § Emergence / Decomposability, `../how/DESIGN_PRINCIPLES.md` § Orthogonality
+- **See also:** [Composition (of primitives)](#composition-of-primitives), [Orthogonality](#orthogonality), [Minimal Core](#minimal-core)
+
 ### Exclusive Access
 
 The requirement that mutation may only proceed when no other live

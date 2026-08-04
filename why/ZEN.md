@@ -14,6 +14,8 @@
 
 > Simplicity is the result of orthogonality.
 
+> What must be added is what failed to emerge.
+
 > Explicitness reduces surprise.
 
 > Abstraction hides complexity from view.

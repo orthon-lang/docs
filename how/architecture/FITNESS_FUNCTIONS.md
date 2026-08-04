@@ -81,6 +81,24 @@ a forbidden pair, triggering an architectural review.
 
 ---
 
+## Emergence / Decomposability
+
+**Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle; [PRIMITIVE_BLOCKS.md](../../what/PRIMITIVE_BLOCKS.md) — Purpose & Scope; [ARCHITECTURE.md](ARCHITECTURE.md) — Semantic Dependency Architecture
+
+A desired capability is architecturally adequate when it *emerges*
+from the composition of simpler, orthogonal parts. If a capability
+cannot decompose onto the Primitive Blocks (Level 1) and requires new
+machinery, either the capability is inadequate or the primitive set is
+incomplete — fix the primitive set, not the feature.
+
+**Measured by:** Decomposability check at each concept addition: does
+the concept decompose onto Primitive Blocks (Level 1)? Does it overlap
+an existing concept? Does it require a special case anywhere (syntax,
+semantics, tooling)? A "no" to the first, or a "yes" to either of the
+last two, triggers an architectural review.
+
+---
+
 ## Explicitness
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Explicitness / Explicit Semantics principles

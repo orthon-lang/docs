@@ -36,6 +36,9 @@
       Principle? If yes, is the violation intentional and documented?
 - [ ] **Orthogonality** — does it compose freely with existing concepts?
       Are there special cases or context-dependent behavior?
+- [ ] **Emergence** — does the desired behavior emerge from composing
+      existing concepts, or must it be engineered in as a special
+      case? If the latter, the proposal fails the adequacy criterion.
 - [ ] **Minimality** — can this be expressed through composition of
       existing concepts instead?
       (See also: [`CORE_INCLUSION_FILTER.md`](../architecture/CORE_INCLUSION_FILTER.md) —
