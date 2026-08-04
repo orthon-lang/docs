@@ -14,7 +14,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
-| 1 | VB1-VB4 | 13 | 39 (VB1-VB3) | 1 | 0 |
+| 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | -- | -- | -- |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
@@ -91,3 +91,38 @@ SMART_CAST needs a template-consistency fix (WARN, non-blocking per D-01).
 
 **Batch verdict:** 10 PASS / 0 WARN / 0 FAIL. Error-handling pair is consistent —
 ERROR_UNION is a complementary mechanism, not a replacement for Result.
+
+---
+
+## VB4 — Traits and Polymorphism (Wave 1)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| TRAITS | PB Decomposition | PASS | — |
+| TRAITS | Intra-batch consistency | PASS | Foundation for GENERICS (bounds) and STRUCTURAL_TYPING (nominal default); no conflict |
+| TRAITS | Cross-batch references | PASS | See-also to SEMANTIC_MODEL, GLOSSARY — resolve |
+| TRAITS | EDR Alternatives | PASS | EDR-019 lists 6 substantive alternatives (inheritance, Go structural, Haskell orphans, Swift protocols, C++ concepts, none) |
+| TRAITS | DESIGN_PRINCIPLES alignment | PASS | Orthogonality (behaviour separate from data), Explicitness (explicit impl), Composition Over Inheritance |
+| GENERICS | PB Decomposition | PASS | — |
+| GENERICS | Intra-batch consistency | PASS | Trait-bounded params build directly on TRAITS; consistent |
+| GENERICS | Cross-batch references | PASS | See-also to TRAITS, TYPE_INFERENCE — resolve |
+| GENERICS | EDR Alternatives | PASS | EDR-024 lists 5 substantive alternatives (type erasure, duck-typed templates, dynamic-only, HKT, negative bounds) |
+| GENERICS | DESIGN_PRINCIPLES alignment | PASS | Explicitness (trait bounds, no duck typing), Declarative With Static Guarantees (no erasure) |
+| STRUCTURAL_TYPING | PB Decomposition | PASS | — |
+| STRUCTURAL_TYPING | Intra-batch consistency | PASS | Opt-in `structural` keyword extends TRAITS without breaking nominal default |
+| STRUCTURAL_TYPING | Cross-batch references | WARN | EDR-044 exists and is referenced by STRUCTURAL_TYPING.md, but is ABSENT from INDEX.md — INDEX "EDR-039..046 intentionally skipped" note is stale; EDR-039, EDR-041..046 files exist and back accepted concepts. Governance plan (04.1-17) must add them to INDEX.md and correct the gap note |
+| STRUCTURAL_TYPING | EDR Alternatives | PASS | EDR-044 lists 5 substantive alternatives (structural-by-default, nominal-only, built-in-only, TS-style, module-scoped) |
+| STRUCTURAL_TYPING | DESIGN_PRINCIPLES alignment | PASS | Explicitness (structural is opt-in via keyword), Orthogonality |
+| EXTENSION_FUNCTIONS | PB Decomposition | PASS | — |
+| EXTENSION_FUNCTIONS | Intra-batch consistency | PASS | Complements TRAITS (receiver-syntax dispatch); no conflict |
+| EXTENSION_FUNCTIONS | Cross-batch references | WARN | Missing standard "✅ ACCEPTED — EDR-NNN" header block and See-also block (EDR-058 linked only in Decision History); add header for template consistency before Phase 5 |
+| EXTENSION_FUNCTIONS | EDR Alternatives | PASS | EDR-058 lists 3 substantive alternatives (trait-based, monkey-patching, none) |
+| EXTENSION_FUNCTIONS | DESIGN_PRINCIPLES alignment | PASS | Explicitness (import control, static dispatch), Encapsulation (no private access) |
+| GRADUAL_TYPING | PB Decomposition | PASS | — |
+| GRADUAL_TYPING | Intra-batch consistency | PASS | Optional annotations coexist with GENERICS/TRAITS bounds; boundary checks are consistent |
+| GRADUAL_TYPING | Cross-batch references | WARN | Missing standard "✅ ACCEPTED — EDR-NNN" header block and See-also block (EDR-059 linked only in Decision History); add header for template consistency before Phase 5 |
+| GRADUAL_TYPING | EDR Alternatives | PASS | EDR-059 lists 3 substantive alternatives (fully static, external checker, dynamic only) |
+| GRADUAL_TYPING | DESIGN_PRINCIPLES alignment | PASS | Explicitness (annotations at boundaries), Intent Over Implementation (inference) |
+
+**Batch verdict:** 22 PASS / 3 WARN / 0 FAIL. Polymorphism cluster is coherent;
+the 3 WARNs are template/registry consistency items for the governance plan.
