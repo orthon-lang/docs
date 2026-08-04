@@ -16,7 +16,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
-| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 74 (VB6+VB7+VB9+VB11) | 4 | 2 |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 86 (VB6+VB7+VB9+VB11+VB14) | 7 | 2 |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
@@ -392,3 +392,28 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
 
 **Batch verdict:** 21 PASS / 3 WARN / 1 FAIL (G1: OBJECT_INITIALIZATION concept file missing — EDR-054 exists).
 3 WARNs are header-template gaps (NAMED_AND_OPTIONAL_PARAMETERS, DELEGATION, PROPERTIES) for governance.
+
+---
+
+## VB14 — Contracts and Declarative (Wave 3)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| CONTRACTS | PB Decomposition | PASS | — |
+| CONTRACTS | Intra-batch consistency | PASS | Compiler-enforced contracts complement DECLARATIVE_CONSTRUCTS (intent over steps); consistent |
+| CONTRACTS | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-056 linked only in Decision History); add header for template consistency before Phase 5 |
+| CONTRACTS | EDR Alternatives | PASS | EDR-056 lists 2 substantive alternatives (library-based, documentation-only) |
+| CONTRACTS | DESIGN_PRINCIPLES alignment | PASS | Declarative With Static Guarantees (compiler-verified intent), LLM Readiness (contracts as executable spec) |
+| DECLARATIVE_CONSTRUCTS | PB Decomposition | PASS | — |
+| DECLARATIVE_CONSTRUCTS | Intra-batch consistency | PASS | Idiom-level declarative constructs consistent with composable collection ops and contracts |
+| DECLARATIVE_CONSTRUCTS | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-073 linked only in Decision History); add header for template consistency before Phase 5 |
+| DECLARATIVE_CONSTRUCTS | EDR Alternatives | PASS | EDR-073 lists 2 substantive alternatives (new syntax, LINQ-style framework) |
+| DECLARATIVE_CONSTRUCTS | DESIGN_PRINCIPLES alignment | PASS | Declarative (what not how), LLM Generability (intent over steps), No hidden state |
+| DECLARATION_BY_ASSIGNMENT | PB Decomposition | PASS | First-assignment introduction via identifier + assignment primitives — documented |
+| DECLARATION_BY_ASSIGNMENT | Intra-batch consistency | PASS | Consistent with TYPE_INFERENCE (type from initializer) and definite-assignment analysis |
+| DECLARATION_BY_ASSIGNMENT | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-074 linked only in Decision History); add header for template consistency before Phase 5 |
+| DECLARATION_BY_ASSIGNMENT | EDR Alternatives | PASS | EDR-074 lists 2 substantive alternatives (keyword declaration, mandatory type annotation) |
+| DECLARATION_BY_ASSIGNMENT | DESIGN_PRINCIPLES alignment | PASS | Explicitness (no accidental creation, read-before-write error), Syntax deferred to Phase 5 |
+
+**Batch verdict:** 12 PASS / 3 WARN / 0 FAIL. Contracts/declarative cluster is coherent;
+3 WARNs are header-template gaps (CONTRACTS, DECLARATIVE_CONSTRUCTS, DECLARATION_BY_ASSIGNMENT) for governance. Wave 3 complete.
