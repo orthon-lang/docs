@@ -7,7 +7,8 @@
 > **See also:** Each concept EDR for full classification rationale
 > and primitive decomposition.
 >
-> **Status:** Finalized — Phase 4 complete.
+> **Status:** Finalized — Phase 4 complete; Phase 4.1 governance-completion
+> additions incorporated.
 > **See also:** [`CORE_CONCEPTS.md`](CORE_CONCEPTS.md),
 > [`DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
 
