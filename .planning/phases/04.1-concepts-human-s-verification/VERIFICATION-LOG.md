@@ -16,7 +16,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
-| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 53 (VB6+VB7+VB9) | 1 | 1 |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 74 (VB6+VB7+VB9+VB11) | 4 | 2 |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
@@ -357,3 +357,38 @@ concepts are coherent and mutually reinforcing.
 
 **Batch verdict:** 19 PASS / 0 WARN / 1 FAIL (G1: PUSH_STREAMS concept file missing — EDR-051 exists).
 Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
+
+---
+
+## VB11 — Functions and Construction (Wave 3)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| NAMED_AND_OPTIONAL_PARAMETERS | PB Decomposition | PASS | — |
+| NAMED_AND_OPTIONAL_PARAMETERS | Intra-batch consistency | PASS | Call ergonomics complement OBJECT_INITIALIZATION (named params with defaults); consistent |
+| NAMED_AND_OPTIONAL_PARAMETERS | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-065 linked only in Decision History); add header for template consistency before Phase 5 |
+| NAMED_AND_OPTIONAL_PARAMETERS | EDR Alternatives | PASS | EDR-065 lists 2 substantive alternatives (positional only, named-only) |
+| NAMED_AND_OPTIONAL_PARAMETERS | DESIGN_PRINCIPLES alignment | PASS | Explicitness (named args), API evolution without breakage |
+| UNPACKING | PB Decomposition | PASS | — |
+| UNPACKING | Intra-batch consistency | PASS | Syntactic expression of pack/unpack primitive (EDR-016); consistent with PATTERN_MATCHING |
+| UNPACKING | Cross-batch references | PASS | See-also to PATTERN_MATCHING, PRIMITIVE_BLOCKS, SEMANTIC_MODEL — resolve |
+| UNPACKING | EDR Alternatives | PASS | EDR-055 lists 2 substantive alternatives (positional only, no param destructuring) |
+| UNPACKING | DESIGN_PRINCIPLES alignment | PASS | Representation Symmetry (pack/unpack), Declarative (bind names to structure) |
+| OBJECT_INITIALIZATION | Concept file missing (G1) | FAIL | Create what/concepts/OBJECT_INITIALIZATION.md from EDR-054 (named params, defaults, copy-and-update, builder via macros) — resolved in governance plan 04.1-17 |
+| OBJECT_INITIALIZATION | Intra-batch consistency | PASS | Uses existing mechanisms (named params, defaults); consistent with NAMED_AND_OPTIONAL_PARAMETERS |
+| OBJECT_INITIALIZATION | Cross-batch references | PASS | EDR-054 links AST macros and named params; consistent |
+| OBJECT_INITIALIZATION | EDR Alternatives | PASS | EDR-054 lists 2 substantive alternatives (built-in builder, positional-only constructors) |
+| OBJECT_INITIALIZATION | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (StdLib patterns over existing mechanisms) |
+| DELEGATION | PB Decomposition | PASS | Composition over inheritance — forwarding via StdLib helper, no new primitives |
+| DELEGATION | Intra-batch consistency | PASS | Reuses delegate execution model (EDR-036); consistent with command-pattern-obsoleted-by-delegate (EDR-071) |
+| DELEGATION | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-057 linked only in Decision History); add header for template consistency before Phase 5 |
+| DELEGATION | EDR Alternatives | PASS | EDR-057 lists 2 substantive alternatives (Kotlin by keyword, implicit Go promotion) |
+| DELEGATION | DESIGN_PRINCIPLES alignment | PASS | Composition Over Inheritance, Explicitness (by keyword at definition site) |
+| PROPERTIES | PB Decomposition | PASS | Getter/setter sugar over attribute access primitive — documented decomposition |
+| PROPERTIES | Intra-batch consistency | PASS | Uniform access consistent with SLOTS (every property is a slot) and DELEGATION |
+| PROPERTIES | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-062 linked only in Decision History); add header for template consistency before Phase 5 |
+| PROPERTIES | EDR Alternatives | PASS | EDR-062 lists 2 substantive alternatives (language-level properties, Java explicit getters) |
+| PROPERTIES | DESIGN_PRINCIPLES alignment | PASS | Uniformity (uniform .name access), Intent Over Implementation |
+
+**Batch verdict:** 21 PASS / 3 WARN / 1 FAIL (G1: OBJECT_INITIALIZATION concept file missing — EDR-054 exists).
+3 WARNs are header-template gaps (NAMED_AND_OPTIONAL_PARAMETERS, DELEGATION, PROPERTIES) for governance.
