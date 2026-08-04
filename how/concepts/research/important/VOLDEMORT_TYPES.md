@@ -235,7 +235,7 @@ explicit.
 
 ### Decision Pipeline (Q1–Q10)
 
-Per [`how/process/DECISION_PIPELINE.md`](../../process/DECISION_PIPELINE.md):
+Per [`how/process/DECISION_PIPELINE.md`](../../../process/DECISION_PIPELINE.md):
 
 1. **What problem are we solving?** Type-level encapsulation at API boundaries — returning complex types without exposing internal structure or sacrificing performance.
 2. **Is this a language problem or a library problem?** Language. Requires type-system support for existential types at return positions.

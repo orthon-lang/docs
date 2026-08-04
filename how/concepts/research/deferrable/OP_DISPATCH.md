@@ -205,7 +205,7 @@ Orthon already has several mechanisms that address parts of the forwarding/decor
 
 ### Decision Pipeline (Q1–Q10)
 
-Per [`how/process/DECISION_PIPELINE.md`](../../process/DECISION_PIPELINE.md):
+Per [`how/process/DECISION_PIPELINE.md`](../../../process/DECISION_PIPELINE.md):
 
 1. **What problem are we solving?** Eliminating forwarding boilerplate for proxy, decorator, and API-compatibility patterns without sacrificing static dispatch performance.
 2. **Is this a language problem or a library problem?** Language. Method resolution is a compiler concern — the compiler decides what `obj.method()` means. A library cannot alter method dispatch semantics.
