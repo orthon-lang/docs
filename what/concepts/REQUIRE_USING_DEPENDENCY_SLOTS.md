@@ -89,6 +89,20 @@ let prod_svc = UserService(using prod_db, prod_log)
 let test_svc = UserService(using test_db, test_log)
 ```
 
+### `using` Position Rule
+
+The `using` keyword appears in two syntactic positions depending on call
+form. The distinction is deliberate, not accidental:
+
+| Call form | `using` position | Example | Rationale |
+|-----------|-----------------|---------|-----------|
+| **Function call** | Postfix clause after closing paren | `process(42) using prod_db` | Separates data arguments from context provision; the function's data parameters stand alone. |
+| **Constructor call** | Inside the call parens | `UserService(using prod_db)` | Constructor arguments are all "configuration" — mixing `using` inside parens mirrors the fact that dependency slots are part of the class's initialization contract, not a separate phase. |
+
+The compiler resolves both forms identically: `using` arguments map to
+`require`-declared slots by name. The positional difference is purely
+syntactic to improve readability at each call site.
+
 ## Default Strategy
 
 `require`/`using` is a Level 2 (Language Pattern) transformation — syntax sugar
