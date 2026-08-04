@@ -625,3 +625,48 @@ The resolution process is defined in
 | **Summary** | Runtime-constrained types — nominal type with type-level constraint predicate. `type Age = Int requires v >= 0 && v <= 150` declares a constraint checked at every boundary where a raw value enters the type. Construction via `Callable(Int) -> Age` trait (not `new`/`make`). Constraint lives **only on the type** — consuming functions carry no redundant `requires`. Nominal identity (`Age ≠ Int`). Immutable backing field. Constraint follows Contract Enforcement Policy. Literal values checked at compile time. Schema Provider exposes constraint in machine-readable form. |
 | **Primitive Decomposition** | Fully decomposable: `type X = Base requires pred` → `struct` (via `pack` + `identifier` + `scope`) + `Callable(Base) -> X` impl (via `function` + `call` + `assignment`) + boundary constraint check (compiler-recognized assertion following Contract Enforcement Policy per EDR-056). No new primitives introduced. Constraint is never duplicated on consuming functions. See [`CONSTRAINED_TYPES.md`](concepts/CONSTRAINED_TYPES.md) § Desugaring for the complete mapping. |
 
+## Phase 4.1 — Governance Completion
+
+### CONCURRENCY
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-049](../how/decision_records/architecture/EDR-049-concurrency.md) |
+| **Specification** | [`concepts/CONCURRENCY.md`](concepts/CONCURRENCY.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | StdLib concurrency utilities built on the delegate model (EDR-033): typed channels (`Channel<T>`), `select` expressions, supervision trees, fan-out/fan-in patterns, timers, and async I/O wrappers. No new language semantics — all utilities are implementable via delegate primitives. Cross-ref with CONCURRENCY_MODEL (EDR-033, Language-level model). |
+| **Primitive Decomposition** | All utilities decompose to delegate primitives (`delegate`, `<-`, `$` ownership transfer) + standard library types. `Channel<T>` wraps delegate mailboxes. `select` polls multiple channels. No new compiler semantics. |
+
+### PUSH_STREAMS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-051](../how/decision_records/architecture/EDR-051-push-streams.md) |
+| **Specification** | [`concepts/PUSH_STREAMS.md`](concepts/PUSH_STREAMS.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Observable-style push-based reactive streams — the dual of pull-based sequences. `Stream<T>` type with `subscribe`, `emit`, `complete`, `error` lifecycle. Implementable via composition of delegate, channel, and callback. Pull-to-push bridging supported. Cross-ref with LAZY_SEQUENCE_GENERATORS (EDR-021) and CONCURRENCY (EDR-049). |
+| **Primitive Decomposition** | `Stream<T>` → delegate-based producer + callback-based subscription + `Channel<T>` for async delivery. Fully expressible via existing delegate primitives and StdLib types. No new compiler semantics. |
+
+### OBJECT_INITIALIZATION
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-054](../how/decision_records/architecture/EDR-054-object-initialization.md) |
+| **Specification** | [`concepts/OBJECT_INITIALIZATION.md`](concepts/OBJECT_INITIALIZATION.md) |
+| **Classification** | StdLib (D-03) |
+| **Summary** | Named parameters with defaults and builder patterns for object construction. Named arguments, default values, and copy-and-update (`Config(cfg, port: 9090)`) follow the general function call model. Builder auto-generation via `@builder` macro (AST macros, EDR-029). Compile-time completeness check for required fields. No constructor-specific language mechanisms. |
+| **Primitive Decomposition** | Named arguments → positional call desugaring via macro layer (EDR-029). Default values → ordinary expressions evaluated at call time. Copy-and-update → `new` + field-by-field copy + selective reassignment. `@builder` → `@macro` function invocation (EDR-029). No new compiler semantics. |
+
+### REQUIRE_USING_DEPENDENCY_SLOTS
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-081](../how/decision_records/architecture/EDR-081-require-using-dependency-slots.md) |
+| **Specification** | [`concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md`](concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md) |
+| **Classification** | Language Pattern (Level 2 — D-03) |
+| **Summary** | `require`/`using` keyword split for dependency declaration and resolution. `require` declares what a function/class needs; `using` provides it at the call/construction site. Class-level dependency slots group shared dependencies, filled per-instance at construction with compile-time initialization guarantee. Refines EDR-037 (Context Parameters) by eliminating `using`/`using` ambiguity. |
+| **Primitive Decomposition** | `require` clause → `function` parameter declaration in context space (EDR-037); `using` clause → `call`-site argument provision; class-level slots → `scope`-visible fields with `assignment` at construction. Fully decomposable to EDR-037's Dual Parameter Model. No new compiler primitives. |
