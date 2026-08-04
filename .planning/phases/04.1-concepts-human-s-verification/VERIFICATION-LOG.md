@@ -15,7 +15,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
-| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 52 (VB5+VB8+VB10) | 2 | 1 |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 74 (VB5+VB8+VB10+VB13) | 5 | 1 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
@@ -211,3 +211,38 @@ and fully consistent with the Phase 3 emit decisions (D-06, D-07).
 
 **Batch verdict:** 19 PASS / 0 WARN / 1 FAIL (G1: CONCURRENCY concept file missing — EDR-049 exists).
 Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
+
+---
+
+## VB13 — Memory and Data Layout (Wave 2)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| SLOTS | PB Decomposition | PASS | — |
+| SLOTS | Intra-batch consistency | PASS | Fixed-field storage complements SPAN (layout predictability) and ALLOCATION (layout-aware arena) |
+| SLOTS | Cross-batch references | WARN | Classification discrepancy: concept file Decision History says "StdLib" but LIBRARY_BOUNDARY.md lists SLOTS under Language (35); also missing ACCEPTED header block. Governance plan (04.1-17) must reconcile |
+| SLOTS | EDR Alternatives | PASS | EDR-063 lists 3 substantive alternatives (always dynamic, opt-in fixed, always fixed) |
+| SLOTS | DESIGN_PRINCIPLES alignment | PASS | Orthogonality (annotation not new semantics), Explicit Semantics (fixed by default) |
+| SPAN | PB Decomposition | PASS | — |
+| SPAN | Intra-batch consistency | PASS | Non-owning view consistent with region/lifetime policy (ALLOCATION/REGION_BASED_MEMORY); no conflict |
+| SPAN | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-064 linked only in Decision History); add header for template consistency before Phase 5 |
+| SPAN | EDR Alternatives | PASS | EDR-064 lists 3 substantive alternatives (library-only, copying slice, unsafe pointer+length) |
+| SPAN | DESIGN_PRINCIPLES alignment | PASS | Correctness Before Performance (bounds/lifetime safety), Deterministic Behavior |
+| ALLOCATION | Concept file | N/A | Policy-level per D-04 — verified via EDR-034 + DEFAULT_STRATEGY.md (Allocation Policy = Arena, Active). No FAIL for missing concept file |
+| ALLOCATION | Intra-batch consistency | PASS | Arena model consistent with REGION_BASED_MEMORY sub-policy and REPRESENTATION_MODIFIERS |
+| ALLOCATION | Cross-batch references | PASS | EDR-034 linked from DEFAULT_STRATEGY; consistent |
+| ALLOCATION | EDR Alternatives | PASS | EDR-034 lists substantive alternatives (allocation as language construct rejected — Minimal Core) |
+| ALLOCATION | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (mechanism not syntax), Intent Over Implementation |
+| REGION_BASED_MEMORY_MANAGEMENT | Concept file | N/A | Policy-level (Allocation sub-policy) per D-04 — EDR-035 + DEFAULT_STRATEGY.md (Region-Based Memory = ScopeRegion, Active) |
+| REGION_BASED_MEMORY_MANAGEMENT | Intra-batch consistency | PASS | Sub-policy of ALLOCATION (EDR-034); consistent |
+| REGION_BASED_MEMORY_MANAGEMENT | Cross-batch references | PASS | EDR-035 linked from DEFAULT_STRATEGY |
+| REGION_BASED_MEMORY_MANAGEMENT | EDR Alternatives | PASS | EDR-035 lists alternatives (region inference as language feature rejected — Minimal Core) |
+| REGION_BASED_MEMORY_MANAGEMENT | DESIGN_PRINCIPLES alignment | PASS | Minimal Core, Deterministic Behavior (arena lifetimes) |
+| REPRESENTATION_MODIFIERS | Concept file | N/A | PRIMITIVE_BLOCKS correction per D-04 — verified via EDR-038 + PRIMITIVE_BLOCKS.md § 7b (Representation Modifiers, orthogonal annotations). No FAIL |
+| REPRESENTATION_MODIFIERS | Intra-batch consistency | PASS | Orthogonal annotations on pack/reference primitives; consistent with allocation model |
+| REPRESENTATION_MODIFIERS | Cross-batch references | PASS | EDR-038 + PRIMITIVE_BLOCKS § 7b co-located; consistent |
+| REPRESENTATION_MODIFIERS | EDR Alternatives | PASS | EDR-038 lists alternatives (full concept doc rejected — over-specification) |
+| REPRESENTATION_MODIFIERS | DESIGN_PRINCIPLES alignment | PASS | Orthogonality (annotations not new primitives), Semantic Purity |
+
+**Batch verdict:** 22 PASS / 3 WARN / 0 FAIL. Memory-layout cluster is coherent;
+the 3 WARNs are SLOTS classification discrepancy + header gaps (SLOTS, SPAN) for governance.
