@@ -73,7 +73,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 - [ ] **ANTIPAT-09**: Metaprogramming & reflection anti-pattern research completed
 - [ ] **ANTIPAT-10**: Serialization anti-pattern research completed
 - [ ] **DERIV-02**: `what/LIBRARY_BOUNDARY.md` documents language-vs-stdlib-vs-external classification for every feature
-- [ ] **DERIV-03**: Every "Language"-classified feature has an accepted EDR and moves to `what/concepts/`; zero DRAFT headers remain in `how/concepts/research/` (supersedes former ANTIPAT-11)
+- [x] **DERIV-03**: Every "Language"-classified feature has an accepted EDR and moves to `what/concepts/`; zero DRAFT headers remain in `how/concepts/research/` (supersedes former ANTIPAT-11)
 
 ### Syntax Design — Phase 5
 
@@ -201,7 +201,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | ANTIPAT-09 | Phase 4 | Pending |
 | ANTIPAT-10 | Phase 4 | Pending |
 | DERIV-02 | Phase 4 | Pending |
-| DERIV-03 | Phase 4 | Pending |
+| DERIV-03 | Phase 4 | Complete |
 | SYNTAX-01 | Phase 5 | Pending |
 | SYNTAX-02 | Phase 5 | Pending |
 | SYNTAX-03 | Phase 5 | Pending |
@@ -228,11 +228,13 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | ONBOARD-04 | Phase 9 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 74 total
 - Mapped to phases: 74 (100%)
 - Unmapped: 0
 
 **Phase summary:**
+
 - Phase 1 — Concerns Remediation: 17 requirements (DEBT-01..17) — **Done**
 - Phase 1.1 — Foundation Completion: 10 requirements (PROC-01..05, VISION-01..03, PRINC-01, FITNESS-01)
 - Phase 2 — Semantic Model: 3 requirements (SEM-01..03)
