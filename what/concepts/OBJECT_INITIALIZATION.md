@@ -38,8 +38,10 @@ a complex object with many optional fields.
    default values; omitted named arguments use the default.
 3. **Copy-and-update** — Immutable modifications use `Config(cfg, port: 9090)`
    style syntax — sugar over `new` + field assignment.
-4. **No builder boilerplate** — `@builder` auto-generation is a macro pattern
-   (AST macros, EDR-029), not a language construct.
+4. **No builder boilerplate** — `@builder` auto-generation is a proposed StdLib
+   macro pattern (using the AST macros mechanism, EDR-029), not a language
+   construct. The `@builder` macro is introduced by this concept and would be
+   registered in the StdLib macro catalogue alongside `@derive`.
 5. **Compile-time completeness check** — All required fields must be provided.
 
 ## Policy Footprint
@@ -78,8 +80,9 @@ struct Request:
 
 Object initialization follows the general function call model: named parameters,
 default values, and copy-and-update syntax are already part of the language.
-Builder auto-generation is provided via the `@builder` macro (AST macros,
-EDR-029). No constructor-specific mechanisms exist.
+Builder auto-generation is provided via the proposed `@builder` StdLib macro
+(using the AST macros mechanism, EDR-029). No constructor-specific mechanisms
+exist.
 
 ## Alternative Strategies
 
