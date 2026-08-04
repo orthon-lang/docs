@@ -138,6 +138,25 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Documentation Principle
 - **See also:** [Operator Equivalence](#operator-equivalence)
 
+### Channel
+
+A typed, bounded or unbounded message-passing conduit between delegates.
+`Channel<T>` wraps delegate mailboxes to provide ergonomic `send`/`receive`
+operations with static type safety. Channels are StdLib types — no new
+language semantics — and form the backbone of CSP-style concurrency patterns
+(select, fan-out/fan-in, pipeline).
+
+```orthon
+let ch = Channel<String>(buffer: 10)
+delegate producer:
+    ch.send("hello")
+delegate consumer:
+    let msg = ch.receive()
+```
+
+- **Source:** `../what/concepts/CONCURRENCY.md` (EDR-049)
+- **See also:** [Delegate](#delegate), [Sequence](#sequence)
+
 ### Collection Literal
 
 A compact, readable syntax for constructing collections (lists, maps, sets)
@@ -216,6 +235,24 @@ fun max(comptime T: type + Comparable, a: T, b: T) -> T
 - **Source:** `../what/concepts/COMPILE_TIME_EXECUTION.md`, EDR-031
 - **See also:** [Combinator](#combinator), [Core Language](#core-language), [Macro](#macro)
 
+### Context Parameter
+
+A function parameter that is resolved automatically from the enclosing
+scope rather than passed explicitly at the call site. In Orthon, context
+parameters use the `require`/`using` dual-keyword model: `require`
+declares a context dependency in a function or class signature, and
+`using` provides the value at the call or construction site. This
+replaces the single-keyword `using`/`using` model from EDR-037 with
+an unambiguous keyword split (EDR-081).
+
+```orthon
+fun process(order_id: Int) require Database db, Logger log -> Receipt
+process(42) using prod_db, prod_log
+```
+
+- **Source:** `../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081), EDR-037
+- **See also:** [Dependency Slot](#dependency-slot), [Implicit Context Flow](#implicit-context-flow)
+
 ---
 
 ## D
@@ -250,6 +287,23 @@ produce or structure data.
 - **Source:** `../what/PRIMITIVE_BLOCKS.md`
 - **See also:** [Data Primitive](#data-primitive), [Primitive Block](#primitive-block), [Data Modifier](#data-modifier)
 
+### Default Value
+
+A value assigned to a function or constructor parameter when no argument
+is provided at the call site. Default values are ordinary expressions
+evaluated at call time. Combined with named parameters, they eliminate
+telescoping-constructor anti-patterns and reduce overload explosion.
+In Orthon, default values are part of the general function call model
+(not a constructor-specific mechanism).
+
+```orthon
+fn connect(host: String, port: Int = 80, useSsl: Bool = false)
+connect(host: "example.com")    # port defaults to 80, useSsl to false
+```
+
+- **Source:** `../what/concepts/OBJECT_INITIALIZATION.md` (EDR-054), `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065)
+- **See also:** [Named and Optional Parameters](#named-and-optional-parameters), [Object Initialization](#object-initialization)
+
 ### Delegate
 
 A concurrent execution context in Orthon's concurrency model. Created with the `delegate` keyword (or the `act` modifier on a type declaration), a delegate owns isolated state and communicates via message passing. Internally, each delegate is implemented as an actor with a mailbox and single-threaded message processing, but the programmer never writes `actor` or manages mailboxes directly.
@@ -274,6 +328,26 @@ not the name.
 
 - **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (OQ2 Resolution)
 - **See also:** [Delegate](#delegate), [Await](#await), [Future](#future)
+
+### Dependency Slot
+
+A class-level `require` declaration that groups shared context
+dependencies for all methods in a class, filled per-instance at
+construction time. Dependency slots carry a compile-time initialization
+guarantee (no `null`, no uninitialized state) and enable prod/test
+differentiation at instance granularity.
+
+```orthon
+class UserService require Database db, Logger log:
+    fun find_user(id: Int) -> Option[User]
+        // db and log are available without redeclaration
+
+let prod_svc = UserService(using prod_db, prod_log)
+let test_svc = UserService(using test_db, test_log)
+```
+
+- **Source:** `../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081)
+- **See also:** [Context Parameter](#context-parameter), [Implicit Context Flow](#implicit-context-flow)
 
 ### Data Primitive
 
@@ -1190,6 +1264,16 @@ connect(host: "example.com", useSsl: true)    # named, skip port
 - **Source:** `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065)
 - **See also:** [Derive](#derive), [Macro](#macro), [Object Initialization](#object-initialization)
 
+### Named Parameter
+
+A function or constructor parameter that can be referenced by name at
+the call site, enabling readable invocations and arbitrary argument
+order. In Orthon, named parameters are part of the general function call
+model and desugar to positional calls via the macro layer (EDR-029).
+
+- **Source:** `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065), `../what/concepts/OBJECT_INITIALIZATION.md` (EDR-054)
+- **See also:** [Named and Optional Parameters](#named-and-optional-parameters), [Default Value](#default-value)
+
 ### Named Before Symbolic
 
 Every symbolic operator must have an equivalent named function. Symbols improve brevity; named functions improve readability. Both express the same semantics.
@@ -1563,6 +1647,26 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
+
+### Stream
+
+A push-based observable type (`Stream<T>`) that emits values to
+subscribed consumers asynchronously. Streams are the dual of pull-based
+sequences: in a pull model the consumer calls `next()`, while in a push
+model the producer calls `emit()` and the consumer reacts via a
+subscription callback. Streams build on the delegate model (EDR-033)
+and channels (EDR-049) for async delivery.
+
+```orthon
+let stream = Stream<Int>.create()
+let sub = stream.subscribe(fn (v) print(v))
+stream.emit(1)
+stream.emit(2)
+stream.complete()
+```
+
+- **Source:** `../what/concepts/PUSH_STREAMS.md` (EDR-051)
+- **See also:** [Sequence](#sequence), [Channel](#channel), [Delegate](#delegate)
 
 ### Spawn
 
