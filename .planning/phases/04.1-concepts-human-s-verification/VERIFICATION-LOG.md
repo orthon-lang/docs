@@ -15,7 +15,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
-| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 33 (VB5+VB8) | 2 | 0 |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 52 (VB5+VB8+VB10) | 2 | 1 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
@@ -181,3 +181,33 @@ COMMAND_PATTERN_VIA_DELEGATE has a classification discrepancy + header gap for g
 
 **Batch verdict:** 20 PASS / 0 WARN / 0 FAIL. Lazy-iteration cluster is coherent
 and fully consistent with the Phase 3 emit decisions (D-06, D-07).
+
+---
+
+## VB10 — Concurrency and Async (Wave 2)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| CONCURRENCY_MODEL | PB Decomposition | PASS | — |
+| CONCURRENCY_MODEL | Intra-batch consistency | PASS | Language-level model; StdLib CONCURRENCY builds on it (per concept's own Relationship note) |
+| CONCURRENCY_MODEL | Cross-batch references | PASS | See-also to GLOSSARY, SEMANTIC_MODEL, ERROR_HANDLING, TRAITS — resolve |
+| CONCURRENCY_MODEL | EDR Alternatives | PASS | EDR-033 lists 4 substantive alternatives (shared-memory threads, async/await, CSP, STM) |
+| CONCURRENCY_MODEL | DESIGN_PRINCIPLES alignment | PASS | No shared mutable state, Implementation Independence gate (EDR-033), Orthogonality |
+| ASYNC_AWAIT | PB Decomposition | PASS | — |
+| ASYNC_AWAIT | Intra-batch consistency | PASS | `async` modifier complements delegate-based CONCURRENCY_MODEL; colourless Future is orthogonal |
+| ASYNC_AWAIT | Cross-batch references | PASS | See-also to CONCURRENCY_MODEL, SEMANTIC_MODEL — resolve |
+| ASYNC_AWAIT | EDR Alternatives | PASS | EDR-047 lists 4 substantive alternatives (separate kind, strict colouring, stackful, implicit parallelism) |
+| ASYNC_AWAIT | DESIGN_PRINCIPLES alignment | PASS | Orthogonality (modifier, not kind), Explicit Semantics (spawn visible) |
+| CONCURRENCY | Concept file missing (G1) | FAIL | Create what/concepts/CONCURRENCY.md from EDR-049 (StdLib utilities: channels, select, supervision on delegate model) — resolved in governance plan 04.1-17 |
+| CONCURRENCY | Intra-batch consistency | PASS | StdLib layer over CONCURRENCY_MODEL (EDR-033); not to be confused with CONCURRENCY_MODEL.md |
+| CONCURRENCY | Cross-batch references | PASS | EDR-049 links delegate (EDR-036) and async model; consistent |
+| CONCURRENCY | EDR Alternatives | PASS | EDR-049 lists 4 substantive alternatives (language-level channels, select, built-in supervision, actor keyword) |
+| CONCURRENCY | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (StdLib not language), Orthogonality |
+| EXECUTION_PROGRAM | Concept file | N/A | Policy-level per D-04 — verified via EDR-036 + DEFAULT_STRATEGY.md (Execution Model Policy = AOT) + IMPLEMENTATION_POLICIES.md § Execution Model Policy. No FAIL for missing concept file |
+| EXECUTION_PROGRAM | Intra-batch consistency | PASS | Execution Model Policy is orthogonal to concurrency/async semantics (HOW vs WHAT) |
+| EXECUTION_PROGRAM | Cross-batch references | PASS | EDR-036 references research/essential/EXECUTION_PROGRAM.md; strategy files cite EDR-036 |
+| EXECUTION_PROGRAM | EDR Alternatives | PASS | EDR-036 lists 3 substantive alternatives (language feature, no execution program, outside Strategy) |
+| EXECUTION_PROGRAM | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (execution is infrastructure), Intent Over Implementation |
+
+**Batch verdict:** 19 PASS / 0 WARN / 1 FAIL (G1: CONCURRENCY concept file missing — EDR-049 exists).
+Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
