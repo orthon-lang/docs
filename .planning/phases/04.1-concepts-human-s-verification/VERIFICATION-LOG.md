@@ -15,7 +15,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
-| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 13 (VB5) | 2 (VB5) | 0 |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 33 (VB5+VB8) | 2 | 0 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
@@ -151,3 +151,33 @@ the 3 WARNs are template/registry consistency items for the governance plan.
 
 **Batch verdict:** 13 PASS / 2 WARN / 0 FAIL. Pattern-matching cluster is coherent;
 COMMAND_PATTERN_VIA_DELEGATE has a classification discrepancy + header gap for governance.
+
+---
+
+## VB8 — Lazy Sequences and Iteration (Wave 2)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| LAZY_SEQUENCE_GENERATORS | PB Decomposition | PASS | — |
+| LAZY_SEQUENCE_GENERATORS | Intra-batch consistency | PASS | Production side of the iterator pair; consistent with ITERATOR_PROTOCOL (consumption side) |
+| LAZY_SEQUENCE_GENERATORS | Cross-batch references | PASS | See-also to ITERATOR_PROTOCOL, SEMANTIC_MODEL — resolve |
+| LAZY_SEQUENCE_GENERATORS | EDR Alternatives | PASS | EDR-021 lists 3 substantive alternatives (yield keyword, manual Iterator, eager default) |
+| LAZY_SEQUENCE_GENERATORS | DESIGN_PRINCIPLES alignment | PASS | Lazy by default (D-06), One Concept One Syntax (canonical forms equivalent) |
+| ITERATOR_PROTOCOL | PB Decomposition | PASS | — |
+| ITERATOR_PROTOCOL | Intra-batch consistency | PASS | Consumption side of the pair; `for` loop desugars to it (ITERATION_LOOP) |
+| ITERATOR_PROTOCOL | Cross-batch references | PASS | See-also to LAZY_SEQUENCE_GENERATORS, SEMANTIC_MODEL — resolve |
+| ITERATOR_PROTOCOL | EDR Alternatives | PASS | EDR-022 lists 3 substantive alternatives (dunder/duck-typing, separate Stream type, eager only) |
+| ITERATOR_PROTOCOL | DESIGN_PRINCIPLES alignment | PASS | Declarative With Static Guarantees (trait-based, monomorphised), Orthogonality (one protocol) |
+| GENERATORS | PB Decomposition | PASS | — |
+| GENERATORS | Intra-batch consistency | PASS | Extends LAZY_SEQUENCE_GENERATORS (bidirectional yield ⊇ emit); implements Iterator/BidirectionalGenerator |
+| GENERATORS | Cross-batch references | PASS | See-also to LAZY_SEQUENCE_GENERATORS, ITERATOR_PROTOCOL, EMIT_AS_INTERMEDIATE_RESULT — resolve |
+| GENERATORS | EDR Alternatives | PASS | EDR-050 lists 3 substantive alternatives (one-way emit only, StdLib expressions, no yield-from) |
+| GENERATORS | DESIGN_PRINCIPLES alignment | PASS | Minimal syntactic addition (sugar over primitives), Composable |
+| ITERATION_LOOP | PB Decomposition | PASS | — |
+| ITERATION_LOOP | Intra-batch consistency | PASS | `for ... in` desugars to ITERATOR_PROTOCOL; one iteration construct (no C-style for) |
+| ITERATION_LOOP | Cross-batch references | PASS | See-also to ITERATOR_PROTOCOL, LAZY_SEQUENCE_GENERATORS — resolve |
+| ITERATION_LOOP | EDR Alternatives | PASS | EDR-053 lists 3 substantive alternatives (C-style for included, while-only, no loop keyword) |
+| ITERATION_LOOP | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (single iteration construct), Declarative (what not how) |
+
+**Batch verdict:** 20 PASS / 0 WARN / 0 FAIL. Lazy-iteration cluster is coherent
+and fully consistent with the Phase 3 emit decisions (D-06, D-07).
