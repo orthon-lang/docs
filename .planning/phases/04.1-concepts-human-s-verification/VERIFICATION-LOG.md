@@ -15,7 +15,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
-| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 74 (VB5+VB8+VB10+VB13) | 5 | 1 |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
@@ -246,3 +246,28 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
 
 **Batch verdict:** 22 PASS / 3 WARN / 0 FAIL. Memory-layout cluster is coherent;
 the 3 WARNs are SLOTS classification discrepancy + header gaps (SLOTS, SPAN) for governance.
+
+---
+
+## VB15 — Modules and Dependencies (Wave 2)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| CONTEXT_LIMITED_MODULES | PB Decomposition | PASS | — |
+| CONTEXT_LIMITED_MODULES | Intra-batch consistency | PASS | Module-level capability checks complement CONTEXT_PARAMETERS (implicit context flow) and REQUIRE_USING (dependency slots) |
+| CONTEXT_LIMITED_MODULES | Cross-batch references | WARN | Missing standard ACCEPTED header block (EDR-072 linked only in Decision History); add header for template consistency before Phase 5 |
+| CONTEXT_LIMITED_MODULES | EDR Alternatives | PASS | EDR-072 lists 3 substantive alternatives (file-scoped, .mli interface files, no module system) |
+| CONTEXT_LIMITED_MODULES | DESIGN_PRINCIPLES alignment | PASS | Explicitness (declared API/deps), LLM Readiness (bounded surface), Declarative With Static Guarantees |
+| CONTEXT_PARAMETERS | Concept file | N/A | SEMANTIC_MODEL correction per D-04 — verified via EDR-037 + SEMANTIC_MODEL.md § Evaluation "Implicit context flow (cross-cutting concern)" note citing EDR-037. No FAIL |
+| CONTEXT_PARAMETERS | Intra-batch consistency | PASS | Cross-cutting concern of Evaluation/Visibility; consistent with module capability model |
+| CONTEXT_PARAMETERS | Cross-batch references | PASS | EDR-037 + SEMANTIC_MODEL § Evaluation co-located and cross-referenced |
+| CONTEXT_PARAMETERS | EDR Alternatives | PASS | EDR-037 lists 3 substantive alternatives (language feature, StdLib DI, reject) |
+| CONTEXT_PARAMETERS | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (correction not new feature), Explicit Semantics (deferred past v0.1) |
+| REQUIRE_USING_DEPENDENCY_SLOTS | Concept file missing (G3) | FAIL | Create what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md from EDR-081 (dual-level require/using resolution) — resolved in governance plan 04.1-17 |
+| REQUIRE_USING_DEPENDENCY_SLOTS | Intra-batch consistency | PASS | Refines EDR-037 (dependency slots); consistent with CONTEXT_PARAMETERS and module model |
+| REQUIRE_USING_DEPENDENCY_SLOTS | Cross-batch references | PASS | EDR-081 refines EDR-037; links consistent |
+| REQUIRE_USING_DEPENDENCY_SLOTS | EDR Alternatives | PASS | EDR-081 lists 4 substantive alternatives (single using, auto-naming, module-level given only, traits carrying require) |
+| REQUIRE_USING_DEPENDENCY_SLOTS | DESIGN_PRINCIPLES alignment | PASS | Explicitness (declaration/provision distinction), LLM Readiness (explicit name resolution) |
+
+**Batch verdict:** 13 PASS / 1 WARN / 0 additional FAIL (1 G3 FAIL: REQUIRE_USING_DEPENDENCY_SLOTS concept file missing — EDR-081 exists).
+Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17. Wave 2 complete.
