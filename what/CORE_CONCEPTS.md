@@ -30,12 +30,12 @@
 >
 > Phase 4 now complete. EDR-079 records the global acceptance of all
 > processed concepts, their interactions, and the aggregated Library
-> Boundary classification (35 Language, 16 StdLib, 3 Policy, 4 Rejected,
+> Boundary classification (37 Language, 16 StdLib, 3 Policy, 4 Rejected,
 > 50 Deferred, 2 Corrections). See [`LIBRARY_BOUNDARY.md`](LIBRARY_BOUNDARY.md)
 > for the full classification summary and [`EDR-079`](../how/decision_records/architecture/EDR-079-aggregating-p4.md)
 > for the aggregating acceptance record.
 >
-> **Last updated:** 2026-07-30
+> **Last updated:** 2026-08-04
 
 ---
 
