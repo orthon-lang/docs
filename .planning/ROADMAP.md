@@ -179,14 +179,31 @@ Plans:
 
 ### Phase 04.1: Concepts Human's Verification (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
+**Goal:** Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist (Primitive Block decomposition, intra-batch consistency, cross-batch references, EDR Alternatives quality, DESIGN_PRINCIPLES alignment), close governance gaps G1-G8, and produce a clean, confirmed concept inventory for Phase 5.
+**Requirements**: CONCEPT-ESS-01, CONCEPT-IMP-01, DERIV-02, DERIV-03
 **Depends on:** Phase 4
-**Plans:** 0 plans
+**Plans:** 18 plans (6 waves)
 
 Plans:
 
-- [ ] TBD (run /gsd-plan-phase 04.1 to break down)
+- [ ] 04.1-00-PLAN.md — Wave 0: G6 consolidation (reconstruct 4 missing Phase 4 summaries)
+- [ ] 04.1-01-PLAN.md — Wave 1: VB1 — Equality and Value Semantics (EQUALITY, COPY_ON_WRITE, PERSISTENT_DATA_STRUCTURES)
+- [ ] 04.1-02-PLAN.md — Wave 1: VB2 — Null Safety and Flow Analysis (NULL_SAFETY, TYPE_LEVEL_NULL_SAFETY, SMART_CAST)
+- [ ] 04.1-03-PLAN.md — Wave 1: VB3 — Error Handling (ERROR_HANDLING, ERROR_UNION)
+- [ ] 04.1-04-PLAN.md — Wave 1: VB4 — Traits and Polymorphism (TRAITS, GENERICS, STRUCTURAL_TYPING, EXTENSION_FUNCTIONS, GRADUAL_TYPING)
+- [ ] 04.1-05-PLAN.md — Wave 2: VB5 — Pattern Matching and Dispatch
+- [ ] 04.1-06-PLAN.md — Wave 2: VB8 — Lazy Sequences and Iteration
+- [ ] 04.1-07-PLAN.md — Wave 2: VB10 — Concurrency and Async (G1, D-04)
+- [ ] 04.1-08-PLAN.md — Wave 2: VB13 — Memory and Data Layout (D-04)
+- [ ] 04.1-09-PLAN.md — Wave 2: VB15 — Modules and Dependencies (G3, D-04)
+- [ ] 04.1-10-PLAN.md — Wave 3: VB6 — Type System Extensions (G2)
+- [ ] 04.1-11-PLAN.md — Wave 3: VB7 — Type Inference and Static Analysis
+- [ ] 04.1-12-PLAN.md — Wave 3: VB9 — Sequence Emission and Composition (G1)
+- [ ] 04.1-13-PLAN.md — Wave 3: VB11 — Functions and Construction (G1)
+- [ ] 04.1-14-PLAN.md — Wave 3: VB14 — Contracts and Declarative
+- [ ] 04.1-15-PLAN.md — Wave 4: VB12 — Data Structures StdLib
+- [ ] 04.1-16-PLAN.md — Wave 4: VB16 — Metaprogramming and Derive
+- [ ] 04.1-17-PLAN.md — Wave 5: Governance sync (G1-G5 closure, G4 inventory, registry updates, human sign-off)
 
 ### Phase 5: Syntax Design
 
