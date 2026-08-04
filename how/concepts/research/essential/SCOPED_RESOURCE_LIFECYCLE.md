@@ -25,7 +25,7 @@ resource management construct that guarantees release at scope exit.
 
 ## Principles
 
-Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md).
+Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md).
 
 1. **Explicitness** — the cleanup must be syntactically visible. Hidden control flow (magic destructors with no surface syntax) is acceptable only if the programmer explicitly opts into it.
 2. **Deterministic Behavior** — cleanup must happen at a well-defined, predictable point. No GC-finalizer-style "eventually" semantics.

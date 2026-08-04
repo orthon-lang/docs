@@ -51,7 +51,7 @@ template.
 
 ## Principles
 
-Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md).
+Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md).
 
 1. **Explicitness** — "The meaning of code should be apparent from its surface form." A call `proxy.unknownMethod()` must not silently succeed via hidden dispatch — the dispatch mechanism must be syntactically visible at the type declaration.
 2. **LLM Generability** — an LLM must be able to determine what methods are available on a type. If `opDispatch` intercepts *all* unknown methods, the LLM cannot enumerate the effective interface.

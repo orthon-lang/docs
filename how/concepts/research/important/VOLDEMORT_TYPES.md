@@ -52,7 +52,7 @@ This is the problem that D's Voldemort types, Rust's `impl Trait`, C++'s
 
 ## Principles
 
-Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../DESIGN_PRINCIPLES.md).
+Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md).
 
 1. **Explicitness** — "The meaning of code should be apparent from its surface form." A signature `fn foo() -> auto` reveals nothing about the return type. A signature `fn foo() -> impl Iterator[Item]` reveals the trait contract but hides the concrete type. Which level of explicitness is sufficient?
 2. **Declarative With Static Guarantees** — the compiler must still verify that the returned type satisfies the declared interface. Opaque types are not dynamic types — they are statically known to the compiler, just hidden from the caller.
