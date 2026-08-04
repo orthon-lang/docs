@@ -17,7 +17,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 86 (VB6+VB7+VB9+VB11+VB14) | 7 | 2 |
-| 4 | VB12, VB16 | 7 | 16 (VB12) | 4 (VB12) | 0 |
+| 4 | VB12, VB16 | 7 | 31 (VB12+VB16) | 4 | 0 |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
 for completed batches (currently VB1 only).*
@@ -447,3 +447,28 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
 
 **Batch verdict:** 16 PASS / 4 WARN / 0 FAIL. StdLib data-structure cluster is coherent;
 4 WARNs are header-template gaps (all VB12 concepts) for governance.
+
+---
+
+## VB16 — Metaprogramming and Derive (Wave 4)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| AST_MACROS | PB Decomposition | PASS | — |
+| AST_MACROS | Intra-batch consistency | PASS | Execution engine is comptime (COMPILE_TIME_EXECUTION); @derive is sugar over macros — coherent metaprogramming stack |
+| AST_MACROS | Cross-batch references | PASS | See-also to COMPILE_TIME_EXECUTION, GENERICS — resolve |
+| AST_MACROS | EDR Alternatives | PASS | EDR-029 lists 2 substantive alternatives (pure comptime, Rust procedural macros) |
+| AST_MACROS | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (no separate macro sublanguage), Hygienic, Deterministic (no recursive expansion) |
+| COMPILE_TIME_EXECUTION | PB Decomposition | PASS | — |
+| COMPILE_TIME_EXECUTION | Intra-batch consistency | PASS | Unified comptime model serves generics, reflection, metaprogramming; explicit bounds diverge from Zig for LLM generability |
+| COMPILE_TIME_EXECUTION | Cross-batch references | PASS | See-also to GENERICS, AST_MACROS — resolve |
+| COMPILE_TIME_EXECUTION | EDR Alternatives | PASS | EDR-031 lists 2 substantive alternatives (full Zig duck-typed, separate Rust generic syntax) |
+| COMPILE_TIME_EXECUTION | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (one mechanism), LLM Generability (explicit comptime bounds), Intent Over Implementation |
+| DATACLASSES | PB Decomposition | PASS | Pattern via existing @derive mechanism — no new semantics or primitives |
+| DATACLASSES | Intra-batch consistency | PASS | Consistent with AST_MACROS (derive) and EQUALITY (structural ===); StdLib derive registry |
+| DATACLASSES | Cross-batch references | PASS | See-also to AST_MACROS, EQUALITY — resolve |
+| DATACLASSES | EDR Alternatives | PASS | EDR-042 lists 2 substantive alternatives (dedicated data class keyword, Java records positional) |
+| DATACLASSES | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (no new keyword), Data First (immutable by default), Structural equality by derive |
+
+**Batch verdict:** 15 PASS / 0 WARN / 0 FAIL. Metaprogramming stack (macros → comptime →
+derive) is coherent and LLM-generability-aligned. Wave 4 complete.
