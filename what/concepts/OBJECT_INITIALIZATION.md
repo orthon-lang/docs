@@ -1,6 +1,6 @@
 # Object Initialization — Named Parameters with Defaults and Builder Patterns
 
-> **✅ ACCEPTED — [EDR-054](../how/decision_records/architecture/EDR-054-object-initialization.md).**
+> **✅ ACCEPTED — [EDR-054](../../how/decision_records/architecture/EDR-054-object-initialization.md).**
 >
 > **Status:** Accepted 2026-07-27.
 >

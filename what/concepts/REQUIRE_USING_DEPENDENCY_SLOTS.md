@@ -1,6 +1,6 @@
 # Dependency Slots — `require` / `using` Dual-Level Resolution
 
-> **✅ ACCEPTED — [EDR-081](../how/decision_records/architecture/EDR-081-require-using-dependency-slots.md).**
+> **✅ ACCEPTED — [EDR-081](../../how/decision_records/architecture/EDR-081-require-using-dependency-slots.md).**
 >
 > **Status:** Accepted 2026-07-30.
 >
@@ -8,7 +8,7 @@
 > keyword split and class-level dependency slots are syntax sugar with no new
 > semantics. The mechanism is identical to EDR-037's Dual Parameter Model.
 >
-> **Refines:** [EDR-037](../how/decision_records/architecture/EDR-037-context-parameters.md)
+> **Refines:** [EDR-037](../../how/decision_records/architecture/EDR-037-context-parameters.md)
 > (Context Parameters).
 >
 > **See also:** [`CONTEXT_LIMITED_MODULES.md`](CONTEXT_LIMITED_MODULES.md),

@@ -1,6 +1,6 @@
 # Concurrency — StdLib Utilities Built on Delegate Model
 
-> **✅ ACCEPTED — [EDR-049](../how/decision_records/architecture/EDR-049-concurrency.md).**
+> **✅ ACCEPTED — [EDR-049](../../how/decision_records/architecture/EDR-049-concurrency.md).**
 >
 > **Status:** Accepted 2026-07-27.
 >

@@ -1,6 +1,6 @@
 # Push Streams — StdLib Observable-Style Reactive Streams
 
-> **✅ ACCEPTED — [EDR-051](../how/decision_records/architecture/EDR-051-push-streams.md).**
+> **✅ ACCEPTED — [EDR-051](../../how/decision_records/architecture/EDR-051-push-streams.md).**
 >
 > **Status:** Accepted 2026-07-27.
 >
