@@ -472,3 +472,96 @@ Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
 
 **Batch verdict:** 15 PASS / 0 WARN / 0 FAIL. Metaprogramming stack (macros → comptime →
 derive) is coherent and LLM-generability-aligned. Wave 4 complete.
+
+---
+
+## G4 Inventory — Unprocessed Research Files
+
+Per D-05, the following research files remain **unprocessed** (have not been
+run through the Decision Pipeline) and are scoped for **Phase 4.2** treatment.
+Each is verified to exist in its tier directory.
+
+| File | Tier | Verdict |
+|------|------|---------|
+| EXECUTION_CONTEXT_INVOCATION | Essential | Unprocessed — Phase 4.2 |
+| EXECUTION_POLICY_HYPOTHESIS | Essential | Unprocessed — Phase 4.2 (may resolve as Policy-level) |
+| MAKE_ILLEGAL_STATES_UNREPRESENTABLE | Essential | Unprocessed — Phase 4.2 |
+| NAMESPACES | Essential | Unprocessed — Phase 4.2 |
+| COLORING_FREE_CONCURRENCY | Important | Unprocessed — Phase 4.2 |
+| DETACHED_EXECUTION | Important | Unprocessed — Phase 4.2 |
+| LLM_AS_DELEGATE_IMPL | Important | Unprocessed — Phase 4.2 |
+| PARALLELISM_EXECUTOR_MODEL | Important | Unprocessed — Phase 4.2 |
+| STRUCT_AS_NOMINAL_PRODUCT_TYPE | Important | Unprocessed — Phase 4.2 |
+| OPEN_CLASSES | Deferrable | Unprocessed — Phase 4.2 |
+| SINGLETON_CLASS | Deferrable | Unprocessed — Phase 4.2 |
+| MIXIN | Deferrable | Unprocessed — Phase 4.2 |
+
+**Verdict:** 12 files catalogued (4 Essential, 5 Important, 3 Deferrable).
+Phase 4.2 CONTEXT should use this list as its ready scope.
+
+---
+
+## Governance Sign-Off (Phase 4.1)
+
+**Date:** 2026-08-04
+
+### FAIL Entries Resolved
+
+All FAIL entries recorded during VB-batch verification have been resolved in
+this governance plan:
+
+| Concept | Gap | Resolution |
+|---------|-----|------------|
+| CONCURRENCY | G1 — EDR-049 exists, concept file missing | `what/concepts/CONCURRENCY.md` created from EDR-049 (StdLib, distinct from CONCURRENCY_MODEL) |
+| PUSH_STREAMS | G1 — EDR-051 exists, concept file missing | `what/concepts/PUSH_STREAMS.md` created from EDR-051 (StdLib) |
+| OBJECT_INITIALIZATION | G1 — EDR-054 exists, concept file missing | `what/concepts/OBJECT_INITIALIZATION.md` created from EDR-054 (StdLib) |
+| REQUIRE_USING_DEPENDENCY_SLOTS | G3 — EDR-081 exists, concept file missing | `what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` created from EDR-081 (Language Pattern, Level 2) |
+
+### Governance Gaps Closed
+
+| Gap | Item | Status |
+|-----|------|--------|
+| G1 | 3 missing concept files (CONCURRENCY, PUSH_STREAMS, OBJECT_INITIALIZATION) | **Closed** — files created |
+| G2 | CONSTRAINED_TYPES (EDR-080) missing from LIBRARY_BOUNDARY.md | **Closed** — added to Language category (35 → 36) |
+| G3 | REQUIRE_USING_DEPENDENCY_SLOTS (EDR-081) concept file missing | **Closed** — file created |
+| G4 | 12 unprocessed research files inventory | **Closed** — catalogued above for Phase 4.2 scope |
+| G5 | CORE_CONCEPTS.md header count ("25 concepts") stale | **Closed** — updated to 53 |
+| G6 | Missing Phase 4 SUMMARY files (04-03, 04-05, 04-07, 04-08) | **Closed** — 04-07/04-08 reconstructed (plan 04.1-00); 04-03/04-05 verified present |
+
+### Final Summary Table
+
+| Wave | Batches | Concepts | PASS | WARN | FAIL |
+|------|---------|----------|------|------|------|
+| 1 | VB1-VB4 | 13 | 61 | 4 | 0 |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 | 6 | 2 |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 86 | 7 | 2 |
+| 4 | VB12, VB16 | 7 | 31 | 4 | 0 |
+| **Total** | 16 batches | **57** | **265** | **21** | **4** |
+
+*All 4 FAIL entries (G1 ×3, G3 ×1) resolved above. The 21 WARN entries are
+predominantly template-consistency items (missing ACCEPTED header blocks) and
+registry/classification consistency items, non-blocking for Phase 5 per D-01
+but tracked for cleanup.*
+
+### WARN Backlog (for Phase 5 prep)
+
+- **Header-template gaps (17):** SMART_CAST, EXTENSION_FUNCTIONS, GRADUAL_TYPING,
+  COMMAND_PATTERN_VIA_DELEGATE, SLOTS, SPAN, CONTEXT_LIMITED_MODULES,
+  NAMED_AND_OPTIONAL_PARAMETERS, DELEGATION, PROPERTIES, CONTRACTS,
+  DECLARATIVE_CONSTRUCTS, DECLARATION_BY_ASSIGNMENT, SORTING,
+  DECLARATIVE_MULTI_KEY_SORT, IMMUTABLE_DATE_TIME, DERIVE_SERIALIZATION —
+  missing standard `✅ ACCEPTED — EDR-NNN` header block; EDR linkage present in
+  Decision History.
+- **Classification discrepancies (2):** COMMAND_PATTERN_VIA_DELEGATE and SLOTS —
+  concept-file Decision History says StdLib, LIBRARY_BOUNDARY.md lists both under
+  Language. Requires reconciliation.
+- **Registry (INDEX.md) gap (1):** EDR-039, EDR-041..046 exist as files and back
+  accepted concepts but are absent from INDEX.md; the "intentionally skipped"
+  note for EDR-039..046 is stale (only EDR-040 is genuinely skipped). INDEX.md
+  must be updated.
+
+### Phase 5 Readiness
+
+All FAILs resolved, registries corrected (G2, G5), governance debts catalogued
+(G4). The confirmed concept inventory is clean: **53 accepted concept files**
+(49 original + 4 created). Phase 5 (Syntax Design) is unblocked.

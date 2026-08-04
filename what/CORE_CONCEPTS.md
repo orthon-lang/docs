@@ -6,9 +6,11 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** 25 concepts accepted through Phase 4. Waves 1–2 (essential
-> core: 13 concepts) plus Wave 4 (important tier: 12 concepts) accepted
-> via Decision Pipeline. Wave 3 (Policy-classified + borderline concepts)
+> **Status:** 53 concepts accepted (49 Phase 4 accepted concept files plus 4
+> governance-completion concept files created in Phase 4.1: CONCURRENCY,
+> PUSH_STREAMS, OBJECT_INITIALIZATION, REQUIRE_USING_DEPENDENCY_SLOTS).
+> Earlier waves — Waves 1–2 (essential core: 13 concepts) plus Wave 4
+> (important tier: 12 concepts) — accepted via Decision Pipeline. Wave 3 (Policy-classified + borderline concepts)
 > processed via Decision Pipeline — see
 > [`how/process/DECISION_PIPELINE.md`](../how/process/DECISION_PIPELINE.md)
 > § Essential — Policy Level and § Essential — Derived Features (Wave 3).
