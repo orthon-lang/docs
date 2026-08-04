@@ -16,7 +16,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
-| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 34 (VB6+VB7) | 1 | 0 |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 53 (VB6+VB7+VB9) | 1 | 1 |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
@@ -327,3 +327,33 @@ EDR-039/043/045/046 are among the unindexed EDRs flagged in VB4 (INDEX gap).
 
 **Batch verdict:** 10 PASS / 0 WARN / 0 FAIL. Both essential-tier static-analysis
 concepts are coherent and mutually reinforcing.
+
+---
+
+## VB9 — Sequence Emission and Composition (Wave 3)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| EMIT_AS_INTERMEDIATE_RESULT | PB Decomposition | PASS | — |
+| EMIT_AS_INTERMEDIATE_RESULT | Intra-batch consistency | PASS | Reuses `emit` (EDR-021) — zero new syntax; consistent with lazy-sequence and generator model |
+| EMIT_AS_INTERMEDIATE_RESULT | Cross-batch references | PASS | See-also to LAZY_SEQUENCE_GENERATORS, GENERATORS, ITERATOR_PROTOCOL — resolve |
+| EMIT_AS_INTERMEDIATE_RESULT | EDR Alternatives | PASS | EDR-052 lists 2 substantive alternatives (separate stream construct, callback-based) |
+| EMIT_AS_INTERMEDIATE_RESULT | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (no new keyword), One Concept One Syntax |
+| COMPOSABLE_COLLECTION_OPS | PB Decomposition | PASS | Compositions of ITERATOR_PROTOCOL — documented decomposition, no new primitives |
+| COMPOSABLE_COLLECTION_OPS | Intra-batch consistency | PASS | Declarative combinator layer over the iterator protocol; consistent with emit model |
+| COMPOSABLE_COLLECTION_OPS | Cross-batch references | PASS | See-also to ITERATOR_PROTOCOL, LAZY_SEQUENCE_GENERATORS — resolve |
+| COMPOSABLE_COLLECTION_OPS | EDR Alternatives | PASS | EDR-032 lists 2 substantive alternatives (language-level comprehensions, map/filter keywords) |
+| COMPOSABLE_COLLECTION_OPS | DESIGN_PRINCIPLES alignment | PASS | Declarative (what not how), Minimal Core, Loop fusion as optimisation (Semantics Before Optimization) |
+| PUSH_STREAMS | Concept file missing (G1) | FAIL | Create what/concepts/PUSH_STREAMS.md from EDR-051 (StdLib observable-style reactive streams on delegate + channel) — resolved in governance plan 04.1-17 |
+| PUSH_STREAMS | Intra-batch consistency | PASS | Push model complements pull-based iterator model; no conflict with emit/combinators |
+| PUSH_STREAMS | Cross-batch references | PASS | EDR-051 links delegate model and channel; consistent |
+| PUSH_STREAMS | EDR Alternatives | PASS | EDR-051 lists 2 substantive alternatives (language-level push duality, ReactiveX library) |
+| PUSH_STREAMS | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (StdLib not language), Orthogonality |
+| COLLECTION_LITERAL_SYNTAX | PB Decomposition | PASS | Desugars to StdLib constructors — documented, no new primitives |
+| COLLECTION_LITERAL_SYNTAX | Intra-batch consistency | PASS | Immutable-by-default consistent with data-first model and CoW |
+| COLLECTION_LITERAL_SYNTAX | Cross-batch references | PASS | See-also to GLOSSARY, SYNTAX (Phase 5), PRIMITIVE_BLOCKS — resolve |
+| COLLECTION_LITERAL_SYNTAX | EDR Alternatives | PASS | EDR-041 lists 2 substantive alternatives (language feature, mutable by default) |
+| COLLECTION_LITERAL_SYNTAX | DESIGN_PRINCIPLES alignment | PASS | Data First (immutable by default), Minimal Core (sugar over StdLib) |
+
+**Batch verdict:** 19 PASS / 0 WARN / 1 FAIL (G1: PUSH_STREAMS concept file missing — EDR-051 exists).
+Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17.
