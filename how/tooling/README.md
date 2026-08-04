@@ -55,6 +55,7 @@ Insight arises → create tooling-requirement.md →
 
 | File | Status | Priority | Source |
 |------|--------|----------|--------|
+| [`LANGUAGE_SERVER.md`](LANGUAGE_SERVER.md) | Open | P1 | D serve-d / code-d case study |
 | [`ORTHON-DESCRIBE.md`](ORTHON-DESCRIBE.md) | Open | P2 | BAML gap analysis § Tier 2 (#8) |
 | [`ORTHON-RUN.md`](ORTHON-RUN.md) | Open | P2 | BAML gap analysis § Tier 2 (#9) |
 | [`ORTHON-RUN-E.md`](ORTHON-RUN-E.md) | Open | P3 | BAML gap analysis § Tier 2 (#10) |
