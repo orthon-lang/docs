@@ -182,7 +182,7 @@ Plans:
 **Goal:** Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist (Primitive Block decomposition, intra-batch consistency, cross-batch references, EDR Alternatives quality, DESIGN_PRINCIPLES alignment), close governance gaps G1-G8, and produce a clean, confirmed concept inventory for Phase 5.
 **Requirements**: CONCEPT-ESS-01, CONCEPT-IMP-01, DERIV-02, DERIV-03
 **Depends on:** Phase 4
-**Plans:** 6/18 plans executed
+**Plans:** 7/18 plans executed
 
 Plans:
 
@@ -192,7 +192,7 @@ Plans:
 - [x] 04.1-03-PLAN.md — Wave 1: VB3 — Error Handling (ERROR_HANDLING, ERROR_UNION)
 - [x] 04.1-04-PLAN.md — Wave 1: VB4 — Traits and Polymorphism (TRAITS, GENERICS, STRUCTURAL_TYPING, EXTENSION_FUNCTIONS, GRADUAL_TYPING)
 - [x] 04.1-05-PLAN.md — Wave 2: VB5 — Pattern Matching and Dispatch
-- [ ] 04.1-06-PLAN.md — Wave 2: VB8 — Lazy Sequences and Iteration
+- [x] 04.1-06-PLAN.md — Wave 2: VB8 — Lazy Sequences and Iteration
 - [ ] 04.1-07-PLAN.md — Wave 2: VB10 — Concurrency and Async (G1, D-04)
 - [ ] 04.1-08-PLAN.md — Wave 2: VB13 — Memory and Data Layout (D-04)
 - [ ] 04.1-09-PLAN.md — Wave 2: VB15 — Modules and Dependencies (G3, D-04)
