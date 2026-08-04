@@ -15,7 +15,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 | Wave | Batches | Concepts | PASS | WARN | FAIL |
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
-| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | -- | -- | -- |
+| 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 13 (VB5) | 2 (VB5) | 0 |
 | 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
@@ -126,3 +126,28 @@ ERROR_UNION is a complementary mechanism, not a replacement for Result.
 
 **Batch verdict:** 22 PASS / 3 WARN / 0 FAIL. Polymorphism cluster is coherent;
 the 3 WARNs are template/registry consistency items for the governance plan.
+
+---
+
+## VB5 — Pattern Matching and Dispatch (Wave 2)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| PATTERN_MATCHING | PB Decomposition | PASS | — |
+| PATTERN_MATCHING | Intra-batch consistency | PASS | Foundation for PATTERN_MATCHING_DISPATCH (arm patterns reuse EDR-025 syntax); no conflict |
+| PATTERN_MATCHING | Cross-batch references | PASS | See-also to TRAITS, PATTERN_MATCHING_DISPATCH — resolve |
+| PATTERN_MATCHING | EDR Alternatives | PASS | EDR-025 lists 5 substantive alternatives (non-exhaustive, statement-oriented, no guards, no or-patterns, library-based) |
+| PATTERN_MATCHING | DESIGN_PRINCIPLES alignment | PASS | Declarative With Static Guarantees (exhaustiveness), Expression-oriented (composability) |
+| PATTERN_MATCHING_DISPATCH | PB Decomposition | PASS | — |
+| PATTERN_MATCHING_DISPATCH | Intra-batch consistency | PASS | Complements TRAITS (single-receiver) for true multimethod scenarios; pattern syntax consistent with EDR-025 |
+| PATTERN_MATCHING_DISPATCH | Cross-batch references | PASS | See-also to PATTERN_MATCHING, TRAITS — resolve |
+| PATTERN_MATCHING_DISPATCH | EDR Alternatives | PASS | EDR-026 lists 4 substantive alternatives (traits-only, per-arm declarations, visitor, CLOS-style) |
+| PATTERN_MATCHING_DISPATCH | DESIGN_PRINCIPLES alignment | PASS | Definition-site declaration (local reasoning), Explicitness (specificity resolution) |
+| COMMAND_PATTERN_VIA_DELEGATE | PB Decomposition | PASS | Obsoleted by delegate primitive (EDR-036) — no new primitives required |
+| COMMAND_PATTERN_VIA_DELEGATE | Intra-batch consistency | WARN | Classification discrepancy: concept file Decision History says "StdLib (documentation-only)" but LIBRARY_BOUNDARY.md lists COMMAND_PATTERN_VIA_DELEGATE under Language (35). Governance plan (04.1-17) must reconcile the authoritative classification |
+| COMMAND_PATTERN_VIA_DELEGATE | Cross-batch references | WARN | Missing standard "✅ ACCEPTED — EDR-NNN" header block (EDR-071 linked only in Decision History); add header for template consistency before Phase 5 |
+| COMMAND_PATTERN_VIA_DELEGATE | EDR Alternatives | PASS | EDR-071 lists 3 substantive alternatives (traditional Command, enum dispatch, annotation-based) |
+| COMMAND_PATTERN_VIA_DELEGATE | DESIGN_PRINCIPLES alignment | PASS | Minimal Core (no new construct — composition via delegate), Orthogonality |
+
+**Batch verdict:** 13 PASS / 2 WARN / 0 FAIL. Pattern-matching cluster is coherent;
+COMMAND_PATTERN_VIA_DELEGATE has a classification discrepancy + header gap for governance.
