@@ -182,12 +182,12 @@ Plans:
 **Goal:** Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist (Primitive Block decomposition, intra-batch consistency, cross-batch references, EDR Alternatives quality, DESIGN_PRINCIPLES alignment), close governance gaps G1-G8, and produce a clean, confirmed concept inventory for Phase 5.
 **Requirements**: CONCEPT-ESS-01, CONCEPT-IMP-01, DERIV-02, DERIV-03
 **Depends on:** Phase 4
-**Plans:** 1/18 plans executed
+**Plans:** 2/18 plans executed
 
 Plans:
 
 - [x] 04.1-00-PLAN.md — Wave 0: G6 consolidation (reconstruct 4 missing Phase 4 summaries)
-- [ ] 04.1-01-PLAN.md — Wave 1: VB1 — Equality and Value Semantics (EQUALITY, COPY_ON_WRITE, PERSISTENT_DATA_STRUCTURES)
+- [x] 04.1-01-PLAN.md — Wave 1: VB1 — Equality and Value Semantics (EQUALITY, COPY_ON_WRITE, PERSISTENT_DATA_STRUCTURES)
 - [ ] 04.1-02-PLAN.md — Wave 1: VB2 — Null Safety and Flow Analysis (NULL_SAFETY, TYPE_LEVEL_NULL_SAFETY, SMART_CAST)
 - [ ] 04.1-03-PLAN.md — Wave 1: VB3 — Error Handling (ERROR_HANDLING, ERROR_UNION)
 - [ ] 04.1-04-PLAN.md — Wave 1: VB4 — Traits and Polymorphism (TRAITS, GENERICS, STRUCTURAL_TYPING, EXTENSION_FUNCTIONS, GRADUAL_TYPING)
