@@ -117,6 +117,63 @@ design decisions toward type-level safety.
    (enforced by the type system) and **verified invariants** (enforced by
    contracts or runtime assertions).
 
+## Invariant Classification
+
+Not every invariant can be eliminated at the type level. Orthon
+distinguishes three tiers, answering directly the "fortress vs.
+chain-link fence" critique of DDD aggregates:
+
+### Tier 1: Type-Level Invariants (compile-time proof)
+
+Enforced by the type system; invalid states are rejected at compile
+time. Mechanisms: literal types, ADTs with exhaustive `match`, ownership
+(single-owner → no aliasing), immutable-by-default bindings, `Option<T>`
+for null safety. These are the structural guarantees — the fortress wall.
+
+```orthon
+type Status = "open" | "closed"    # "opne" won't compile
+```
+
+### Tier 2: Contract-Level Invariants (runtime/test-time verification)
+
+Expressed via `requires`/`ensures`/`invariant` clauses (EDR-056,
+[`CONTRACTS.md`](../../../what/concepts/CONTRACTS.md)). Checked in debug
+builds; elided in release unless `--enforce-contracts` is passed. These
+are verified assertions — the fence.
+
+```orthon
+fun sqrt(x: Float) -> Float
+    requires x >= 0.0
+    ensures result * result ≈ x
+```
+
+**Bridge mechanism:** Constrained Types (EDR-080,
+[`CONSTRAINED_TYPES.md`](../../../what/concepts/CONSTRAINED_TYPES.md))
+straddle Tiers 1 and 2. The constraint is *declared* at the type level
+(Tier-1-shaped syntax) but *enforced* at runtime entry boundaries
+(Tier-2 semantics): `type Age = Int requires v >= 0 && v <= 150` —
+`Age(200)` is a compile-time warning plus a runtime error, not a
+compile-time error. Moving this to Tier 1 (compile-time proof for a
+decidable predicate subset) is the subject of
+[`REFINEMENT_TYPES.md`](../deferrable/REFINEMENT_TYPES.md).
+
+### Tier 3: External Invariants (outside the language)
+
+Properties that cannot be expressed in Orthon's type system or contract
+system — e.g., "this list is sorted", "this integer is a valid TCP
+port". These require dependent types or refinement types (see Open
+Questions, and [`REFINEMENT_TYPES.md`](../deferrable/REFINEMENT_TYPES.md))
+and are verified by external tools, tests, or formal methods. These
+remain the programmer's responsibility.
+
+This taxonomy is the boundary between what the type system can prove
+(Tier 1), what contracts can verify (Tier 2), and what must be checked
+externally (Tier 3). A concept that moves an invariant from a lower tier
+to a higher one (e.g., refinement types moving `Port` validity from
+Tier 3 to Tier 1) strengthens the language's Correctness-by-Construction
+posture (see
+[`CORRECTNESS_BY_CONSTRUCTION.md`](../important/CORRECTNESS_BY_CONSTRUCTION.md)).
+
 ## Open Questions
 
 1. Should "Make Illegal States Unrepresentable" be added as an explicit
@@ -134,8 +191,11 @@ design decisions toward type-level safety.
 
 3. Should Orthon provide a `newtype` or opaque type mechanism to make the
    pattern applicable to single-value wrappers? E.g., `type Port = Int`
-   where only values 1..65535 are constructible. This is related to
-   `SMART_CONSTRUCTORS.md` (if it exists in research).
+   where only values 1..65535 are constructible. **RESOLVED by EDR-080**
+   — Constrained Types provide exactly this (`type Port = Int requires
+   v in 1..65535`), with runtime enforcement at entry boundaries. The
+   remaining open question is *static* enforcement (see
+   [`REFINEMENT_TYPES.md`](../deferrable/REFINEMENT_TYPES.md)).
 
 4. Does the pattern interact with `REFINEMENT_TYPES.md` (if it exists)?
    Refinement types extend the pattern to value-range constraints
@@ -143,6 +203,10 @@ design decisions toward type-level safety.
    contract-level invariants.
 
 ## Decision History
+
+- **2026-08-04:** Added "Invariant Classification" section — three-tier
+taxonomy (type-level / contract-level / external) linking to
+`CORRECTNESS_BY_CONSTRUCTION.md` and `REFINEMENT_TYPES.md`.
 
 Initial research — no decisions recorded yet.
 

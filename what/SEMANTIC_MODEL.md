@@ -220,6 +220,23 @@ is not "is this a file handle," but "would silently duplicating this
 value violate an invariant the program depends on." Plain data almost
 never fails that test; resources almost always do.
 
+**Formal foundation.** The ownership model is grounded in Separation
+Logic (Reynolds 2002, O'Hearn 2019). Separation Logic's spatial
+separation operator $P * Q$ — asserting that the heap can be
+partitioned into two disjoint regions satisfying $P$ and $Q$
+respectively — is realized through the single-owner invariant: if every
+value has exactly one owner at any point, no other code can mutate it,
+and the frame condition is satisfied by construction. Ownership is
+Orthon's answer to the **framing problem** — the problem that in
+languages with shared mutable state, modular verification of invariants
+is impossible without explicit frame conditions, because an alias
+anywhere can invalidate a local invariant. The borrow checker (or
+another enforcement mechanism, per Implementation Strategy) is a
+practical, compiler-embedded realization of Separation Logic's
+disjoint-concurrency rule. This paragraph states *why* ownership exists
+as the semantic foundation; the choice of *how* to verify it remains
+unprescribed below.
+
 **Fresh-value exemption.** A value that has just been constructed and
 not yet bound to a name (see [Identity](#identity) § Fresh-value
 exemption) has no existing owner to invalidate, so the compiler

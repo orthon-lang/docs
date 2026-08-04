@@ -127,6 +127,29 @@ partly to keep the two from being conflated.
 - **Source:** `../what/SEMANTIC_MODEL.md` § Identity
 - **See also:** [Value Identity](#value-identity), [Semantic Dimension](#semantic-dimension), [Orthogonality](#orthogonality)
 
+### Boolean Blindness
+
+An anti-pattern where a function returns `Bool` as a *validation
+verdict*, erasing the fact of validity as soon as the check ends. At the
+call site, the program *knows* the value is valid but the type system
+cannot use that knowledge — the witness of validity was discarded with
+the boolean. The remedy is the **Parse, Don't Validate** idiom: parse the
+value into a more precise type (`Option<T>` / `Result<T,E>` / a
+constrained type) whose construction guarantees validity.
+
+```orthon
+# Boolean Blindness — witness erased
+fun isValidEmail(s: String) -> Bool
+    return s.contains("@") and s.contains(".")
+
+# Parse, don't validate — witness is the type
+fun parseEmail(s: String) -> Option<Email>
+    ...
+```
+
+- **Source:** `../notes/parse-dont-validate-idiom.md`, [`MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md`](../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md)
+- **See also:** [Parse, Don't Validate](#parse-dont-validate), [Option Type](#option-type), [Constrained Type](#constrained-type)
+
 ---
 
 ## C
@@ -252,6 +275,21 @@ process(42) using prod_db, prod_log
 
 - **Source:** `../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081), EDR-037
 - **See also:** [Dependency Slot](#dependency-slot), [Implicit Context Flow](#implicit-context-flow)
+
+### Correctness by Construction (CbC)
+
+A cross-cutting pattern in which the language makes invalid states
+*structurally impossible to express*, so a program that compiles is
+already correct with respect to the invariants the type system can
+capture. Orthon realizes CbC through the composition of orthogonal
+mechanisms: ownership + move semantics (invariants become local and
+provable), value semantics by default, immutable-by-default bindings,
+ADTs with exhaustive `match`, literal types, `Option`/`Result`, and
+contracts. CbC is a *documented pattern*, not a design principle
+(`DESIGN_PRINCIPLES.md` is locked).
+
+- **Source:** `../how/concepts/research/important/CORRECTNESS_BY_CONSTRUCTION.md`, [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation)
+- **See also:** [Invariant Classification](#invariant-classification), [Constrained Type](#constrained-type)
 
 ---
 
@@ -770,6 +808,22 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 ## F
 
+### Frame Condition
+
+The set of memory locations a computation is allowed to modify — the
+*absence* side of a function contract. A postcondition (`ensures`)
+states what a function guarantees; the frame condition states what it
+does *not* touch. In Orthon, the declaration kinds already provide a
+coarse frame condition on `self` (`fun` and `new` never mutate `self`;
+`proc` does). The residual case — free functions and non-`self` state
+(globals, I/O, dependency slots) — is the subject of the
+[`FRAME_CONDITIONS.md`](../how/concepts/research/deferrable/FRAME_CONDITIONS.md)
+hypothesis, which proposes a `@modifies` doc annotation rather than a
+language keyword. Grounded in Separation Logic's spatial separation.
+
+- **Source:** `../how/concepts/research/deferrable/FRAME_CONDITIONS.md`, [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation)
+- **See also:** [Contract (Design by Contract)](#contract-design-by-contract)
+
 ### For Loop
 
 The iteration construct in Orthon: `for item in sequence`. The only loop
@@ -921,6 +975,25 @@ Generator expressions are lazy by default — they produce an
 ---
 
 ## I
+
+### Invariant Classification
+
+A three-tier taxonomy of the invariants a language can enforce, defined
+in [`MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md`](../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md):
+
+1. **Tier 1 — Type-level invariants:** proven by the compiler (literal
+types, ADTs with exhaustive `match`, ownership, immutable-by-default).
+2. **Tier 2 — Contract-level invariants:** verified at debug/test time
+via `requires`/`ensures`/`invariant`. Constrained Types (EDR-080)
+straddle Tiers 1–2: declared at the type level, enforced at runtime
+boundaries.
+3. **Tier 3 — External invariants:** outside the language ("this list is
+sorted"), verified by tests or external tools.
+
+Correctness by Construction is strongest at Tier 1.
+
+- **Source:** `../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md` § Invariant Classification
+- **See also:** [Correctness by Construction (CbC)](#correctness-by-construction-cbc), [Constrained Type](#constrained-type), [Contract (Design by Contract)](#contract-design-by-contract)
 
 ### Implicit Context Flow
 
@@ -1340,6 +1413,20 @@ Each language construct solves exactly one problem and combines freely with othe
 
 ## P
 
+### Parse, Don't Validate
+
+An idiom for replacing boolean validation with parsing into a more
+precise type, so the type itself becomes the witness of validity (the
+antidote to Boolean Blindness). Instead of `isValidEmail(s) -> Bool`,
+write `parseEmail(s) -> Option<Email>`: the compiler then enforces
+handling of both outcomes (`match` on `Some`/`None`) and downstream code
+receives an `Email` that is valid by construction. Realized through
+ADTs, `Option`/`Result`, exhaustive `match`, and Constrained Types
+(EDR-080).
+
+- **Source:** `../notes/parse-dont-validate-idiom.md`, [`CONSTRAINED_TYPES.md`](../what/concepts/CONSTRAINED_TYPES.md)
+- **See also:** [Boolean Blindness](#boolean-blindness), [Constrained Type](#constrained-type), [Option Type](#option-type)
+
 ### Policy
 
 See [Implementation Policy](#implementation-policy).
@@ -1416,6 +1503,21 @@ Program + Execution Descriptor
 ---
 
 ## R
+
+### Refinement Type
+
+A type carrying a value-range or predicate constraint, e.g.
+`type Port = Int requires v in 1..65535`. Orthon's accepted pragmatic
+form is **Constrained Types** (EDR-080): a nominal type with a
+runtime-enforced predicate at entry boundaries (`Age(200)` is a
+compile-time warning plus runtime error). The open hypothesis
+([`REFINEMENT_TYPES.md`](../how/concepts/research/deferrable/REFINEMENT_TYPES.md))
+is **static refinement** — compile-time rejection of invalid literals
+for a decidable predicate subset (ranges, positivity, non-empty),
+moving Tier-2 enforcement to Tier-1 proof without an SMT solver.
+
+- **Source:** `../how/concepts/research/deferrable/REFINEMENT_TYPES.md`, [`CONSTRAINED_TYPES.md`](../what/concepts/CONSTRAINED_TYPES.md) (EDR-080)
+- **See also:** [Constrained Type](#constrained-type), [Invariant Classification](#invariant-classification)
 
 ### Primitive Block
 
