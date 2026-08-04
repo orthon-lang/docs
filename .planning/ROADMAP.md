@@ -182,7 +182,7 @@ Plans:
 **Goal:** Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist (Primitive Block decomposition, intra-batch consistency, cross-batch references, EDR Alternatives quality, DESIGN_PRINCIPLES alignment), close governance gaps G1-G8, and produce a clean, confirmed concept inventory for Phase 5.
 **Requirements**: CONCEPT-ESS-01, CONCEPT-IMP-01, DERIV-02, DERIV-03
 **Depends on:** Phase 4
-**Plans:** 16/18 plans executed
+**Plans:** 17/18 plans executed
 
 Plans:
 
@@ -202,7 +202,7 @@ Plans:
 - [x] 04.1-13-PLAN.md — Wave 3: VB11 — Functions and Construction (G1)
 - [x] 04.1-14-PLAN.md — Wave 3: VB14 — Contracts and Declarative
 - [x] 04.1-15-PLAN.md — Wave 4: VB12 — Data Structures StdLib
-- [ ] 04.1-16-PLAN.md — Wave 4: VB16 — Metaprogramming and Derive
+- [x] 04.1-16-PLAN.md — Wave 4: VB16 — Metaprogramming and Derive
 - [ ] 04.1-17-PLAN.md — Wave 5: Governance sync (G1-G5 closure, G4 inventory, registry updates, human sign-off)
 
 ### Phase 5: Syntax Design
