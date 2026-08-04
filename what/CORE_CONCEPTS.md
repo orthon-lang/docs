@@ -257,7 +257,7 @@ The resolution process is defined in
 
 ---
 
-## Wave 4 — Important Tier (Phase 4)
+## Wave 5 — Important Tier (Phase 4)
 
 ### ALGEBRAIC_DATA_TYPES
 
@@ -338,7 +338,7 @@ The resolution process is defined in
 
 ---
 
-## Wave 4 — Important Tier (Phase 4)
+## Wave 5b — Important Tier (Phase 4)
 
 ### ASYNC_AWAIT
 
@@ -478,7 +478,7 @@ The resolution process is defined in
 
 ---
 
-## Wave 4 — Important Tier (Phase 4, Batch 2)
+## Wave 6b — Important Tier (Phase 4, Batch 2)
 
 ### SLOTS
 
