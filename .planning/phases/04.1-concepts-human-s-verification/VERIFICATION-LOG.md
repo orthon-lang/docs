@@ -16,7 +16,7 @@ FAIL entries are processed in the governance plan (04.1-17).
 |------|---------|----------|------|------|------|
 | 1 | VB1-VB4 | 13 | 61 (VB1-VB4) | 4 | 0 |
 | 2 | VB5, VB8, VB10, VB13, VB15 | 18 | 87 (VB5+VB8+VB10+VB13+VB15) | 6 | 2 |
-| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | -- | -- | -- |
+| 3 | VB6, VB7, VB9, VB11, VB14 | 19 | 24 (VB6) | 1 (VB6) | 0 |
 | 4 | VB12, VB16 | 7 | -- | -- | -- |
 
 *Counts fill in as batches complete. Wave 1 row shows the cumulative PASS/WARN/FAIL
@@ -271,3 +271,39 @@ the 3 WARNs are SLOTS classification discrepancy + header gaps (SLOTS, SPAN) for
 
 **Batch verdict:** 13 PASS / 1 WARN / 0 additional FAIL (1 G3 FAIL: REQUIRE_USING_DEPENDENCY_SLOTS concept file missing — EDR-081 exists).
 Per D-01 the FAIL is recorded and deferred to governance plan 04.1-17. Wave 2 complete.
+
+---
+
+## VB6 — Type System Extensions (Wave 3)
+
+| Concept | Check-point | Severity | Required Action |
+|---------|-------------|----------|-----------------|
+| ALGEBRAIC_DATA_TYPES | PB Decomposition | PASS | — |
+| ALGEBRAIC_DATA_TYPES | Intra-batch consistency | PASS | Named sum type foundation; UNION_INTERSECTION_TYPES is the structural (untagged) complement |
+| ALGEBRAIC_DATA_TYPES | Cross-batch references | PASS | See-also to TRAITS, PATTERN_MATCHING — resolve; single sum-type mechanism (no separate enum) |
+| ALGEBRAIC_DATA_TYPES | EDR Alternatives | PASS | EDR-039 lists 3 substantive alternatives (dedicated enum, Go iota, Rust-style ADT+enum) |
+| ALGEBRAIC_DATA_TYPES | DESIGN_PRINCIPLES alignment | PASS | One Concept One Syntax, Declarative With Static Guarantees (exhaustiveness), Sealed by default |
+| UNION_INTERSECTION_TYPES | PB Decomposition | PASS | — |
+| UNION_INTERSECTION_TYPES | Intra-batch consistency | PASS | Structural untagged union complements ADTs; intersection rejected (redundant with product types) — no conflict |
+| UNION_INTERSECTION_TYPES | Cross-batch references | PASS | See-also to ADTs, LITERAL_TYPES, TYPE_LEVEL_NULL_SAFETY — resolve |
+| UNION_INTERSECTION_TYPES | EDR Alternatives | PASS | EDR-045 lists 3 substantive alternatives (ADTs-only, TS-style structural, intersection accepted) |
+| UNION_INTERSECTION_TYPES | DESIGN_PRINCIPLES alignment | PASS | Minimal Core, Explicitness (named members only), Orthogonality |
+| LITERAL_TYPES | PB Decomposition | PASS | — |
+| LITERAL_TYPES | Intra-batch consistency | PASS | Feeds union composition (EDR-045) and type-level computation (EDR-046 KeyOf); consistent |
+| LITERAL_TYPES | Cross-batch references | PASS | See-also to UNION_INTERSECTION_TYPES, TYPE_LEVEL_COMPUTATION, ADTs — resolve |
+| LITERAL_TYPES | EDR Alternatives | PASS | EDR-043 lists 3 substantive alternatives (ADTs-only, TS context-dependent widening, strings-only) |
+| LITERAL_TYPES | DESIGN_PRINCIPLES alignment | PASS | LLM Generability (one explicit widening rule), Explicitness |
+| TYPE_LEVEL_COMPUTATION | PB Decomposition | PASS | — |
+| TYPE_LEVEL_COMPUTATION | Intra-batch consistency | PASS | Closed 8-intrinsic set consumes LITERAL_TYPES; macro escape hatch via comptime (EDR-031) — consistent |
+| TYPE_LEVEL_COMPUTATION | Cross-batch references | PASS | See-also to LITERAL_TYPES, AST_MACROS, COMPILE_TIME_EXECUTION — resolve |
+| TYPE_LEVEL_COMPUTATION | EDR Alternatives | PASS | EDR-046 lists 3 substantive alternatives (TS-style Turing-complete, macros-only, recursive with depth limit) |
+| TYPE_LEVEL_COMPUTATION | DESIGN_PRINCIPLES alignment | PASS | Minimal Core, LLM Generability (non-recursive, closed set) |
+| CONSTRAINED_TYPES | PB Decomposition | PASS | Decomposes via struct + Callable trait (Level 2 Language Pattern) — documented |
+| CONSTRAINED_TYPES | Intra-batch consistency | PASS | Complements CONTRACTS and type system; runtime enforcement per Contract Enforcement Policy |
+| CONSTRAINED_TYPES | Cross-batch references | WARN | G2: CONSTRAINED_TYPES (EDR-080) present in concepts but ABSENT from LIBRARY_BOUNDARY.md (0 matches). Governance plan (04.1-17) must add the registry entry. See-also links to research files resolve |
+| CONSTRAINED_TYPES | EDR Alternatives | PASS | EDR-080 lists 3 substantive alternatives (SMT refinement types, Bounded<T> library, contracts-only) |
+| CONSTRAINED_TYPES | DESIGN_PRINCIPLES alignment | PASS | Composition Over Addition (decomposes to primitives), LLM Readiness (schema exposure), Nominal identity |
+
+**Batch verdict:** 24 PASS / 1 WARN / 0 FAIL. Type-system cluster is coherent;
+G2 (CONSTRAINED_TYPES unregistered in LIBRARY_BOUNDARY) flagged for governance. Note:
+EDR-039/043/045/046 are among the unindexed EDRs flagged in VB4 (INDEX gap).
