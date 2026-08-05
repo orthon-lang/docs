@@ -47,7 +47,7 @@ Orthon's solution: the **`Iterator[T]` trait** defines a lazy consumption protoc
 | Combinator Policy | Determines which combinators are StdLib vs. built-in — combinators are StdLib |
 | Laziness Policy | Governs that combinator chains are always lazy; materialisation is explicit |
 | Collection Policy | Defines `IntoIterator[T]` and how collections expose iterators |
-| Range Policy | Specifies range syntax (`0..10`, `0..=10`, `.step(n)`) and range iterator semantics |
+| Range Policy | Specifies range syntax (`(0..10)`, `(0..=10)`, step via `.step(n)` outside the literal) and range iterator semantics |
 | Desugaring Policy | Formalises `for` loop desugaring to `Iterator[T]` protocol |
 
 ## Model (What)
@@ -185,7 +185,7 @@ for i in 0..10:              # 0, 1, ..., 9 — exclusive end
 for i in 0..=10:             # 0, 1, ..., 10 — inclusive end
     ...
 
-for i in 0..10:step(2)       # 0, 2, 4, 6, 8
+for i in (0..10).step(2)     # 0, 2, 4, 6, 8 — step outside the range literal
     ...
 ```
 
@@ -239,6 +239,7 @@ The `Iterator[T]` trait is the single iteration protocol. The `for` loop desugar
 3. Should combinators support parallel execution (e.g., `.par_map()`) or should that be a separate concept?
 4. Should `for` accept owned collections directly (via `IntoIterator`) or only references?
 5. How does the iterator protocol interact with the `delegate` execution policy — can an iterator be delegated?
+6. Should `IntoIterator[T]` be renamed to `Iterable[T]`? (2026-08-05 review — a separate `Iterable` was rejected in discussion, but a pure rename was not previously considered; would amend EDR-022.)
 
 ## Decision History
 

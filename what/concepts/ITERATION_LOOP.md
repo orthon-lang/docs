@@ -133,7 +133,7 @@ Range literals produce iterators:
 ```orthon
 for i in 0..10:          # 0, 1, 2, ..., 9 (exclusive)
 for i in 0..=10:         # 0, 1, 2, ..., 10 (inclusive)
-for i in 0..10.step(2):  # 0, 2, 4, 6, 8
+for i in (0..10).step(2):  # 0, 2, 4, 6, 8 — step outside the range literal
 ```
 
 ## Default Strategy
