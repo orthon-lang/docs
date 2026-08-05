@@ -5573,12 +5573,12 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 | Check | Status |
 |-------|--------|
 | Syntax reviewed | ⚠️ Range syntax deferred to Phase 5; `a[i]` has no conflict with `.`/`@` |
-| Edge cases probed | ⚠️ SPAN interaction (Q5) unresolved |
+| Edge cases probed | ✅ SPAN interaction resolved (B2) — single-base 1-based |
 | Desugaring verified | ✅ Resolved (B1) — `a[i]` ≡ `a@get(i)` |
-| User/stakeholder agrees | ⚠️ Open question remains (B2) |
-| No remaining ambiguity | ⚠️ Blocker B2 unresolved |
+| User/stakeholder agrees | ✅ All open questions resolved (B1–B4) |
+| No remaining ambiguity | ✅ No blockers remain |
 
-**Convergence: FAIL** — B1 (decomposition), B3 (enumerate), and B4 (range convention) resolved 2026-08-05; only B2 (SPAN) remains before an EDR can be filed.
+**Convergence re-check (2026-08-05): PASS** — B1 (decomposition), B2 (SPAN), B3 (enumerate), and B4 (range convention) all resolved. Ready to file EDR-082.
 
 ---
 
@@ -5623,13 +5623,41 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 
 ---
 
+### B2 Resolution (2026-08-05)
+
+**Single-base rule — `Span` is 1-based like every collection:**
+- `span[1]` = first element, `span[len(span)]` = last; `enumerate(span)`
+  starts at 1 (no Span-specific exception). Span is a **Language** type
+  (EDR-064) and a random-access `pack` composite under B1's
+  `Indexable`-like trait — so the `@get(1)` contract applies to it
+  identically. A second base would fail `LOGICAL_CONSISTENCY_GATE` (one
+  term "index", two bases) and `CONCEPTUAL_SIMPLICITY_GATE` (the LLM must
+  remember which type uses which base).
+- **FFI role does not create a second base.** Span's interop usefulness
+  (wrapping raw C buffers) is served by the existing FFI index-translation
+  layer (B4: `0..<N`, `to_c_index`/`from_c_index`), which already handles
+  memory layout, calling convention, and type mapping at the boundary. Raw
+  C memory enters through that translation path — never through 0-based
+  Span indexing in application code.
+- **Rejected:** two-base language (Span 0-based, collections 1-based) —
+  breaks B1's trait contract, B3's enumerate, and the single-natural-counting
+  story; hybrid per-type base marker — violates Minimal Core (configurable
+  bases rejected in the concept's Alternative B).
+- **Cross-concept amendment:** SPAN (`what/concepts/SPAN.md`, EDR-064) —
+  base committed to 1 and examples rewritten (`span[0]` → `span[1]`;
+  `arr[1..3]` re-read under the inclusive norm as "first 3 elements");
+  applied at EDR-082 acceptance. Recorded under C-001 in
+  `CONFLICT_REGISTRY.md`.
+
+---
+
 ### Overall
 
-**Verdict: NOT CONVERGED.** Pre-filter (Pipeline Q&A) → **ACCEPT as a Language decision**. Validation gates: 3 Pass, 4 Flag, 0 Fail. The concept is a strong, well-argued proposal, but cannot proceed to EDR-082 until the blockers below are resolved.
+**Verdict: CONVERGED (2026-08-05).** Pre-filter (Pipeline Q&A) → **ACCEPT as a Language decision**. Validation gates: 3 Pass, 4 Flag, 0 Fail. All four blockers (B1–B4) resolved; convergence re-check PASS. Ready to draft EDR-082 (acceptance), which will also apply the cross-concept amendments (C-001).
 
 **Blockers before EDR-082:**
 - **B1 (decomposition):** ✅ **RESOLVED (2026-08-05)** — `a[i]` is a Level 2 pattern over `a@get(i)` (Metadata Protocol, `@`-prefix); no new primitive; `INDEXING_ONE_BASED.md` § Impact on Primitive Blocks corrected. See the resolution note under Primitive Decomposition Check.
-- **B2 (SPAN):** Decide a single-base rule (Span follows 1-based, with an explicit 0-based interop view) vs. a two-base language; record the interaction with `SPAN.md`/EDR-064.
+- **B2 (SPAN):** ✅ **RESOLVED (2026-08-05)** — single-base rule: Span is 1-based like every collection; FFI raw buffers translate at the boundary (`0..<N`), never a second base. Cross-concept amendment to SPAN/EDR-064 pinned at EDR-082. See the B2 Resolution note above.
 - **B3 (enumerate):** ✅ **RESOLVED (2026-08-05)** — `enumerate` defaults to 1 (matching the collection base); composition `enumerate(items) ≡ zip(1..=len(items), items)`; optional `enumerate(from: N)` per EDR-065; Python-style default 0 rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL EDR-022 pinned at EDR-082. See the B3 Resolution note below.
 - **B4 (retroactive amendment):** ✅ **RESOLVED (2026-08-05)** — range norm locked: inclusive-inclusive `1..N` everywhere (incl. slices); language owns `+1` (`len(slice)`); empty slice = `end < start`; `0..<N` is FFI-boundary-only. Cross-concept amendment to ITERATION_LOOP EDR-053 / ITERATOR_PROTOCOL EDR-022 recorded as Type C (C-001) in `CONFLICT_REGISTRY.md`, applied at EDR-082. See the B4 Resolution note above.
 

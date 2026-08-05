@@ -16,7 +16,7 @@
 
 | ID | Concepts Involved | Nature of Conflict | Resolution Plan | Status |
 |----|-------------------|-------------------|-----------------|--------|
-| C-001 | ITERATION_LOOP (EDR-053), ITERATOR_PROTOCOL (EDR-022), INDEXING (draft) | Accepted loop/iterator concepts use 0-based index ranges (`for i in 0..len(array)`, `enumerate`); 1-based indexing (INDEXING_ONE_BASED) makes index 0 invalid — direct contradiction. | Adopt inclusive-inclusive `1..N` as the single range norm; canonical index iteration `for i in 1..=len(array)`; `enumerate` from 1 (B3); amend EDR-053/EDR-022 semantics and examples at EDR-082 acceptance. | Decision made 2026-08-05 (B4 + B3); amendment pending EDR-082 |
+| C-001 | ITERATION_LOOP (EDR-053), ITERATOR_PROTOCOL (EDR-022), SPAN (EDR-064), INDEXING (draft) | Accepted loop/iterator/span concepts use 0-based index ranges (`for i in 0..len(array)`, `enumerate`, `span[0]`); 1-based indexing (INDEXING_ONE_BASED) makes index 0 invalid — direct contradiction. | Adopt inclusive-inclusive `1..N` as the single range norm; canonical index iteration `for i in 1..=len(array)`; `enumerate` from 1 (B3); Span single-base 1-based (B2); amend EDR-053/EDR-022/EDR-064 semantics and examples at EDR-082 acceptance. | Decision made 2026-08-05 (B2 + B3 + B4); amendment pending EDR-082 |
 
 ## Resolved Conflicts
 

@@ -10,11 +10,13 @@
 > **🚦 Pipeline status (2026-08-05):** Ran through the Concept Pipeline
 > ([`how/CONCEPT_PIPELINE.md`](../../../CONCEPT_PIPELINE.md), stages 2–7).
 > Decision Pipeline → **ACCEPT** (Language/Core). Validation gates →
-> **3 Pass / 4 Flag**. Convergence check → **FAIL** — **NOT CONVERGED**:
-> blockers B1–B4 must be resolved before an EDR (EDR-082) can be filed.
-> **B1 + B3 + B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
+> **3 Pass / 4 Flag**. Convergence check → **FAIL on first pass** —
+> blockers B1–B4 raised; **all resolved 2026-08-05**, convergence
+> re-check → **PASS** — ready for EDR (EDR-082).
+> **B1–B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
 > `a@get(i)`; range norm `1..N` inclusive everywhere, incl. slices;
-> `enumerate` defaults to 1. B2 (SPAN) remains open. Full reasoning trail:
+> `enumerate` defaults to 1; Span is single-base 1-based. Full reasoning
+> trail:
 > [`how/gates/DECISION_LOG.md`](../../../gates/DECISION_LOG.md)
 > § Entry: 1-Based Indexing. See Decision History below.
 >
@@ -344,6 +346,10 @@ is the Core-language commitment on that protocol.
   Foreign Function Interface. Index translation layer required at the
   C interop boundary.
 
+- **SPAN** ([`SPAN.md`](../../../what/concepts/SPAN.md), EDR-064) — memory
+  view type. Single-base rule (B2): Span is 1-based like collections; raw
+  C buffers translate at the FFI boundary, never a second base.
+
 ## Alternative Approaches
 
 ### Alternative A: 0-based indexing (C-family default)
@@ -407,11 +413,12 @@ needs to decide whether `i` starts at 0 or 1.
    explicit `to_c_index` / `from_c_index` calls? Julia leaves this to
    the programmer; Orthon could provide a more structured approach.
 
-5. **Interaction with `SPAN`.** The `SPAN` concept
-   ([`SPAN.md`](../important/SPAN.md)) defines a lifetime-tracked view
-   over memory. Does `Span` use 1-based or 0-based indexing? If `Span`
-   is primarily an FFI/interop type, 0-based may be more natural for
-   that specific type.
+5. **Interaction with `SPAN`.** ✅ **Resolved (2026-08-05, B2):** single-base
+   rule — `Span` is 1-based like every collection (`span[1]` = first,
+   `enumerate(span)` starts at 1). Span is a **Language** type (EDR-064);
+   its FFI role does not make it a second-base exception. Raw C buffers
+   enter through the FFI index-translation layer (`0..<N`), not through
+   0-based Span indexing in application code.
 
 6. **GLOSSARY and existing examples.** The current
    [`GLOSSARY.md`](../../../what/GLOSSARY.md) entry for `for` loop uses
@@ -448,7 +455,13 @@ Detailed reasoning trail recorded in
   random-access `pack` composites (tuples, strings, `Span`, ranges) via an
   `Indexable`-like trait. The 1-based base is a semantic parameter of the
   `@get` contract. See the corrected «Impact on Primitive Blocks» section.
-- **B2** — open: SPAN interaction (single-base rule vs. two-base language).
+- **B2** — ✅ **RESOLVED (2026-08-05).** Single-base rule: `Span` is 1-based
+  like every collection (consistent with B1's `@get(1)` contract and B3's
+  `enumerate`); FFI interop handled by the boundary translation layer
+  (`0..<N`), never by a second base inside the language. Two-base option
+  rejected (breaks trait contract, enumerate, single-counting story).
+  Cross-concept amendment to SPAN (EDR-064): examples rewritten to 1-based,
+  base committed; applied at EDR-082.
 - **B3** — ✅ **RESOLVED (2026-08-05).** `enumerate` defaults to 1, matching
   the collection base; composition
   `enumerate(items) ≡ zip(1..=len(items), items)`; optional
