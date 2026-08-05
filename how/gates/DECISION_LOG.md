@@ -5573,12 +5573,12 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 | Check | Status |
 |-------|--------|
 | Syntax reviewed | ⚠️ Range syntax deferred to Phase 5; `a[i]` has no conflict with `.`/`@` |
-| Edge cases probed | ⚠️ SPAN interaction (Q5) and `enumerate` default (Q2) unresolved |
+| Edge cases probed | ⚠️ SPAN interaction (Q5) unresolved |
 | Desugaring verified | ✅ Resolved (B1) — `a[i]` ≡ `a@get(i)` |
-| User/stakeholder agrees | ⚠️ Open questions remain (B2, B3) |
-| No remaining ambiguity | ⚠️ Blockers B2–B3 unresolved |
+| User/stakeholder agrees | ⚠️ Open question remains (B2) |
+| No remaining ambiguity | ⚠️ Blocker B2 unresolved |
 
-**Convergence: FAIL** — B1 (decomposition) and B4 (range convention) resolved 2026-08-05; B2 (SPAN) and B3 (enumerate) remain before an EDR can be filed.
+**Convergence: FAIL** — B1 (decomposition), B3 (enumerate), and B4 (range convention) resolved 2026-08-05; only B2 (SPAN) remains before an EDR can be filed.
 
 ---
 
@@ -5594,6 +5594,35 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 
 ---
 
+### B3 Resolution (2026-08-05)
+
+**`enumerate` defaults to 1, matching the collection base:**
+- `items.enumerate()` yields `(1, first), (2, second), …` — the yielded index
+  is always a valid `@get(i)` index on the same collection (no index/value
+  desync). Failing to pin this would fail `LOGICAL_CONSISTENCY_GATE`: one term
+  ("index") would carry two bases depending on whether `enumerate` produced it
+  or `@get(i)` consumed it — recreating the off-by-one class the concept
+  eliminates.
+- **Composition, not a primitive:** `enumerate(items) ≡ zip(1..=len(items), items)` —
+  a pure Level 2 composition over the inclusive range norm (B4) + `zip`
+  (COMPOSABLE_COLLECTION_OPS, EDR-023). Strengthens `CONCEPTUAL_SIMPLICITY`
+  (one counting convention for index production and consumption) and
+  `LLM_GENERABILITY` (single, teachable formula).
+- **Optional `enumerate(from: N)`** per EDR-065 (optional parameters), for
+  offset/FFI cases (e.g., pairing with a 0-based C array region); the
+  default — and the only form used in application code — starts at 1.
+- **Rejected:** Python-style default 0 (recreates the off-by-one class);
+  mandatory `enumerate(from: 1)` (ceremony without information, fails POLA and
+  Intent Over Implementation).
+- **Cross-concept amendment:** ITERATOR_PROTOCOL (EDR-022) `.enumerate()`
+  ("Pair each element with its index", `Iterator[(Int, T)]`) — base pinned to
+  1; applied at EDR-082 acceptance (recorded under C-001 in
+  `CONFLICT_REGISTRY.md`). `enumerate` remains a Standard Library combinator
+  (LIBRARY_BOUNDARY); only its *base* is a Core commitment of the 1-based
+  decision, consistent with `len`/`@get`.
+
+---
+
 ### Overall
 
 **Verdict: NOT CONVERGED.** Pre-filter (Pipeline Q&A) → **ACCEPT as a Language decision**. Validation gates: 3 Pass, 4 Flag, 0 Fail. The concept is a strong, well-argued proposal, but cannot proceed to EDR-082 until the blockers below are resolved.
@@ -5601,7 +5630,7 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 **Blockers before EDR-082:**
 - **B1 (decomposition):** ✅ **RESOLVED (2026-08-05)** — `a[i]` is a Level 2 pattern over `a@get(i)` (Metadata Protocol, `@`-prefix); no new primitive; `INDEXING_ONE_BASED.md` § Impact on Primitive Blocks corrected. See the resolution note under Primitive Decomposition Check.
 - **B2 (SPAN):** Decide a single-base rule (Span follows 1-based, with an explicit 0-based interop view) vs. a two-base language; record the interaction with `SPAN.md`/EDR-064.
-- **B3 (enumerate):** Resolve the `enumerate` default start (1, matching the collection base); coordinate with ITERATOR_PROTOCOL EDR-022.
+- **B3 (enumerate):** ✅ **RESOLVED (2026-08-05)** — `enumerate` defaults to 1 (matching the collection base); composition `enumerate(items) ≡ zip(1..=len(items), items)`; optional `enumerate(from: N)` per EDR-065; Python-style default 0 rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL EDR-022 pinned at EDR-082. See the B3 Resolution note below.
 - **B4 (retroactive amendment):** ✅ **RESOLVED (2026-08-05)** — range norm locked: inclusive-inclusive `1..N` everywhere (incl. slices); language owns `+1` (`len(slice)`); empty slice = `end < start`; `0..<N` is FFI-boundary-only. Cross-concept amendment to ITERATION_LOOP EDR-053 / ITERATOR_PROTOCOL EDR-022 recorded as Type C (C-001) in `CONFLICT_REGISTRY.md`, applied at EDR-082. See the B4 Resolution note above.
 
 **Advisory (not blocking):**

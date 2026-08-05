@@ -12,9 +12,9 @@
 > Decision Pipeline → **ACCEPT** (Language/Core). Validation gates →
 > **3 Pass / 4 Flag**. Convergence check → **FAIL** — **NOT CONVERGED**:
 > blockers B1–B4 must be resolved before an EDR (EDR-082) can be filed.
-> **B1 + B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
-> `a@get(i)`; range norm `1..N` inclusive everywhere, incl. slices. B2–B3
-> remain open. Full reasoning trail:
+> **B1 + B3 + B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
+> `a@get(i)`; range norm `1..N` inclusive everywhere, incl. slices;
+> `enumerate` defaults to 1. B2 (SPAN) remains open. Full reasoning trail:
 > [`how/gates/DECISION_LOG.md`](../../../gates/DECISION_LOG.md)
 > § Entry: 1-Based Indexing. See Decision History below.
 >
@@ -168,9 +168,15 @@ policy (automatic vs. explicit — Open Question 4, decided in the FFI
 concept, Milestone 8). It is never the default and never appears in
 application code.
 
-**enumerate semantics:** `items.enumerate()` produces pairs `(1, first)`,
-`(2, second)`, `(3, third)`, … — matching the natural counting that
-`enumerate` implies.
+**enumerate semantics (norm resolved 2026-08-05, B3):**
+`items.enumerate()` produces pairs `(1, first)`, `(2, second)`,
+`(3, third)`, … — the index matches the collection base, so the index an
+`enumerate` yields is always a valid `@get(i)` index on the same collection
+(no index/value desync). This is a Level 2 composition, not a new primitive:
+`enumerate(items) ≡ zip(1..=len(items), items)`. An optional
+`enumerate(from: N)` (EDR-065 optional parameter) exists for offset cases
+such as FFI regions, but the default — and the only form used in application
+code — starts at 1.
 
 ### Impact on Semantic Model
 
@@ -385,10 +391,11 @@ needs to decide whether `i` starts at 0 or 1.
    (Syntax Design) and the RANGE concept (Type A gap — see
    `RANGE_SLICE.md`/`RANGE_STEP.md` hypotheses).
 
-2. **`enumerate` default.** Should `enumerate()` start at 1 by default, or
-   should it accept an optional start parameter (`enumerate(from: 0)`)?
-   Julia's `enumerate` starts at 1; Python's starts at 0 with an optional
-   `start` parameter.
+2. **`enumerate` default.** ✅ **Resolved (2026-08-05, B3):** `enumerate()`
+   starts at 1 by default (matching the collection base); composition
+   `enumerate(items) ≡ zip(1..=len(items), items)`; optional
+   `enumerate(from: N)` per EDR-065 for offset/FFI cases. Python-style
+   default 0 rejected — it desyncs the yielded index from `@get(i)`.
 
 3. **Modulo arithmetic in the standard library.** What utilities should the
    standard library provide for index wrapping (`wrap_index`), ring buffer
@@ -442,7 +449,12 @@ Detailed reasoning trail recorded in
   `Indexable`-like trait. The 1-based base is a semantic parameter of the
   `@get` contract. See the corrected «Impact on Primitive Blocks» section.
 - **B2** — open: SPAN interaction (single-base rule vs. two-base language).
-- **B3** — open: `enumerate` default start (1, matching the collection base).
+- **B3** — ✅ **RESOLVED (2026-08-05).** `enumerate` defaults to 1, matching
+  the collection base; composition
+  `enumerate(items) ≡ zip(1..=len(items), items)`; optional
+  `enumerate(from: N)` (EDR-065) for offset/FFI cases; Python-style default 0
+  rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL
+  (EDR-022) `.enumerate()` — base pinned to 1, applied at EDR-082.
 - **B4** — ✅ **RESOLVED (2026-08-05).** Range norm locked: inclusive-inclusive
   `1..N` everywhere, incl. slices; the language owns the `+1` length
   arithmetic (`len(slice)`); empty slice = `end < start`; `0..<N` is an
