@@ -262,12 +262,14 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 
 ## Post-Acceptance — 1-Based Indexing example audit (EDR-082, 2026-08-05)
 
-- [ ] **IX-B1:** Sweep all 0-based index examples (`0..`, `[0]`, `0..len(array)`) to the
-      1-based canonical forms per EDR-082 (cross-concept amendment C-001). Includes
-      `what/GLOSSARY.md` § For Loop (`for i in 0..len(array)` → `for i in 1..len(array)`),
-      `what/concepts/SPAN.md` (`span[0]`, `data[0] = 42`, `arr[1..3]` re-read under the
-      inclusive norm), `what/concepts/ITERATION_LOOP.md`,
-      `what/concepts/ITERATOR_PROTOCOL.md`, and any other doc with `0..`/`[0]` index usage.
+- [ ] **IX-B1:** Sweep remaining 0-based index examples (`0..`, `[0]`, `0..len(array)`) to the
+      1-based canonical forms per EDR-082 (cross-concept amendment C-001). The range sections of
+      `what/concepts/ITERATION_LOOP.md` and `what/concepts/ITERATOR_PROTOCOL.md` were rewritten
+      under the inclusive-inclusive `1..N` norm by the Range/Slice package (EDR-083/EDR-084,
+      2026-08-05) — no longer in scope here. Remaining: `what/GLOSSARY.md` § For Loop
+      (`for i in 0..len(array)` → `for i in 1..len(array)`), `what/concepts/SPAN.md`
+      (`span[0]`, `data[0] = 42`, `arr[1..3]` re-read under the inclusive norm), and any other
+      doc with `0..`/`[0]` index usage.
   - **Owner:** Solo author
   - **Ref:** EDR-082 (Compliance), `CONFLICT_REGISTRY.md` C-001, `DECISION_LOG.md` B5-3
   - **Spec:** `what/concepts/INDEXING.md`
