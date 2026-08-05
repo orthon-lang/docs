@@ -260,3 +260,15 @@ projection of conclusions onto Orthon's design. Each topic has a file in
   - **Ref:** ITERATOR_PROTOCOL review 2026-08-05 (items A2, B1)
   - **Hypotheses:** `how/concepts/research/important/MUTABLE_ITERATOR.md`
 
+## Post-Acceptance — 1-Based Indexing example audit (EDR-082, 2026-08-05)
+
+- [ ] **IX-B1:** Sweep all 0-based index examples (`0..`, `[0]`, `0..len(array)`) to the
+      1-based canonical forms per EDR-082 (cross-concept amendment C-001). Includes
+      `what/GLOSSARY.md` § For Loop (`for i in 0..len(array)` → `for i in 1..len(array)`),
+      `what/concepts/SPAN.md` (`span[0]`, `data[0] = 42`, `arr[1..3]` re-read under the
+      inclusive norm), `what/concepts/ITERATION_LOOP.md`,
+      `what/concepts/ITERATOR_PROTOCOL.md`, and any other doc with `0..`/`[0]` index usage.
+  - **Owner:** Solo author
+  - **Ref:** EDR-082 (Compliance), `CONFLICT_REGISTRY.md` C-001, `DECISION_LOG.md` B5-3
+  - **Spec:** `what/concepts/INDEXING.md`
+
