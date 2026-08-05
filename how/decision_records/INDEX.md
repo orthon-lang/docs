@@ -85,6 +85,8 @@
 | EDR-080 | Architecture | [Runtime-Constrained Types — Language Pattern Over Struct + Contract](architecture/EDR-080-constrained-types.md) | Accepted | 2026-07-30 | — |
 | EDR-081 | Architecture | [Dependency Slots — `require` / `using` Dual-Level Resolution](architecture/EDR-081-require-using-dependency-slots.md) | Accepted | 2026-07-30 | Refines EDR-037 |
 | EDR-082 | Architecture | [1-Based Indexing — Ordinal Collection Indexing](architecture/EDR-082-1-based-indexing.md) | Accepted | 2026-08-05 | — |
+| EDR-083 | Architecture | [Range — Inclusive-Inclusive Range as a First-Class Value](architecture/EDR-083-range.md) | Accepted | 2026-08-05 | Supersedes range text of EDR-022/EDR-053 |
+| EDR-084 | Architecture | [Slice — Range Applied to a Random-Access Composite](architecture/EDR-084-slice.md) | Accepted | 2026-08-05 | — |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -181,6 +183,8 @@
 | EDR-080 | Architecture | [Runtime-Constrained Types — Language Pattern Over Struct + Contract](architecture/EDR-080-constrained-types.md) | Accepted | 2026-07-30 | — |
 | EDR-081 | Architecture | [Dependency Slots — `require` / `using` Dual-Level Resolution](architecture/EDR-081-require-using-dependency-slots.md) | Accepted | 2026-07-30 | Refines EDR-037 |
 | EDR-082 | Architecture | [1-Based Indexing — Ordinal Collection Indexing](architecture/EDR-082-1-based-indexing.md) | Accepted | 2026-08-05 | — |
+| EDR-083 | Architecture | [Range — Inclusive-Inclusive Range as a First-Class Value](architecture/EDR-083-range.md) | Accepted | 2026-08-05 | — |
+| EDR-084 | Architecture | [Slice — Range Applied to a Random-Access Composite](architecture/EDR-084-slice.md) | Accepted | 2026-08-05 | — |
 
 ### Process
 | ID | Title | Status | Date |
@@ -208,7 +212,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 58 |
+| Accepted | 60 |
 | **Rejected** | **4** |
 | Proposed | 0 |
 | Deprecated | 0 |
@@ -216,4 +220,4 @@
 
 ---
 
-*Last updated: 2026-08-05* (EDR-082 added — 1-Based Indexing, Architecture. By Category table backfilled with EDR-079 through EDR-081. Prior: EDR-075 through EDR-078 added — PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING, CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION rejected. See also: EDR-063 through EDR-074 added in prior wave)
+*Last updated: 2026-08-05* (EDR-083 Range + EDR-084 Slice added — Range/Slice package; accepted concepts RANGE, SLICE. Prior: EDR-082 added — 1-Based Indexing, Architecture. By Category table backfilled with EDR-079 through EDR-081. Prior: EDR-075 through EDR-078 added — PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING, CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION rejected. See also: EDR-063 through EDR-074 added in prior wave)

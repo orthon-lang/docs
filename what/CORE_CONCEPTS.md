@@ -127,8 +127,8 @@ The resolution process is defined in
 | **EDR** | [EDR-022](../how/decision_records/architecture/EDR-022-iterator-protocol.md) |
 | **Specification** | [`concepts/ITERATOR_PROTOCOL.md`](concepts/ITERATOR_PROTOCOL.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Trait-based: `Iterator[T] { fn next(self) -> Option[T] }`. Lazy, single-pass, composable. `for` loop desugars to iterator protocol. `IntoIterator[T]` for collections. Standard combinators as StdLib (map, filter, take, skip, fold, collect, etc.). Range expressions (0..10, 0..=10, step). `@` prefix for protocol method calls per D-07. Single-pass semantics. Zero-cost via monomorphisation. |
-| **Primitive Decomposition** | `Iterator[T]` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; range `0..10` → syntax desugaring to `RangeIterator` constructor + `literal`; combinators → `function` implementations on `Iterator[T]` (StdLib). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition. |
+| **Summary** | Trait-based: `Iterator[T] { fn next(self) -> Option[T] }`. Lazy, single-pass, composable. `for` loop desugars to iterator protocol. `IntoIterator[T]` for collections. Standard combinators as StdLib (map, filter, take, skip, fold, collect, etc.). Range expressions delegated to RANGE (EDR-083). `@` prefix for protocol method calls per D-07. Single-pass semantics. Zero-cost via monomorphisation. |
+| **Primitive Decomposition** | `Iterator[T]` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; range literal `1..N` → syntax desugaring to a `Range` value implementing `IntoIterator` (EDR-083); combinators → `function` implementations on `Iterator[T]` (StdLib). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition. |
 
 ---
 
@@ -381,7 +381,7 @@ The resolution process is defined in
 | **EDR** | [EDR-053](../how/decision_records/architecture/EDR-053-iteration-loop.md) |
 | **Specification** | [`concepts/ITERATION_LOOP.md`](concepts/ITERATION_LOOP.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | `for item in sequence` — the only iteration construct. `while condition` — separate condition-based loop. `loop { }` — infinite loop with optional `break value`. No C-style `for (;;)`. `break` and `continue` in all loop forms. Destructuring in loop variables. Range syntax (`0..n`, `0..=n`). `for` desugars to ITERATOR_PROTOCOL (EDR-022). |
+| **Summary** | `for item in sequence` — the only iteration construct. `while condition` — separate condition-based loop. `loop { }` — infinite loop with optional `break value`. No C-style `for (;;)`. `break` and `continue` in all loop forms. Destructuring in loop variables. Range syntax (inclusive-inclusive `1..N` per RANGE EDR-083). `for` desugars to ITERATOR_PROTOCOL (EDR-022). |
 | **Primitive Decomposition** | `for item in sequence` → `IntoIterator::iter()` + `loop` + `match` + `next()` per EDR-022; `while condition` → `loop` + conditional `break`; `loop` → primitive infinite loop; `break`/`continue` → primitive control flow. The `for` desugaring and range-to-iterator conversion add compiler-level semantics beyond primitive composition. |
 
 ### UNPACKING
@@ -633,8 +633,30 @@ The resolution process is defined in
 | **EDR** | [EDR-082](../how/decision_records/architecture/EDR-082-1-based-indexing.md) |
 | **Specification** | [`concepts/INDEXING.md`](concepts/INDEXING.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | 1-based indexing for all built-in collections: first element at index 1, last at `len(coll)`. `a[i]` ≡ `a@get(i)` — Level 2 pattern over the Metadata Protocol (`@`-prefix), decomposing to `function` + `call`. Range norm: inclusive-inclusive `1..N` everywhere (index access, slices, iteration); the language owns the `+1` length arithmetic; `0..<N` is FFI-boundary-only. `enumerate` defaults to 1 (StdLib method, `enumerate(items) ≡ zip(1..=len(items), items)`). Single-base rule: `Span` is 1-based. No configurable base. |
+| **Summary** | 1-based indexing for all built-in collections: first element at index 1, last at `len(coll)`. `a[i]` ≡ `a@get(i)` — Level 2 pattern over the Metadata Protocol (`@`-prefix), decomposing to `function` + `call`. Range norm: inclusive-inclusive `1..N` everywhere (index access, slices, iteration); the language owns the `+1` length arithmetic; `0..<N` is FFI-boundary-only. `enumerate` defaults to 1 (StdLib method, `enumerate(items) ≡ zip(1..len(items), items)`). Single-base rule: `Span` is 1-based. No configurable base. |
 | **Primitive Decomposition** | `a[i]` → `a@get(i)` → `call(function(@get), a, i)` — no new primitive; the 1-based base is a semantic parameter of the `@get` contract. Fully expressible via `function` + `call` + `pack`/`unpack`. |
+
+### RANGE
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-083](../how/decision_records/architecture/EDR-083-range.md) |
+| **Specification** | [`concepts/RANGE.md`](concepts/RANGE.md) |
+| **Classification** | Language (D-03) — literal `a..b`; the `Range` type is StdLib |
+| **Summary** | Range is a first-class value type, inclusive-inclusive `1..N` — the only range semantic; `..=` eliminated. `range(a, b)` named form ≡ `a..b`. `Range` implements `IntoIterator[Int]`; combinators apply directly. `.step(n)` returns a strided Range value (step(0) is a compile error; negative step descends). Empty range `end < start` is a value. `0..<N` is FFI-boundary-only. `enumerate(items) ≡ zip(1..len(items), items)`. |
+| **Primitive Decomposition** | Range literal `a..b` → Level 2 pattern over a `pack` composite (`start`, `end`) + `IntoIterator`; `range(a, b)` → StdLib constructor (`function` + `call`); `.step(n)` → method on `Range` returning a strided descriptor. No new primitives. |
+
+### SLICE
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-084](../how/decision_records/architecture/EDR-084-slice.md) |
+| **Specification** | [`concepts/SLICE.md`](concepts/SLICE.md) |
+| **Classification** | Language Pattern (Level 2 — D-03) |
+| **Summary** | A slice is a Range applied to a random-access composite via `@get`: `items[1..k]` — the multi-element form of `a[i]` (INDEXING). Contiguous slicing never copies → non-owning `Span` view (SPAN). `len(slice) == b - a + 1`; empty slice `end < start` is a value. Strided slicing yields an iterator, never a `Span`. Multi-dimensional slicing deferred (SPAN/FFI). |
+| **Primitive Decomposition** | `items[a..b]` → `@get`-based range extraction on the `Indexable`-like trait (INDEXING EDR-082) + Range value (EDR-083) + Span view (EDR-064). No new primitives. |
 
 ## Phase 4.1 — Governance Completion
 

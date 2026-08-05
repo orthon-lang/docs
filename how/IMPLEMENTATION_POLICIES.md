@@ -100,11 +100,11 @@ concept is designed.*
 
 ### Collection Indexing Policy
 
-**Status:** *Pending concept acceptance (EDR-082).* Decision locked by
+**Status:** *Accepted (EDR-082).* Decision locked by
 [`concepts/research/important/INDEXING_ONE_BASED.md`](concepts/research/important/INDEXING_ONE_BASED.md)
 (blockers B1–B4 resolved 2026-08-05).
 
-**Related Concepts:** [`concepts/research/important/INDEXING_ONE_BASED.md`](concepts/research/important/INDEXING_ONE_BASED.md), `ITERATION_LOOP.md` (EDR-053), `SPAN.md` (EDR-064), RANGE (Type A, pending), FFI (Milestone 8)
+**Related Concepts:** [`concepts/research/important/INDEXING_ONE_BASED.md`](concepts/research/important/INDEXING_ONE_BASED.md), `ITERATION_LOOP.md` (EDR-053), `SPAN.md` (EDR-064), RANGE (EDR-083), FFI (Milestone 8)
 
 Controls the index base of built-in collection types. Classified as **Policy** per D-04: the base is a HOW decision (how indices map to positions), not a WHAT decision (what indexing means). The semantic rule is strategy-independent — every strategy (Default, Embedded, High-Performance) implements the same mapping.
 
@@ -113,6 +113,22 @@ Controls the index base of built-in collection types. Classified as **Policy** p
 | `OneBased` | First element at index 1; last at `len(coll)`; inclusive range norm `1..N` everywhere (index access, slices, iteration) |
 
 *No other value is permitted in v0.1 — a configurable index base (Pascal/Ada style) is rejected (violates Minimal Core and Orthogonality).*
+
+### Range Semantics Policy
+
+**Status:** *Accepted (EDR-083).* Decision locked by
+[`concepts/research/essential/RANGE_SLICE.md`](concepts/research/essential/RANGE_SLICE.md)
+and [`what/concepts/RANGE.md`](../../what/concepts/RANGE.md).
+
+**Related Concepts:** RANGE (EDR-083), INDEXING (EDR-082), ITERATION_LOOP (EDR-053), ITERATOR_PROTOCOL (EDR-022), FFI (Milestone 8)
+
+Controls the semantics of range literals. Inclusive-inclusive `1..N` is the only range semantic; `..=` is eliminated; `0..<N` is an FFI-boundary interop utility only.
+
+| Value | Description |
+|-------|-------------|
+| `InclusiveInclusive` | `a..b` produces a..b inclusive (`b - a + 1` elements); empty range `end < start` is a value; step via `.step(n)` outside the literal |
+
+*No other value is permitted in v0.1 — half-open or split exclusive/inclusive semantics contradict the EDR-082 norm.*
 
 ### Lifetime Policy
 

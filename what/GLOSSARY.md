@@ -1516,6 +1516,40 @@ Program + Execution Descriptor
 
 ## R
 
+### Range
+
+A first-class value type describing a contiguous run of integers.
+`a..b` is **inclusive-inclusive**: `1..N` produces N elements
+(1, 2, …, N) — the *only* range semantic in the language (EDR-082 norm).
+The `..=` spelling is eliminated. `range(a, b)` is the named canonical
+form, equivalent to `a..b`. A `Range` implements `IntoIterator[Int]`, so
+it drives `for` loops and combinator chains directly. Empty ranges
+(`end < start`, e.g. `1..0`) are values with zero elements.
+
+- **Source:** `../what/concepts/RANGE.md` (EDR-083)
+- **See also:** [Range Literal](#range-literal), [Strided Range](#strided-range), [Slice](#slice), [Iterator Protocol](#iterator-protocol)
+
+### Range Literal
+
+The `a..b` syntax producing a [Range](#range) value. The literal is a
+**Language** construct (compiler-recognized; participates in `@get`
+indexing and `for` desugaring); the `Range` type and `range(a, b)` named
+constructor are **Standard Library**.
+
+- **Source:** `../what/concepts/RANGE.md` (EDR-083)
+- **See also:** [Range](#range), [Slice](#slice)
+
+### Strided Range
+
+A [Range](#range) with a step, produced by `.step(n)`. It is
+non-contiguous: iterating yields every n-th element; applied to indexing
+it yields an iterator of elements, never a contiguous `Span` view.
+`step(0)` is a compile-time error; a negative step iterates in
+descending direction.
+
+- **Source:** `../what/concepts/RANGE.md` § Step (EDR-083)
+- **See also:** [Range](#range)
+
 ### Refinement Type
 
 A type carrying a value-range or predicate constraint, e.g.
@@ -1691,6 +1725,18 @@ information, while `Option` represents mere absence.
 ---
 
 ## S
+
+### Slice
+
+The result of applying a [Range](#range) to a random-access composite:
+`items[1..k]` — the multi-element form of `a[i]` (indexing). A
+contiguous slice never copies: slicing a `Span` or array-backed
+collection produces a non-owning `Span` view. `len(slice) == b - a + 1`;
+an empty slice (`end < start`) is a value. A strided slice yields an
+iterator, never a `Span`.
+
+- **Source:** `../what/concepts/SLICE.md` (EDR-084)
+- **See also:** [Range](#range), [Iterator Protocol](#iterator-protocol), [Combinator](#combinator)
 
 ### Semantic Dimension
 

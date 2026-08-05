@@ -5698,3 +5698,115 @@ Advisory items made concrete (none blocks EDR-082):
 - **B5-1:** Collection Indexing Policy added to `IMPLEMENTATION_POLICIES.md` (pending acceptance). FFI Boundary / Range Semantics Policies deferred to their concepts (FFI M8, RANGE Type A).
 - **B5-2:** LLM Toolchain requirement recorded (schema encodes 1-based base) — honoured when the LLM Toolchain concept is developed.
 - **B5-3:** GLOSSARY/examples audit planned — fixes applied at EDR-082 as part of C-001.
+
+---
+
+## Entry: Range (EDR-083)
+
+**Date:** 2026-08-05
+**Artifact validated:** [`what/concepts/RANGE.md`](../../what/concepts/RANGE.md)
+**Decision recorded as:** [EDR-083](../decision_records/architecture/EDR-083-range.md)
+**Gates applied:** All 7 (a new Core Language semantic requires the full catalogue, per `DECISION_VALIDATION.md` § Gate Selection)
+
+### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer (human or LLM) I want to write `1..10` and get ten elements — no `+1`, no `..=` vs `..` choice, no second half-open convention to remember.
+
+**Press release.** *Ranges become a first-class inclusive-inclusive value, decoupled from the iterator protocol. `1..N` is N elements everywhere — index access, slices, and loops share one semantic, one spelling.*
+
+**Requirements derived.** A first-class `Range` value; `range(a, b)` named form; `IntoIterator` on ranges; `.step(n)` strided value; FFI-only `0..<N`; `enumerate` formula reconciled.
+
+**Verdict: Pass.**
+
+### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** `Range` (value), `range(a, b)` (named form ≡ literal), `IntoIterator` (iterable value), `.step(n)` (strided descriptor), empty range (`end < start`), `0..<N` (FFI-only) — each precise, non-overlapping.
+
+**Socratic probe.** *If `..` is inclusive-inclusive, is `..=` redundant?* — Yes; eliminated (single spelling, Minimal Core). *Does a range need to be an iterator?* — No; it is a value implementing `IntoIterator` — descriptor vs consumption state separated.
+
+**Verdict: Pass.** The `enumerate` formula (`zip(1..=len(items), items)` from EDR-082) is reconciled to `zip(1..len(items), items)`.
+
+### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** "The range concept is minimal — removing any component breaks a use case." Removing the value → no reuse across index/slice/loop; removing `IntoIterator` → no direct combinators; removing `.step` → strided iteration impossible. **Result:** all components necessary.
+
+**Verdict: Pass.**
+
+### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+Literal semantics = Core (Level 2 pattern over `pack`/`call`); `Range` type + methods = StdLib (LIBRARY_BOUNDARY per EDR-082). Range no longer depends on the iterator protocol for its identity. No layer violation.
+
+**Verdict: Pass.**
+
+### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+Apparent contradiction: "zero-cost counter loop" (seems strategy-dependent) vs "strategy-agnostic semantics". Separation: semantics = which integers, in which order; representation (counter loop, unrolled, vectorized) = Strategy. Same mapping in all strategies.
+
+**Verdict: Pass.**
+
+### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+One-sentence test: "A range is a first-class inclusive-inclusive run of integers that can be iterated or sliced." Remove-one-thing: removing ranges forces manual counter loops and `+1` arithmetic everywhere. Evolution: `Range[T]` over other ordered `pack` types is a StdLib extension.
+
+**Verdict: Pass.**
+
+### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+`1..N` maps directly to human/mathematical notation; a single spelling removes the `..` vs `..=` choice an LLM must track; `range(a, b)` named form is LLM-friendly; `step(0)` is a compile-time error (statically detectable).
+
+**Verdict: Pass.**
+
+---
+
+## Entry: Slice (EDR-084)
+
+**Date:** 2026-08-05
+**Artifact validated:** [`what/concepts/SLICE.md`](../../what/concepts/SLICE.md)
+**Decision recorded as:** [EDR-084](../decision_records/architecture/EDR-084-slice.md)
+**Gates applied:** All 7 (a new Core Language construct requires the full catalogue, per `DECISION_VALIDATION.md` § Gate Selection)
+
+### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer I want `items[1..k]` to select the first k elements without copying and without thinking about `j - i + 1`.
+
+**Press release.** *Slicing becomes the multi-element form of indexing: a range applied to any random-access composite, zero-copy into a `Span` view, with empty and strided cases defined.*
+
+**Requirements derived.** Slice = Range applied via `@get`; zero-copy contiguous → `Span`; strided → iterator; empty slice is a value; multi-dimensional deferred.
+
+**Verdict: Pass.**
+
+### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** slice, contiguous slice (`Span` view), strided slice (iterator), empty slice (`end < start`), one-element vs multi-element `@get`. Precise, non-overlapping with Span's own contract.
+
+**Verdict: Pass.**
+
+### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+Removing slicing forces manual `@get` loops; the concept adds no new primitive — it composes Range + `@get` + Span. All components necessary.
+
+**Verdict: Pass.**
+
+### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+Level 2 pattern over `@get` (INDEXING EDR-082) + Range value (EDR-083) + Span view (EDR-064). No new layer; no layer violation.
+
+**Verdict: Pass.**
+
+### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+Zero-copy view (pointer + length) vs strategy: view semantics identical across strategies; allocation strategy is a Strategy choice. Strided slicing allocates an iterator/collection — a Strategy concern, not a semantic difference.
+
+**Verdict: Pass.**
+
+### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selected by an inclusive range." Evolution: `StrSpan` and multi-dimensional slicing are deferred, not precluded.
+
+**Verdict: Pass.**
+
+### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+`items[1..k]` maps directly to mathematics; a single inclusive norm removes off-by-one ambiguity; empty/strided edge cases are statically describable.
+
+**Verdict: Pass.**
