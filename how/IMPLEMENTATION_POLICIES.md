@@ -98,6 +98,22 @@ Controls when and how expressions are evaluated.
 *Specific values will be formalised when the corresponding language
 concept is designed.*
 
+### Collection Indexing Policy
+
+**Status:** *Pending concept acceptance (EDR-082).* Decision locked by
+[`concepts/research/important/INDEXING_ONE_BASED.md`](concepts/research/important/INDEXING_ONE_BASED.md)
+(blockers B1–B4 resolved 2026-08-05).
+
+**Related Concepts:** [`concepts/research/important/INDEXING_ONE_BASED.md`](concepts/research/important/INDEXING_ONE_BASED.md), `ITERATION_LOOP.md` (EDR-053), `SPAN.md` (EDR-064), RANGE (Type A, pending), FFI (Milestone 8)
+
+Controls the index base of built-in collection types. Classified as **Policy** per D-04: the base is a HOW decision (how indices map to positions), not a WHAT decision (what indexing means). The semantic rule is strategy-independent — every strategy (Default, Embedded, High-Performance) implements the same mapping.
+
+| Value | Description |
+|-------|-------------|
+| `OneBased` | First element at index 1; last at `len(coll)`; inclusive range norm `1..N` everywhere (index access, slices, iteration) |
+
+*No other value is permitted in v0.1 — a configurable index base (Pascal/Ada style) is rejected (violates Minimal Core and Orthogonality).*
+
 ### Lifetime Policy
 
 **Status:** *Pending concept design.*

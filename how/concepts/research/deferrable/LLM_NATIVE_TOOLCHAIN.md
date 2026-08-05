@@ -151,6 +151,13 @@ The central source of truth for the LLM Toolchain. Exposes:
 The Schema Provider is versioned alongside the language and is the
 *only* source of truth an LLM needs to generate valid Orthon code.
 
+**Index-base requirement (from `INDEXING_ONE_BASED`, B5-2, 2026-08-05):**
+the Standard Library Schema must encode the collection index base (1-based)
+— e.g., in the `@get` contract and range-literal schema — so LLM generation
+defaults to 1-based, never 0-based. LLMs are predominantly trained on 0-based
+code; the base must not be left implicit in the schema. Honoured when this
+concept is developed (deferrable).
+
 **Code Completer**
 Provides context-aware code completion that understands:
 

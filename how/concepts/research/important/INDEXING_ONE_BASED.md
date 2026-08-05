@@ -424,7 +424,10 @@ needs to decide whether `i` starts at 0 or 1.
    `enumerate(span)` starts at 1). Span is a **Language** type (EDR-064);
    its FFI role does not make it a second-base exception. Raw C buffers
    enter through the FFI index-translation layer (`0..<N`), not through
-   0-based Span indexing in application code.
+   0-based Span indexing in application code. **Deferred (B2):** the exact
+   C-facing constructor surface for wrapping raw C memory (0-based C-native
+   vs 1-based arguments) is a third-party library support question — requires
+   a separate hypothesis, belongs to the FFI concept (M8), not pinned here.
 
 6. **GLOSSARY and existing examples.** The current
    [`GLOSSARY.md`](../../../what/GLOSSARY.md) entry for `for` loop uses
@@ -467,7 +470,9 @@ Detailed reasoning trail recorded in
   (`0..<N`), never by a second base inside the language. Two-base option
   rejected (breaks trait contract, enumerate, single-counting story).
   Cross-concept amendment to SPAN (EDR-064): examples rewritten to 1-based,
-  base committed; applied at EDR-082.
+  base committed; applied at EDR-082. C-facing constructor surface
+  (`from_c`-style / `as_c_view`) **deferred** — separate hypothesis, FFI M8,
+  third-party library support question.
 - **B3** — ✅ **RESOLVED (2026-08-05).** `enumerate` defaults to 1, matching
   the collection base; composition
   `enumerate(items) ≡ zip(1..=len(items), items)`. `enumerate`/`zip` are
@@ -488,12 +493,16 @@ Detailed reasoning trail recorded in
   conflicting with the GLOSSARY norm (`1..10` inclusive) — reconcile in the
   RANGE concept design.
 
-Advisory (B5): add Collection Indexing Policy to `IMPLEMENTATION_POLICIES.md`,
-consider an LLM Toolchain requirement for the 1-based base in the schema, and
-plan the GLOSSARY/examples audit.
+Advisory (B5) — ✅ **RESOLVED (2026-08-05):**
+- **B5-1:** Collection Indexing Policy added to `IMPLEMENTATION_POLICIES.md`
+  (pending acceptance).
+- **B5-2:** LLM Toolchain requirement recorded (schema encodes 1-based base).
+- **B5-3:** GLOSSARY/examples audit planned (fixes applied at EDR-082 as part
+  of C-001).
 
-No decision accepted yet — the B1 resolution is a design refinement, not the
-acceptance EDR.
+All blockers B1–B4 and advisory B5 resolved; acceptance still requires the
+EDR (EDR-082) — the resolutions above are design refinements, not the
+acceptance decision.
 
 ---
 

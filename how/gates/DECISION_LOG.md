@@ -5640,10 +5640,13 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
   remember which type uses which base).
 - **FFI role does not create a second base.** Span's interop usefulness
   (wrapping raw C buffers) is served by the existing FFI index-translation
-  layer (B4: `0..<N`, `to_c_index`/`from_c_index`), which already handles
-  memory layout, calling convention, and type mapping at the boundary. Raw
-  C memory enters through that translation path — never through 0-based
-  Span indexing in application code.
+  layer (B4: `0..<N`), which already handles memory layout, calling
+  convention, and type mapping at the boundary. Raw C memory enters through
+  that translation path — never through 0-based Span indexing in application
+  code. The exact C-facing constructor surface (`from_c`-style constructors,
+  `as_c_view`-style adapters; 0-based C-native vs 1-based arguments) is a
+  third-party library support question — **deferred**: requires its own
+  hypothesis, belongs to the FFI concept (M8), not pinned here.
 - **Rejected:** two-base language (Span 0-based, collections 1-based) —
   breaks B1's trait contract, B3's enumerate, and the single-natural-counting
   story; hybrid per-type base marker — violates Minimal Core (configurable
@@ -5653,6 +5656,31 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
   `arr[1..3]` re-read under the inclusive norm as "first 3 elements");
   applied at EDR-082 acceptance. Recorded under C-001 in
   `CONFLICT_REGISTRY.md`.
+
+---
+
+### B5 Resolution (advisory, 2026-08-05)
+
+Advisory items made concrete (none blocks EDR-082):
+- **B5-1 — Collection Indexing Policy added** to
+  `IMPLEMENTATION_POLICIES.md` (Status: *Pending concept acceptance
+  (EDR-082)*; single value `OneBased`; no configurable base in v0.1).
+  FFI Boundary Policy and Range Semantics Policy are deferred to their
+  concepts (FFI M8, RANGE Type A).
+- **B5-2 — LLM Toolchain requirement recorded.** The Standard Library
+  Schema (Schema Provider, `LLM_NATIVE_TOOLCHAIN.md`, deferrable) must
+  encode the 1-based index base (`@get` contract, range literals) so LLM
+  generation defaults to 1-based, never 0-based. Honoured when the LLM
+  Toolchain concept is developed.
+- **B5-3 — GLOSSARY / examples audit planned.** Concrete 0-based examples
+  to fix (applied at EDR-082 as part of C-001):
+  - `what/GLOSSARY.md` § For Loop: `for i in 0..len(array)` →
+    `for i in 1..=len(array)`.
+  - `what/concepts/SPAN.md`: `span[0]`, `data[0] = 42`, `arr[1..3]`
+    (re-read under the inclusive norm).
+  - `ITERATION_LOOP.md` (EDR-053) and `ITERATOR_PROTOCOL.md` (EDR-022)
+    examples.
+  - Any other `0..`/`[0]` usage surfaced during the audit.
 
 ---
 
@@ -5666,5 +5694,7 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 - **B3 (enumerate):** ✅ **RESOLVED (2026-08-05)** — `enumerate` defaults to 1 (matching the collection base); composition `enumerate(items) ≡ zip(1..=len(items), items)`; `enumerate`/`zip` are StdLib methods on `Iterator[T]` (EDR-022/EDR-032), not keywords; no start parameter — offsets use an explicit preliminary range; Python-style default 0 rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL EDR-022 pinned at EDR-082. See the B3 Resolution note below.
 - **B4 (retroactive amendment):** ✅ **RESOLVED (2026-08-05)** — range norm locked: inclusive-inclusive `1..N` everywhere (incl. slices); language owns `+1` (`len(slice)`); empty slice = `end < start`; `0..<N` is FFI-boundary-only. Cross-concept amendment to ITERATION_LOOP EDR-053 / ITERATOR_PROTOCOL EDR-022 recorded as Type C (C-001) in `CONFLICT_REGISTRY.md`, applied at EDR-082. See the B4 Resolution note above.
 
-**Advisory (not blocking):**
-- **B5:** Add the Collection Indexing Policy (plus FFI Boundary Policy and Range Semantics Policy when the FFI/RANGE concepts are designed) to `IMPLEMENTATION_POLICIES.md`; consider an LLM Toolchain requirement encoding the 1-based base in the schema; plan the GLOSSARY/examples audit.
+**Advisory (not blocking) — resolved 2026-08-05:**
+- **B5-1:** Collection Indexing Policy added to `IMPLEMENTATION_POLICIES.md` (pending acceptance). FFI Boundary / Range Semantics Policies deferred to their concepts (FFI M8, RANGE Type A).
+- **B5-2:** LLM Toolchain requirement recorded (schema encodes 1-based base) — honoured when the LLM Toolchain concept is developed.
+- **B5-3:** GLOSSARY/examples audit planned — fixes applied at EDR-082 as part of C-001.
