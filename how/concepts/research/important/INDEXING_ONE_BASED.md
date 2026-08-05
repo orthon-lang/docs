@@ -172,13 +172,17 @@ application code.
 
 **enumerate semantics (norm resolved 2026-08-05, B3):**
 `items.enumerate()` produces pairs `(1, first)`, `(2, second)`,
-`(3, third)`, … — the index matches the collection base, so the index an
-`enumerate` yields is always a valid `@get(i)` index on the same collection
-(no index/value desync). This is a Level 2 composition, not a new primitive:
-`enumerate(items) ≡ zip(1..=len(items), items)`. An optional
-`enumerate(from: N)` (EDR-065 optional parameter) exists for offset cases
-such as FFI regions, but the default — and the only form used in application
-code — starts at 1.
+`(3, third)`, … — the index is pure ordinal numbering and matches the `1`
+of the inclusive range norm: it is always a valid `@get(i)` index on the
+same collection (no index/value desync). `enumerate` is **not a keyword** —
+it is a plain Standard Library method on `Iterator[T]` (EDR-022/EDR-032),
+defined by composition: `enumerate(items) ≡ zip(1..=len(items), items)`,
+where `zip` is likewise a plain StdLib method on `Iterator[T]` (EDR-032),
+not a language construct. `enumerate` has **no start parameter** — an offset
+is expressed by an explicit preliminary range, e.g.
+`zip(offset..len(items), items)` (range spelling per Phase 5/RANGE);
+`enumerate` itself is exactly one thing: pair each element with its 1-based
+ordinal.
 
 ### Impact on Semantic Model
 
@@ -398,10 +402,12 @@ needs to decide whether `i` starts at 0 or 1.
    `RANGE_SLICE.md`/`RANGE_STEP.md` hypotheses).
 
 2. **`enumerate` default.** ✅ **Resolved (2026-08-05, B3):** `enumerate()`
-   starts at 1 by default (matching the collection base); composition
-   `enumerate(items) ≡ zip(1..=len(items), items)`; optional
-   `enumerate(from: N)` per EDR-065 for offset/FFI cases. Python-style
-   default 0 rejected — it desyncs the yielded index from `@get(i)`.
+   starts at 1 (matching the collection base); composition
+   `enumerate(items) ≡ zip(1..=len(items), items)`. `enumerate`/`zip` are
+   plain StdLib methods on `Iterator[T]` (EDR-022/EDR-032), not keywords.
+   No `enumerate(from: N)` — offsets use an explicit preliminary range
+   (`zip(offset..len(items), items)`). Python-style default 0 rejected — it
+   desyncs the yielded index from `@get(i)`.
 
 3. **Modulo arithmetic in the standard library.** What utilities should the
    standard library provide for index wrapping (`wrap_index`), ring buffer
@@ -464,10 +470,12 @@ Detailed reasoning trail recorded in
   base committed; applied at EDR-082.
 - **B3** — ✅ **RESOLVED (2026-08-05).** `enumerate` defaults to 1, matching
   the collection base; composition
-  `enumerate(items) ≡ zip(1..=len(items), items)`; optional
-  `enumerate(from: N)` (EDR-065) for offset/FFI cases; Python-style default 0
-  rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL
-  (EDR-022) `.enumerate()` — base pinned to 1, applied at EDR-082.
+  `enumerate(items) ≡ zip(1..=len(items), items)`. `enumerate`/`zip` are
+  plain StdLib methods on `Iterator[T]` (EDR-022/EDR-032), not keywords.
+  No start parameter — offsets use an explicit preliminary range. Python-style
+  default 0 rejected (index/`@get` desync). Cross-concept amendment to
+  ITERATOR_PROTOCOL (EDR-022) `.enumerate()` — base pinned to 1, applied at
+  EDR-082.
 - **B4** — ✅ **RESOLVED (2026-08-05).** Range norm locked: inclusive-inclusive
   `1..N` everywhere, incl. slices; the language owns the `+1` length
   arithmetic (`len(slice)`); empty slice = `end < start`; `0..<N` is an
