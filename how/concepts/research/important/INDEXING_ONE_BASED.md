@@ -12,8 +12,9 @@
 > Decision Pipeline → **ACCEPT** (Language/Core). Validation gates →
 > **3 Pass / 4 Flag**. Convergence check → **FAIL** — **NOT CONVERGED**:
 > blockers B1–B4 must be resolved before an EDR (EDR-082) can be filed.
-> **B1 resolved (2026-08-05)** — indexing is a Level 2 pattern over `a@get(i)`;
-> B2–B4 remain open. Full reasoning trail:
+> **B1 + B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
+> `a@get(i)`; range norm `1..N` inclusive everywhere, incl. slices. B2–B3
+> remain open. Full reasoning trail:
 > [`how/gates/DECISION_LOG.md`](../../../gates/DECISION_LOG.md)
 > § Entry: 1-Based Indexing. See Decision History below.
 >
@@ -153,9 +154,19 @@ items[1..k]        -- first k elements (inclusive-inclusive)
 1-based indexing, the last valid index equals `len(sequence)` — a natural
 and intuitive property.
 
-**Range literals:** `1..N` is inclusive-inclusive, producing N elements.
-An alternative half-open form `0..<N` (producing N elements starting at 0)
-is available for FFI interop contexts but is not the default.
+**Range literals (norm resolved 2026-08-05, B4):** `1..N` is
+inclusive-inclusive, producing N elements, and is the **only** range
+semantic in the language — applied uniformly to index access, slices
+(`items[1..k]` = first k elements), and iteration. The language owns the
+length arithmetic: `len(slice)` returns the element count directly; the
+programmer never writes `j - i + 1`. An empty slice is a value with
+`end < start` (e.g., `items[1..0]`), not a syntax error — its exact
+representation belongs to the RANGE concept (Type A gap). A half-open form
+`0..<N` exists only as an interop utility at the FFI boundary; whether it
+is visible to the programmer is determined by the FFI index-translation
+policy (automatic vs. explicit — Open Question 4, decided in the FFI
+concept, Milestone 8). It is never the default and never appears in
+application code.
 
 **enumerate semantics:** `items.enumerate()` produces pairs `(1, first)`,
 `(2, second)`, `(3, third)`, … — matching the natural counting that
@@ -365,10 +376,14 @@ needs to decide whether `i` starts at 0 or 1.
 
 ## Open Questions
 
-1. **Range syntax details (Phase 5).** Should the default range literal be
-   `1..N` (inclusive-inclusive) or `1..<N+1` (half-open)? The semantic
-   commitment (1-based) is this document's concern; the concrete syntax
-   is deferred to Phase 5 (Syntax Design).
+1. **Range syntax details (Phase 5).** ✅ **Semantic norm resolved
+   (2026-08-05, B4):** inclusive-inclusive `1..N` everywhere, including
+   slices; the language owns the `+1` length arithmetic; empty slice =
+   `end < start`; `0..<N` is an FFI-boundary interop utility only (visibility
+   per FFI translation policy). The concrete syntax (literal spelling,
+   `..`/`..=` choice, named `range(a, b)` form) is deferred to Phase 5
+   (Syntax Design) and the RANGE concept (Type A gap — see
+   `RANGE_SLICE.md`/`RANGE_STEP.md` hypotheses).
 
 2. **`enumerate` default.** Should `enumerate()` start at 1 by default, or
    should it accept an optional start parameter (`enumerate(from: 0)`)?
@@ -428,8 +443,17 @@ Detailed reasoning trail recorded in
   `@get` contract. See the corrected «Impact on Primitive Blocks» section.
 - **B2** — open: SPAN interaction (single-base rule vs. two-base language).
 - **B3** — open: `enumerate` default start (1, matching the collection base).
-- **B4** — open: retroactive amendment to ITERATION_LOOP (EDR-053) and
-  ITERATOR_PROTOCOL (EDR-022) range/enumerate conventions.
+- **B4** — ✅ **RESOLVED (2026-08-05).** Range norm locked: inclusive-inclusive
+  `1..N` everywhere, incl. slices; the language owns the `+1` length
+  arithmetic (`len(slice)`); empty slice = `end < start`; `0..<N` is an
+  FFI-boundary interop utility only (visibility per FFI translation policy,
+  Open Q4). Cross-concept amendment to ITERATION_LOOP (EDR-053) and
+  ITERATOR_PROTOCOL (EDR-022): canonical index iteration becomes
+  `for i in 1..=len(array): array[i]` (spelling per Phase 5). Recorded as a
+  Type C conflict in `CONFLICT_REGISTRY.md` (C-001); applied at EDR-082.
+  Note: `RANGE_SLICE.md` (parallel hypothesis) proposes exclusive `a..b`,
+  conflicting with the GLOSSARY norm (`1..10` inclusive) — reconcile in the
+  RANGE concept design.
 
 Advisory (B5): add Collection Indexing Policy to `IMPLEMENTATION_POLICIES.md`,
 consider an LLM Toolchain requirement for the 1-based base in the schema, and

@@ -5574,11 +5574,23 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 |-------|--------|
 | Syntax reviewed | ⚠️ Range syntax deferred to Phase 5; `a[i]` has no conflict with `.`/`@` |
 | Edge cases probed | ⚠️ SPAN interaction (Q5) and `enumerate` default (Q2) unresolved |
-| Desugaring verified | ❌ Indexing decomposition incorrect — must be corrected (option b vs. a) |
-| User/stakeholder agrees | ⚠️ Six open questions remain |
-| No remaining ambiguity | ❌ Blockers B2–B4 unresolved |
+| Desugaring verified | ✅ Resolved (B1) — `a[i]` ≡ `a@get(i)` |
+| User/stakeholder agrees | ⚠️ Open questions remain (B2, B3) |
+| No remaining ambiguity | ⚠️ Blockers B2–B3 unresolved |
 
-**Convergence: FAIL** — return to Concept Design Review Step 2 (Minimal Solution) to resolve the decomposition and the three cross-concept interactions before proceeding to EDR.
+**Convergence: FAIL** — B1 (decomposition) and B4 (range convention) resolved 2026-08-05; B2 (SPAN) and B3 (enumerate) remain before an EDR can be filed.
+
+---
+
+### B4 Resolution (2026-08-05)
+
+**Range norm locked — inclusive-inclusive `1..N` everywhere, incl. slices:**
+- `1..N` is the **only** range semantic: index access, slices (`items[1..k]` = first k elements), and iteration all use it.
+- The language owns the `+1` length arithmetic: `len(slice)` returns the element count directly; the programmer never writes `j - i + 1` (Intent Over Implementation).
+- Empty slice is a value with `end < start` (e.g., `items[1..0]`), not a syntax error; exact representation is a RANGE (Type A) question.
+- `0..<N` is an FFI-boundary interop utility only; visibility per FFI translation policy (automatic vs explicit — Open Q4, FFI concept, M8); never the default, never in application code.
+- Cross-concept amendment: ITERATION_LOOP (EDR-053) / ITERATOR_PROTOCOL (EDR-022) canonical index iteration becomes `for i in 1..=len(array)`; recorded as Type C conflict C-001 in `CONFLICT_REGISTRY.md`; applied at EDR-082 acceptance.
+- **Conflict surfaced:** `RANGE_SLICE.md` (parallel hypothesis, 2026-08-05) proposes exclusive `a..b`; this contradicts the GLOSSARY norm (`1..10` inclusive). Reconcile in the RANGE concept design (Type A).
 
 ---
 
@@ -5590,7 +5602,7 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 - **B1 (decomposition):** ✅ **RESOLVED (2026-08-05)** — `a[i]` is a Level 2 pattern over `a@get(i)` (Metadata Protocol, `@`-prefix); no new primitive; `INDEXING_ONE_BASED.md` § Impact on Primitive Blocks corrected. See the resolution note under Primitive Decomposition Check.
 - **B2 (SPAN):** Decide a single-base rule (Span follows 1-based, with an explicit 0-based interop view) vs. a two-base language; record the interaction with `SPAN.md`/EDR-064.
 - **B3 (enumerate):** Resolve the `enumerate` default start (1, matching the collection base); coordinate with ITERATOR_PROTOCOL EDR-022.
-- **B4 (retroactive amendment):** Record the amendment to ITERATION_LOOP EDR-053 (canonical index-range form `1..=N`) as an explicit cross-concept change.
+- **B4 (retroactive amendment):** ✅ **RESOLVED (2026-08-05)** — range norm locked: inclusive-inclusive `1..N` everywhere (incl. slices); language owns `+1` (`len(slice)`); empty slice = `end < start`; `0..<N` is FFI-boundary-only. Cross-concept amendment to ITERATION_LOOP EDR-053 / ITERATOR_PROTOCOL EDR-022 recorded as Type C (C-001) in `CONFLICT_REGISTRY.md`, applied at EDR-082. See the B4 Resolution note above.
 
 **Advisory (not blocking):**
 - **B5:** Add the Collection Indexing Policy (plus FFI Boundary Policy and Range Semantics Policy when the FFI/RANGE concepts are designed) to `IMPLEMENTATION_POLICIES.md`; consider an LLM Toolchain requirement encoding the 1-based base in the schema; plan the GLOSSARY/examples audit.
