@@ -5,6 +5,7 @@
 > **Status:** Accepted 2026-07-27.
 >
 > **See also:** [`LAZY_SEQUENCE_GENERATORS.md`](LAZY_SEQUENCE_GENERATORS.md),
+> [`RANGE.md`](RANGE.md),
 > [`SEMANTIC_MODEL.md`](../SEMANTIC_MODEL.md) § Evaluation,
 > [`GLOSSARY.md`](../GLOSSARY.md) § Iterator Protocol, IntoIterator,
 > [`PRIMITIVE_BLOCKS.md`](../PRIMITIVE_BLOCKS.md)
@@ -47,7 +48,7 @@ Orthon's solution: the **`Iterator[T]` trait** defines a lazy consumption protoc
 | Combinator Policy | Determines which combinators are StdLib vs. built-in — combinators are StdLib |
 | Laziness Policy | Governs that combinator chains are always lazy; materialisation is explicit |
 | Collection Policy | Defines `IntoIterator[T]` and how collections expose iterators |
-| Range Policy | Specifies range syntax (`(0..10)`, `(0..=10)`, step via `.step(n)` outside the literal) and range iterator semantics |
+| Range Policy | Range syntax and semantics delegated to the RANGE concept (EDR-083) — inclusive-inclusive `1..N`; ranges implement `IntoIterator` and enter combinator chains directly |
 | Desugaring Policy | Formalises `for` loop desugaring to `Iterator[T]` protocol |
 
 ## Model (What)
@@ -118,7 +119,7 @@ Combinators are methods on `Iterator[T]` with default implementations. They are 
 | `.skip(n)` | `Iterator[T]` | Skip first `n` elements |
 | `.flat_map(fn)` | `Iterator[U]` where `fn: T -> Iterator[U]` | Map to iterator, then flatten |
 | `.zip(other)` | `Iterator[(T, U)]` where `other: Iterator[U]` | Pair elements from two iterators |
-| `.enumerate()` | `Iterator[(Int, T)]` | Pair each element with its index |
+| `.enumerate()` | `Iterator[(Int, T)]` | Pair each element with its 1-based index; `enumerate(items) ≡ zip(1..len(items), items)` (EDR-082/EDR-083) |
 | `.collect()` | `Collection[T]` | Materialise into a concrete collection |
 | `.fold(init, fn)` | `U` where `fn: (U, T) -> U` | Reduce to a single value |
 | `.for_each(fn)` | `Void` where `fn: T -> Void` | Side-effect for each element |
@@ -176,20 +177,17 @@ for item in collection:      # Collection implements IntoIterator[T]
 
 ### Range Expressions
 
-Ranges produce iterators:
+Ranges are first-class values defined by the RANGE concept ([`RANGE.md`](RANGE.md), EDR-083), not by the iterator protocol. A range is inclusive-inclusive `1..N`, produces N elements, and implements `IntoIterator[Int]`, so it enters `for` loops and combinator chains directly:
 
 ```orthon
-for i in 0..10:              # 0, 1, ..., 9 — exclusive end
+for i in 1..10:              # 1, 2, ..., 10 — inclusive-inclusive (10 elements)
     ...
 
-for i in 0..=10:             # 0, 1, ..., 10 — inclusive end
-    ...
-
-for i in (0..10).step(2)     # 0, 2, 4, 6, 8 — step outside the range literal
+for i in (1..10).step(2)     # 1, 3, 5, 7, 9 — step via a method on Range
     ...
 ```
 
-Range iterators are zero-cost: they compile to a simple counter loop with no heap allocation.
+Range iteration is zero-cost: it compiles to a simple counter loop with no heap allocation. See [`RANGE.md`](RANGE.md) for the full definition (literal `1..N`, `range(a, b)` named form, `.step(n)`, empty ranges, FFI-only `0..<N`).
 
 ### Ownership and Mutability
 
@@ -250,6 +248,7 @@ The `Iterator[T]` trait is the single iteration protocol. The `for` loop desugar
 - **Lazy by default** adopted. Rationale: Eager evaluation would break infinite sequences and increase allocation. Materialisation is explicit via `.collect()`.
 - **`IntoIterator` for `for` loops** adopted. Rationale: Enables `for` to work uniformly on collections, iterators, ranges, and I/O streams.
 - **Accepted via EDR-022** on 2026-07-27.
+- **2026-08-05 — Range semantics superseded by EDR-083.** Range is now a separate first-class value concept (see [`RANGE.md`](RANGE.md)); this document no longer owns range syntax. Range expressions follow the inclusive-inclusive `1..N` norm; `.enumerate()` base is pinned to 1 per EDR-082/EDR-083.
 
 ---
 

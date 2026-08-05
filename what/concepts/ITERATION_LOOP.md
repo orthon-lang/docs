@@ -27,7 +27,7 @@ Orthon's answer: one iteration construct (`for ... in`), one condition-based con
 
 1. **One iteration construct** — `for item in sequence` is the only loop for consuming values from a sequence. No separate syntax for index-based vs. element-based iteration.
 
-2. **Sequence-based** — The loop operates on sequences (values produced over time), not on indices. Index-based iteration uses range syntax: `for i in 0..n`.
+2. **Sequence-based** — The loop operates on sequences (values produced over time), not on indices. Index-based iteration uses range syntax: `for i in 1..len(seq)` (inclusive-inclusive norm, EDR-083).
 
 3. **Protocol-based** — `for` desugars to the iterator protocol (`IntoIterator` + `next()`).
 
@@ -55,8 +55,8 @@ Orthon's answer: one iteration construct (`for ... in`), one condition-based con
 for item in items:
     process(item)
 
-# Index-based via range
-for i in 0..len(array):
+# Index-based via range (inclusive-inclusive 1..N)
+for i in 1..len(array):
     process(array[i])
 
 # Destructuring in loop variable
@@ -128,12 +128,12 @@ let first_valid = loop:
 
 ### Range Syntax
 
-Range literals produce iterators:
+Range literals are first-class values defined by the RANGE concept ([`RANGE.md`](RANGE.md), EDR-083). They are inclusive-inclusive `1..N` and implement `IntoIterator`, so they drive `for` directly:
 
 ```orthon
-for i in 0..10:          # 0, 1, 2, ..., 9 (exclusive)
-for i in 0..=10:         # 0, 1, 2, ..., 10 (inclusive)
-for i in (0..10).step(2):  # 0, 2, 4, 6, 8 — step outside the range literal
+for i in 1..10:            # 1, 2, ..., 10 (inclusive-inclusive)
+for i in 1..len(array):    # index-based iteration over all elements
+for i in (1..10).step(2):  # 1, 3, 5, 7, 9 — step via a method on Range
 ```
 
 ## Default Strategy
@@ -149,7 +149,7 @@ All iteration is lazy and single-pass. `for` desugaring is a syntactic transform
 
 ## Open Questions
 
-1. Should `range` type (`0..10`) be a built-in literal or a StdLib constructor?
+1. ~~Should `range` type (`0..10`) be a built-in literal or a StdLib constructor?~~ **Resolved 2026-08-05 (EDR-083):** the `a..b` literal is Language; the `Range` type and `range(a, b)` named form are StdLib; both are equivalent.
 2. Should `break` support a value in `for` loops (like Rust's `break` in `loop`)?
 3. Should there be an `else` clause on `for` (Python-style, executed if no `break`)?
 4. How does iteration interact with ownership — does `for item in collection` consume or borrow?
@@ -157,6 +157,7 @@ All iteration is lazy and single-pass. `for` desugaring is a syntactic transform
 ## Decision History
 
 - **2026-07-27** — Accepted via EDR-053. Classification: Language. `for`/`while`/`loop` constructs with protocol-based desugaring. One iteration construct (`for ... in`). No C-style `for (;;)`.
+- **2026-08-05** — Range syntax delegated to EDR-083. Range literals follow the inclusive-inclusive `1..N` norm; `for i in 1..len(array)` is the canonical index iteration.
 
 ---
 
@@ -165,5 +166,6 @@ All iteration is lazy and single-pass. `for` desugaring is a syntactic transform
 - [x] `what/CORE_CONCEPTS.md`
 - [x] `what/GLOSSARY.md`
 - [x] `what/concepts/ITERATOR_PROTOCOL.md` (referenced)
+- [x] `what/concepts/RANGE.md` (referenced)
 - [ ] `what/SYNTAX.md`
 - [ ] `what/EXECUTION_MODEL.md`

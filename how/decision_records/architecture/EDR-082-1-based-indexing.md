@@ -72,7 +72,7 @@ EDR-022, SPAN EDR-064) — handled as a documented cross-concept amendment
 
 4. **`enumerate` defaults to 1**, matching the collection base. It is a
    plain Standard Library method on `Iterator[T]` (EDR-022/EDR-032), *not a
-   keyword*: `enumerate(items) ≡ zip(1..=len(items), items)`. No start
+   keyword*: `enumerate(items) ≡ zip(1..len(items), items)` (spelling superseded by EDR-083). No start
    parameter — an offset is expressed by an explicit preliminary range
    (`zip(offset..len(items), items)`).
 

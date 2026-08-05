@@ -35,7 +35,7 @@ Adopt the **trait-based `Iterator[T]` protocol** for Orthon sequence consumption
 3. **`IntoIterator[T]` trait** — `fn iter(self) -> Iterator[T]`. Enables collections, ranges, and I/O streams to participate in `for` loops. `Iterator[T]` implements `IntoIterator[T]` (returning `self`).
 4. **`@` for protocol method access** — Per Phase 3 D-07, `iterator@next()` distinguishes protocol access from attribute access.
 5. **Standard combinators as StdLib** — `map`, `filter`, `take`, `skip`, `flat_map`, `zip`, `enumerate`, `collect`, `fold`, `for_each`, `count`, `all`, `any` are default method implementations on `Iterator[T]` living in the Standard Library.
-6. **Range expressions** — `0..10` (exclusive), `0..=10` (inclusive), `0..10:step(2)` produce range iterators. Zero-cost — compile to counter loops.
+6. **Range expressions** — *Superseded by EDR-083 (see Amendments).* Ranges are now defined by the RANGE concept: inclusive-inclusive `1..N`; `Range` implements `IntoIterator`. Zero-cost — compile to counter loops.
 7. **Dependency on COMPOSABLE_COLLECTION_OPS** — The `IntoIterator[T]` trait and iterator combinators provide the foundation for composable collection operations. COMPOSABLE_COLLECTION_OPS (Plan 04-03) builds on this foundation with collection-specific operations (sort, unique, join, group_by).
 
 ---
@@ -65,7 +65,7 @@ Adopt the **trait-based `Iterator[T]` protocol** for Orthon sequence consumption
 2. Every implementation must support the `Iterator[T]` trait and `IntoIterator[T]` trait.
 3. `for` loop desugaring must call `IntoIterator::iter()` and produce a `next()` loop.
 4. All standard combinators must return lazy iterators — no intermediate allocation.
-5. Range expressions must compile to zero-cost counter loops (no heap allocation).
+5. Range expressions must compile to zero-cost counter loops (no heap allocation). *(Range syntax/semantics per EDR-083.)*
 6. Protocol method access uses `@` prefix — `iterator@next()`, not `iterator.next()`.
 7. COMPOSABLE_COLLECTION_OPS (Plan 04-03) may add collection-specific operations on top of `IntoIterator`.
 
@@ -118,3 +118,15 @@ All seven gates are required per `DECISION_VALIDATION.md` § Gate Selection (new
 ### Supersedes
 
 *None* — this is a new decision, not a replacement.
+
+---
+
+### Amendments
+
+**2026-08-05 — Range semantics superseded by [EDR-083](./EDR-083-range.md).**
+Decision item 6 and Compliance item 5 are superseded: range syntax and semantics are
+defined by the RANGE concept as inclusive-inclusive `1..N`. The spellings `0..10`,
+`0..=10`, and `0..10:step(2)` are retired. `Range` implements `IntoIterator` and enters
+combinator chains directly. ITERATOR_PROTOCOL remains authoritative for the
+`Iterator[T]`/`IntoIterator[T]` traits, `for` desugaring, and StdLib combinators.
+`.enumerate()` base is pinned to 1 per EDR-082 (`enumerate(items) ≡ zip(1..len(items), items)`).

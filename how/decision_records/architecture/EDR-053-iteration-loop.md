@@ -59,11 +59,11 @@ Adopt the following loop model for Orthon:
     for item in items:
         process(item)
     
-    for i in 0..len(array):       # index-based via range
+    for i in 1..len(array):       # index-based via range (1-based, EDR-082)
         process(array[i])
     ```
 
-2. **No C-style `for (;;)`** — Index-based iteration is expressed via range literals (`0..n`, `0..=n`) which produce iterators.
+2. **No C-style `for (;;)`** — Index-based iteration is expressed via range literals (inclusive-inclusive `1..N` per EDR-083, amended 2026-08-05).
 
 3. **`while condition`** — Condition-based looping, separate from iteration.
 
@@ -120,7 +120,7 @@ Adopt the following loop model for Orthon:
 4. `break` and `continue` must have defined semantics in both `for` and `while`.
 5. `loop { ... }` must execute forever unless `break` is called.
 6. `break value` must be supported in `loop` constructs (expression-oriented).
-7. Range syntax (`0..n`) must produce an `Iterator[Int]` value.
+7. Range syntax (`0..n`) must produce an `Iterator[Int]` value. *(Range syntax/semantics per EDR-083 — inclusive-inclusive `1..N`; `Range` implements `IntoIterator`.)*
 8. Destructuring in loop variables must follow the same pattern syntax as PATTERN_MATCHING (EDR-025).
 
 ---
@@ -137,6 +137,17 @@ Adopt the following loop model for Orthon:
 ### Gate Validation
 
 Gates required per `DECISION_VALIDATION.md` § Gate Selection (new language construct — loop syntax with desugaring): All seven gates.
+
+---
+
+### Amendments
+
+**2026-08-05 — Range syntax delegated to [EDR-083](./EDR-083-range.md).**
+Decision items 1–2 are amended: range literals follow the inclusive-inclusive `1..N`
+norm (per EDR-082/EDR-083). The canonical index iteration is `for i in 1..len(array)`;
+the spellings `0..n` and `0..=n` are retired. Open Question 1 (built-in literal vs StdLib
+constructor) is resolved by EDR-083: the literal is Language, the `Range` type and
+`range(a, b)` named form are StdLib.
 
 | Gate | Method | Verdict | Notes |
 |------|--------|---------|-------|
