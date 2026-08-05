@@ -5415,3 +5415,182 @@ All seven gates Pass outright. One Flag (mutation guard) resolved in concept dra
 | `LLM_GENERABILITY_GATE` | Pass | Pass | `Int requires v >= 0` is less ambiguous for LLMs than `Int(0..150)` (no confusion with call syntax). |
 
 **Procedure:** Per `CONCEPT_PIPELINE.md` § 10 (Type B), the decision pipeline, concept design review, and validation gates were NOT re-run. Only the affected gates were re-assessed against the delta. Rationale: the core decision (Level 2 Language Pattern, runtime enforcement, nominal identity) did not change — only the syntactic form and decomposition mechanism were refined.
+
+---
+
+## Entry: 1-Based Indexing (INDEXING_ONE_BASED)
+
+**Date:** 2026-08-05
+**Artifact validated:** [`how/concepts/research/important/INDEXING_ONE_BASED.md`](../../how/concepts/research/important/INDEXING_ONE_BASED.md)
+**Decision recorded as:** Not yet — pipeline run completed, **NOT CONVERGED**. EDR (EDR-082) pending resolution of blockers B1–B4.
+**Pipeline applied:** Full 10-question Decision Pipeline per `DECISION_PIPELINE.md`, then Concept Design Review, then all 7 Decision Validation gates.
+
+### Pipeline Q&A
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem? | Cognitive gap between human counting (1, 2, 3, …) and machine addressing (offset 0, 1, …) → off-by-one errors and domain-expert translation tax in index-based code. |
+| Q2 | Language/StdLib/Policy? | **Language (Core).** The index base is a semantic commitment on the collection access model — a library cannot change the meaning of `a[i]`. |
+| Q3 | Existing primitives? | Partially. The *base* is a semantic parameter, not expressible by composing primitives. However, the *mechanism* `a[i]` is not covered by the existing `attribute access` primitive (named-member, `.` syntax) — see Decomposition Check flag. |
+| Q4 | Violates principle? | No. Aligns with Data First, Intent Over Implementation, POLA, Minimal Core (rejects configurable base). |
+| Q5 | New semantics? | **Yes.** A semantic commitment on how indexed access maps to elements — not syntactic sugar. |
+| Q6 | Composition? | No. The base is a semantic default, not a composed behaviour. |
+| Q7 | Sugar over primitives? | The *mechanism* `a[i]` may be sugar for `nth(i)`/`get(i)` (Level 2 pattern) — the open decomposition question. The *base* is not sugar. |
+| Q8 | Optimisation? | No. Index translation is compile-time constant folding. |
+| Q9 | Backward compat? | Pre-v1.0 — no released-code break. But broad spec impact: 12 documents plus accepted concepts (ITERATION_LOOP EDR-053, ITERATOR_PROTOCOL EDR-022) assume 0-based. |
+| Q10 | Worth adding? | **Yes.** The decision is unavoidable — even abstract indexing (Alternative C) must choose a base for `nth(i)`. The question is which base, not whether. |
+
+**Classification per D-03:** Core Language (Level 1/2 boundary — see Decomposition Check). **Language** category per `LIBRARY_BOUNDARY.md`.
+
+### Primitive Decomposition Check
+
+**Finding (Flag):** The concept doc claims `items[i]` "is a form of attribute access". This is **inaccurate** against `PRIMITIVE_BLOCKS.md` § 3.2.4: `attribute access` is defined as *named* member access via `.` syntax. The primitive set has **no positional/subscript access**. Resolution options:
+- **(a)** new Level 1 primitive (positional access), or
+- **(b)** Level 2 pattern: `a[i]` desugars to `a@get(i)` (`function` + `call`), with the index base as a semantic parameter of the `@get` protocol method.
+
+Option (b) is consistent with Minimal Core and matches the existing Metadata Protocol pattern (`obj@fields`, `list@len()`, `collection@iter()`). The composition formula must be shown. **Must be corrected before EDR.**
+
+**Resolution (2026-08-05) — RESOLVED, option (b) adopted:**
+- `a[i]` ≡ `a@get(i)` — Level 2 sugar over the `@get` protocol method (`@`-prefix per Metadata Protocol), decomposing to `function` + `call`. Not `.nth(i)`: `.` is reserved for user-defined member access, and indexing must remain language-recognized.
+- Composition formula: `a[i]` → `a@get(i)` → `call(function(@get), a, i)`.
+- The 1-based base is a semantic parameter of the `@get` contract: first element at `@get(1)`, last at `@get(len(a))`.
+- Positional access is the one-element form of `unpack` and therefore applies to every random-access `pack` composite (tuples, strings, Span, ranges), not just collections. Capability is declared via an `Indexable`-like trait, so `Sequence`/`Set` (non-random-access) reject `a[i]` at compile time.
+- Bounds behaviour (Option vs Result) deferred to the `@get` contract, aligned with EDR-018 / EDR-020.
+
+### Gate Validation
+
+**Gates applied:** All 7 per `DECISION_VALIDATION.md` § Gate Selection (new language construct).
+
+#### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer — and every code-generating LLM — I want `items[1]` to return the first element, so that index-based code reads the way I count and the way my domain notation writes it, and so that the off-by-one class (`range(len(items))` + `items[i+1]`) disappears at the language level.
+
+**Press release.** *Orthon counts like people do. The first element is at index 1, the last at index `len`. Mathematical formulas and business notation copy into code without index translation. Off-by-one bugs lose their primary breeding ground.*
+
+**FAQ.**
+- *How is this different from C-family?* — C-family inherits the pointer-arithmetic base 0; Orthon's Data model has no raw memory, so the hardware default has no claim here.
+- *When would I use 0-based?* — Only at the FFI boundary, via an explicit translation layer.
+- *What do I lose?* — C-ecosystem familiarity and zero-cost FFI indexing; both accepted as documented trade-offs.
+
+**Requirements derived.** A Core semantic commitment (index base = 1); a range-literal convention; an FFI index-translation boundary; an `enumerate` start rule.
+
+**Verdict: Pass.** Problem is user-stated (cognitive gap, off-by-one), justified by the comfort-by-construction Vision pillar, with a concrete code example.
+
+---
+
+#### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** "1-based indexing"; "last index == len"; "inclusive-inclusive range `1..N`"; "half-open FFI form `0..<N`"; "`enumerate` from 1".
+
+**Test with counterexamples.**
+- *Two range forms (`1..N` inclusive + `0..<N` half-open) — a special case that patches an inconsistency?* — The half-open form is justified by interop, but it *is* a second range semantic. It must be scoped to the FFI boundary only, or the language carries two range conventions.
+- *Does `enumerate` starting at 0 while collections are 1-based create an index/value mismatch?* — Yes if undecided. The doc proposes enumerate from 1 (consistent), but Open Question 2 leaves it open. Must be resolved.
+- *What about the accepted ITERATION_LOOP (`for i in 0..len(array)`)?* — Currently 0-based. Adopting 1-based requires deciding the canonical index-range form (`1..=N` inclusive vs `0..<N` half-open). Cross-concept interaction not ignored but unresolved.
+- *What about SPAN?* — If Span (EDR-064, primarily an FFI/interop view) uses 0-based while collections use 1-based, the language has two bases — undermining the single-natural-counting story. Must be resolved (single-base rule vs. explicit two-base).
+
+**Follow the contradiction.** Apparent tension: "one natural counting convention" vs. "half-open form exists for FFI". Resolved only if the half-open form is a *boundary-only* escape hatch, never the default.
+
+**Verdict: Flag.** No paradox, but three undecided cross-concept interactions (range convention, `enumerate` default, SPAN base) plus a boundary special-case must be resolved before the concept is internally closed.
+
+---
+
+#### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** 1-based indexing is a single, learnable semantic commitment — "Orthon counts like you do" — with no new keywords and no configurable base.
+
+**Observations.**
+- One decision (base = 1); no new primitive under option (b); range/`enumerate`/FFI are separate concepts.
+- Alternative B (configurable base) is correctly rejected: violates Minimal Core and Orthogonality — two collections with different bases cannot be indexed uniformly.
+- Alternative C (abstract indexing) is correctly rejected: `nth(i)` still must pick a base.
+
+**Prediction.** A learner needs one sentence to absorb it.
+
+**Alternative hypothesis (weakened).** Indexing is a new Level 1 primitive (option a). Option (b) — Level 2 pattern over `nth(i)` — is simpler and consistent with the existing protocol pattern. Scope note: the concept doc bundles range semantics + `enumerate` + FFI translation into one proposal; those belong to RANGE, ITERATOR_PROTOCOL, and FFI respectively.
+
+**Verdict: Pass** (with scope note — keep the minimal concept to the index base; move adjacent decisions to their owning concepts).
+
+---
+
+#### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**State the premises.**
+1. The index base is a Core Language semantic commitment.
+2. `a[i]` decomposes to a Level 2 pattern over `nth(i)` (option b) or a Level 1 primitive (option a).
+3. Range, `enumerate`, and FFI translation are downstream of the base.
+
+**Deductions.**
+- Fits within the layered architecture; no StdLib/compiler-internals coupling.
+- Composes orthogonally with existing constructs (with the three interactions named in the Consistency gate).
+- **Retroactive modification:** ITERATION_LOOP (EDR-053) and ITERATOR_PROTOCOL (EDR-022) were accepted with 0-based ranges/enumerate. Adopting 1-based *modifies accepted concepts* — engaging the gate's fail condition "an existing concept must be modified to accommodate the new one". Because the base is more foundational than those concepts, the dependency direction is legitimate, but it must be handled as a documented cross-concept amendment, not silent drift.
+
+**Verdict: Flag.** Architecture fit is clean, but the retroactive amendment of two accepted EDRs must be explicit and recorded.
+
+---
+
+#### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+**Apparent contradiction.** Indexing seems tied to a specific layout (0-based offset arithmetic), yet must be strategy-independent.
+
+**Apply separation.** The *semantic rule* ("the first element is at index 1") is strategy-independent — all strategies (Default, Embedded, High-Performance) implement the same mapping. Index translation to C/0-based is a compile-time constant fold and a boundary concern, not a strategy concern. No strategy produces different observable behaviour.
+
+**Verdict: Pass.** 1-based indexing is fully strategy-agnostic.
+
+---
+
+#### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+**One sentence:** *Orthon counts from 1, so `items[1]` is the first element and `items[len(items)]` is the last — and the cost of this is an explicit translation layer at every C interop boundary.*
+
+**Evolution path.**
+- Pre-1.0: the decision is cheap to make now (a design-time commitment) and effectively **irreversible after freeze** — 50+ derived concepts, GLOSSARY, and doc examples already assume 0-based and would need a mass retrofit to change later.
+- FFI translation tax is permanent and paid by every FFI consumer; mitigated by a structured, auditable boundary.
+- Reversal risk: shipping 1-based while the surrounding ecosystem is 0-based is a permanent ergonomic tax at interop; the choice must be made with confidence now.
+
+**Verdict: Flag.** The decision ages well *if* it is right; it does not age gracefully *if wrong* — the reversal window is now, before freeze.
+
+---
+
+#### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Structural analysis:** `a[i]` with 1-based indexing is single-syntax and unambiguous.
+
+| Criterion | Verdict | Basis |
+|---|---|---|
+| Schema-serializable | Pass | The base is a schema-visible convention (grammar + stdlib `nth` contract) |
+| Predictable generation (≥90%) | Pass | LLMs are trained on both bases (Lua, Julia, MATLAB, R); 1-based has fewer off-by-one patterns to track |
+| No hallucination surface | Pass | One base, no configurable option, no ambiguity |
+| Strategy-aware default | Pass | Base is strategy-independent; generated code is valid under all strategies |
+| Self-correctable | Pass | Out-of-range index → Static Analyser diagnostic; boundary translation verifiable |
+
+**Note (Flag):** LLMs are *predominantly* trained on 0-based code; the 1-based convention must be surfaced explicitly in the LLM schema/strategy (e.g., in the `nth` contract) so generation defaults to 1-based, not 0-based.
+
+**Verdict: Pass** (with the schema-surface note).
+
+---
+
+### Convergence Check (pre-EDR gate)
+
+| Check | Status |
+|-------|--------|
+| Syntax reviewed | ⚠️ Range syntax deferred to Phase 5; `a[i]` has no conflict with `.`/`@` |
+| Edge cases probed | ⚠️ SPAN interaction (Q5) and `enumerate` default (Q2) unresolved |
+| Desugaring verified | ❌ Indexing decomposition incorrect — must be corrected (option b vs. a) |
+| User/stakeholder agrees | ⚠️ Six open questions remain |
+| No remaining ambiguity | ❌ Blockers B2–B4 unresolved |
+
+**Convergence: FAIL** — return to Concept Design Review Step 2 (Minimal Solution) to resolve the decomposition and the three cross-concept interactions before proceeding to EDR.
+
+---
+
+### Overall
+
+**Verdict: NOT CONVERGED.** Pre-filter (Pipeline Q&A) → **ACCEPT as a Language decision**. Validation gates: 3 Pass, 4 Flag, 0 Fail. The concept is a strong, well-argued proposal, but cannot proceed to EDR-082 until the blockers below are resolved.
+
+**Blockers before EDR-082:**
+- **B1 (decomposition):** ✅ **RESOLVED (2026-08-05)** — `a[i]` is a Level 2 pattern over `a@get(i)` (Metadata Protocol, `@`-prefix); no new primitive; `INDEXING_ONE_BASED.md` § Impact on Primitive Blocks corrected. See the resolution note under Primitive Decomposition Check.
+- **B2 (SPAN):** Decide a single-base rule (Span follows 1-based, with an explicit 0-based interop view) vs. a two-base language; record the interaction with `SPAN.md`/EDR-064.
+- **B3 (enumerate):** Resolve the `enumerate` default start (1, matching the collection base); coordinate with ITERATOR_PROTOCOL EDR-022.
+- **B4 (retroactive amendment):** Record the amendment to ITERATION_LOOP EDR-053 (canonical index-range form `1..=N`) as an explicit cross-concept change.
+
+**Advisory (not blocking):**
+- **B5:** Add the Collection Indexing Policy (plus FFI Boundary Policy and Range Semantics Policy when the FFI/RANGE concepts are designed) to `IMPLEMENTATION_POLICIES.md`; consider an LLM Toolchain requirement encoding the 1-based base in the schema; plan the GLOSSARY/examples audit.
