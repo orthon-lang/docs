@@ -176,7 +176,7 @@ application code.
 of the inclusive range norm: it is always a valid `@get(i)` index on the
 same collection (no index/value desync). `enumerate` is **not a keyword** —
 it is a plain Standard Library method on `Iterator[T]` (EDR-022/EDR-032),
-defined by composition: `enumerate(items) ≡ zip(1..=len(items), items)`,
+defined by composition: `enumerate(items) ≡ zip(1..len(items), items)` (spelling corrected by EDR-083; `..=` eliminated),
 where `zip` is likewise a plain StdLib method on `Iterator[T]` (EDR-032),
 not a language construct. `enumerate` has **no start parameter** — an offset
 is expressed by an explicit preliminary range, e.g.
@@ -403,7 +403,7 @@ needs to decide whether `i` starts at 0 or 1.
 
 2. **`enumerate` default.** ✅ **Resolved (2026-08-05, B3):** `enumerate()`
    starts at 1 (matching the collection base); composition
-   `enumerate(items) ≡ zip(1..=len(items), items)`. `enumerate`/`zip` are
+   `enumerate(items) ≡ zip(1..len(items), items)` *(spelling per EDR-083)*. `enumerate`/`zip` are
    plain StdLib methods on `Iterator[T]` (EDR-022/EDR-032), not keywords.
    No `enumerate(from: N)` — offsets use an explicit preliminary range
    (`zip(offset..len(items), items)`). Python-style default 0 rejected — it
