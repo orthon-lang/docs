@@ -1,9 +1,9 @@
 # 1-Based Indexing
 
-> **⚠️ DRAFT — This document is a preliminary hypothesis.**
-> It was created as exploratory research material for the Concept Design Review
-> process (Milestone 2). A concept is registered only after
-> acceptance via EDR (Architecture category).
+> **✅ ACCEPTED via [EDR-082](../../../decision_records/architecture/EDR-082-1-based-indexing.md)
+> (2026-08-05).**
+> This research document is the full reasoning trail; the accepted
+> specification lives in [`what/concepts/INDEXING.md`](../../../../what/concepts/INDEXING.md).
 >
 > **Last updated:** 2026-08-05
 >
@@ -12,7 +12,7 @@
 > Decision Pipeline → **ACCEPT** (Language/Core). Validation gates →
 > **3 Pass / 4 Flag**. Convergence check → **FAIL on first pass** —
 > blockers B1–B4 raised; **all resolved 2026-08-05**, convergence
-> re-check → **PASS** — ready for EDR (EDR-082).
+> re-check → **PASS** — **accepted via EDR-082 (2026-08-05)**.
 > **B1–B4 resolved (2026-08-05)** — indexing is a Level 2 pattern over
 > `a@get(i)`; range norm `1..N` inclusive everywhere, incl. slices;
 > `enumerate` defaults to 1; Span is single-base 1-based. Full reasoning
@@ -500,9 +500,10 @@ Advisory (B5) — ✅ **RESOLVED (2026-08-05):**
 - **B5-3:** GLOSSARY/examples audit planned (fixes applied at EDR-082 as part
   of C-001).
 
-All blockers B1–B4 and advisory B5 resolved; acceptance still requires the
-EDR (EDR-082) — the resolutions above are design refinements, not the
-acceptance decision.
+**Accepted via [EDR-082](../../../decision_records/architecture/EDR-082-1-based-indexing.md)
+(2026-08-05).** The resolutions B1–B5 above were the convergence work; the
+acceptance decision and the cross-concept amendments (C-001) are recorded in
+EDR-082 and [`what/concepts/INDEXING.md`](../../../../what/concepts/INDEXING.md).
 
 ---
 

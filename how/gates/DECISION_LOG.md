@@ -5422,7 +5422,7 @@ All seven gates Pass outright. One Flag (mutation guard) resolved in concept dra
 
 **Date:** 2026-08-05
 **Artifact validated:** [`how/concepts/research/important/INDEXING_ONE_BASED.md`](../../how/concepts/research/important/INDEXING_ONE_BASED.md)
-**Decision recorded as:** Not yet — pipeline run completed, **NOT CONVERGED**. EDR (EDR-082) pending resolution of blockers B1–B4.
+**Decision recorded as:** [EDR-082](../decision_records/architecture/EDR-082-1-based-indexing.md) — Accepted, 2026-08-05. All blockers B1–B4 and advisory B5 resolved; convergence re-check PASS.
 **Pipeline applied:** Full 10-question Decision Pipeline per `DECISION_PIPELINE.md`, then Concept Design Review, then all 7 Decision Validation gates.
 
 ### Pipeline Q&A

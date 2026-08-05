@@ -6,7 +6,7 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** 53 concepts accepted (49 Phase 4 accepted concept files plus 4
+> **Status:** 54 concepts accepted (49 Phase 4 accepted concept files plus 4
 > governance-completion concept files created in Phase 4.1: CONCURRENCY,
 > PUSH_STREAMS, OBJECT_INITIALIZATION, REQUIRE_USING_DEPENDENCY_SLOTS).
 > Earlier waves — Waves 1–2 (essential core: 13 concepts) plus Wave 4
@@ -35,7 +35,7 @@
 > for the full classification summary and [`EDR-079`](../how/decision_records/architecture/EDR-079-aggregating-p4.md)
 > for the aggregating acceptance record.
 >
-> **Last updated:** 2026-08-04
+> **Last updated:** 2026-08-05
 
 ---
 
@@ -624,6 +624,17 @@ The resolution process is defined in
 | **Classification** | Language Pattern (Level 2 — D-03) |
 | **Summary** | Runtime-constrained types — nominal type with type-level constraint predicate. `type Age = Int requires v >= 0 && v <= 150` declares a constraint checked at every boundary where a raw value enters the type. Construction via `Callable(Int) -> Age` trait (not `new`/`make`). Constraint lives **only on the type** — consuming functions carry no redundant `requires`. Nominal identity (`Age ≠ Int`). Immutable backing field. Constraint follows Contract Enforcement Policy. Literal values checked at compile time. Schema Provider exposes constraint in machine-readable form. |
 | **Primitive Decomposition** | Fully decomposable: `type X = Base requires pred` → `struct` (via `pack` + `identifier` + `scope`) + `Callable(Base) -> X` impl (via `function` + `call` + `assignment`) + boundary constraint check (compiler-recognized assertion following Contract Enforcement Policy per EDR-056). No new primitives introduced. Constraint is never duplicated on consuming functions. See [`CONSTRAINED_TYPES.md`](concepts/CONSTRAINED_TYPES.md) § Desugaring for the complete mapping. |
+
+### INDEXING
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-082](../how/decision_records/architecture/EDR-082-1-based-indexing.md) |
+| **Specification** | [`concepts/INDEXING.md`](concepts/INDEXING.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | 1-based indexing for all built-in collections: first element at index 1, last at `len(coll)`. `a[i]` ≡ `a@get(i)` — Level 2 pattern over the Metadata Protocol (`@`-prefix), decomposing to `function` + `call`. Range norm: inclusive-inclusive `1..N` everywhere (index access, slices, iteration); the language owns the `+1` length arithmetic; `0..<N` is FFI-boundary-only. `enumerate` defaults to 1 (StdLib method, `enumerate(items) ≡ zip(1..=len(items), items)`). Single-base rule: `Span` is 1-based. No configurable base. |
+| **Primitive Decomposition** | `a[i]` → `a@get(i)` → `call(function(@get), a, i)` — no new primitive; the 1-based base is a semantic parameter of the `@get` contract. Fully expressible via `function` + `call` + `pack`/`unpack`. |
 
 ## Phase 4.1 — Governance Completion
 
