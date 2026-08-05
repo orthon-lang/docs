@@ -250,3 +250,13 @@ projection of conclusions onto Orthon's design. Each topic has a file in
   - **Target:** Phase 3
   - **Ref:** PydanticAI `Dep()` / `RunContext[Deps]`; пересекается с Execution Program Model (семантика программы отделена от стратегии получения ресурсов)
 
+## Post-Acceptance — ITERATOR_PROTOCOL review (2026-08-05)
+
+- [ ] **IP-B1:** Replace `fn` with `fun`/`proc`/`new` in method signatures across
+      EDRs and concept docs (systematic sweep). Includes `Iterator[T]::next` → `proc`
+      and `IntoIterator[T]::iter` → `fun` in `what/concepts/ITERATOR_PROTOCOL.md`,
+      `what/concepts/TRAITS.md`, and related EDRs.
+  - **Owner:** Solo author
+  - **Ref:** ITERATOR_PROTOCOL review 2026-08-05 (items A2, B1)
+  - **Hypotheses:** `how/concepts/research/important/MUTABLE_ITERATOR.md`
+

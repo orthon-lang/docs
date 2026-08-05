@@ -192,3 +192,37 @@ From ITERATOR_PROTOCOL.md's checklist:
 - [ ] `what/SEMANTIC_MODEL.md`
 - [ ] `how/DESIGN_PRINCIPLES.md`
 - [ ] `how/IMPLEMENTATION_POLICIES.md`
+
+---
+
+## Follow-up: Review decisions (2026-08-05)
+
+Routing of the 2026-08-05 ITERATOR_PROTOCOL review items. Hypotheses live in
+`how/concepts/research/{tier}/` (hypothesis documents); all pending design
+convergence (CONCEPT_PIPELINE.md Stage 10, Type B).
+
+| Item | Decision / Routing |
+|------|--------------------|
+| A1 | Match-arm syntax conflict (`case ... =>` per EDR-025 vs `Some(...) -> ...` in iterator docs) → `what/CONFLICT_REGISTRY.md`, resolve in Phase 6 |
+| A2 | `IntoIterator[T]` = immutable iterator only (`fun iter(self) -> Iterator[&T]`). Mutable iteration → MUTABLE_ITERATOR (receiver-type dispatch `&C`/`&mut C`, `proc next`) |
+| A3 | `break` unification (`break` ≡ `break Void`) → BREAK_UNIFICATION → EDR after Decision Pipeline |
+| B1 | Systematic `fn` → `fun`/`proc`/`new` sweep → TODO.md task IP-B1 |
+| B2 | Step outside the range literal, `:` never used in ranges, `(0..10).step(2)` → RANGE_STEP + SEQUENCE_METHODS |
+| B3 | Range/Slice as a concept separate from Iterator → RANGE_SLICE |
+| B4 | `then` keyword (`if ... then ... else`) → IF_THEN |
+| B5 | ITERATOR_PROTOCOL.md Affected Documents checklist — OK to update |
+| C1 | `IntoIterator` → `Iterable` rename → Open Question (below + concept Open Q6) |
+| C2 | Return syntax + argument syntax (Java-style) → two hypotheses: FUNCTION_RETURN_SYNTAX, FUNCTION_ARGUMENT_SYNTAX |
+| C3 | Lambda syntax → Open Question (below); assumptions recorded in `notes/code-block-semantics.md` |
+| C4 | `next(iterator)` sugar — already deferred to Phase 4/5 (03-CONTEXT D-07); no new action |
+
+### Open Questions
+
+- **C1 — Rename `IntoIterator` → `Iterable`?** Fresh idea from the review; a
+  separate `Iterable` *in addition to* `IntoIterator` was rejected (see §2), but a
+  pure rename was not previously considered. Would amend EDR-022. Recorded as
+  Open Q6 in `what/concepts/ITERATOR_PROTOCOL.md`.
+- **C3 — Lambda syntax.** `|u|` vs `u -> u.is_active`. Coupled with return-type
+  syntax (FUNCTION_RETURN_SYNTAX) and the match-arm separator
+  inconsistency (A1). Assumptions recorded in `notes/code-block-semantics.md`;
+  Phase 5 decision.
