@@ -120,7 +120,8 @@ Equivalent concepts should be expressed in equivalent ways.
 Once a user learns a language pattern, the same pattern should apply
 consistently throughout the language.
 
-All invocations use the same syntax, regardless of what is being invoked:
+All **immediate** invocations use the same call syntax, regardless of
+what is being invoked:
 
 ```
 fn()
@@ -128,6 +129,12 @@ method()
 context()
 decorator()
 ```
+
+Invocation **in context** uses the closed two-operator family uniformly
+(EDR-085): `ctx <- fn(args)` for a single owner (serialised, in order),
+and the distribution operator for stateless workers (parallel; glyph
+deferred to Phase 5). The same function is invoked in either form —
+functions are colourless, so no construct gets its own calling convention.
 
 All system-introspection access uses the same syntax:
 

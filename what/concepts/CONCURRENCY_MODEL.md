@@ -1,8 +1,16 @@
 # Concurrency Model
 
+> **⚠️ SUPERSEDED — [EDR-085](../how/decision_records/architecture/EDR-085-execution-context-invocation.md) (Execution Context Invocation), 2026-08-06.**
+> This concept is superseded by the unified Invocation model. The
+> `delegate`/`<-`/`act` model is absorbed into Execution Contexts:
+> `delegate(obj)` becomes a context constructor, `<-` becomes the
+> single-owner submission operator, `act` is no longer a concurrency
+> modifier. Functions are colourless; execution policy is expressed via
+> Execution Contexts. Retained for historical reference.
+
 > **✅ ACCEPTED — [EDR-033](../how/decision_records/architecture/EDR-033-concurrency-model.md).**
 >
-> **Status:** Accepted 2026-07-27.
+> **Status:** Accepted 2026-07-27 (superseded 2026-08-06 by EDR-085).
 >
 > **⚠️ IMPLEMENTATION INDEPENDENCE GATE — Critical.** This concept must be
 > defined without depending on a specific threading or async runtime model.

@@ -32,11 +32,18 @@ all variants — the compiler enforces exhaustiveness.
 
 ### Async
 
+> **⚠️ SUPERSEDED — EDR-085 (Execution Context Invocation).**
+> `async` as an execution modifier is eliminated. Functions are
+> **colourless**; execution policy is expressed by submitting an
+> invocation to an [Execution Context](#execution-context)
+> (`defer`/`delegate`/`spawn`/`fork`). Retained here for historical
+> reference and cross-references.
+
 A modifier on `proc`/`fun`/`new` indicating that the function may suspend
-execution at `await` points and resume later. `async` is an **execution
-modifier**, not a semantic category — it composes orthogonally with the
+execution at `await` points and resume later. `async` was an **execution
+modifier**, not a semantic category — it composed orthogonally with the
 three declaration kinds (`async proc`, `async fun`, `async new`). Async
-says nothing about parallelism or concurrent access; those are expressed
+said nothing about parallelism or concurrent access; those were expressed
 via `spawn` (parallel execution) and `exclusive` (access serialisation).
 
 ```orthon
@@ -44,28 +51,30 @@ async fun fetch(url: Url) -> String
     return await httpClient.get(url)
 ```
 
-An `async` function returns `Future<T>`. Calling without `await` produces
-a `Future` without suspension (colourless model).
+An `async` function returned `Future<T>`.
 
-- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
-- **See also:** [Await](#await), [Future](#future), [Spawn](#spawn), [Scope](#scope-structured-concurrency), [Exclusive Access](#exclusive-access)
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047, superseded by EDR-085)
+- **See also:** [Invocation in Context](#invocation-in-context), [Execution Context](#execution-context), [Await](#await)
 
 ### Await
 
-The syntactic marker of a suspension point in an `async` function. `await`
-suspends execution until the awaited `Future<T>` resolves to a value of
-type `T`. `await` is the only yield point (cooperative scheduling).
+The context-specific **materialisation function** for a `defer` (coroutine)
+[Execution Context](#execution-context): `await(ctx)` suspends until the
+deferred invocation submitted to `ctx` is ready, then yields its value.
+`await` is one of the context-defined extraction forms (with `take` for
+`delegate`, `next`/`stop` for `spawn`/`fork`); it is a named function, not
+an operator.
 
 ```orthon
-let result = await future   # suspend until future completes
+let task = defer(obj)
+task <- compute()
+let result = await(task)   # suspend until ready
 ```
 
 `await` is required only when the current code needs the result value.
-Without `await`, an async function call produces a `Future<T>` without
-suspension.
 
-- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
-- **See also:** [Async](#async), [Future](#future)
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (EDR-085)
+- **See also:** [Execution Context](#execution-context), [Deferred Invocation](#deferred-invocation), [Take](#take)
 
 ### Allocation Policy
 
@@ -127,32 +136,26 @@ partly to keep the two from being conflated.
 - **Source:** `../what/SEMANTIC_MODEL.md` § Identity
 - **See also:** [Value Identity](#value-identity), [Semantic Dimension](#semantic-dimension), [Orthogonality](#orthogonality)
 
-### Boolean Blindness
-
-An anti-pattern where a function returns `Bool` as a *validation
-verdict*, erasing the fact of validity as soon as the check ends. At the
-call site, the program *knows* the value is valid but the type system
-cannot use that knowledge — the witness of validity was discarded with
-the boolean. The remedy is the **Parse, Don't Validate** idiom: parse the
-value into a more precise type (`Option<T>` / `Result<T,E>` / a
-constrained type) whose construction guarantees validity.
-
-```orthon
-# Boolean Blindness — witness erased
-fun isValidEmail(s: String) -> Bool
-    return s.contains("@") and s.contains(".")
-
-# Parse, don't validate — witness is the type
-fun parseEmail(s: String) -> Option<Email>
-    ...
-```
-
-- **Source:** `../notes/parse-dont-validate-idiom.md`, [`MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md`](../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md)
-- **See also:** [Parse, Don't Validate](#parse-dont-validate), [Option Type](#option-type), [Constrained Type](#constrained-type)
-
 ---
 
 ## C
+
+### call
+
+The primitive for **immediate invocation** of a declared function with
+supplied arguments. `fn(args)` executes now, in the current execution
+environment, with no execution context and no operator. `call` is the base
+case of [Invocation](#invocation); contextual forms submit the invocation
+to an [Execution Context](#execution-context) via the operator family and
+are not `call` themselves.
+
+```orthon
+add(1, 2)            # call — immediate, no context
+ctx <- fn(args)      # invocation in context — not call
+```
+
+- **Source:** `../what/PRIMITIVE_BLOCKS.md` § call (EDR-016), `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`
+- **See also:** [Invocation](#invocation), [Execution Context](#execution-context), [Invocation in Context](#invocation-in-context)
 
 ### Canonical Form
 
@@ -160,25 +163,6 @@ One of the equivalent syntactic ways to express a language construct. All canoni
 
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Documentation Principle
 - **See also:** [Operator Equivalence](#operator-equivalence)
-
-### Channel
-
-A typed, bounded or unbounded message-passing conduit between delegates.
-`Channel<T>` wraps delegate mailboxes to provide ergonomic `send`/`receive`
-operations with static type safety. Channels are StdLib types — no new
-language semantics — and form the backbone of CSP-style concurrency patterns
-(select, fan-out/fan-in, pipeline).
-
-```orthon
-let ch = Channel<String>(buffer: 10)
-delegate producer:
-    ch.send("hello")
-delegate consumer:
-    let msg = ch.receive()
-```
-
-- **Source:** `../what/concepts/CONCURRENCY.md` (EDR-049)
-- **See also:** [Delegate](#delegate), [Sequence](#sequence)
 
 ### Collection Literal
 
@@ -258,39 +242,6 @@ fun max(comptime T: type + Comparable, a: T, b: T) -> T
 - **Source:** `../what/concepts/COMPILE_TIME_EXECUTION.md`, EDR-031
 - **See also:** [Combinator](#combinator), [Core Language](#core-language), [Macro](#macro)
 
-### Context Parameter
-
-A function parameter that is resolved automatically from the enclosing
-scope rather than passed explicitly at the call site. In Orthon, context
-parameters use the `require`/`using` dual-keyword model: `require`
-declares a context dependency in a function or class signature, and
-`using` provides the value at the call or construction site. This
-replaces the single-keyword `using`/`using` model from EDR-037 with
-an unambiguous keyword split (EDR-081).
-
-```orthon
-fun process(order_id: Int) require Database db, Logger log -> Receipt
-process(42) using prod_db, prod_log
-```
-
-- **Source:** `../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081), EDR-037
-- **See also:** [Dependency Slot](#dependency-slot), [Implicit Context Flow](#implicit-context-flow)
-
-### Correctness by Construction (CbC)
-
-A cross-cutting pattern in which the language makes invalid states
-*structurally impossible to express*, so a program that compiles is
-already correct with respect to the invariants the type system can
-capture. Orthon realizes CbC through the composition of orthogonal
-mechanisms: ownership + move semantics (invariants become local and
-provable), value semantics by default, immutable-by-default bindings,
-ADTs with exhaustive `match`, literal types, `Option`/`Result`, and
-contracts. CbC is a *documented pattern*, not a design principle
-(`DESIGN_PRINCIPLES.md` is locked).
-
-- **Source:** `../how/concepts/research/important/CORRECTNESS_BY_CONSTRUCTION.md`, [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation)
-- **See also:** [Invariant Classification](#invariant-classification), [Constrained Type](#constrained-type)
-
 ---
 
 ## D
@@ -317,42 +268,34 @@ A construct that transforms data from one representation to another. Modifiers e
 ### Data Operations Primitive
 
 A primitive block whose primary responsibility is transforming, accessing,
-or controlling data rather than constructing it. The six Data Operations
+or controlling data rather than constructing it. The seven Data Operations
 primitives are `assignment`, `function`, `call`, `attribute access`,
-`scope`, and `reference`. Distinguished from Data Primitives which
-produce or structure data.
+`scope`, `reference`, and `execution_context`. Distinguished from Data
+Primitives which produce or structure data.
 
 - **Source:** `../what/PRIMITIVE_BLOCKS.md`
 - **See also:** [Data Primitive](#data-primitive), [Primitive Block](#primitive-block), [Data Modifier](#data-modifier)
 
-### Default Value
-
-A value assigned to a function or constructor parameter when no argument
-is provided at the call site. Default values are ordinary expressions
-evaluated at call time. Combined with named parameters, they eliminate
-telescoping-constructor anti-patterns and reduce overload explosion.
-In Orthon, default values are part of the general function call model
-(not a constructor-specific mechanism).
-
-```orthon
-fn connect(host: String, port: Int = 80, useSsl: Bool = false)
-connect(host: "example.com")    # port defaults to 80, useSsl to false
-```
-
-- **Source:** `../what/concepts/OBJECT_INITIALIZATION.md` (EDR-054), `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065)
-- **See also:** [Named and Optional Parameters](#named-and-optional-parameters), [Object Initialization](#object-initialization)
-
 ### Delegate
 
-A concurrent execution context in Orthon's concurrency model. Created with the `delegate` keyword (or the `act` modifier on a type declaration), a delegate owns isolated state and communicates via message passing. Internally, each delegate is implemented as an actor with a mailbox and single-threaded message processing, but the programmer never writes `actor` or manages mailboxes directly.
+An **actor context constructor** in the unified Invocation model
+(EDR-085): `delegate(obj)` wraps a state-owning object into a serialised
+execution context (mailbox). It always wraps an object — bare contexts
+do not exist. Submissions use the single-owner operator `ctx <- fn(args)`
+(serialised, in order) and return `void`; the owner's state is read via
+`take(ctx)`. The actor-with-mailbox implementation is internal — the
+programmer never writes `actor` or manages mailboxes directly. `delegate`
+is a Level 2 constructor over the `execution_context` primitive, not a
+keyword.
 
 ```orthon
 let counter = delegate(Counter(0))
-counter <- increment()    # asynchronous message send
+counter <- increment()    # invocation in context — serialised
+let state = take(counter) # move the owned state out
 ```
 
-- **Source:** `../what/concepts/CONCURRENCY_MODEL.md`, EDR-033
-- **See also:** [Exclusive Access](#exclusive-access), [Foreign Function Interface (FFI)](#foreign-function-interface-ffi)
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`, EDR-085 (supersedes `../what/concepts/CONCURRENCY_MODEL.md`, EDR-033)
+- **See also:** [Execution Context](#execution-context), [Invocation in Context](#invocation-in-context), [Take](#take)
 
 ### Deferred Invocation
 
@@ -364,28 +307,8 @@ Awaiting it (`await(ctx)`) yields until the computation is ready. The exact
 type name is deferred to Phase 5; the Core Language commits to the concept,
 not the name.
 
-- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (OQ2 Resolution)
-- **See also:** [Delegate](#delegate), [Await](#await), [Future](#future)
-
-### Dependency Slot
-
-A class-level `require` declaration that groups shared context
-dependencies for all methods in a class, filled per-instance at
-construction time. Dependency slots carry a compile-time initialization
-guarantee (no `null`, no uninitialized state) and enable prod/test
-differentiation at instance granularity.
-
-```orthon
-class UserService require Database db, Logger log:
-    fun find_user(id: Int) -> Option[User]
-        // db and log are available without redeclaration
-
-let prod_svc = UserService(using prod_db, prod_log)
-let test_svc = UserService(using test_db, test_log)
-```
-
-- **Source:** `../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081)
-- **See also:** [Context Parameter](#context-parameter), [Implicit Context Flow](#implicit-context-flow)
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (OQ2 Resolution, EDR-085)
+- **See also:** [Delegate](#delegate), [Await](#await), [Execution Context](#execution-context)
 
 ### Data Primitive
 
@@ -592,18 +515,6 @@ index at `decision_records/INDEX.md`.
 - **Source:** `../how/decision_records/process/EDR-001-edr-system.md`
 - **See also:** [Architecture](#architecture), [Decision Validation](#decision-validation)
 
-### Emergence
-
-The property by which system-level capabilities arise from the
-composition of orthogonal primitives rather than being explicitly
-added as special cases. Emergence is the adequacy test for Orthon's
-architecture: a capability that must be engineered in — rather than
-emerging from composition — signals either an inadequate design or an
-incomplete primitive set.
-
-- **Source:** `../how/architecture/FITNESS_FUNCTIONS.md` § Emergence / Decomposability, `../how/DESIGN_PRINCIPLES.md` § Orthogonality
-- **See also:** [Composition (of primitives)](#composition-of-primitives), [Orthogonality](#orthogonality), [Minimal Core](#minimal-core)
-
 ### Exclusive Access
 
 The requirement that mutation may only proceed when no other live
@@ -720,6 +631,24 @@ cases.
 - **Source:** `../what/concepts/PATTERN_MATCHING.md` § Model (EDR-025)
 - **See also:** [Pattern Matching](#pattern-matching), [Pattern Matching Dispatch](#pattern-matching-dispatch), [Option Type](#option-type)
 
+### Execution Context
+
+The primitive that executes an [Invocation](#invocation) according to a
+policy. Created by a constructor: `defer(obj)` (coroutine), `delegate(obj)`
+(mailbox), `spawn()` (thread pool), `fork()` (process pool). A context owns
+zero or one state object; destruction is deterministic (the owned value
+drops per Ownership/Lifetime). Pending stateless work on `spawn`/`fork`
+must be resolved explicitly (`next()`/`stop()`) before destruction.
+
+```orthon
+let pool = spawn()
+pool |> fetch(url)      # distribute to stateless workers
+let data = grab(pool)   # materialise
+```
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`
+- **See also:** [Invocation](#invocation), [Invocation in Context](#invocation-in-context), [Delegate](#delegate), [Deferred Invocation](#deferred-invocation)
+
 ### Execution Descriptor
 
 A declarative, first-class manifest of what a program requires to
@@ -820,22 +749,6 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 ## F
 
-### Frame Condition
-
-The set of memory locations a computation is allowed to modify — the
-*absence* side of a function contract. A postcondition (`ensures`)
-states what a function guarantees; the frame condition states what it
-does *not* touch. In Orthon, the declaration kinds already provide a
-coarse frame condition on `self` (`fun` and `new` never mutate `self`;
-`proc` does). The residual case — free functions and non-`self` state
-(globals, I/O, dependency slots) — is the subject of the
-[`FRAME_CONDITIONS.md`](../how/concepts/research/deferrable/FRAME_CONDITIONS.md)
-hypothesis, which proposes a `@modifies` doc annotation rather than a
-language keyword. Grounded in Separation Logic's spatial separation.
-
-- **Source:** `../how/concepts/research/deferrable/FRAME_CONDITIONS.md`, [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation)
-- **See also:** [Contract (Design by Contract)](#contract-design-by-contract)
-
 ### For Loop
 
 The iteration construct in Orthon: `for item in sequence`. The only loop
@@ -867,22 +780,17 @@ Orthon's type system and memory model and those of foreign languages.
 
 ### Future
 
-The return type of an `async` function. `Future<T>` represents a value
-of type `T` that may not be available yet. Futures are first-class values
-— they can be stored, passed, and combined without forcing evaluation.
+> **⚠️ SUPERSEDED — EDR-085 (Execution Context Invocation).**
+> `Future<T>` as the return type of `async` functions is eliminated with
+> the colouring model. Its role is absorbed by the **deferred
+> invocation** — the suspendable computation returned by a `defer`
+> context submission. Retained here for historical reference.
 
-```orthon
-let f = async fetch(url)     # Future[String], no suspension
-let result = await f         # suspend, unwrap to String
-```
+The former return type of an `async` function. `Future<T>` represented a
+value of type `T` that may not be available yet.
 
-Key properties: `await` resolves a `Future` to its value; calling an
-`async` function without `await` produces a `Future` without suspension
-(colourless model); `Future` is single-subscriber by default (one consumer
-can await it).
-
-- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
-- **See also:** [Async](#async), [Await](#await), [Spawn](#spawn)
+- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047, superseded by EDR-085)
+- **See also:** [Deferred Invocation](#deferred-invocation), [Await](#await), [Async](#async)
 
 ### Flow-Sensitive Narrowing
 
@@ -984,28 +892,23 @@ Generator expressions are lazy by default — they produce an
 - **Source:** `../what/concepts/GENERATORS.md` (EDR-050)
 - **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence)
 
+### Generator Protocol
+
+The materialisation protocol for stateless worker contexts (`spawn()` /
+`fork()`) in the unified Invocation model (EDR-085). Each submission
+joins the context's generator stream; results are read with `next()`
+(one result at a time) or `grab`/`gather` (StdLib sugar over the
+protocol); pending work is cancelled with `stop()`. Destroying a
+`spawn`/`fork` context with unresolved work is a program error — work
+must be resolved explicitly (`next()`/`gather()`) or cancelled
+(`stop()`).
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (EDR-085, OQ4 Resolution)
+- **See also:** [Execution Context](#execution-context), [Spawn](#spawn), [Generator](#generator)
+
 ---
 
 ## I
-
-### Invariant Classification
-
-A three-tier taxonomy of the invariants a language can enforce, defined
-in [`MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md`](../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md):
-
-1. **Tier 1 — Type-level invariants:** proven by the compiler (literal
-types, ADTs with exhaustive `match`, ownership, immutable-by-default).
-2. **Tier 2 — Contract-level invariants:** verified at debug/test time
-via `requires`/`ensures`/`invariant`. Constrained Types (EDR-080)
-straddle Tiers 1–2: declared at the type level, enforced at runtime
-boundaries.
-3. **Tier 3 — External invariants:** outside the language ("this list is
-sorted"), verified by tests or external tools.
-
-Correctness by Construction is strongest at Tier 1.
-
-- **Source:** `../how/concepts/research/essential/MAKE_ILLEGAL_STATES_UNREPRESENTABLE.md` § Invariant Classification
-- **See also:** [Correctness by Construction (CbC)](#correctness-by-construction-cbc), [Constrained Type](#constrained-type), [Contract (Design by Contract)](#contract-design-by-contract)
 
 ### Implicit Context Flow
 
@@ -1128,6 +1031,31 @@ trait IntoIterator[T]
 
 - **Source:** `../what/concepts/ITERATOR_PROTOCOL.md` § IntoIterator[T] for Collections
 - **See also:** [Iterator Protocol](#iterator-protocol), [Generator](#generator)
+
+### Invocation
+
+The operation of calling a target with arguments. Performed either
+immediately via the [call](#call) primitive (no context), or within an
+[Execution Context](#execution-context) by submitting via the operator
+family — an [Invocation in Context](#invocation-in-context). Functions
+are **colourless**: the same function can be invoked in any context
+without modification.
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`
+- **See also:** [call](#call), [Execution Context](#execution-context), [Invocation in Context](#invocation-in-context)
+
+### Invocation in Context
+
+An invocation submitted to an [Execution Context](#execution-context)
+via the submission operator family: `ctx <- fn(args)` (submit to a
+single owner — serialised) or `ctx |> fn(args)` (distribute to
+stateless workers — parallel; glyph provisional, Phase 5). Uses both
+the `call` and `execution_context` primitives: the operator encodes the
+ownership relationship; the context constructor determines the
+execution policy.
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (OQ5 Resolution)
+- **See also:** [Invocation](#invocation), [Execution Context](#execution-context), [call](#call)
 
 ### Iterator Protocol
 
@@ -1349,16 +1277,6 @@ connect(host: "example.com", useSsl: true)    # named, skip port
 - **Source:** `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065)
 - **See also:** [Derive](#derive), [Macro](#macro), [Object Initialization](#object-initialization)
 
-### Named Parameter
-
-A function or constructor parameter that can be referenced by name at
-the call site, enabling readable invocations and arbitrary argument
-order. In Orthon, named parameters are part of the general function call
-model and desugar to positional calls via the macro layer (EDR-029).
-
-- **Source:** `../what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md` (EDR-065), `../what/concepts/OBJECT_INITIALIZATION.md` (EDR-054)
-- **See also:** [Named and Optional Parameters](#named-and-optional-parameters), [Default Value](#default-value)
-
 ### Named Before Symbolic
 
 Every symbolic operator must have an equivalent named function. Symbols improve brevity; named functions improve readability. Both express the same semantics.
@@ -1424,20 +1342,6 @@ Each language construct solves exactly one problem and combines freely with othe
 ---
 
 ## P
-
-### Parse, Don't Validate
-
-An idiom for replacing boolean validation with parsing into a more
-precise type, so the type itself becomes the witness of validity (the
-antidote to Boolean Blindness). Instead of `isValidEmail(s) -> Bool`,
-write `parseEmail(s) -> Option<Email>`: the compiler then enforces
-handling of both outcomes (`match` on `Some`/`None`) and downstream code
-receives an `Email` that is valid by construction. Realized through
-ADTs, `Option`/`Result`, exhaustive `match`, and Constrained Types
-(EDR-080).
-
-- **Source:** `../notes/parse-dont-validate-idiom.md`, [`CONSTRAINED_TYPES.md`](../what/concepts/CONSTRAINED_TYPES.md)
-- **See also:** [Boolean Blindness](#boolean-blindness), [Constrained Type](#constrained-type), [Option Type](#option-type)
 
 ### Policy
 
@@ -1515,55 +1419,6 @@ Program + Execution Descriptor
 ---
 
 ## R
-
-### Range
-
-A first-class value type describing a contiguous run of integers.
-`a..b` is **inclusive-inclusive**: `1..N` produces N elements
-(1, 2, …, N) — the *only* range semantic in the language (EDR-082 norm).
-The `..=` spelling is eliminated. `range(a, b)` is the named canonical
-form, equivalent to `a..b`. A `Range` implements `IntoIterator[Int]`, so
-it drives `for` loops and combinator chains directly. Empty ranges
-(`end < start`, e.g. `1..0`) are values with zero elements.
-
-- **Source:** `../what/concepts/RANGE.md` (EDR-083)
-- **See also:** [Range Literal](#range-literal), [Strided Range](#strided-range), [Slice](#slice), [Iterator Protocol](#iterator-protocol)
-
-### Range Literal
-
-The `a..b` syntax producing a [Range](#range) value. The literal is a
-**Language** construct (compiler-recognized; participates in `@get`
-indexing and `for` desugaring); the `Range` type and `range(a, b)` named
-constructor are **Standard Library**.
-
-- **Source:** `../what/concepts/RANGE.md` (EDR-083)
-- **See also:** [Range](#range), [Slice](#slice)
-
-### Strided Range
-
-A [Range](#range) with a step, produced by `.step(n)`. It is
-non-contiguous: iterating yields every n-th element; applied to indexing
-it yields an iterator of elements, never a contiguous `Span` view.
-`step(0)` is a compile-time error; a negative step iterates in
-descending direction.
-
-- **Source:** `../what/concepts/RANGE.md` § Step (EDR-083)
-- **See also:** [Range](#range)
-
-### Refinement Type
-
-A type carrying a value-range or predicate constraint, e.g.
-`type Port = Int requires v in 1..65535`. Orthon's accepted pragmatic
-form is **Constrained Types** (EDR-080): a nominal type with a
-runtime-enforced predicate at entry boundaries (`Age(200)` is a
-compile-time warning plus runtime error). The open hypothesis
-([`REFINEMENT_TYPES.md`](../how/concepts/research/deferrable/REFINEMENT_TYPES.md))
-is **static refinement** — compile-time rejection of invalid literals
-for a decidable predicate subset (ranges, positivity, non-empty),
-moving Tier-2 enforcement to Tier-1 proof without an SMT solver.
-
-- **Source:** `../how/concepts/research/deferrable/REFINEMENT_TYPES.md`, [`CONSTRAINED_TYPES.md`](../what/concepts/CONSTRAINED_TYPES.md) (EDR-080)
-- **See also:** [Constrained Type](#constrained-type), [Invariant Classification](#invariant-classification)
 
 ### Primitive Block
 
@@ -1726,18 +1581,6 @@ information, while `Option` represents mere absence.
 
 ## S
 
-### Slice
-
-The result of applying a [Range](#range) to a random-access composite:
-`items[1..k]` — the multi-element form of `a[i]` (indexing). A
-contiguous slice never copies: slicing a `Span` or array-backed
-collection produces a non-owning `Span` view. `len(slice) == b - a + 1`;
-an empty slice (`end < start`) is a value. A strided slice yields an
-iterator, never a `Span`.
-
-- **Source:** `../what/concepts/SLICE.md` (EDR-084)
-- **See also:** [Range](#range), [Iterator Protocol](#iterator-protocol), [Combinator](#combinator)
-
 ### Semantic Dimension
 
 One of six independent, orthogonal facets a Semantic Model uses to
@@ -1808,46 +1651,30 @@ A fundamental type representing a sequence of values produced over time. Unlike 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Sequence and the `emit` Keyword
 - **See also:** [Representation](#representation)
 
-### Stream
-
-A push-based observable type (`Stream<T>`) that emits values to
-subscribed consumers asynchronously. Streams are the dual of pull-based
-sequences: in a pull model the consumer calls `next()`, while in a push
-model the producer calls `emit()` and the consumer reacts via a
-subscription callback. Streams build on the delegate model (EDR-033)
-and channels (EDR-049) for async delivery.
-
-```orthon
-let stream = Stream<Int>.create()
-let sub = stream.subscribe(fn (v) print(v))
-stream.emit(1)
-stream.emit(2)
-stream.complete()
-```
-
-- **Source:** `../what/concepts/PUSH_STREAMS.md` (EDR-051)
-- **See also:** [Sequence](#sequence), [Channel](#channel), [Delegate](#delegate)
-
 ### Spawn
 
-A keyword that creates a new concurrent task running in parallel with
-the current one. `spawn` makes parallelism syntactically visible —
-without it, `async` functions execute sequentially in the current
-context.
+> **⚠️ SUPERSEDED as a keyword — EDR-085 (Execution Context Invocation).**
+> `spawn` is no longer a keyword; it is a **context constructor** that
+> creates a stateless worker context (`spawn()`) for parallel execution
+> over shared memory. `fork()` is the isolated-memory (process) variant.
+> Submissions use the distribution operator; results are materialised
+> via the [Generator Protocol](#generator-protocol)
+> (`next()`/`stop()`, `grab`/`gather`). Captured data must satisfy the
+> `Send` marker trait (compile time).
+
+A context constructor that creates a new stateless worker context running
+in parallel with the current one:
 
 ```orthon
-let t1 = spawn async loadImage("a.jpg")
-let t2 = spawn async loadImage("b.jpg")
-let img1 = await t1
-let img2 = await t2
+let pool = spawn()
+pool |> loadImage("a.jpg")
+pool |> loadImage("b.jpg")
+let img1 = grab(pool)
+let img2 = grab(pool)
 ```
 
-`spawn` returns `Task<T>` (which is also a `Future<T>`). Tasks can be
-cancelled via `.cancel()`. Tasks within a `scope` block are
-automatically managed.
-
-- **Source:** `../what/concepts/ASYNC_AWAIT.md` (EDR-047)
-- **See also:** [Async](#async), [Scope (Structured Concurrency)](#scope-structured-concurrency), [Future](#future)
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (EDR-085)
+- **See also:** [Execution Context](#execution-context), [Invocation in Context](#invocation-in-context), [Generator Protocol](#generator-protocol)
 
 ### Stable Mental Model
 
@@ -1919,6 +1746,23 @@ named constant, or iota construct.
 ---
 
 ## T
+
+### Take
+
+The context-specific **materialisation function** for a `delegate`
+(actor) [Execution Context](#execution-context): `take(ctx)` moves the
+owned state object out of the context. It is one of the context-defined
+extraction forms (with `await` for `defer`, `next`/`stop` for
+`spawn`/`fork`); a named function, not an operator.
+
+```orthon
+let counter = delegate(Counter(0))
+counter <- increment()
+let state = take(counter)   # move the owned state out
+```
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md` (EDR-085)
+- **See also:** [Execution Context](#execution-context), [Delegate](#delegate), [Await](#await)
 
 ### Trait
 
@@ -2099,6 +1943,24 @@ Distinct from [Semantic Equality](#semantic-equality) (`==`, user-defined) and [
 ---
 
 ## U
+
+### Using
+
+Pure syntactic sugar over context + scope + deterministic destructor
+(EDR-085). `using x = expr:` desugars to `delegate(expr)` + block +
+scope-bound destruction. It introduces no new semantics — resource
+management is the same Invocation pattern as coroutines, actors, and
+threads. `SCOPED_RESOURCE_LIFECYCLE.md` is superseded by this model.
+
+```orthon
+using file = open("data.txt"):
+    let content = file.read_all()
+    process(content)
+# desugars to delegate(open("data.txt")) + block + scope-bound destruction
+```
+
+- **Source:** `../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`, EDR-085
+- **See also:** [Execution Context](#execution-context), [Delegate](#delegate), [Deferred Invocation](#deferred-invocation)
 
 ### Union Type
 

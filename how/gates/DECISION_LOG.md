@@ -5810,3 +5810,143 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 `items[1..k]` maps directly to mathematics; a single inclusive norm removes off-by-one ambiguity; empty/strided edge cases are statically describable.
 
 **Verdict: Pass.**
+
+---
+
+## Entry: EXECUTION_CONTEXT_INVOCATION
+
+**Date:** 2026-08-06
+**Artifact validated:** [`how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`](../../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md)
+**Decision recorded as:** [EDR-085](../decision_records/architecture/EDR-085-execution-context-invocation.md) — accepted 2026-08-06 (converged through B1–B6)
+**Pipeline applied:** Full 10-question Decision Pipeline per `DECISION_PIPELINE.md`, then Concept Design Review (OQ2–OQ8 resolutions), then all 7 Decision Validation gates.
+
+### Pipeline Q&A
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem? | Fragmentation of invocation mechanisms (`call` / `delegate send` / `spawn`) plus coloured functions (`async`/`await`). The programmer decides *how* to execute before writing *what*. |
+| Q2 | Language/StdLib/Policy? | **Language (Core).** Context constructors need compiler/runtime support (state machine, mailbox isolation, thread/process); operators are language syntax; `Send`/`Move` are compile-time type checks. Materialisation (`await`/`take`/`next`/`stop`) and `using` are StdLib/sugar. |
+| Q3 | Existing primitives? | No. Execution Context is a new irreducible entity (execution policy, state, lifecycle) — not expressible by composing the 9 primitives. |
+| Q4 | Violates principle? | No — strengthens Orthogonality, Minimal Core, Explicitness, Composition over Exceptions; colourless functions. Syntax conflicts (`<=`, `.`, `->`) resolved in the hypothesis. |
+| Q5 | New semantics? | **Yes.** Execution Context, submission operators, constructor lifecycle/destructor contract, deferred invocation, `Send`/`Move` marker traits. `using` is sugar. |
+| Q6 | Composition? | Core — no (state machine, mailbox, thread/process are new mechanisms). `using` — yes. Materialisation — yes. |
+| Q7 | Sugar over primitives? | Partially. `using` is pure sugar. Operators and contexts are not sugar. |
+| Q8 | Optimisation? | No — semantic execution model. Worker-shutdown manner is a `DEFAULT_STRATEGY` concern (Phase 7). |
+| Q9 | Backward compat? | Pre-v1.0, no released code. Broad retroactive spec impact (see C-003). |
+| Q10 | Worth adding? | **Yes.** Central semantic foundation: unifies three mechanisms, eliminates colouring, unifies resource management. |
+
+**Classification per D-03:** Language (Core), Level 1/2 boundary — `execution_context` is a new Level 1 primitive (10th); operators/constructors are Level 2; materialisation is StdLib.
+
+### Primitive Decomposition Check — RESOLVED (B1)
+
+**Finding.** The hypothesis claims `call` “is no longer invocation of a declared function — it is Invocation, parameterised by Execution Context”. Against `PRIMITIVE_BLOCKS.md` § 3.2.3 this changes an accepted primitive (EDR-016, 9 primitives).
+
+**Resolution (2026-08-06) — variant A adopted:**
+- `execution_context` added as the **10th primitive**: *“Environment that executes an invocation according to a policy. Created by a constructor (`defer`/`delegate`/`spawn`/`fork`); owns zero or one state object; deterministic destruction; pending stateless work on `spawn`/`fork` must be resolved explicitly (`next()`/`stop()`).”*
+- `call` remains the **immediate** invocation primitive — no context, no operator. It is **not** parameterised by context. `fn(args)` is the base case of Invocation.
+- **Invocation in context** (`ctx <- fn(args)` single-owner; `ctx |> fn(args)` stateless — glyph Phase 5) submits the invocation to an Execution Context; uses both primitives.
+- Composition formula: `fn(args)` ≡ `call(fn, args)` (no context); `ctx <- fn(args)` ≡ `call(fn, args)` executed by `ctx` (serialised); `ctx |> fn(args)` ≡ `call(fn, args)` executed by `ctx` (parallel).
+- Rationale: Execution Context is irreducible (compiler-level semantics, not expressible via the 9); variant B (hidden parameter) violates `call`'s single responsibility.
+- GLOSSARY updated (B1): `call`, `Execution Context`, `Invocation`, `Invocation in Context` added.
+
+### Minimality Re-proof — RESOLVED (B2)
+
+- `execution_context` necessary: removing it makes `defer`/`delegate`/`spawn`/`fork` inexpressible; no existing primitive provides an execution environment with a policy.
+- `call` still necessary: immediate base case; context answers *how*, not *what*.
+- Remaining 8 unaffected (EDR-016 proof stands).
+- No hidden primitives: mailbox/scheduler/thread pool are Strategy mechanisms (Phase 7); generator protocol is `function` + `call` composition.
+
+### Gate Validation
+
+**Gates applied:** All 7 (a new language construct — 10th primitive — requires the full catalogue per `DECISION_VALIDATION.md` § Gate Selection).
+
+#### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer (and code-generating LLM) I want one way to invoke a computation — immediate, deferred, or parallel — without choosing *how* before writing *what*, and a schema-visible execution context so generation doesn't guess.
+
+**Press release.** *Orthon eliminates coloured functions. No `async fn`, no `spawn` keyword, no `delegate send` — one Invocation operation and a context to control how it runs. `defer(obj)` for coroutines, `delegate(obj)` for actors, `spawn()` for threads, `fork()` for processes. One colourless function works in every context. `using x = open(...)` is sugar over the same context.*
+
+**Verdict: Pass.** Problem stated in programmer terms; serves Architectural Integrity, Comfortable by Construction, and LLM Readiness pillars; concrete examples in the hypothesis.
+
+#### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** Invocation; call (immediate); Execution Context; invocation in context (`<-` single-owner, distribution stateless); `defer`/`await`; `delegate`/`take`; `spawn`/`fork` with `next`/`stop`; `using` sugar. Each single-meaning.
+
+**Counterexamples.** `fn(args)` inside defer → fixed inline call (OQ6); `<-` on spawn → compile error; bare `delegate()` → does not exist (OQ5); `await` on spawn → compile error (OQ4).
+
+**Follow the contradiction.** Two operators vs “one concept per syntax” → the two operators are one axis (ownership relationship: single owner vs stateless workers); the operator set is closed (2), the constructor set is open. Not N-dimensional.
+
+**Verdict: Pass.** OQ2–OQ8 remove all contradictions found.
+
+#### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** Execution Context is minimal — not expressible via composition of the 9 primitives.
+
+**Experiment.** Coroutine = function + saved stack? `function` has no suspend/resume; `scope` defines a lexical boundary, not an execution policy; none of the 9 governs *how* `call` executes → inexpressible; the 10th primitive is justified.
+
+**Verdict: Pass** (flag: 4 constructors grow the syntax surface, but they are Level 2 patterns, not primitives).
+
+#### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**Premises.** `execution_context` = Level 1 primitive; operators = Level 2 syntax (Phase 5); constructors = Level 2; materialisation = StdLib (with possible compiler intrinsics).
+
+**Deductions.** The context primitive references no Level 2 construct; operator-context pairing is checked at compile time; layers stay clean.
+
+**Verdict: Flag** (retroactive amendment of 6+ accepted documents — C-003; not a layer violation, applied at EDR-085).
+
+#### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+**Apparent contradiction.** Execution Context defines an execution policy (coroutine/thread/process) — seems strategy-dependent; must be strategy-agnostic.
+
+**Separation.** The semantic definition (“environment that accepts an invocation and executes it with a policy”) is strategy-independent; concrete contexts (`defer`/`delegate`/`spawn`/`fork`) are Level 2 patterns realised per Strategy (OS threads / cooperative scheduler / work-stealing pool).
+
+**Verdict: Pass.** Embedded can implement `spawn` via cooperative scheduling; the contract never requires a specific mechanism.
+
+#### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+**One sentence.** “Create a context, submit an invocation, take the result — coroutine, actor, or thread, it is the same shape.”
+
+**Remove one thing.** Removing Execution Context returns three mechanisms + coloured functions + ununified resource management.
+
+**Evolution.** New contexts (GPU, cluster) = a new constructor only, no new operator; `detach()`/`peek()`/out-of-order wait are additive.
+
+**Verdict: Flag** (two-operator family = documented trade-off; pre-freeze reversible).
+
+#### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Structural analysis.** `fn(args)` universal; `ctx <- fn(args)` intuitive; named constructors (not symbols); `using` sugar familiar.
+
+**Schema round-trip.** Execution Context serialisable as `Ctx<Policy, Owner>`; operators in the grammar; `Send`/`Move` as marker traits.
+
+| Criterion | Verdict |
+|---|---|
+| Schema-serializable | Flag — distribution glyph not finalised (Phase 5) |
+| Predictable generation (≥90%) | Pass |
+| No hallucination surface | Pass — `.` vs `<-` syntactically distinct |
+| Strategy-aware default | Pass — immediate call always valid |
+| Self-correctable | Pass — wrong operator/context pairing is a compile error |
+
+**Verdict: Flag** (only the distribution glyph, deferred Phase 5).
+
+### Convergence Check (pre-EDR gate)
+
+| Check | Status |
+|-------|--------|
+| Syntax reviewed | ✅ `.` vs `<-` distinct; `<=` rejected; glyph deferred (Phase 5) |
+| Edge cases probed | ✅ OQ2–OQ8 (counterexamples, composition, mutation, destructor) |
+| Desugaring verified | ✅ `using` desugars to context + scope + destructor |
+| User/stakeholder agrees | ✅ B1–B6 locked (2026-08-06) |
+| No remaining ambiguity | ✅ B1 decomposition resolved; distribution glyph is a Phase 5 item, not a semantic blocker |
+
+### B-Item Resolutions (2026-08-06)
+
+- **B1 (decomposition):** RESOLVED — variant A: `execution_context` = 10th primitive; `call` stays immediate; invocation-in-context uses both. GLOSSARY updated.
+- **B2 (minimality re-proof):** RESOLVED — 10-primitive set minimal; no hidden primitives.
+- **B3 (retroactive amendment):** RESOLVED — C-003 registered in `CONFLICT_REGISTRY.md`; amendments applied at EDR-085 acceptance.
+- **B4 (distribution glyph):** deferred to Phase 5 — non-blocking; `<=` rejected; `|>` provisional, `<||` leading candidate.
+- **B5 (gate impact):** RESOLVED — 7 Pass, 0 Fail, 3 non-blocking flags; EDR-016 verdicts not overturned.
+- **B6 (decision journal):** this entry + Decision Journal row in `DECISION_VALIDATION.md`.
+
+### Overall
+
+**Verdict: CONVERGED (2026-08-06).** Pre-filter → **ACCEPT as a Language (Core) decision, Level 1/2**. Validation gates: 4 Pass, 3 Flag, 0 Fail — all flags non-blocking (constructor surface, two-operator debt, distribution glyph). Ready to draft EDR-085, which applies the C-003 cross-concept amendments.

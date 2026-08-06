@@ -87,6 +87,7 @@
 | EDR-082 | Architecture | [1-Based Indexing — Ordinal Collection Indexing](architecture/EDR-082-1-based-indexing.md) | Accepted | 2026-08-05 | — |
 | EDR-083 | Architecture | [Range — Inclusive-Inclusive Range as a First-Class Value](architecture/EDR-083-range.md) | Accepted | 2026-08-05 | Supersedes range text of EDR-022/EDR-053 |
 | EDR-084 | Architecture | [Slice — Range Applied to a Random-Access Composite](architecture/EDR-084-slice.md) | Accepted | 2026-08-05 | — |
+| EDR-085 | Architecture | [Execution Context Invocation — Unified Invocation Model](architecture/EDR-085-execution-context-invocation.md) | Accepted | 2026-08-06 | Supersedes EDR-033, EDR-047; adds 10th primitive |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -220,4 +221,4 @@
 
 ---
 
-*Last updated: 2026-08-05* (EDR-083 Range + EDR-084 Slice added — Range/Slice package; accepted concepts RANGE, SLICE. Prior: EDR-082 added — 1-Based Indexing, Architecture. By Category table backfilled with EDR-079 through EDR-081. Prior: EDR-075 through EDR-078 added — PROTOTYPE, SIGNIFICANT_WHITESPACE, DYNAMIC_TYPING, CLASS_OR_STRUCTURE_AS_PRIMARY_COMPOSITION rejected. See also: EDR-063 through EDR-074 added in prior wave)
+*Last updated: 2026-08-06* (EDR-085 added — Execution Context Invocation, Architecture; supersedes EDR-033/EDR-047, adds 10th primitive; C-003 amendment applied — PRIMITIVE_BLOCKS 10 primitives, EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES/DECLARATIVE_CONSTRUCTS updated, DELEGATE rewritten, SCOPED_RESOURCE_LIFECYCLE superseded. Prior: EDR-083 Range + EDR-084 Slice — Range/Slice package. Prior: EDR-082 — 1-Based Indexing. By Category table backfilled with EDR-079 through EDR-081. See also: EDR-075 through EDR-078 rejected, EDR-063 through EDR-074 prior wave)

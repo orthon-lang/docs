@@ -1,10 +1,18 @@
 # Scoped Resource Lifecycle
 
+> **⚠️ SUPERSEDED — [EDR-085](../../../decision_records/architecture/EDR-085-execution-context-invocation.md) (Execution Context Invocation), 2026-08-06.**
+> This hypothesis is superseded. Resource management is the same
+> Invocation pattern as coroutines, actors, and threads: `using x = expr`
+> is pure syntactic sugar over context + scope + deterministic destructor
+> (desugars to `delegate(expr)` + block + scope-bound destruction), with
+> no new semantics. Retained for historical reference (the four-model
+> comparative analysis remains useful background).
+>
 > **⚠️ DRAFT — This document is a preliminary hypothesis derived from imperative crutch analysis.**
 > It has not passed Concept Design Review.
 >
 > **Source:** `imperative-crutch-resource-management.md`
-> **Last updated:** 2026-08-04 — expanded with four-model comparative analysis (D, Zig, Go, Rust).
+> **Last updated:** 2026-08-06 — superseded by EDR-085.
 
 ## Issue (Why)
 
@@ -250,6 +258,7 @@ Resources (files, sockets, locks, allocators) implement `Drop`. The compiler gua
 
 - Initial hypothesis derived from `imperative-crutch-resource-management.md` — no decisions recorded.
 - 2026-08-04: Four-model comparative analysis added (D, Zig, Go, Rust). The analysis surfaces the RAII-vs-explicit tension and the error-awareness question. No decision yet — this remains an open design question for Concept Design Review (Milestone 2).
+- 2026-08-06: **Superseded by EDR-085.** `using` is pure sugar over context + scope + deterministic destructor; resource management is the same Invocation pattern as coroutines/actors/threads. The RAII-vs-explicit question is resolved: context-scoped deterministic destruction, with `using` as the declarative form.
 
 ## Affected Documents
 

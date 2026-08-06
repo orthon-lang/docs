@@ -52,7 +52,7 @@ NOT as the primitive set itself. Primitives are categorized into:
 | Category | Responsibility | Primitives |
 |----------|---------------|------------|
 | **Data Primitives** | Producing or structuring data values | `literal`, `identifier`, `pack/unpack` |
-| **Data Operations Primitives** | Transforming, accessing, or controlling data | `assignment`, `function`, `call`, `attribute access`, `scope`, `reference` |
+| **Data Operations Primitives** | Transforming, accessing, or controlling data | `assignment`, `function`, `call`, `attribute access`, `scope`, `reference`, `execution_context` |
 
 The taxonomy is a classification aid, not a replacement for the primitive set.
 Two abstractions alone would be too coarse-grained for Phase 4 decomposition
@@ -168,10 +168,10 @@ new sorted() -> List        # transforming constructor
 | Field | Value |
 |-------|-------|
 | **Category** | Data Operations Primitive |
-| **Definition** | Invocation of a declared function. Triggers evaluation of a function body with supplied arguments. Unified syntax regardless of declaration form (named, anonymous, closure). |
+| **Definition** | **Immediate** invocation of a declared function. `fn(args)` triggers evaluation of a function body with supplied arguments now, in the current execution environment, with **no execution context and no operator**. `call` is the base case of [Invocation](GLOSSARY.md#invocation) (EDR-085); it answers only *what* to invoke, never *how* to execute it. Unified syntax regardless of declaration form (named, anonymous, closure). |
 | **Semantic dimensions** | **Evaluation** — triggers computation; the function's body is evaluated with the given arguments. **Lifetime** — function scope begins at call and ends at return; the call frame's lifetime is bounded by the call. |
-| **Orthogonal to** | `function` (declaration vs. invocation). `assignment` (call triggers computation that may produce a value; assignment binds that value — the two compose sequentially). |
-| **Composition** | Every function execution is a call. Recursion is call composed with itself. `()` is the call syntax per Semantic Purity. Call consumes literals, identifiers, and composite values as arguments. |
+| **Orthogonal to** | `function` (declaration vs. invocation). `execution_context` (call answers *what* to invoke; execution_context answers *how* to execute — together they form Invocation's two axes). `assignment` (call triggers computation that may produce a value; assignment binds that value — the two compose sequentially). |
+| **Composition** | Every immediate function execution is a call. Recursion is call composed with itself. `()` is the call syntax per Semantic Purity. Call composes with `execution_context` for invocation in context (`ctx <- fn(args)`, distribution operator) — see § 3.2.7. Call consumes literals, identifiers, and composite values as arguments. |
 
 ```orthon
 add(1, 2)               # named function call
@@ -235,6 +235,27 @@ fun len(s: &String) -> Int   # borrowing parameter
     return s@len()
 ```
 
+#### 3.2.7 `execution_context`
+
+| Field | Value |
+|-------|-------|
+| **Category** | Data Operations Primitive |
+| **Definition** | Environment that executes an invocation according to a policy. Created by a constructor (`defer(obj)` / `delegate(obj)` / `spawn()` / `fork()`); owns zero or one state object; deterministic destruction (the owned value drops per Ownership/Lifetime); pending stateless work on `spawn`/`fork` must be resolved explicitly (`next()`/`stop()`) before destruction. Added as the **10th primitive** by EDR-085. |
+| **Semantic dimensions** | **Evaluation** — controls *how* a computation is executed: immediately (no context), deferred (coroutine), serialised on an owner (actor), or distributed (thread/process). **Lifetime** — owns the execution environment's lifecycle; the wrapped object's lifetime is bound to the context, with deterministic destruction. |
+| **Orthogonal to** | `call` (call answers *what* to invoke — immediate, no context; execution_context answers *how* to execute — the policy and environment). `scope` (scope is a lexical boundary; execution_context is an execution environment with a policy — independent concerns). |
+| **Composition** | Composes with `call`: `fn(args)` ≡ `call(fn, args)` (no context); `ctx <- fn(args)` (single-owner, serialised) and the distribution operator (stateless workers, parallel; glyph Phase 5) are invocation in context and use both primitives. Constructors (`defer`/`delegate`/`spawn`/`fork`) are Level 2 patterns over this primitive (`function` + `call`); materialisation (`await`/`take`/`next`/`stop`/`grab`/`gather`) is StdLib. |
+
+```orthon
+let counter = delegate(Counter(0))   # context owns state (actor)
+counter <- increment()               # invocation in context — serialised
+
+let pool = spawn()                   # stateless worker context
+pool |> fetch(url)                   # invocation in context — parallel
+
+let task = defer(obj)                # coroutine context
+let result = await(task)             # materialise
+```
+
 ---
 
 ## 4. Exclusions and Decomposition
@@ -248,7 +269,7 @@ and the source document that justifies the decomposition.
 | `operator definition` | Syntactic sugar: `function` with a symbolic name | Symbols are brevity; named functions are the canonical form. The actual primitive is `function`. | [`DESIGN_PRINCIPLES.md`](../how/DESIGN_PRINCIPLES.md) § Named Before Symbolic, D-01 |
 | `struct` | Type-level convenience: `pack` + `identifier` + `scope` | Structs are data, not behaviour. The type keyword is a convenience that bundles pack composition, a named identifier, and a scope for member definitions. | [`STRUCT_AS_VALUE_TYPE.md`](../how/concepts/research/essential/STRUCT_AS_VALUE_TYPE.md), D-03 |
 | `class` | Type-level convenience: `pack` + `reference` + `scope` + `assignment` | Classes are reference types built on indirection. The class keyword bundles pack (field composition), reference (identity semantics), scope (member visibility), and assignment (field initialization). | [`CLASS_WITH_ACT.md`](../how/concepts/research/essential/CLASS_WITH_ACT.md), D-03 |
-| `delegate` | Execution policy: `reference` + `function` + ownership | Execution is orthogonal to declaration. Delegate composes a reference to a function with ownership semantics to define how something executes, not what it does. | [`DELEGATE.md`](../how/concepts/research/essential/DELEGATE.md), D-05 |
+| `delegate` (context constructors) | Execution policy: `execution_context` + `function` + `call` | `delegate`/`defer`/`spawn`/`fork` are Level 2 constructors over the `execution_context` primitive — they build a context with a policy, not new primitives. The policy is the primitive's semantic content. | [`EXECUTION_CONTEXT_INVOCATION.md`](../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md), EDR-085 |
 | `namespace` | Organizational: `identifier` + `scope` + visibility | Namespaces are naming convenience — a named scope with visibility rules. The identifier names the namespace; the scope defines its boundary; visibility controls access. | [`NAMESPACES.md`](../how/concepts/research/essential/NAMESPACES.md), D-05 |
 | `act` (isolation) | Concurrency modifier: `function` tag (built on `reference` + scope) | Act is a concurrency modifier on the function primitive — it tags a function as isolated, but the underlying mechanism is reference (access to shared state) and scope (lifetime boundaries). | [`CLASS_WITH_ACT.md`](../how/concepts/research/essential/CLASS_WITH_ACT.md) |
 | `act` fields | Isolated access: `reference` + scope | Fields marked `act` are accessed through a reference that enforces isolated (actor-style) access. The primitives are reference and scope; `act` is a policy annotation. | [`CLASS_WITH_ACT.md`](../how/concepts/research/essential/CLASS_WITH_ACT.md) |
@@ -438,8 +459,9 @@ Primitives compose according to these rules:
 | 7 | `attribute access` | Data Operations | Visibility |
 | 8 | `scope` | Data Operations | Visibility, Lifetime |
 | 9 | `reference` | Data Operations | Ownership, Lifetime |
+| 10 | `execution_context` | Data Operations | Evaluation, Lifetime |
 
-**Count:** 9 conceptual primitives (counting pack/unpack as one symmetric pair)
+**Count:** 10 conceptual primitives (counting pack/unpack as one symmetric pair)
 across two categories.
 
 ---
@@ -457,7 +479,7 @@ inexpressible), and documents any gaps found and their resolutions.
 
 1. **Essential tier (42 files)** — Verified individually by reading
    each file's Issue, Model, and Policy Footprint sections to confirm
-   its features decompose onto the 9 primitives. Files already consumed
+   its features decompose onto the 10 primitives. Files already consumed
    by Phase 2 or Phase 3 (20 files) were confirmed as accounted for.
    Compiler-infrastructure meta-concepts (2 files) were verified as
    acting *upon* primitive-level operations, not requiring new
@@ -544,7 +566,7 @@ primitives, not language constructs requiring new primitives.
 
 ### 10.3 Important Tier — Verification Results (36 files)
 
-Verified by category. All concepts decompose onto the 9 primitives.
+Verified by category. All concepts decompose onto the 10 primitives (see § 10.8 for the EDR-085 extension).
 
 | Category | Files | Core Decomposition Pattern | Gap? |
 |----------|-------|----------------------------|------|
@@ -580,12 +602,12 @@ not in the set. Key category patterns:
 | Misc | `ASYNC_LAMBDA.md`, `CUSTOM_OPERATORS.md`, `METADATA_ANNOTATIONS.md`, `OBJECTS_AND_SINGLETONS.md`, `PARTIAL_CLASSES.md` | Composition of existing primitives | None |
 
 **Result: All 54 deferrable-tier files decompose cleanly.**
-No deferrable concept requires a primitive not in the 9-primitive set.
+No deferrable concept requires a primitive not in the 10-primitive set.
 
 ### 10.5 Completeness Verification
 
 **The primitive set is complete.** Every concept in the research catalog
-(~132 files across all tiers) decomposes onto one or more of the 9
+(~132 files across all tiers) decomposes onto one or more of the 10
 primitives. No concept was found that requires an operation not
 expressible by the set.
 
@@ -605,13 +627,41 @@ make at least one known feature inexpressible:
 | `attribute access` | No field access, no method calls | `TRAITS.md` |
 | `scope` | No lexical boundaries, no lifetime management | Every block |
 | `reference` | No borrowing, no indirection, no class identity | `CLASS_WITH_ACT.md`, `DELEGATE.md` |
+| `execution_context` | No deferred/serialised/parallel execution — coroutines, actors, threads, processes (`defer`/`delegate`/`spawn`/`fork`) become inexpressible | `EXECUTION_CONTEXT_INVOCATION.md` (EDR-085) |
 
 ### 10.7 Gaps Found and Resolutions
 
-**No gaps found.** All ~132 concept research files decompose onto the
-9-primitive set. No missing primitive was discovered. The set is ready
-for Phase 4 (Derived Features) where each concept will receive a formal
-decomposition as part of its acceptance process.
+**No gaps found in the 9-primitive verification pass.** All ~132 concept
+research files decompose onto the 9-primitive set at the time of EDR-016.
+One gap was discovered post-acceptance during the Execution Context
+Invocation review: coroutines, actors, threads, and processes are
+inexpressible with the 9-primitive set. Resolved by adding
+`execution_context` as the 10th primitive (EDR-085) — see § 10.8.
+
+### 10.8 Post-Acceptance Amendment — 10th Primitive (EDR-085)
+
+**2026-08-06:** The primitive set was extended from 9 to 10 by the
+Execution Context Invocation decision
+([EDR-085](../how/decision_records/architecture/EDR-085-execution-context-invocation.md)).
+`execution_context` (§ 3.2.7) is an irreducible Data Operations primitive:
+an environment that executes an invocation according to a policy. The
+minimality proof is re-run for the 10-element set (`DECISION_LOG.md` §
+Entry: EXECUTION_CONTEXT_INVOCATION, B2):
+
+- `execution_context` necessary: removing it makes `defer`/`delegate`/
+  `spawn`/`fork` inexpressible — no existing primitive provides an
+  execution environment with a policy.
+- `call` remains necessary: the immediate base case of Invocation;
+  context answers *how*, not *what*.
+- The remaining 8 primitives are unaffected (EDR-016 proof stands).
+- No hidden primitives: mailbox, scheduler, and thread pool are Strategy
+  mechanisms (Phase 7); the generator protocol is `function` + `call`
+  composition.
+
+`call` is unchanged in scope — immediate invocation, no context, not
+parameterised by an Execution Context. CONCURRENCY_MODEL (EDR-033) and
+ASYNC_AWAIT (EDR-047) are superseded by the unified Invocation model
+(EDR-085).
 
 ---
 

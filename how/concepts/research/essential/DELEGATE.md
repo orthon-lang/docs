@@ -1,5 +1,15 @@
 # Delegate as an Execution Policy
 
+> **✅ SUPERSEDED & ABSORBED — [EDR-085](../../../decision_records/architecture/EDR-085-execution-context-invocation.md) (Execution Context Invocation), 2026-08-06.**
+> This hypothesis is superseded by the unified Invocation model.
+> `delegate(obj)` is retained, but as a **context constructor** over the
+> `execution_context` primitive (a Level 2 pattern), not a standalone
+> execution policy. The actor/mailbox execution it describes is now the
+> `delegate(obj)` Execution Context; submissions use the single-owner
+> operator `<-`; the owner's state is read via `take(ctx)`. Retained for
+> historical reference; the authoritative model is
+> [`EXECUTION_CONTEXT_INVOCATION.md`](EXECUTION_CONTEXT_INVOCATION.md).
+>
 > **⚠️ DRAFT — This document is a preliminary hypothesis.**
 >
 > This hypothesis proposes removing actors from the language surface.
@@ -574,3 +584,4 @@ lst.append(5)                   // OK (List restored)
 | 2026-07-26 | Hypothesis created. Actor removed from language concepts. `ACTORS.md`, `ACT_AS_ACTIVE_OBJECT.md`, `ACT_AS_FUNCTION.md` superseded by this hypothesis. |
 | 2026-07-26 | **Refinement:** `delegate` applies to state owners, not arbitrary code. State is the unit of serialization. Method-level delegation (`delegate(obj.method)`) is invalid — methods are operations on state, not state owners. Concurrency model tied to ownership model. |
 | 2026-07-26 | **Refinement:** Ownership integration — `delegate` takes ownership via `move`. Shadowing pattern: same variable name, type changes, operator changes to `<-`. `release` returns ownership. `OWNERSHIP.md` open question resolved. |
+| 2026-08-06 | **Superseded by EDR-085.** `delegate` retained as a context constructor (`delegate(obj)`) over the `execution_context` primitive; absorbed into the unified Invocation model. Authoritative model: `EXECUTION_CONTEXT_INVOCATION.md`. |

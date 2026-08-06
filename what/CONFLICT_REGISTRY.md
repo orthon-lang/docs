@@ -16,7 +16,7 @@
 
 | ID | Concepts Involved | Nature of Conflict | Resolution Plan | Status |
 |----|-------------------|-------------------|-----------------|--------|
-| — | — | — | — | — |
+| _None_ | — | — | — | — |
 
 ## Resolved Conflicts
 
@@ -24,6 +24,7 @@
 
 | ID | Concepts Involved | Resolution | EDR |
 |----|-------------------|------------|-----|
+| C-003 | EXECUTION_CONTEXT_INVOCATION, `call` (EDR-016), CONCURRENCY_MODEL (EDR-033), ASYNC_AWAIT (EDR-047), DELEGATE, EXECUTION_MODEL, SYNTAX, GLOSSARY, CORE_CONCEPTS, DESIGN_PRINCIPLES, SCOPED_RESOURCE_LIFECYCLE, DECLARATIVE_CONSTRUCTS | Unified Invocation model adopted: `execution_context` added as the 10th primitive; `call` clarified as immediate (no context, not parameterised by an Execution Context); CONCURRENCY_MODEL (EDR-033) and ASYNC_AWAIT (EDR-047) superseded; DELEGATE rewritten as a context constructor; EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES updated; SCOPED_RESOURCE_LIFECYCLE superseded; DECLARATIVE_CONSTRUCTS § Resource Management rewritten (`using` = sugar over context + scope + destructor). Distribution operator glyph deferred to Phase 5 (non-blocking). | [EDR-085](../how/decision_records/architecture/EDR-085-execution-context-invocation.md) |
 | C-001 | ITERATION_LOOP (EDR-053), ITERATOR_PROTOCOL (EDR-022), SPAN (EDR-064), INDEXING (EDR-082) | Adopted 1-based as the single base and inclusive-inclusive `1..N` as the single range norm; canonical index iteration `for i in 1..len(array)`; `enumerate` from 1; Span single-base 1-based. Amendments to EDR-053/EDR-022/EDR-064 and GLOSSARY examples applied at acceptance. | [EDR-082](../how/decision_records/architecture/EDR-082-1-based-indexing.md) |
 | C-002 | RANGE (EDR-083), SLICE (EDR-084), ITERATOR_PROTOCOL (EDR-022), ITERATION_LOOP (EDR-053), INDEXING (EDR-082) | Range semantics delegated from EDR-022/EDR-053 to the RANGE concept; `..=` eliminated (single inclusive-inclusive `1..N` spelling); slicing specified as a Range applied to a random-access composite (SLICE, EDR-084); `enumerate` formula reconciled to `zip(1..len(items), items)`. | [EDR-083](../how/decision_records/architecture/EDR-083-range.md), [EDR-084](../how/decision_records/architecture/EDR-084-slice.md) |
 

@@ -248,12 +248,12 @@ The resolution process is defined in
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted |
+| **Status** | Superseded (2026-08-06, by EDR-085) |
 | **EDR** | [EDR-033](../how/decision_records/architecture/EDR-033-concurrency-model.md) |
 | **Specification** | [`concepts/CONCURRENCY_MODEL.md`](concepts/CONCURRENCY_MODEL.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Delegate-based concurrency model. `act` modifier for concurrent type declarations. `delegate` keyword creates isolated execution contexts. `<-` message operator for asynchronous communication. No shared-state threads — all concurrency through message passing. Explicit ownership transfer (`$`) across delegate boundaries. Error propagation via `Result<T,E>`. Trait dispatch on delegates. Implementation-independent — no dependency on specific threading/async runtime. Cross-ref with ERROR_HANDLING (EDR-020), TRAITS (EDR-019), and CONCURRENCY (Plan 04-06). |
-| **Primitive Decomposition** | `act` modifier → type declaration modifier (compiler-enforced isolation semantics); `delegate` → `reference` + isolated `scope` + message queue; `<-` operator → compiler-recognized message-send syntax; ownership transfer (`$`) → existing `reference` + ownership semantics across boundaries. The isolation guarantee, message ordering, and single-threaded processing per delegate add compiler-level semantics beyond primitive composition. |
+| **Summary** | Delegate-based concurrency model. **Superseded by EXECUTION_CONTEXT_INVOCATION (EDR-085):** the `delegate`/`<-`/`act` model is absorbed into the unified Invocation model — `delegate(obj)` becomes a context constructor, `<-` becomes the single-owner submission operator, and `act` is no longer a concurrency modifier. Functions are colourless; execution policy is expressed via Execution Contexts. See [EXECUTION_CONTEXT_INVOCATION](#execution_context_invocation). |
+| **Primitive Decomposition** | Historical (EDR-033): `act` modifier → type declaration modifier (compiler-enforced isolation semantics); `delegate` → `reference` + isolated `scope` + message queue; `<-` → compiler-recognized message-send syntax. Under EDR-085: `delegate`/`defer`/`spawn`/`fork` → `execution_context` + `function` + `call` (Level 2 constructors over the 10th primitive); `<-` and the distribution operator → invocation in context over `call` + `execution_context`. |
 
 ---
 
@@ -344,12 +344,12 @@ The resolution process is defined in
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted |
+| **Status** | Superseded (2026-08-06, by EDR-085) |
 | **EDR** | [EDR-047](../how/decision_records/architecture/EDR-047-async-await.md) |
 | **Specification** | [`concepts/ASYNC_AWAIT.md`](concepts/ASYNC_AWAIT.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Async as orthogonal execution modifier on `proc`/`fun`/`new`, not a separate abstraction. Combined with ASYNC_AS_EXPLICIT_MODIFIER. Stackless coroutines with `await` suspension points. Colourless model — `Future<T>` as first-class value; `await` required only when result needed. `spawn` for explicit parallelism, `scope` for structured concurrency. `exclusive` modifier separates suspension from access serialisation. Task cancellation and timeouts. Async lambdas. |
-| **Primitive Decomposition** | `async` modifier → compiler-recognized execution modifier on `function`/`scope`; state machine transformation → compiler-level coroutine compilation; `Future<T>` → compiler-managed type + suspension/resumption; `spawn` + `scope` → compiler-enforced lifecycle management. The coroutine transformation and suspension tracking add compiler-level semantics beyond primitive composition. |
+| **Summary** | Async as orthogonal execution modifier on `proc`/`fun`/`new`, not a separate abstraction. **Superseded by EXECUTION_CONTEXT_INVOCATION (EDR-085):** the `async` modifier and coloured `Future<T>` are eliminated — functions are colourless, and coroutine execution is a `defer(obj)` Execution Context materialised with `await(ctx)`. See [EXECUTION_CONTEXT_INVOCATION](#execution_context_invocation). |
+| **Primitive Decomposition** | Historical (EDR-047): `async` modifier → compiler-recognized execution modifier on `function`/`scope`; state machine transformation → compiler-level coroutine compilation; `Future<T>` → compiler-managed type + suspension/resumption. Under EDR-085: `defer`/`delegate`/`spawn`/`fork` → `execution_context` + `function` + `call`; `await`/`take` → StdLib materialisation over `execution_context`. |
 
 ### GENERATORS
 
@@ -657,6 +657,17 @@ The resolution process is defined in
 | **Classification** | Language Pattern (Level 2 — D-03) |
 | **Summary** | A slice is a Range applied to a random-access composite via `@get`: `items[1..k]` — the multi-element form of `a[i]` (INDEXING). Contiguous slicing never copies → non-owning `Span` view (SPAN). `len(slice) == b - a + 1`; empty slice `end < start` is a value. Strided slicing yields an iterator, never a `Span`. Multi-dimensional slicing deferred (SPAN/FFI). |
 | **Primitive Decomposition** | `items[a..b]` → `@get`-based range extraction on the `Indexable`-like trait (INDEXING EDR-082) + Range value (EDR-083) + Span view (EDR-064). No new primitives. |
+
+### EXECUTION_CONTEXT_INVOCATION
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted (2026-08-06) |
+| **EDR** | [EDR-085](../how/decision_records/architecture/EDR-085-execution-context-invocation.md) |
+| **Specification** | [`how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md`](../how/concepts/research/essential/EXECUTION_CONTEXT_INVOCATION.md) |
+| **Classification** | Language (D-03), Level 1/2 boundary — `execution_context` is the 10th Level 1 primitive; operators/constructors are Level 2; materialisation is StdLib |
+| **Summary** | Unified Invocation model: one operation with two axes (*what* to invoke vs. *how* to execute). Adds `execution_context` as the 10th primitive. Invocation in context via a closed two-operator family (`<-` single-owner serialised; distribution operator for stateless workers, glyph deferred to Phase 5). Context constructors: `defer(obj)` (coroutine), `delegate(obj)` (actor), `spawn()` (thread), `fork()` (process). Materialisation: `await`/`take`/`next`/`stop`/`grab`/`gather`. Functions are colourless. `Send`/`Move` marker traits for `spawn`/`fork` (compile time). Fixed inline call semantics. `using` = sugar over context + scope + destructor. Supersedes CONCURRENCY_MODEL (EDR-033) and ASYNC_AWAIT (EDR-047); SCOPED_RESOURCE_LIFECYCLE superseded. |
+| **Primitive Decomposition** | `execution_context` = new Level 1 primitive (10th; minimality re-proved for the 10-element set). `fn(args)` ≡ `call(fn, args)` (no context); `ctx <- fn(args)` / distribution ≡ `call(fn, args)` executed by `ctx`. Constructors (`defer`/`delegate`/`spawn`/`fork`) → `execution_context` + `function` + `call`; materialisation → StdLib over `execution_context`. |
 
 ## Phase 4.1 — Governance Completion
 

@@ -47,12 +47,19 @@ adults.sort()
 
 #### 2. Resource Management
 
+Resource management is the same Invocation pattern as coroutines, actors,
+and threads (EDR-085). `using` is pure syntactic sugar over context +
+scope + deterministic destructor — it desugars to `delegate(open(...))` +
+block + scope-bound destruction. It introduces no new semantics;
+`SCOPED_RESOURCE_LIFECYCLE.md` is superseded.
+
 ```orthon
 # Declarative: resource scope with automatic cleanup
 using file = open("data.txt"):
     let content = file.read_all()
     process(content)
 # file is closed when the block exits
+# desugars to delegate(open("data.txt")) + block + scope-bound destruction
 ```
 
 #### 3. Sorting and Ordering
@@ -96,6 +103,7 @@ Declarative Constructs is a **StdLib** documentation concept — the StdLib prov
 ## Decision History
 
 - **EDR-073:** Declarative Constructs accepted as StdLib (documentation-only) — declarative sugar over imperative patterns. The concept documents which patterns Orthon considers declarative and how each desugars to primitives. No new language semantics — all constructs are already provided by existing concepts.
+- **EDR-085 (2026-08-06):** § Resource Management rewritten — `using` is pure sugar over context + scope + deterministic destructor (desugars to `delegate(expr)`), per the unified Invocation model. No change to the concept's StdLib classification.
 - **Classification per D-03:** StdLib (documentation-only). This is a meta-concept that catalogues existing declarative patterns. No new compiler semantics.
 
 ---

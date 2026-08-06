@@ -1,12 +1,13 @@
 # Execution Context Invocation
 
-> **⚠️ DRAFT — Concept research.**
+> **✅ ACCEPTED — [EDR-085](../../../decision_records/architecture/EDR-085-execution-context-invocation.md), 2026-08-06.**
 > This document proposes a unified invocation model: a single **Invocation**
 > operation submitted to an **Execution Context** via a two-operator family.
 > The operator encodes the ownership relationship (single owner vs.
 > distribution); the context constructor determines the execution policy.
 >
-> **Status:** Exploratory — not accepted.
+> **Status:** Accepted 2026-08-06 (EDR-085). OQ2–OQ8 resolved via Concept
+> Design Review Convergence Check; B1–B6 resolved 2026-08-06.
 > **Supersedes:** [`EXECUTION_POLICY_HYPOTHESIS.md`](EXECUTION_POLICY_HYPOTHESIS.md) (earlier hypothesis with per-context operators)
 > **Related:** [`DELEGATE.md`](DELEGATE.md) (current execution policy model),
 > [`FUNCTIONS.md`](FUNCTIONS.md),
@@ -1069,5 +1070,6 @@ destruction.
 | 2026-07-31 | **OQ8 resolved.** Context destructor contract: the wrapped object drops automatically as a consequence of ownership + lifetime (not a new rule); `take(ctx)` = move-out; `using` remains pure sugar. For `spawn`/`fork`, no safe automatic behaviour for pending work exists — explicit resolution (materialise via `next()`/`gather()`, or cancel via `stop()`) is required before destruction; destroying a context with unresolved work is a program error. Worker-shutdown manner and enforcement are Implementation Strategy concerns (Phase 7). Fire-and-forget is not expressible without `detach()` — deferred to a separate research hypothesis (`../important/DETACHED_EXECUTION.md`). |
 | 2026-07-31 | **OQ2 resolved.** Submission return is context-defined (Variant C): `delegate` returns `void` (a message; owner state read via `take(ctx)`), `defer` returns a deferred invocation (a suspendable computation — semantically coroutine-like, distinct from the context itself), `spawn`/`fork` return `void` and each submission joins the generator stream (`next()`/`stop()`, `grab`/`gather`). Type name of the `defer` transport deferred to Phase 5 (OQ2 Naming Note: Task/Future/Deferred — all realisations of "deferred invocation"). Out-of-order wait for `spawn`/`fork` deferred to v0.2 (additive). |
 
-**Status:** Exploratory — not accepted. Requires resolution of open
-questions before EDR.
+**Status:** Accepted 2026-08-06 (EDR-085). All open questions resolved
+(OQ2–OQ8 via Convergence Check; B1–B6 locked). C-003 amendments applied
+at acceptance.

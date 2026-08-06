@@ -1,8 +1,14 @@
 # Async/Await — Coroutine Execution with Orthogonal Modifier
 
+> **⚠️ SUPERSEDED — [EDR-085](../how/decision_records/architecture/EDR-085-execution-context-invocation.md) (Execution Context Invocation), 2026-08-06.**
+> This concept is superseded by the unified Invocation model. The `async`
+> modifier and coloured `Future<T>` are eliminated; functions are
+> colourless, and coroutine execution is a `defer(obj)` Execution Context
+> materialised with `await(ctx)`. Retained for historical reference.
+
 > **✅ ACCEPTED — [EDR-047](../how/decision_records/architecture/EDR-047-async-await.md).**
 >
-> **Status:** Accepted 2026-07-27.
+> **Status:** Accepted 2026-07-27 (superseded 2026-08-06 by EDR-085).
 >
 > **See also:** [`CONCURRENCY_MODEL.md`](CONCURRENCY_MODEL.md),
 > [`SEMANTIC_MODEL.md`](../SEMANTIC_MODEL.md) § Evaluation,
