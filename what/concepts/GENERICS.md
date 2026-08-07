@@ -32,6 +32,7 @@ The core problem: **behavioural constraints on type parameters** must be express
 4. **Invariant by default** — Generic type parameters are invariant unless variance is declared via trait method signatures.
 5. **`where` clauses for complex bounds** — Multiple trait bounds use `where T as TraitA + TraitB`. `+` combines bounds on one parameter (conjunction of requirements); `,` separates constraints on different parameters. Simple single bounds may use the inline shorthand `<Iterator as T>`.
 6. **No method-level shadowing** — A method must not re-declare a type parameter of its enclosing type; a duplicate name is a compile error.
+7. **Bound-first order is mandatory** — Inline bounds in `<>` are always written bound-first: `<Bound as Param>` (read "Param is (at least) Bound"). The param-first order `<Param as Bound>` is a compile error — the bound must lead so the contract is visible at the parameter.
 
 ## Policy Footprint
 
@@ -60,6 +61,9 @@ fun process<T>(T value, T other) where T as Hash + Eq
     let hash = value.hash()      // justified by T as Hash
     let equal = value == other   // justified by T as Eq
     return hash
+
+// INVALID — param-first order is prohibited (bound must lead)
+fun process<T as Hash + Eq>(T value, T other)   # ✗ ERROR: must be <Hash + Eq as T>
 ```
 
 ### Generic Types
@@ -72,8 +76,8 @@ type Pair<T, U>
     T first
     U second
 
-// Generic with trait bounds — inline shorthand on K
-type HashMap<K as Hash, V>
+// Generic with trait bounds — inline shorthand on K (bound-first)
+type HashMap<Hash as K, V>
     # implementation
 ```
 
@@ -209,7 +213,7 @@ The precise interaction is specified in Phase 04-03 (COMPILE_TIME_EXECUTION).
 
 ## Default Strategy
 
-Static dispatch via monomorphisation with trait bounds. Invariant by default. `where` clauses for complex bounds, inline `<Iterator as T>` for simple bounds. `+` combines bounds on one parameter; `,` separates parameters. Associated types resolved during monomorphisation. No type erasure.
+Static dispatch via monomorphisation with trait bounds. Invariant by default. `where` clauses for complex bounds, inline `<Iterator as T>` (bound-first) for simple bounds; param-first inline order is prohibited. `+` combines bounds on one parameter; `,` separates parameters. Associated types resolved during monomorphisation. No type erasure.
 
 ## Alternative Strategies
 
@@ -236,6 +240,7 @@ Static dispatch via monomorphisation with trait bounds. Invariant by default. `w
 - **No type erasure** adopted. Rationale: Preserves type information for LLM tooling, schema provision, and reflection.
 - **Accepted via EDR-024** on 2026-07-27.
 - **Syntax revision via EDR-086** on 2026-08-07: angle-bracket parameters `<T>` (replacing `[T]`), bound-first inline shorthand `<Iterator as T>`, `where` clauses via `as` (`where T as Hash + Eq`) with `+` for bounds and `,` for parameters, `fun`/`proc`/`new` declaration kinds, type-first parameter syntax (`T item`). Variance section rewritten around position-based inference and Orthon's real subtyping sources (unions, literals, widening); the class-hierarchy example was removed. Method-level re-declaration of a class type parameter is a compile error.
+- **Bound-first order fixed** on 2026-08-07 (review finding): inline bounds in `<>` must be bound-first (`<Bound as Param>`); param-first (`<Param as Bound>`) is a compile error — principle 7 + INVALID example. Strengthens EDR-086's bound-first choice (which rejected param-first) into a normative, LLM-documented rule.
 
 ---
 
