@@ -150,6 +150,8 @@ impl<T> Printable for T where T as Display
 
 Blanket implementations are subject to the orphan rule: the blanket must be in the same module as the trait being implemented.
 
+> **See also:** `../../how/concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` — open hypothesis analysing blanket-impl syntax and semantics.
+
 ### Named Function Equivalents
 
 Per the Named Before Symbolic principle, trait method calls have named equivalents:

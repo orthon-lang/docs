@@ -10,6 +10,7 @@
 > `what/concepts/TRAITS.md` (EDR-019), `what/GLOSSARY.md` § Trait Bound,
 > `FUNCTION_RETURN_SYNTAX.md`, `FUNCTION_ARGUMENT_SYNTAX.md`,
 > `FUNCTION_RETURNING_FUNCTION.md`, `CLOSURE_CAPTURE.md`,
+> `TRAIT_BLANKET_IMPLEMENTATION.md`,
 > `how/DESIGN_PRINCIPLES.md` (Parsimony, DRY, Uniformity, Semantic Purity)
 
 ## Problem
@@ -44,8 +45,8 @@ type Pair<Hash as K, V>
 class UserService<Eq as T> require Database db
     fun find<Hash as K>(key: K) -> Option[User]
 
-# Blanket impl — bound moves into <>
-impl<Display as T> Printable for T
+# Blanket impl — extracted to its own hypothesis
+# see TRAIT_BLANKET_IMPLEMENTATION.md
 ```
 
 Reading mnemonic: `<>` says "process T, but note that T is (at least)
@@ -58,9 +59,11 @@ of a long signature.
 |----------|--------------|----------|
 | Generic function signatures | `fun process<T>(...) where T as Hash + Eq` | `fun process<Hash + Eq as T>(...)` |
 | Generic types | `type Pair<T> where T as Hash` | `type Pair<Hash as K, V>` |
-| Blanket implementations | `impl<T> Printable for T where T as Display` | `impl<Display as T> Printable for T` |
 | Negative bounds (open question in TRAITS) | `where T as !FixedSize` | Marker trait: `<NonFixedSize as T>` (opt-in — see caveat) |
 | Associated-type bounds | `where T::Item: Display` | Named alias in module header, or deferred to v0.2 (see caveat) |
+
+*Blanket-impl bounds: removed from this table — covered by the dedicated
+hypothesis `TRAIT_BLANKET_IMPLEMENTATION.md`.*
 
 ## Implications for Orthon
 
@@ -84,8 +87,9 @@ of a long signature.
 - **Bound-first order is the accepted direction.** `<Hash + Eq as T>` reads
   against the param-first intuition `<T as Hash + Eq>`; EDR-086 already chose
   bound-first, so this is consistent — but it must be re-affirmed.
-- **Blanket-impl syntax changes.** `impl<Display as T> Printable for T`
-  reads less naturally than `where`; needs an LLM generability check.
+- **Blanket-impl syntax.** The blanket-impl risk (bound-first form reads less
+  naturally than `where`; LLM generability check needed) is analyzed in the
+  dedicated hypothesis `TRAIT_BLANKET_IMPLEMENTATION.md`.
 - **Negative bounds become opt-in marker traits only.** `<NonFixedSize as T>`
   requires a concrete marker trait that types explicitly implement. Automatic
   complement ("any T that is NOT `FixedSize`") is **not** expressible this
@@ -106,14 +110,12 @@ of a long signature.
 
 ## Open Questions
 
-1. Can blanket-impl bounds always move into `<>`, including multi-bound
-   forms (`impl<Hash + Eq as T> Printable for T`)?
-2. Negative bounds: is an opt-in marker trait (`<NonFixedSize as T>`)
+1. Negative bounds: is an opt-in marker trait (`<NonFixedSize as T>`)
    sufficient permanently, or will Orthon ever need automatic complement
    (requiring `where` or a new mechanism)?
-3. Associated-type bounds: is a named alias in the module header a workable
+2. Associated-type bounds: is a named alias in the module header a workable
    v0.1 mechanism, or should they be deferred to v0.2?
-4. Interaction with the `comptime T: type` generics description in
+3. Interaction with the `comptime T: type` generics description in
    `GLOSSARY.md` — does the `<>` form survive?
 
 ## Next Step

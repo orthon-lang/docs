@@ -40,6 +40,8 @@ Adopt the **nominal trait system** for Orthon polymorphism:
 8. **Default implementations** — methods with bodies in trait declarations.
 9. **Blanket implementations** — `impl<T> Trait for T where T: OtherTrait`.
 
+> **See also:** `../../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` — open hypothesis analysing blanket-impl syntax and semantics.
+
 ---
 
 ### Consequences
