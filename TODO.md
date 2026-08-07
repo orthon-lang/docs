@@ -155,6 +155,10 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 - [ ] investigate Interaction Matrix format and finalise (`docs/notes/interaction-matrix-format.md`)
   - **Owner:** Solo author
   - **Target:** Phase 4
+- [ ] apply CBAM-lite (benefit × probability / design cost) when selecting v0.1 candidate concepts, esp. from the `deferrable/` tier
+  - **Owner:** Solo author
+  - **Target:** Phase 4
+  - **Ref:** `docs/notes/atam-cbam-architecture-evaluation.md`, `docs/how/process/DECISION_PIPELINE.md`
 
 ## Milestone 6 — Naming
 
@@ -179,6 +183,10 @@ projection of conclusions onto Orthon's design. Each topic has a file in
 - [ ] define launch / announcement strategy (audience, channels, timing)
   - **Owner:** Solo author
   - **Target:** Phase 5
+- [ ] run adapted ATAM-lite architecture self-audit before freeze — utility tree, scenario catalogue with measures, tradeoff/sensitivity points, risk themes
+  - **Owner:** Solo author
+  - **Target:** Phase 5
+  - **Ref:** `docs/notes/atam-cbam-architecture-evaluation.md`, `docs/how/architecture/FITNESS_FUNCTIONS.md`, `docs/how/gates/DECISION_VALIDATION.md`
 
 ## Milestone 8 — Standard Library & FFI (post-Freeze)
 

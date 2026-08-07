@@ -11,6 +11,32 @@ metrics. They are checked as part of the design pipeline —
 alongside [Gates](../gates/DECISION_VALIDATION.md) — before a
 concept is approved.
 
+## Evaluation Approach
+
+Orthon evaluates its architecture using **adapted** versions of the SEI
+methods **ATAM** (Architecture Tradeoff Analysis Method) and **CBAM**
+(Cost Benefit Analysis Method). The methods are adapted because Orthon
+is a language specification, not a deployed software system: the quality
+attribute model, scenario set, and stakeholder mechanism are re-targeted
+to a design-only, solo-authored project.
+
+The mechanism consists of:
+
+- **Utility tree** — business drivers → quality attributes → scenarios, each with priority and risk.
+- **Quality-attribute scenarios** — stimulus → environment → response → measure.
+- **Sensitivity points** — a decision affects a single attribute.
+- **Tradeoff points** — a decision affects multiple attributes.
+- **Risk themes** — unverified claims that could invalidate the architecture.
+- **CBAM-lite** — benefit × probability / design cost for concept selection.
+
+The fitness functions in this catalogue, together with the
+[Decision Validation gates](../gates/DECISION_VALIDATION.md), form this
+mechanism in practice. The full description and timeline — ATAM-lite
+before the v0.1 freeze, CBAM-lite at concept selection, and full ATAM
+with runtime quality attributes deferred to the implementation milestone
+— is recorded in
+[`notes/atam-cbam-architecture-evaluation.md`](../../notes/atam-cbam-architecture-evaluation.md).
+
 ---
 
 ## Concept Stability

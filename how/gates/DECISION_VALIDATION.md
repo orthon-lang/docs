@@ -14,6 +14,15 @@ Decision Validation formalises this requirement: before a proposal
 enters the formal specification, it is evaluated through a set of
 **validation gates**, each with its own lens and method.
 
+This gate structure is aligned with the **adapted ATAM** (Architecture
+Tradeoff Analysis Method) evaluation approach: each gate acts as a
+quality-attribute scenario with a lens, a method, and pass criteria.
+Together with the
+[fitness functions](../architecture/FITNESS_FUNCTIONS.md) they form
+Orthon's architecture evaluation mechanism. See
+[`notes/atam-cbam-architecture-evaluation.md`](../../notes/atam-cbam-architecture-evaluation.md)
+for the full description and timeline.
+
 | Gate | Core Question | Method |
 |------|---------------|--------|
 | `USER_VALUE_GATE` | Does this solve a real problem for the programmer? | [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md) |
