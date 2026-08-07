@@ -77,13 +77,13 @@ fn compute(a: Int, b: Int) -> Int
 At call sites, generic type arguments are inferred from argument types and expected return type:
 
 ```orthon
-fn first[T: Iterator](items: T) -> Option<T::Item>
+fun first<Iterator as T>(T items) -> Option<T::Item>
     for item in items
         return Some(item)
     return None
 
-let result = first([1, 2, 3])       # T inferred as List[Int]
-let result: Option[Float] = first(data)  # T inferred from expected return type
+let result = first([1, 2, 3])       # T inferred as List<Int>
+let result: Option<Float> = first(data)  # T inferred from expected return type
 ```
 
 ### Turbofish Disambiguation

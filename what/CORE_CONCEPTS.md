@@ -94,7 +94,7 @@ The resolution process is defined in
 | **EDR** | [EDR-019](../how/decision_records/architecture/EDR-019-traits.md) |
 | **Specification** | [`concepts/TRAITS.md`](concepts/TRAITS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Nominal trait system. Explicit `impl Trait for Type`. Static dispatch by default (monomorphisation). Dynamic dispatch via `dyn Trait` (vtable, opt-in). Orphan rule for coherence. Associated types. Default method implementations. Blanket implementations. No inheritance — bounds via `where T: A + B`. |
+| **Summary** | Nominal trait system. Explicit `impl Trait for Type`. Static dispatch by default (monomorphisation). Dynamic dispatch via `dyn Trait` (vtable, opt-in). Orphan rule for coherence. Associated types. Default method implementations. Blanket implementations. No inheritance — bounds via `where T as A + B`. |
 | **Primitive Decomposition** | Trait declaration → `function` signatures + `identifier` + `scope`; `impl` → `function` implementations + `scope`; `dyn Trait` → `reference` + vtable; static dispatch → monomorphisation of generics (`function` + type parameters). Coherence and bound resolution add compiler-level semantics. |
 
 ### ERROR_HANDLING
@@ -150,10 +150,10 @@ The resolution process is defined in
 | Field | Value |
 |-------|-------|
 | **Status** | Accepted |
-| **EDR** | [EDR-024](../how/decision_records/architecture/EDR-024-generics.md) |
+| **EDR** | [EDR-024](../how/decision_records/architecture/EDR-024-generics.md) (syntax: [EDR-086](../how/decision_records/architecture/EDR-086-generics-syntax-revision.md)) |
 | **Specification** | [`concepts/GENERICS.md`](concepts/GENERICS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Trait-bounded parametric polymorphism. `where T: TraitA + TraitB` for complex bounds, `[T: Trait]` shorthand for simple. Static dispatch by default (monomorphisation). Dynamic dispatch via `dyn Trait` (opt-in). Invariant by default; covariance/contravariance declared via trait method signatures. No HKT in v0.1. No negative bounds in v0.1. Cross-ref COMPILE_TIME_EXECUTION (Plan 04-03). |
+| **Summary** | Trait-bounded parametric polymorphism. Angle-bracket parameters `<T>`; inline bound-first shorthand `<Iterator as T>`; `where T as TraitA + TraitB` for complex bounds (`+` combines bounds on one parameter, `,` separates parameters). Static dispatch by default (monomorphisation). Dynamic dispatch via `dyn Trait` (opt-in). Invariant by default; covariance/contravariance computed from trait method signatures. No HKT in v0.1. No negative bounds in v0.1. Cross-ref COMPILE_TIME_EXECUTION (Plan 04-03). |
 | **Primitive Decomposition** | Generic function → `function` + type parameters (new abstraction); monomorphised instantiation → `function` + concrete type substitution (compiler transformation); trait bound → `identifier` (trait name) + type-system constraint. The type-level abstraction, bound resolution, and monomorphisation add compiler-level semantics beyond primitive composition. |
 
 ### PATTERN_MATCHING

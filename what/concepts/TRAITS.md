@@ -25,7 +25,7 @@ The core problem: Orthon needs a mechanism for types to declare that they satisf
 3. **Static dispatch by default** — Trait bounds on generic parameters use static dispatch (monomorphisation). Dynamic dispatch (`dyn Trait`) is opt-in, syntactically visible.
 4. **Coherence** — A trait implementation must be defined in the same module as either the trait or the type. At most one implementation of a trait for any type. No orphan implementations.
 5. **Associated types** — Traits can declare associated types, allowing a single trait to model type families (e.g., `Iterator` with `Item`).
-6. **No inheritance** — Traits do not extend other traits to form hierarchies. Trait bounds express requirements: `fn sort(items: [T]) where T: Ordered`. This is composition of constraints, not inheritance.
+6. **No inheritance** — Traits do not extend other traits to form hierarchies. Trait bounds express requirements: `fun sort<T>([T] items) where T as Ordered`. This is composition of constraints, not inheritance.
 7. **Default methods enable Template Method** — Traits with default implementations express the Template Method pattern without abstract classes, `virtual`, or `override`.
 
 ## Policy Footprint
@@ -36,7 +36,7 @@ The core problem: Orthon needs a mechanism for types to declare that they satisf
 | Dispatch Policy | Determines whether trait dispatch is static (monomorphisation) or dynamic (vtable). Default: static. |
 | Coherence Policy | Controls orphan rules — no downstream implementations of foreign traits on foreign types. |
 | Subtyping Policy | Traits do not create subtype relationships. A `dyn Trait` is a dynamically-dispatched handle, not a subtype. |
-| Interface Reuse Policy | Traits compose via bounds (`where T: A + B`), not via extending parent traits. |
+| Interface Reuse Policy | Traits compose via bounds (`where T as A + B`), not via extending parent traits. |
 
 ## Model (What)
 
@@ -47,15 +47,15 @@ A **trait** is a behavioural contract that types can implement. Traits define me
 ```orthon
 // Trait declaration
 trait Printable
-    fn format(self) -> String
+    fun format(self) -> String
 
 // Implementation for a concrete type
 impl Printable for User
-    fn format(self) -> String
+    fun format(self) -> String
         return "User({self.name})"
 
-// Generic function with trait bound
-fn print_all(items: [T]) where T: Printable
+// Generic function with trait bound (bound-first inline shorthand)
+fun print_all<Printable as T>([T] items)
     for item in items
         print(item.format())
 ```
@@ -66,11 +66,11 @@ Orthon chooses **static dispatch by default** because it eliminates indirect cal
 
 ```orthon
 // Static dispatch — monomorphised at compile time (default)
-fn process[T: Processor](item: T)
+fun process<Processor as T>(T item)
     item.process()
 
 // Dynamic dispatch — vtable at runtime (opt-in)
-fn process_dyn(item: dyn Processor)
+fun process_dyn(dyn Processor item)
     item.process()
 ```
 
@@ -79,8 +79,8 @@ fn process_dyn(item: dyn Processor)
 ```orthon
 trait Collection
     type Item
-    fn get(self, index: Int) -> Option<Self::Item>
-    fn len(self) -> Int
+    fun get(self, Int index) -> Option<Self::Item>
+    fun len(self) -> Int
 ```
 
 Associated types allow a trait to model type-level relationships without additional generic parameters.
@@ -89,7 +89,7 @@ Associated types allow a trait to model type-level relationships without additio
 
 ```orthon
 trait Stringifiable
-    fn to_string(self) -> String
+    fun to_string(self) -> String
         return "<opaque>"  // default
 
 impl Stringifiable for Int
@@ -102,20 +102,20 @@ Traits with default implementations express the **Template Method** pattern with
 
 ```orthon
 trait DataImporter
-    fn open(self)                   // hook — declared in trait signature
-    fn parse(self)                  // hook — declared in trait signature
-    fn close(self)                  // hook — declared in trait signature
+    fun open(self)                   // hook — declared in trait signature
+    fun parse(self)                  // hook — declared in trait signature
+    fun close(self)                  // hook — declared in trait signature
 
     // default implementation = template method
-    fn import(self)
+    fun import(self)
         self.open()
         self.parse()
         self.close()
 
 impl DataImporter for CsvImporter
-    fn open(self)    // file open logic
-    fn parse(self)   // CSV parsing logic
-    fn close(self)   // resource cleanup
+    fun open(self)    // file open logic
+    fun parse(self)   // CSV parsing logic
+    fun close(self)   // resource cleanup
 ```
 
 The template method `import()` is inherited from the default. `impl` blocks only require providing the methods declared in the trait signature, not default methods. This eliminates accidental override.
@@ -143,8 +143,8 @@ impl ForeignTrait for User { ... }
 Traits support blanket implementations using `where` clauses:
 
 ```orthon
-impl<T> Printable for T where T: Display
-    fn format(self) -> String
+impl<T> Printable for T where T as Display
+    fun format(self) -> String
         return self.to_display()
 ```
 
@@ -161,7 +161,7 @@ process(item)        # free function via trait (UFCS-like)
 
 ## Default Strategy
 
-Traits with explicit `impl` blocks. Static dispatch by default — generic functions with `where T: Trait` bounds are monomorphised at compile time. Dynamic dispatch (`dyn Trait`) is opt-in and syntactically visible. The orphan rule is enforced (no downstream implementations of foreign traits on foreign types). Associated types are supported. Default method implementations are supported. Blanket implementations via `where` clauses are supported.
+Traits with explicit `impl` blocks. Static dispatch by default — generic functions with `where T as Trait` bounds are monomorphised at compile time. Dynamic dispatch (`dyn Trait`) is opt-in and syntactically visible. The orphan rule is enforced (no downstream implementations of foreign traits on foreign types). Associated types are supported. Default method implementations are supported. Blanket implementations via `where` clauses are supported.
 
 ## Alternative Strategies
 
@@ -175,7 +175,7 @@ Traits with explicit `impl` blocks. Static dispatch by default — generic funct
 
 ## Open Questions
 
-1. Should traits support negative constraints (`where T: !FixedSize`)?
+1. Should traits support negative constraints (`where T as !FixedSize`)?
 2. Should `dyn Trait` be object-safe by default, or should object safety require explicit opt-in?
 3. How do traits interact with Orthon's Metadata Protocol (`@`)?
 4. Should trait bounds be expressible in the Schema Provider for LLM querying?
@@ -187,7 +187,7 @@ Traits with explicit `impl` blocks. Static dispatch by default — generic funct
 - **Explicit `impl` over structural satisfaction** adopted. Rationale: Explicitness principle — a type must explicitly declare trait conformance. No accidental interface satisfaction.
 - **Static dispatch by default** adopted. Rationale: Performance, inlining, and binary size. Dynamic dispatch via `dyn` is opt-in and visible.
 - **Orphan rule** adopted. Rationale: Coherence — at most one implementation of a trait for any type. Prevents conflicting implementations.
-- **No trait inheritance** adopted. Rationale: Trait bounds via `where T: A + B` replace hierarchies with composition of constraints.
+- **No trait inheritance** adopted. Rationale: Trait bounds via `where T as A + B` replace hierarchies with composition of constraints.
 - **Accepted via EDR-019** on 2026-07-27.
 
 ---

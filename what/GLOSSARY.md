@@ -831,21 +831,24 @@ syntactically explicit.
 Trait-bounded parametric polymorphism — the ability to write functions
 and types that operate uniformly across different concrete types while
 preserving type safety and performance. Generic parameters are
-constrained by traits that specify required operations.
+constrained by traits that specify required operations. Parameters are
+declared in angle brackets; a single inline bound is written bound-first
+with `as` (`<Iterator as T>`), and multiple bounds in a `where` clause
+are combined with `+` (`where T as Hash + Eq`).
 
 ```orthon
-fn identity[T](value: T) -> T
+fun identity<T>(T value) -> T
     return value
 
-fn sort[T](items: [T]) where T: Ordered + Printable
+fun sort<T>(T items) where T as Ordered + Printable
 ```
 
 Static dispatch by default (monomorphisation). Dynamic dispatch via
 `dyn Trait` is opt-in. Generic type parameters are invariant by default;
-covariance/contravariance are declared via trait method signatures. No
+covariance/contravariance are computed from trait method signatures. No
 HKT or negative bounds in v0.1.
 
-- **Source:** `../what/concepts/GENERICS.md` (EDR-024)
+- **Source:** `../what/concepts/GENERICS.md` (EDR-024, EDR-086)
 - **See also:** [Trait](#trait), [Trait Bound](#trait-bound), [Type Inference](#type-inference), [Monomorphisation](#monomorphisation)
 
 ### Generator
@@ -1766,17 +1769,17 @@ let state = take(counter)   # move the owned state out
 
 ### Trait
 
-A behavioural contract that types can implement. Traits define method signatures, associated types, and optionally provide default implementations. Traits support both static dispatch (via generics with `where T: Trait` bounds, monomorphised at compile time) and dynamic dispatch (via `dyn Trait`, vtable-based, opt-in).
+A behavioural contract that types can implement. Traits define method signatures, associated types, and optionally provide default implementations. Traits support both static dispatch (via generics with `where T as Trait` bounds, monomorphised at compile time) and dynamic dispatch (via `dyn Trait`, vtable-based, opt-in).
 
 ```orthon
 trait Printable
-    fn format(self) -> String
+    fun format(self) -> String
 
 impl Printable for User
-    fn format(self) -> String
+    fun format(self) -> String
         return "User({self.name})"
 
-fn print_all[T: Printable](items: [T])
+fun print_all<Printable as T>([T] items)
     ...
 ```
 
@@ -1787,13 +1790,13 @@ Orthon's trait system is nominal (explicit `impl`), enforces coherence via the [
 
 ### Trait Bound
 
-A constraint on a generic type parameter requiring that the type implements a given trait. Expressed via `where` clauses.
+A constraint on a generic type parameter requiring that the type implements a given trait. A single inline bound is written bound-first with `as` (`<Iterator as T>`); complex bounds are expressed via `where` clauses.
 
 ```orthon
-fn sort[T](items: [T]) where T: Ordered + Printable
+fun sort<T>([T] items) where T as Ordered + Printable
 ```
 
-Multiple bounds are combined with `+`. Trait bounds enable static dispatch by default. The compiler verifies that all concrete types used in generic functions satisfy their required bounds.
+Multiple bounds on one parameter are combined with `+` (the type must satisfy all of them); `,` separates constraints on different parameters. Trait bounds enable static dispatch by default. The compiler verifies that all concrete types used in generic functions satisfy their required bounds.
 
 - **Source:** `../what/concepts/TRAITS.md` § Model
 - **See also:** [Trait](#trait), [Orphan Rule](#orphan-rule)

@@ -65,7 +65,7 @@ type Point(x: Int, y: Int)
 Point has show(self) -> String
 
 # No explicit impl needed — structural matching resolves at call site
-fun print[T: Show](value: T)
+fun print<Show as T>(T value)
     print(value.show())
 ```
 
