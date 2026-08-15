@@ -305,37 +305,50 @@ classified as language/stdlib/external, and accepted via EDR.
 
 **Goal:** Design syntax as the *external interface* of the semantic model —
 not as an independent creative exercise. Syntax is derived from semantics,
-not the reverse.
+not the reverse. Acceptance is governed by
+[`how/SYNTAX_PIPELINE.md`](../how/SYNTAX_PIPELINE.md) (EDR-087).
 
 **Steps:**
 
-1. **Establish syntax principles:**
+1. **Inventory and resolve all deferred syntax decisions.** Sweep the open
+   syntax hypotheses in [`how/syntax/`](../how/syntax/) (decision queue) and
+   close each one through the Syntax Pipeline **before** any per-concept
+   syntax is produced. No deferred decision may be designed ad hoc.
+2. **Establish syntax principles:**
    - One concept → one syntax
    - One symbol → one meaning (context-independent)
    - No significant whitespace
    - Named forms preferred over symbolic (when ambiguity risk)
    - Syntax is derived from semantics, not vice versa
-
-2. **Produce syntax for each accepted Language concept:**
+3. **Produce syntax for each accepted Language concept:**
    - All canonical forms documented together (per AGENTS.md §4.2)
    - Syntax must be consistent across all concepts
-
-3. **Validate syntax:**
+   - Accepted syntax lands in `what/syntax/` (one record per construct)
+4. **Validate syntax:**
    - No ambiguous parses
    - No context-dependent syntax
    - LLM generability check
    - Readability check — can a human predict the syntax from semantics alone?
+5. **Update the hub and grammar:** `what/SYNTAX.md` (hub — principles +
+   pointers), `what/syntax/` (records), `how/architecture/PARSER.md`
+   (concrete grammar). Mark each resolved hypothesis in `how/syntax/` as
+   "Resolved — see `SYNTAX.md` § …".
 
-4. **Create `SYNTAX.md` and update `PARSER.md`**
-
-**Primary gates applied:** `ARCHITECTURAL_INTEGRITY_GATE`,
-`LOGICAL_CONSISTENCY_GATE`.
+**Primary gates applied:** Syntax Acceptance Gates per
+`DECISION_VALIDATION.md` § Gate Selection ("Syntax change" row):
+`LOGICAL_CONSISTENCY_GATE`, `CONCEPTUAL_SIMPLICITY_GATE`,
+`ARCHITECTURAL_INTEGRITY_GATE`, `LLM_GENERABILITY_GATE`
+(see [`SYNTAX_PIPELINE.md`](../how/SYNTAX_PIPELINE.md)).
 
 **New artifacts:**
-- `what/SYNTAX.md` — complete syntax reference
+- `how/syntax/` — open syntax hypotheses + decision queue
+- `how/SYNTAX_PIPELINE.md` — syntax acceptance pipeline (EDR-087)
+- `what/syntax/` — accepted syntax records (one per construct)
+- `what/SYNTAX.md` — hub (principles + pointers)
 - `how/architecture/PARSER.md` — updated with concrete grammar
 
 **Exit criteria:**
+- [ ] All open syntax hypotheses in `how/syntax/` resolved and folded into `SYNTAX.md`
 - [ ] Every language concept has defined syntax
 - [ ] No ambiguous or context-dependent syntax
 - [ ] LLM generability gate passed for all syntax

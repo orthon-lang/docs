@@ -11,7 +11,7 @@
 >
 > **See also:** `../../../../what/concepts/TRAITS.md` (EDR-019),
 > `../../../decision_records/architecture/EDR-019-traits.md`,
-> `../../../../what/concepts/GENERICS.md`, `BOUNDS_IN_ANGLE_BRACKETS.md`,
+> `../../../../what/concepts/GENERICS.md`, `../../syntax/BOUNDS_IN_ANGLE_BRACKETS.md`,
 > `../../../../what/GLOSSARY.md` § Trait Bound, `../../../DESIGN_PRINCIPLES.md`
 > (Parsimony, DRY, Uniformity, Explicitness).
 

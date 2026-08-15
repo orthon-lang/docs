@@ -1,12 +1,13 @@
 # Hypothesis: Java-Style Function Argument Syntax (Type Before Name)
 
-> **⚠️ DRAFT — This document is a preliminary hypothesis.**
+> **⚠️ DRAFT — This document is a preliminary syntax hypothesis.**
 > Post-acceptance hypothesis from the ITERATOR_PROTOCOL review (2026-08-05).
-> Syntax question — Phase 5 scope. Separate from return syntax
-> (see `FUNCTION_RETURN_SYNTAX.md`).
+> Phase 5 input — syntax hypothesis; not a concept under current review.
+> Home: [`how/syntax/`](README.md) — established by EDR-087 (2026-08-15).
+> Separate from return syntax (see `FUNCTION_RETURN_SYNTAX.md`).
 >
-> **See also:** `what/SYNTAX.md` (Phase 5 placeholder),
-> `what/SEMANTIC_MODEL.md` § Mutation (`fun`/`proc`/`new` examples).
+> **See also:** `../../what/SYNTAX.md` (Phase 5 hub),
+> `../../what/SEMANTIC_MODEL.md` § Mutation (`fun`/`proc`/`new` examples).
 
 ## Problem
 
@@ -27,7 +28,7 @@ with a prefix return type (`FUNCTION_RETURN_SYNTAX.md`).
 
 ## Open Questions
 
-- Named and optional parameters interaction (`NAMED_AND_OPTIONAL_PARAMETERS.md`).
+- Named and optional parameters interaction (`../concepts/research/important/NAMED_AND_OPTIONAL_PARAMETERS.md`).
 - Signature readability with `require`/`using` clauses present.
 
 ## Next Step

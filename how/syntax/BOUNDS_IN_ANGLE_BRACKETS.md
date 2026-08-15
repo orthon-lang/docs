@@ -2,16 +2,18 @@
 
 > **⚠️ HYPOTHESIS — open design hypothesis, not an accepted concept.**
 > Raised during the FUNCTIONS concept review, trailing-clause discussion
-> (2026-08-07). Syntax question — Phase 5 scope. Further revision of
-> EDR-086 (bound-first `as` bounds).
+> (2026-08-07). Phase 5 input — syntax hypothesis; not a concept under
+> current review. Home: [`how/syntax/`](README.md) — established by
+> EDR-087 (2026-08-15). Further revision of EDR-086 (bound-first `as` bounds).
 >
-> **See also:** `what/SYNTAX.md` (Phase 5 placeholder),
-> `what/concepts/GENERICS.md` (EDR-024 / EDR-086),
-> `what/concepts/TRAITS.md` (EDR-019), `what/GLOSSARY.md` § Trait Bound,
+> **See also:** `../../what/SYNTAX.md` (Phase 5 hub),
+> `../../what/concepts/GENERICS.md` (EDR-024 / EDR-086),
+> `../../what/concepts/TRAITS.md` (EDR-019), `../../what/GLOSSARY.md` § Trait Bound,
 > `FUNCTION_RETURN_SYNTAX.md`, `FUNCTION_ARGUMENT_SYNTAX.md`,
-> `FUNCTION_RETURNING_FUNCTION.md`, `CLOSURE_CAPTURE.md`,
-> `TRAIT_BLANKET_IMPLEMENTATION.md`,
-> `how/DESIGN_PRINCIPLES.md` (Parsimony, DRY, Uniformity, Semantic Purity)
+> `FUNCTION_RETURNING_FUNCTION.md`,
+> `../concepts/research/essential/CLOSURE_CAPTURE.md`,
+> `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md`,
+> `../DESIGN_PRINCIPLES.md` (Parsimony, DRY, Uniformity, Semantic Purity)
 
 ## Problem
 

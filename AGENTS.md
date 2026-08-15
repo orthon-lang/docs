@@ -77,7 +77,10 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `what/SEMANTIC_MODEL.md` | What | Unified semantic model — identity, ownership, mutation, evaluation, visibility, lifetime |
 | `what/PRIMITIVE_BLOCKS.md` | What | Minimal orthogonal primitive blocks — all features decompose to these |
 | `what/LIBRARY_BOUNDARY.md` | What | Language vs. standard library vs. external classification |
-| `what/SYNTAX.md` | What | Complete syntax reference — derived from semantics |
+| `what/SYNTAX.md` | What | Syntax hub — principles + pointers to `what/syntax/` (EDR-087) |
+| `what/syntax/README.md` | What | Accepted syntax records — index, one file per construct (EDR-087) |
+| `how/SYNTAX_PIPELINE.md` | How | Syntax acceptance pipeline — hypothesis to accepted syntax (EDR-087) |
+| `how/syntax/README.md` | How | Syntax hypothesis inbox + decision queue — open Phase 5 decisions (EDR-087) |
 | `what/CROSS_CUTTING.md` | What | Interaction matrix — pair-wise concept interaction analysis |
 | `what/CONFLICT_REGISTRY.md` | What | Concept-boundary conflict tracking and resolution |
 | `what/EXECUTION_MODEL.md` | What | Execution semantics — what the language guarantees about execution |
@@ -125,7 +128,8 @@ docs/
 │   ├── SEMANTIC_MODEL.md     # Unified semantic model (Phase 2)
 │   ├── PRIMITIVE_BLOCKS.md   # Minimal orthogonal primitive blocks (Phase 3)
 │   ├── LIBRARY_BOUNDARY.md   # Language vs stdlib vs external (Phase 4)
-│   ├── SYNTAX.md             # Complete syntax reference (Phase 5)
+│   ├── SYNTAX.md             # Syntax hub — principles + pointers (Phase 5)
+│   ├── syntax/               # Accepted syntax records (one per construct)
 │   ├── CROSS_CUTTING.md      # Interaction matrix (Phase 6)
 │   ├── CONFLICT_REGISTRY.md  # Concept-boundary conflicts (Phase 6)
 │   ├── EXECUTION_MODEL.md    # Execution semantics (Phase 7)
@@ -138,6 +142,8 @@ docs/
 │   │   ├── DECISION_PROCESS.md   # One-page decision authority (Phase 1)
 │   │   └── DECISION_PIPELINE.md  # 10-question feature pipeline (Phase 4)
 │   ├── EVOLUTION_MODEL.md    # Versioning, deprecation, feature gates (Phase 8)
+│   ├── SYNTAX_PIPELINE.md    # Syntax acceptance pipeline (Phase 5, EDR-087)
+│   ├── syntax/               # Syntax hypothesis inbox + decision queue (Phase 5)
 │   ├── concepts/             # Concept design pipeline
 │   │   ├── README.md
 │   │   ├── research/         # Concept research inbox (raw analyses, triaged by tier)
@@ -203,6 +209,7 @@ All files in `docs/` follow a consistent naming pattern:
 | **Gate checklists** | `_` prefix + kebab-case inside `gates/` | `how/gates/_language-design.md` |
 | **EDR records** | `EDR-NNN-title-with-dashes.md` inside `decision_records/{category}/` | `how/decision_records/architecture/EDR-042-event-sourcing.md` |
 | **Glossary / reference** | UPPER_CASE, `GLOSSARY.md` | `what/GLOSSARY.md` |
+| **Syntax hypothesis / record** | UPPER_CASE with `_SYNTAX` suffix, in `how/syntax/` (hypotheses) or `what/syntax/` (accepted) | `TYPE_ANNOTATION_SYNTAX.md`, `RANGE_SYNTAX.md` |
 
 **Rules:**
 

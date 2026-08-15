@@ -1,13 +1,14 @@
 # Hypothesis: Java-Style Function Return Type (Prefix)
 
-> **⚠️ DRAFT — This document is a preliminary hypothesis.**
+> **⚠️ DRAFT — This document is a preliminary syntax hypothesis.**
 > Post-acceptance hypothesis from the ITERATOR_PROTOCOL review (2026-08-05).
-> Syntax question — Phase 5 scope. Separate from argument syntax
-> (see `FUNCTION_ARGUMENT_SYNTAX.md`).
+> Phase 5 input — syntax hypothesis; not a concept under current review.
+> Home: [`how/syntax/`](README.md) — established by EDR-087 (2026-08-15).
+> Separate from argument syntax (see `FUNCTION_ARGUMENT_SYNTAX.md`).
 >
-> **See also:** `what/SYNTAX.md` (Phase 5 placeholder),
-> `what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081),
-> `notes/code-block-semantics.md`.
+> **See also:** `../../what/SYNTAX.md` (Phase 5 hub),
+> `../../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081),
+> `../../notes/code-block-semantics.md`.
 
 ## Problem
 

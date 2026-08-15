@@ -1,8 +1,9 @@
 # Shadowing Syntax
 
 > **Status:** Phase 5 input — syntax hypothesis; not a concept under current review.
+> Home: [`how/syntax/`](README.md) — established by EDR-087 (2026-08-15).
 > Records the explicit-shadowing-keyword hypothesis deferred to Phase 5 (Syntax)
-> by [`DECLARATION_BY_ASSIGNMENT.md`](../../../what/concepts/DECLARATION_BY_ASSIGNMENT.md)
+> by [`DECLARATION_BY_ASSIGNMENT.md`](../../what/concepts/DECLARATION_BY_ASSIGNMENT.md)
 > (EDR-074, Principle 5). The semantic core — shadowing requires an explicit
 > marker — is settled in the concept; this document holds the syntax hypothesis
 > for the marker and its interaction with mutability.
@@ -13,7 +14,7 @@
 
 How should Orthon express variable shadowing, and how should the shadowing marker compose with the mutability marker?
 
-[`DECLARATION_BY_ASSIGNMENT.md`](../../../what/concepts/DECLARATION_BY_ASSIGNMENT.md) Principle 5 settles the semantics: shadowing (re-declaring a name in an inner scope) is permitted but must be syntactically visible. The concept defers the concrete keyword and its interaction with mutability to Phase 5 (Syntax). This document records the proposed hypothesis.
+[`DECLARATION_BY_ASSIGNMENT.md`](../../what/concepts/DECLARATION_BY_ASSIGNMENT.md) Principle 5 settles the semantics: shadowing (re-declaring a name in an inner scope) is permitted but must be syntactically visible. The concept defers the concrete keyword and its interaction with mutability to Phase 5 (Syntax). This document records the proposed hypothesis.
 
 ## Hypothesis: two orthogonal axes
 
@@ -59,5 +60,6 @@ Shadowing and mutability are two independent axes. Each keyword performs exactly
 
 ## Cross-References
 
-- [`DECLARATION_BY_ASSIGNMENT.md`](../../../what/concepts/DECLARATION_BY_ASSIGNMENT.md) — concept (EDR-074), Principle 5, Phase 5 boundary.
+- [`README.md`](README.md) — syntax hypothesis inbox (decision queue).
+- [`DECLARATION_BY_ASSIGNMENT.md`](../../what/concepts/DECLARATION_BY_ASSIGNMENT.md) — concept (EDR-074), Principle 5, Phase 5 boundary.
 - [`TYPE_ANNOTATION_SYNTAX.md`](TYPE_ANNOTATION_SYNTAX.md) — companion Phase 5 syntax hypothesis.

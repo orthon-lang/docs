@@ -28,6 +28,7 @@ specific failure mode each one prevents.
 | Implementation Policies | Policy | EDR-006 | What and how entangled | Cannot change implementation strategy without changing semantics |
 | Implementation Strategies | Strategy | EDR-006 | Ad-hoc strategy selection | No coherent implementation profiles for different use cases |
 | Concept Design Review (5-step) | Procedure | EDR-007 | Unstructured, inconsistent concept design | Variable quality across language concepts |
+| Syntax Pipeline | Procedure | EDR-087 | Deferred syntax decisions lost or decided ad hoc | Syntax chosen without the existing gates; overloaded symbols recur |
 | Architecture Decision Records (ADR) | Record | EDR-001 | Decisions without documented rationale | Design amnesia — "why did we choose this?" |
 | Tools Decision Records (TDR) | Record | EDR-001 | Process tools without documented rationale | Process becomes unexamined ritual |
 | Layered Architecture | Architecture | EDR-010 | Cross-layer coupling | Changes in one layer ripple unpredictably to others |
@@ -93,6 +94,7 @@ Which tools are active at each milestone:
 - [`LANGUAGE_INVENTORY.md`](../when/LANGUAGE_INVENTORY.md) — language-lens counterpart
 - [`ROADMAP.md`](../when/ROADMAP.md) — milestone definitions
 - [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — gate catalogue
+- [`SYNTAX_PIPELINE.md`](SYNTAX_PIPELINE.md) — syntax acceptance pipeline (EDR-087)
 - [`tdr/`](tdr/) — superseded TDR records (migrated to EDR)
 - [`decision_records/`](decision_records/) — active Engineering Decision Records
 - [`decision_records/INDEX.md`](decision_records/INDEX.md) — unified EDR journal

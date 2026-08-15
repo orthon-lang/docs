@@ -34,6 +34,12 @@ proposals:
 - `imperative-crutches-index.md` — index of anti-pattern analysis
 - `language-llm-comparison.md` — language comparison reference
 
+> **Note (2026-08-15):** Syntax hypotheses previously kept here (for example
+> `TYPE_ANNOTATION_SYNTAX.md`, `SHADOWING_SYNTAX.md`) and in `important/`
+> (`FUNCTION_ARGUMENT_SYNTAX.md`, `FUNCTION_RETURN_SYNTAX.md`,
+> `FUNCTION_RETURNING_FUNCTION.md`, `BOUNDS_IN_ANGLE_BRACKETS.md`) moved to
+> [`../syntax/`](../syntax/) — the syntax hypothesis inbox (EDR-087).
+
 ## Adding Research
 
 To add a new concept research document:

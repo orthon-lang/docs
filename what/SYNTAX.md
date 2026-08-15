@@ -5,7 +5,8 @@
 > Orthon language concepts. Syntax is derived from semantics, not
 > the reverse.
 >
-> **Status:** Placeholder — to be filled during Phase 5 of M1.
+> **Status:** Hub — Syntax Principles plus pointers to accepted syntax
+> records in `what/syntax/`. Established by EDR-087 (2026-08-15).
 > **See also:** [`ROADMAP.md`](../when/ROADMAP.md) § Phase 5,
 > [`SEMANTIC_MODEL.md`](SEMANTIC_MODEL.md),
 > [`PRIMITIVE_BLOCKS.md`](PRIMITIVE_BLOCKS.md),
@@ -27,64 +28,19 @@
 5. **Syntax derived from semantics.** Syntax is the external interface
    of the semantic model, not an independent design exercise.
 
-## Concept Syntax
+## Accepted Syntax (hub)
 
-<!-- To be filled during Phase 5 — one section per Language-classified concept -->
+`what/SYNTAX.md` is the **hub**: it holds the Syntax Principles and points
+to the full accepted syntax records in [`what/syntax/`](syntax/). One record
+per construct — see [`what/syntax/README.md`](syntax/README.md) for the index.
 
-### Invocation Syntax
+| Construct | Record | Decision |
+|-----------|--------|----------|
+| Invocation context operators `<-` / `\|>` | [`what/syntax/INVOCATION_SYNTAX.md`](syntax/INVOCATION_SYNTAX.md) | EDR-085 |
+| Range literal `1..N`, `range(a,b)`, `.step(n)` | [`what/syntax/RANGE_SYNTAX.md`](syntax/RANGE_SYNTAX.md) | EDR-083 |
+| Generics: `<>` parameters, `as` bounds | [`what/syntax/GENERICS_SYNTAX.md`](syntax/GENERICS_SYNTAX.md) | EDR-086 |
 
-> **Accepted — EDR-085 (Execution Context Invocation).**
-> Full syntax is finalised in Phase 5; the shapes below are fixed by the
-> semantic model.
-
-Invocation has two syntactic forms, distinguished by whether an execution
-context is present:
-
-1. **Immediate invocation (call)** — `fn(args)`. No context, no operator.
-   The base case of Invocation; executes now, in the current environment.
-
-2. **Invocation in context** — the **two-operator family** that encodes
-   the ownership relationship between the invocation and the context:
-
-   | Operator | Meaning | Contexts | Glyph status |
-   |----------|---------|----------|--------------|
-   | `ctx <- fn(args)` | Submit to a **single owner** — serialised, in order | `delegate(obj)`, `defer(obj)` | Final |
-   | `ctx |> fn(args)` | Submit to **stateless workers** — independent, parallel | `spawn()`, `fork()` | Provisional — final glyph deferred to Phase 5 |
-
-   The operator set is **closed (2)**; the constructor set is **open** — a
-   new context type resolves to one of the two by whether it owns state.
-
-```orthon
-add(1, 2)                 # immediate invocation — no context
-counter <- increment()    # invocation in context — single owner, serialised
-pool |> fetch(url)        # invocation in context — stateless workers, parallel
-```
-
-**Context constructors and materialisation** use named forms, not symbols:
-
-```orthon
-let task = defer(obj)     # coroutine context (wraps an object)
-let result = await(task)  # materialise
-
-let actor = delegate(Counter(0))   # actor context (wraps an object)
-let state = take(actor)            # move the owned state out
-
-let pool = spawn()        # thread context (stateless)
-let data = grab(pool)     # materialise (StdLib sugar over generator protocol)
-```
-
-**`using` sugar** — `using` is pure syntactic sugar over context + scope +
-deterministic destructor; it introduces no new semantics:
-
-```orthon
-# Canonical (context + scope + destructor)
-using file = open("data.txt"):
-    let content = file.read_all()
-    process(content)
-# desugars to delegate(open("data.txt")) + block + scope-bound destruction
-```
-
-Rejected glyphs: `.` (conflicts with immediate method call — the reader
-could not tell whether `x.foo()` blocks), `<=` (already comparison), and
-per-context operators (operator proliferation). `Send`/`Move` marker
-traits are compile-time checks on captured data, not syntax.
+**Open syntax questions** (Phase 5 input) live in the hypothesis inbox:
+[`how/syntax/`](../how/syntax/) with its decision queue
+([`how/syntax/README.md`](../how/syntax/README.md)). The acceptance process
+is defined in [`how/SYNTAX_PIPELINE.md`](../how/SYNTAX_PIPELINE.md) (EDR-087).

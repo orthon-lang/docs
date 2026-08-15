@@ -2,13 +2,16 @@
 
 > **⚠️ HYPOTHESIS — open design hypothesis, not an accepted concept.**
 > Raised during the FUNCTIONS concept review (2026-08-07).
-> Syntax question — Phase 5 scope. Coupled with return-type placement
-> (`FUNCTION_RETURN_SYNTAX.md`) and argument syntax
-> (`FUNCTION_ARGUMENT_SYNTAX.md`).
+> Phase 5 input — syntax hypothesis; not a concept under current review.
+> Home: [`how/syntax/`](README.md) — established by EDR-087 (2026-08-15).
+> Coupled with return-type placement (`FUNCTION_RETURN_SYNTAX.md`) and
+> argument syntax (`FUNCTION_ARGUMENT_SYNTAX.md`).
 >
-> **See also:** `what/SYNTAX.md` (Phase 5 placeholder), `FUNCTIONS.md`,
-> `CLOSURE_CAPTURE.md`, `how/DESIGN_PRINCIPLES.md` (Semantic Purity, DRY),
-> `notes/code-block-semantics.md`
+> **See also:** `../../what/SYNTAX.md` (Phase 5 hub),
+> `../concepts/research/essential/FUNCTIONS.md`,
+> `../concepts/research/essential/CLOSURE_CAPTURE.md`,
+> `../DESIGN_PRINCIPLES.md` (Semantic Purity, DRY),
+> `../../notes/code-block-semantics.md`
 
 ## Problem
 
