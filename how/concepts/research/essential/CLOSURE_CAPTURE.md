@@ -1,9 +1,10 @@
 # Closure Capture
 
-> **⚠️ HYPOTHESIS — open design hypothesis, not an accepted concept.**
+> **✅ RESOLVED — open design hypothesis, resolved during review (2026-08-16).**
 > Raised during the FUNCTIONS concept review (2026-08-07).
-> **Provisional decision:** `capture` is the closure-capture keyword.
-> The unification question below is deliberately deferred.
+> **Resolution:** closure capture is a creation-time resolution of a `using`
+> slot (unification accepted). See EDR-081 Amendment (2026-08-16). The
+> provisional `capture` keyword is superseded.
 >
 > **Related:** `FUNCTIONS.md`, `DEPENDENCY_REQUIRE_USING.md` (EDR-081),
 > `../what/DESIGN_PRINCIPLES.md` (Semantic Purity, POLA, Parsimony)
@@ -47,16 +48,44 @@ analogue to a dedicated capture keyword.
   symbol; `capture` adds one word but removes the need for a capture-list
   delimiter syntax (`[...]`).
 
-## Provisional Decision
+## Provisional Decision (superseded 2026-08-16)
 
 `capture` (2026-08-07). Rationale: Semantic Purity / POLA outweigh parsimony;
 `using` unification is a larger architectural change best decided
 independently.
 
+**Superseded:** the unification was accepted (2026-08-16) — closure capture is
+a creation-time resolution of a `using` slot. See EDR-081 Amendment (2026-08-16).
+
 ## Open Questions
 
-1. Can `using` be redefined as ONE meaning — "environment injection" — with
+1. ~~Can `using` be redefined as ONE meaning — "environment injection" — with
    creation-time (capture) and call-time (provision) resolutions, without
-   violating Semantic Purity? If yes, `capture` becomes redundant.
-2. Does the unified model improve or hurt LLM generability?
-3. What is the exact syntax for mutable vs by-value capture under `capture`?
+   violating Semantic Purity? If yes, `capture` becomes redundant.~~
+   **Resolved (2026-08-16):** yes — EDR-081 Amendment; `capture` superseded.
+2. Does the unified model improve or hurt LLM generability? *(open — empirical)*
+3. Mutable vs by-value capture. *(deferred — separate decision)*
+
+## Syntax (Phase 5 — deferred)
+
+Semantics are locked (EDR-081 Amendment, 2026-08-16). The remaining open
+question is purely syntactic — the exact surface form of creation-time
+`using` in function literals. Registered in the Phase 5 syntax inbox
+(`how/syntax/README.md` — "Open, coupled by pointer"). Phase 5 input; not
+under current concept review.
+
+**Open syntax questions:**
+1. Canonical literal form: is `using n` part of the literal signature
+   (`fn (x) using n -> x * n`) or a separate capture clause?
+2. Multiple slots: `fn (x) using a, b -> ...` vs a single `using` clause
+   with comma-separated names?
+3. Fallback edge case: is an unresolvable slot at creation a compile error,
+   or does it fall to `given` per the unified priority (EDR-081 Amendment §2)?
+4. Interaction with the signature tail — `using n` + `-> Return` — a known
+   contention point (see `FUNCTION_RETURN_SYNTAX.md`,
+   `FUNCTION_RETURNING_FUNCTION.md`).
+
+**Coupled with:** `how/syntax/FUNCTION_RETURN_SYNTAX.md`,
+`how/syntax/FUNCTION_ARGUMENT_SYNTAX.md`,
+`how/syntax/FUNCTION_RETURNING_FUNCTION.md`, lambda syntax
+(`notes/code-block-semantics.md`).

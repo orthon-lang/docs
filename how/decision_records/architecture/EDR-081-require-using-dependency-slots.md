@@ -142,3 +142,40 @@ All 7 gates applied per `DECISION_VALIDATION.md` § Gate Selection (semantic ref
 **Gates not applied:** None.
 
 **Detailed reasoning:** See pipeline pass output for per-gate reasoning trail with criterion-level breakdown.
+
+---
+
+### Amendment (2026-08-16): Creation-time Resolution — Closure Capture Unification
+
+**Post-acceptance finding** (from the CLOSURE_CAPTURE hypothesis review). The Dual Parameter Model gains a **creation-time resolution point** for dependency slots, unifying closure capture with environment injection.
+
+#### 1. Creation-time resolution for function literals
+
+A function literal `fn (x) using n -> ...` resolves its `using` slot **at creation**, binding the captured value into the resulting function value. A closure is **not a separate concept** — it is a self-contained first-class function value whose `using` slot was resolved at creation. This is consistent with the accepted primitive decomposition (`PRIMITIVE_BLOCKS.md` § 3.2.2, EDR-016): closures decompose to `function` + `reference` + `scope`.
+
+The resolution point is determined by syntactic position:
+- `using n` inside a **function literal** → creation-time binding (capture; the value is self-contained).
+- `using v` at a **call / construction site** → call-time provision (as originally specified).
+- `require` in a **signature** → declaration (as originally specified).
+
+#### 2. Unified resolution priority
+
+The same four-tier priority applies to `using` slots at **both** resolution points:
+
+| Tier | Creation-time (literal) | Call-time / construction |
+|------|-------------------------|--------------------------|
+| 1 — Explicit | `n` lexically bound in the enclosing scope at creation → capture that binding | Explicit `using v` at the call / construction site |
+| 2 — Local `given` | Local `given n` → bind at creation | Local `given` |
+| 3 — Imported `given` | Imported `given n` | Imported `given` |
+| 4 — Missing | Compile error — slot must be filled | Compile error — slot must be filled |
+
+**Rationale:** one priority rule across both resolution points keeps the mental model uniform and supports testability — closures fall back to `given` defaults, explicit capture is achieved via a lexical binding, and per-instance overrides (EDR-081) remain unchanged.
+
+#### 3. Superseded decision
+
+This amendment **supersedes** the provisional `capture` keyword for closure capture (`CLOSURE_CAPTURE.md`, 2026-08-07). The unification direction is accepted; `using` remains the single injection keyword.
+
+#### 4. Deferred
+
+- **Mutable vs by-value capture** — separate decision.
+- **Exact syntax** (keyword position, grammar, fallback edge cases) — deferred to `SYNTAX_PIPELINE` (Phase 5).

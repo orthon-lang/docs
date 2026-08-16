@@ -112,7 +112,7 @@ EDR); **Rejected** — a binding negative decision.
 
 | Question | Home document | Status |
 |----------|---------------|--------|
-| Capture keyword / lambda syntax | `../concepts/research/important/CLOSURE_CAPTURE.md`, `../../notes/code-block-semantics.md` | Open (coupled) |
+| Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) |
 | Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) |
 
 ### Resolved (accepted — record in `what/syntax/`)
