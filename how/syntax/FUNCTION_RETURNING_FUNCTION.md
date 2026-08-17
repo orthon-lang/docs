@@ -10,6 +10,9 @@
 > **See also:** `../../what/SYNTAX.md` (Phase 5 hub),
 > `../concepts/research/essential/FUNCTIONS.md`,
 > `../concepts/research/essential/CLOSURE_CAPTURE.md`,
+> `../concepts/research/essential/ANONYMOUS_FUNCTION.md` (anonymous function / cascade hypothesis),
+> `../concepts/research/important/TYPE_ALIAS.md` (type-synonym hypothesis —
+> `alias` as nominalisation of a function type),
 > `../DESIGN_PRINCIPLES.md` (Semantic Purity, DRY),
 > `../../notes/code-block-semantics.md`
 
@@ -74,15 +77,33 @@ type-first declarations would reverse the annotation position of the accepted
 
 ## Open Questions
 
-1. Is a first-class function *type* syntax needed at all, or can function
-   types be nominal (`Fn[...]`, trait-based per EDR-019)?
-2. If `->` is kept, should it be reserved for exactly one role — which one?
-3. Which notation is most LLM-generable for a function returning a function?
-4. Interaction with the capture keyword (`capture`, `CLOSURE_CAPTURE.md`) in
-   the chosen lambda/function form.
+1. ~~Is a first-class function *type* syntax needed at all, or can function
+   types be nominal (`Fn[...]`, trait-based per EDR-019)?~~
+   **Resolved (2026-08-17):** the named form `(x: Int): String` is the base
+   notation; the positional `Fn[Int, String]` was rejected (ambiguous
+   input/output). An `alias` (`TYPE_ALIAS.md`) optionally names the type.
+2. ~~If `->` is kept, should it be reserved for exactly one role — which one?~~
+   **Deferred with caveat (2026-08-17):** a syntax-only question, not
+   semantics. Current direction is `:` for return / function type; final
+   resolution belongs to Phase 5 (`SYNTAX_PIPELINE.md`, EDR-087). `->`
+   remains a candidate for sequence emission (`return value ->`, EDR-021,
+   replaceable by `emit` / `return sequence(...)`) or may be removed
+   entirely. The `=>` (match, EDR-025) vs `->` (iterator docs) cross-concept
+   conflict stands.
+3. ~~Which notation is most LLM-generable for a function returning a function?~~
+   **Resolved (2026-08-17):** named form + top-level `alias` — Pass
+   (`LLM_GENERABILITY_GATE`, EDR-014); the inline tail form Flags two
+   criteria.
+4. ~~Interaction with the capture keyword (`capture`, `CLOSURE_CAPTURE.md`) in
+   the chosen lambda/function form.~~
+   **Resolved (2026-08-17):** `capture` is superseded — closure capture is a
+   creation-time resolution of a `using` slot (EDR-081 Amendment); the
+   lambda/function form interacts with `using` clauses, not `capture`.
 
 ## Next Step
 
 Phase 5 syntax decision; coupled with `FUNCTION_RETURN_SYNTAX.md`,
-`FUNCTION_ARGUMENT_SYNTAX.md`, `CLOSURE_CAPTURE.md`, and lambda syntax
-(`notes/code-block-semantics.md`).
+`FUNCTION_ARGUMENT_SYNTAX.md`, `CLOSURE_CAPTURE.md`, `TYPE_ALIAS.md`, and
+lambda syntax (`notes/code-block-semantics.md`). The `:` vs `->` choice is
+deferred with a caveat (syntax-only; no strong operator overload) pending the
+Phase 5 pipeline.

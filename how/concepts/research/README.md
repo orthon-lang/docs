@@ -43,6 +43,13 @@ proposals:
 > **Note (2026-08-17):** `EFFECT_FOOTPRINT.md` added to `essential/` — the
 > unified effect-footprint model (read/mutate/consume × {self, capture,
 > global}) unifying the declaration kinds, `using`, and `@modifies`.
+>
+> **Note (2026-08-17):** `TYPE_ALIAS.md` added to `important/` — type synonym
+> hypothesis (same type, new name; syntactic sugar). Scopes `alias` to type
+> synonyms only, excluding import aliasing (`USING_DIRECTIVES.md`) and
+> refinement types (`REFINEMENT_TYPES.md`). See
+> `../../../syntax/FUNCTION_RETURNING_FUNCTION.md` for the function-type
+> synonym coupling.
 
 ## Adding Research
 

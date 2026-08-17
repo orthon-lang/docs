@@ -5,7 +5,8 @@
 > **Affects:** Primitive Blocks (`scope`), Functions (`function` concept)
 > **See also:** [`CONCEPT_PIPELINE.md`](../how/CONCEPT_PIPELINE.md) § Post-Acceptance Gaps (Type B),
 > [`PRIMITIVE_BLOCKS.md`](../what/PRIMITIVE_BLOCKS.md),
-> [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Evaluation
+> [`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Evaluation,
+> [`ANONYMOUS_FUNCTION.md`](../how/concepts/research/essential/ANONYMOUS_FUNCTION.md) — anonymous function / lambda hypothesis
 
 ---
 
