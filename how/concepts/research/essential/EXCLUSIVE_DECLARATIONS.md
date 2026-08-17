@@ -12,13 +12,14 @@
 
 `proc` (procedure) in many languages (Pascal, Nim, early Rust) denotes a block of code that performs actions, usually with side effects, and often does not return a value. In our model, a mutating method is precisely a procedure that changes an object's state.
 
-If we introduce `proc` as a **standalone keyword for method declaration** rather than as a modifier, we get three mutually exclusive forms:
+If we introduce `proc` as a **standalone keyword for method declaration** rather than as a modifier, we get four mutually exclusive forms:
 
 - **`proc`** — mutating operation (identity preserved). May return a value (like `pop`) or nothing.
 - **`fun`** — pure read-only operation. Does not mutate `self`, always returns a value (void is permitted but meaningless).
-- **`new`** — transforming operation (identity changed). Does not mutate `self`, always returns a new value.
+- **`trans`** — transforming operation (identity changed). Does not mutate `self`, always returns a new value.
+- **`into`** — consuming operation (identity destroyed). Takes `self` by value and returns a value derived from its parts; the receiver is invalid after the call. The **phoenix method**: the receiver dies, but its contents are reborn in the returned value.
 
-These three keywords simultaneously declare the method and specify its effect. No combinations like `mut fun` or `new fun` are needed. The syntax becomes cleaner and more declarative.
+These four keywords simultaneously declare the method and specify its effect. No combinations like `mut fun` or `new fun` are needed. The syntax becomes cleaner and more declarative.
 
 ## 3. What It Looks Like in Code
 
@@ -39,12 +40,15 @@ class List<T> {
         return val
     }
 
-    // Transforming (new) — always return a new value
-    new sorted() -> List<T> { List(self.items.sorted()) }
-    new pop_child() -> (List<T>, T) {
+    // Transforming (trans) — always return a new value
+    trans sorted() -> List<T> { List(self.items.sorted()) }
+    trans pop_child() -> (List<T>, T) {
         let new_items = self.items.withoutLast()
         return (List(new_items), self.items.last())
     }
+
+    // Consuming (into) — takes self by value, returns a value from its parts
+    into iter() -> Iterator<T> { self.items.into_iter() }
 }
 
 fun demo() {
@@ -59,42 +63,63 @@ fun demo() {
     nums.sort()
     let last = nums.pop()
 
-    // new-calls (always allowed)
+    // trans-calls (always allowed)
     let sorted = nums.sorted()
     let (new_list, elem) = nums.pop_child()
+
+    // into-calls (consume the receiver)
+    let it = nums.iter()
 }
 ```
 
 ## 4. Advantages of Exclusive Declarations
 
-- **No effect matrix**: no need to think about whether `mut` combines with `new` or `fun` with `mut`. Three orthogonal categories, each with its own keyword.
+- **No effect matrix**: no need to think about whether `mut` combines with `new` or `fun` with `mut`. Four orthogonal categories, each with its own keyword.
 - **Less noise**: instead of `mut fun append(...)`, simply write `proc append(...)`. Lines are shorter and more expressive.
 - **Semantic precision**:
   - `proc` clearly says: "this is an action, it mutates the object."
   - `fun` — "this is a pure computation over the object."
-  - `new` — "this is a factory for a new value derived from the current one."
+  - `trans` — "this is a factory for a new value derived from the current one."
+  - `into` — "this consumes the object and returns its contents reborn."
 - **Simplified ABI**: each method has exactly one effect tag, no ambiguity.
-- **Familiarity**: developers are familiar with `proc` (Pascal, Nim) and `fun` (ML, Kotlin). `new` for creating new objects is universally understood.
+- **Familiarity**: developers are familiar with `proc` (Pascal, Nim), `fun` (ML, Kotlin), and `into` (Rust `into_*`). The transform kind is spelled `trans`, avoiding `new`'s construction connotation.
 
-## 5. Possible Trade-offs
+## 5. Relationship to Rust's read/mutate/consume and the Two Axes
 
-- **`proc` and return values**: in some languages, `proc` implies no return value. But we can clearly state that `proc` may return a value (like a function, but with mutation). This breaks tradition, but is pragmatic. The alternative — forbidding returns from `proc` and requiring `new`-version for `pop` returning a tuple — would force the programmer to create a new variable for simple element extraction, which can be inconvenient and wasteful. Better to allow `proc pop() -> T`.
-- **`new` and void**: `new` must always return a value; otherwise it is meaningless. The compiler may require a non-void return type.
-- **Strictness of separation**: a method that both mutates and returns a new value (like `pop` in its `proc` version) is no longer "only mutating" — it is mixed. But this is acceptable: `proc` covers any operation involving mutation, including returning partial data. If strict purity is needed, a fourth category `extract` could be added, but that is overkill initially.
+The four kinds map onto the Rust closure trichotomy (`Fn`/`FnMut`/`FnOnce`)
+as receiver modes: `fun` ↔ `Fn` (read), `proc` ↔ `FnMut` (mutate),
+`trans` ↔ `&self -> T` (read, returns a fresh value), `into` ↔ `FnOnce`
+(consume). The ACID analogy was considered and rejected: only Isolation
+(and loosely Consistency) map, while Atomicity and Durability have no
+analog — `proc` makes no atomicity promise.
 
-## 6. Comparison with the Previous Model (`mut`, `new`, `fun`)
+The kinds form the **ownership axis**: what a method does to `self`. They
+are orthogonal to the **effect axis** — whether a callable affects
+captures or globals — which is expressed by `using` (captures) and
+`@modifies` (globals/I/O). Lambdas, anonymous functions, and free
+functions have no `self`, so they are not classified by the four kinds;
+their external link is declared via `using`. See
+[`EFFECT_FOOTPRINT.md`](EFFECT_FOOTPRINT.md) for the unified model.
 
-| Criterion | Previous (modifiers) | New (exclusive `proc`/`fun`/`new`) |
-|-----------|----------------------|-------------------------------------|
+## 6. Possible Trade-offs
+
+- **`proc` and return values**: in some languages, `proc` implies no return value. But we can clearly state that `proc` may return a value (like a function, but with mutation). This breaks tradition, but is pragmatic. The alternative — forbidding returns from `proc` and requiring a `trans`-version for `pop` returning a tuple — would force the programmer to create a new variable for simple element extraction, which can be inconvenient and wasteful. Better to allow `proc pop() -> T`.
+- **`trans` and void**: `trans` must always return a value; otherwise it is meaningless. The compiler may require a non-void return type.
+- **Strictness of separation**: a method that both mutates and returns a new value (like `pop` in its `proc` version) is no longer "only mutating" — it is mixed. But this is acceptable: `proc` covers any operation involving mutation, including returning partial data. If strict purity is needed, a `proc`-less `extract` category could be added, but that is overkill initially. `extract` is distinct from `into`: `extract` addresses the mutate-and-return mix (a `proc` purity concern), while `into` is ownership transfer (consumes `self`).
+
+## 7. Comparison with the Previous Model (`mut`, `new`, `fun`)
+
+| Criterion | Previous (modifiers) | New (exclusive `proc`/`fun`/`trans`/`into`) |
+|-----------|----------------------|---------------------------------------------|
 | Keywords in declaration | 2 (`mut fun`) | 1 (`proc`) |
 | Effect explicitness | Effect is an extra annotation | Effect is built into the declaration kind |
 | Call uniformity | `.` always | `.` always |
-| Learning curve | Must remember combinations | Three non-overlapping variants |
+| Learning curve | Must remember combinations | Four non-overlapping variants |
 
-## 7. Recommendation
+## 8. Recommendation
 
-Use the exclusive declaration model: `proc` for mutating, `fun` for pure, `new` for transforming operations. This makes the language more declarative, removes "effect modifiers," and aligns the syntax with the tradition where procedures and functions differ at the declaration level.
+Use the exclusive declaration model: `proc` for mutating, `fun` for pure, `trans` for transforming operations, `into` for consuming operations. This makes the language more declarative, removes "effect modifiers," and aligns the syntax with the tradition where procedures and functions differ at the declaration level.
 
-## 8. Conclusion
+## 9. Conclusion
 
-`mut` as a term is adequate, but the combination `mut fun` is redundant. `proc` better conveys the meaning of a mutating action and allows a clean system of three non-overlapping method declaration forms. This improves readability, simplifies the compiler, and eliminates the "effect matrix" while retaining all memory safety guarantees without GC and without a borrow checker.
+`mut` as a term is adequate, but the combination `mut fun` is redundant. `proc` better conveys the meaning of a mutating action, and the four kinds (`proc`/`fun`/`trans`/`into`) form a clean system of non-overlapping method declaration forms — including the phoenix method `into`, where the receiver dies and its contents are reborn in the returned value. This improves readability, simplifies the compiler, and eliminates the "effect matrix" while retaining all memory safety guarantees without GC and without a borrow checker.

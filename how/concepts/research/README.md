@@ -40,6 +40,10 @@ proposals:
 > `FUNCTION_RETURNING_FUNCTION.md`, `BOUNDS_IN_ANGLE_BRACKETS.md`) moved to
 > [`../syntax/`](../syntax/) — the syntax hypothesis inbox (EDR-087).
 
+> **Note (2026-08-17):** `EFFECT_FOOTPRINT.md` added to `essential/` — the
+> unified effect-footprint model (read/mutate/consume × {self, capture,
+> global}) unifying the declaration kinds, `using`, and `@modifies`.
+
 ## Adding Research
 
 To add a new concept research document:

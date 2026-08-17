@@ -161,8 +161,9 @@ Initial research — no decisions recorded yet.
 
 ## See also
 
-- [`CONTRACTS.md`](../../../what/concepts/CONTRACTS.md) — `requires`/`ensures`/`invariant` (EDR-056)
-- [`SEMANTIC_MODEL.md`](../../../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation) — Separation Logic grounding for frame conditions
+- [`EFFECT_FOOTPRINT.md`](../essential/EFFECT_FOOTPRINT.md) — the unified effect-footprint model (kinds = frame condition on `self`; this document is the deferrable `@modifies` sub-topic)
+- [`CONTRACTS.md`](../../../../what/concepts/CONTRACTS.md) — `requires`/`ensures`/`invariant` (EDR-056)
+- [`SEMANTIC_MODEL.md`](../../../../what/SEMANTIC_MODEL.md) § Ownership (Formal foundation) — Separation Logic grounding for frame conditions
 - [`CORRECTNESS_BY_CONSTRUCTION.md`](../important/CORRECTNESS_BY_CONSTRUCTION.md) — why frames matter for modular correctness
-- [`EXCLUSIVE_DECLARATIONS.md`](../essential/EXCLUSIVE_DECLARATIONS.md) — the `fun`/`proc`/`new` model
-- [`REQUIRE_USING_DEPENDENCY_SLOTS.md`](../../../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md) — `require`/`using` dependency slots
+- [`EXCLUSIVE_DECLARATIONS.md`](../essential/EXCLUSIVE_DECLARATIONS.md) — the `fun`/`proc`/`trans`/`into` model
+- [`REQUIRE_USING_DEPENDENCY_SLOTS.md`](../../../../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md) — `require`/`using` dependency slots
