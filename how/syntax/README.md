@@ -102,7 +102,7 @@ EDR); **Rejected** — a binding negative decision.
 | Question | Hypothesis doc | Deferral source | Coupled with | Status |
 |----------|----------------|-----------------|--------------|--------|
 | Type annotation: `x: Type` vs `Type x` | [TYPE_ANNOTATION_SYNTAX.md](TYPE_ANNOTATION_SYNTAX.md) | EDR-027, EDR-074 | SHADOWING, FUNCTION_ARGUMENT, FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION | Open (Decision Pipeline run 2026-08-15) |
-| Shadowing marker: `let` / `var` / `let var` | [SHADOWING_SYNTAX.md](SHADOWING_SYNTAX.md) | EDR-074 (Principle 5) | TYPE_ANNOTATION | Open |
+| Rebinding / capture: `var` vs `let`; explicit capture (not `using`) | [REBINDING_SYNTAX.md](REBINDING_SYNTAX.md) | EDR-074 (Principle 5) | SHADOWING (folded), TYPE_ANNOTATION, CLOSURE_CAPTURE | Open (2026-08-19) |
 | Argument syntax: `(a: Int)` vs `(Int a)` | [FUNCTION_ARGUMENT_SYNTAX.md](FUNCTION_ARGUMENT_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION, TYPE_ANNOTATION | Open |
 | Return-type placement: suffix `->` vs prefix | [FUNCTION_RETURN_SYNTAX.md](FUNCTION_RETURN_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_ARGUMENT, BOUNDS_IN_ANGLE_BRACKETS, lambda syntax | Open |
 | Function-type notation / `->` overload | [FUNCTION_RETURNING_FUNCTION.md](FUNCTION_RETURNING_FUNCTION.md) | FUNCTIONS review (2026-08-07) | FUNCTION_RETURN, FUNCTION_ARGUMENT, CLOSURE_CAPTURE, lambda syntax | Open |

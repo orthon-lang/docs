@@ -9,6 +9,11 @@
 > for the marker and its interaction with mutability.
 >
 > **Last updated:** 2026-08-15
+>
+> **Superseded (2026-08-19):** the single "shadowing marker" question is split
+> into two axes — same-scope rebinding and nested-scope capture — by
+> [`REBINDING_SYNTAX.md`](REBINDING_SYNTAX.md). This document remains the
+> `let`-based candidate for the rebinding axis.
 
 ## Issue (Why)
 
