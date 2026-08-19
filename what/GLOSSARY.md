@@ -1333,8 +1333,14 @@ raw = user!                  # forced unwrap (panics if None)
 
 Key operators: `?.` (elvis / optional chaining), `??` (unwrap or default), `!` (forced unwrap).
 
-- **Source:** `../what/concepts/NULL_SAFETY.md`
-- **See also:** [Representation](#representation), [Trait](#trait), [Orphan Rule](#orphan-rule)
+`Option` and `Result` are **two orthogonal axes**: `Option` answers "is
+the value present?" (absence), `Result` answers "did the operation
+fail?" (failure with diagnosis). Combining both concerns is done by
+nesting (`Result<Option<T>, E>`, `Option<Result<T, E>>`), not by merging
+them into a single type.
+
+- **Source:** `../what/concepts/NULL_SAFETY.md`, `../what/concepts/ERROR_HANDLING.md` § Interaction with Option
+- **See also:** [Representation](#representation), [Result Type](#result-type), [Error Union](#error-union), [Trait](#trait), [Orphan Rule](#orphan-rule)
 
 ### Orphan Rule
 

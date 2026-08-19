@@ -85,3 +85,24 @@ expected.
 > Corollary: `None` is the `None` variant of `Option<T>` — a value of
 > type `None` coerces into `Option<T>` because `None` is one of its two
 > variants. There is no `null` sentinel that silently inhabits `T`.
+
+### Option with Error — two orthogonal axes, combined by nesting
+
+**Status:** VERIFIED
+**Source:** [EDR-020](../how/decision_records/architecture/EDR-020-error-handling.md),
+[EDR-023](../how/decision_records/architecture/EDR-023-error-union.md),
+[EDR-028](../how/decision_records/architecture/EDR-028-type-level-null-safety.md),
+[`what/concepts/ERROR_HANDLING.md`](concepts/ERROR_HANDLING.md) § Interaction with Option,
+[`what/concepts/ERROR_UNION.md`](concepts/ERROR_UNION.md)
+
+**Thesis:** `Option<T>` and `Result<T, E>` / Error Union (`!T`) are
+**two orthogonal axes**, deliberately kept separate in Orthon: `Option`
+answers "is the value present?" (absence), `Result`/`!T` answers "did
+the operation fail?" (failure with diagnosis). Combining both concerns
+is done by **nesting** (`Result<Option<T>, E>`, `Option<Result<T, E>>`),
+not by merging them into a single type.
+
+> Corollary: the two axes have distinct operators — `?.`/`??` on
+> `Option` (absence is normal), `?` on `Result`/`!T` (failure must be
+> propagated or handled). Orthogonality is why Orthon separates
+> narrowable `Option` from non-narrowable `Result` (EDR-028).
