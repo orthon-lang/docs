@@ -343,6 +343,15 @@ EDRs are appropriate when:
 - The rationale needs to be *findable* years later.
 - The decision supersedes or deprecates a previous EDR.
 
+### 7.4 Human Sign-off (mandatory before EDR)
+
+Every Tier 1–2 EDR requires a prior **Human Sign-off**: the solo author
+explicitly confirms the design is baked — `Reviewed-by: <author> · Date:
+YYYY-MM-DD · Verdict: [LOCKED / changes]`. This is a **non-automatable**
+gate: agents/GSD flows must not self-certify it. See the Concept Design
+Review Step 6 (Convergence Check) and `SYNTAX_PIPELINE.md` Stage 6b. An
+EDR may not be filed until the sign-off is populated.
+
 ---
 
 ## 8. Proposal Structure
