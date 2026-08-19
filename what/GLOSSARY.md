@@ -1289,6 +1289,22 @@ Example: `&x` and `ref(x)` are equivalent.
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Operator Equivalence](#operator-equivalence)
 
+### None
+
+A value of its own distinct type `None`, representing absence in Orthon.
+There is no `null` sentinel — absence is always encoded in the type.
+`None` is one of the two variants of [Option Type](#option-type)
+(alongside `Some(T)`). Assigning `None` to a non-optional type `T` is a
+compile-time error; it is assignable only where `Option<T>` is expected.
+
+```orthon
+user = db.find_user(42)    # returns Option<User>
+raw = user!                # forced unwrap (panics if None)
+```
+
+- **Source:** `../what/concepts/NULL_SAFETY.md`, [EDR-018](../how/decision_records/architecture/EDR-018-null-safety.md)
+- **See also:** [Option Type](#option-type), [Exhaustiveness](#exhaustiveness), [Flow-Sensitive Narrowing](#flow-sensitive-narrowing)
+
 ---
 
 ## O

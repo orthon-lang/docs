@@ -51,6 +51,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/strategies/EMBEDDED_STRATEGY.md` | How | Strategy for embedded / resource-constrained targets |
 | `how/strategies/HIGH_PERFORMANCE_STRATEGY.md` | How | Strategy for performance-optimized targets |
 | `what/CORE_CONCEPTS.md` | What | Registry of accepted Orthon concepts — currently empty (see `how/concepts/research/` for in-progress research) |
+| `what/THESES.md` | What | Distilled, verifiable understanding anchors about language semantics — status-tracked, routed to canonical destinations |
 | `what/concepts/README.md` | What | Describes the acceptance pipeline for concept drafts |
 | `how/concepts/README.md` | How | Concept design pipeline: research → design → spec |
 | `how/concepts/research/DATA_MODEL.md` | How | Concept research: formal data model analysis |
@@ -125,6 +126,7 @@ docs/
 ├── what/                     # WHAT — language design & reference
 │   ├── CORE_CONCEPTS.md      # Accepted concept registry (currently empty; see how/concepts/research/)
 │   ├── GLOSSARY.md
+│   ├── THESES.md             # Distilled understanding anchors (status-tracked)
 │   ├── SEMANTIC_MODEL.md     # Unified semantic model (Phase 2)
 │   ├── PRIMITIVE_BLOCKS.md   # Minimal orthogonal primitive blocks (Phase 3)
 │   ├── LIBRARY_BOUNDARY.md   # Language vs stdlib vs external (Phase 4)
