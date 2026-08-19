@@ -21,7 +21,7 @@ criteria, and how the decision is recorded.**
 | Tier | Scope | Decision Maker | Record Keeping | Examples |
 |------|-------|----------------|----------------|----------|
 | **Tier 1 — Principle** | Design Principles, Vision, Semantic Model | Solo author + EDR | EDR (Architecture category) | "Data is immutable by default" |
-| **Tier 2 — Language Concept** | A new language feature | Solo author + Pipeline + EDR | EDR (Architecture category) + concept doc | "Add pattern matching" |
+| **Tier 2 — Language Concept** | A new language feature | Solo author + Pipeline + Human sign-off + EDR | EDR (Architecture category) + concept doc | "Add pattern matching" |
 | **Tier 3 — Process** | How design work is done | Solo author | EDR (Process category) | "Adopt 8-phase pipeline" |
 | **Tier 4 — Inline** | Small decisions within a section | Solo author | Inline note in document | "Tuples are ordered by default" |
 
@@ -50,3 +50,7 @@ what priority.
    decompose to Primitive Blocks (from Phase 3).
 4. **No feature without pipeline.** Every feature runs through the
    Decision Pipeline before detailed design begins.
+5. **No EDR without human sign-off.** Tier 1–2 decisions require the
+   solo author's explicit Human Sign-off (Concept Design Review Step 6
+   — Convergence Check; Syntax Pipeline Stage 6b) before an EDR may be
+   filed. Agents/GSD flows must not self-certify the sign-off.

@@ -97,30 +97,36 @@ All syntax questions (open and resolved). Status legend: **Open** — awaiting
 Phase 5 resolution; **Resolved** — accepted (record in `what/syntax/` or an
 EDR); **Rejected** — a binding negative decision.
 
+**Human review** column: the solo author's explicit sign-off required by
+[`SYNTAX_PIPELINE.md`](../SYNTAX_PIPELINE.md) Stage 6b —
+`Reviewed-by · Date · Verdict [LOCKED / changes]`. Open items are
+`Pending`; no EDR may be filed before the sign-off is populated and
+agents/GSD flows must not self-certify it.
+
 ### Open (in this inbox)
 
-| Question | Hypothesis doc | Deferral source | Coupled with | Status |
-|----------|----------------|-----------------|--------------|--------|
-| Type annotation: `x: Type` vs `Type x` | [TYPE_ANNOTATION_SYNTAX.md](TYPE_ANNOTATION_SYNTAX.md) | EDR-027, EDR-074 | SHADOWING, FUNCTION_ARGUMENT, FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION | Open (Decision Pipeline run 2026-08-15) |
-| Rebinding / capture: `var` vs `let`; explicit capture (not `using`) | [REBINDING_SYNTAX.md](REBINDING_SYNTAX.md) | EDR-074 (Principle 5) | SHADOWING (folded), TYPE_ANNOTATION, CLOSURE_CAPTURE | Open (2026-08-19) |
-| Argument syntax: `(a: Int)` vs `(Int a)` | [FUNCTION_ARGUMENT_SYNTAX.md](FUNCTION_ARGUMENT_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION, TYPE_ANNOTATION | Open |
-| Return-type placement: suffix `->` vs prefix | [FUNCTION_RETURN_SYNTAX.md](FUNCTION_RETURN_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_ARGUMENT, BOUNDS_IN_ANGLE_BRACKETS, lambda syntax | Open |
-| Function-type notation / `->` overload | [FUNCTION_RETURNING_FUNCTION.md](FUNCTION_RETURNING_FUNCTION.md) | FUNCTIONS review (2026-08-07) | FUNCTION_RETURN, FUNCTION_ARGUMENT, CLOSURE_CAPTURE, lambda syntax | Open |
-| Eliminate `where`: all bounds in `<>` | [BOUNDS_IN_ANGLE_BRACKETS.md](BOUNDS_IN_ANGLE_BRACKETS.md) | FUNCTIONS review (2026-08-07); revises EDR-086 | FUNCTION_RETURN, FUNCTION_ARGUMENT, FUNCTION_RETURNING_FUNCTION, CLOSURE_CAPTURE, TRAIT_BLANKET_IMPLEMENTATION | Open |
+| Question | Hypothesis doc | Deferral source | Coupled with | Status | Human review |
+|----------|----------------|-----------------|--------------|--------|--------------|
+| Type annotation: `x: Type` vs `Type x` | [TYPE_ANNOTATION_SYNTAX.md](TYPE_ANNOTATION_SYNTAX.md) | EDR-027, EDR-074 | SHADOWING, FUNCTION_ARGUMENT, FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION | Open (Decision Pipeline run 2026-08-15) | Pending |
+| Rebinding / capture: `var` vs `let`; explicit capture (not `using`) | [REBINDING_SYNTAX.md](REBINDING_SYNTAX.md) | EDR-074 (Principle 5) | SHADOWING (folded), TYPE_ANNOTATION, CLOSURE_CAPTURE | Open (2026-08-19) | Pending |
+| Argument syntax: `(a: Int)` vs `(Int a)` | [FUNCTION_ARGUMENT_SYNTAX.md](FUNCTION_ARGUMENT_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION, TYPE_ANNOTATION | Open | Pending |
+| Return-type placement: suffix `->` vs prefix | [FUNCTION_RETURN_SYNTAX.md](FUNCTION_RETURN_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_ARGUMENT, BOUNDS_IN_ANGLE_BRACKETS, lambda syntax | Open | Pending |
+| Function-type notation / `->` overload | [FUNCTION_RETURNING_FUNCTION.md](FUNCTION_RETURNING_FUNCTION.md) | FUNCTIONS review (2026-08-07) | FUNCTION_RETURN, FUNCTION_ARGUMENT, CLOSURE_CAPTURE, lambda syntax | Open | Pending |
+| Eliminate `where`: all bounds in `<>` | [BOUNDS_IN_ANGLE_BRACKETS.md](BOUNDS_IN_ANGLE_BRACKETS.md) | FUNCTIONS review (2026-08-07); revises EDR-086 | FUNCTION_RETURN, FUNCTION_ARGUMENT, FUNCTION_RETURNING_FUNCTION, CLOSURE_CAPTURE, TRAIT_BLANKET_IMPLEMENTATION | Open | Pending |
 
 ### Open — coupled by pointer (not relocated)
 
-| Question | Home document | Status |
-|----------|---------------|--------|
-| Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) |
-| Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) |
+| Question | Home document | Status | Human review |
+|----------|---------------|--------|--------------|
+| Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) | Pending |
+| Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) | Pending |
 
 ### Resolved (accepted — record in `what/syntax/`)
 
-| Question | Record | Decision | Status |
-|----------|--------|----------|--------|
-| Invocation context operators `<-` / `|>` | [INVOCATION_SYNTAX.md](../../what/syntax/INVOCATION_SYNTAX.md) | EDR-085 | Resolved |
-| Range literal `1..N`, `range(a,b)`, `.step(n)` | [RANGE_SYNTAX.md](../../what/syntax/RANGE_SYNTAX.md) | EDR-083 | Resolved |
-| Generics: `<>` parameters, `as` bounds, `+` conjunction | [GENERICS_SYNTAX.md](../../what/syntax/GENERICS_SYNTAX.md) | EDR-086 | Resolved |
-| Collection literals `[1,2,3]`, `{"a":1}`, `{1,2,3}` | EDR-041 (concept) | EDR-041 | Resolved (record in `what/syntax/` pending Phase 5) |
-| No significant whitespace | — | EDR-076 (rejected) | Rejected (binding negative) |
+| Question | Record | Decision | Status | Human review |
+|----------|--------|----------|--------|--------------|
+| Invocation context operators `<-` / `|>` | [INVOCATION_SYNTAX.md](../../what/syntax/INVOCATION_SYNTAX.md) | EDR-085 | Resolved | EDR-085 (accepted) |
+| Range literal `1..N`, `range(a,b)`, `.step(n)` | [RANGE_SYNTAX.md](../../what/syntax/RANGE_SYNTAX.md) | EDR-083 | Resolved | EDR-083 (accepted) |
+| Generics: `<>` parameters, `as` bounds, `+` conjunction | [GENERICS_SYNTAX.md](../../what/syntax/GENERICS_SYNTAX.md) | EDR-086 | Resolved | EDR-086 (accepted) |
+| Collection literals `[1,2,3]`, `{"a":1}`, `{1,2,3}` | EDR-041 (concept) | EDR-041 | Resolved (record in `what/syntax/` pending Phase 5) | EDR-041 (accepted) |
+| No significant whitespace | — | EDR-076 (rejected) | Rejected (binding negative) | EDR-076 (rejected) |

@@ -4,6 +4,7 @@
 > syntax revised by [EDR-086](../how/decision_records/architecture/EDR-086-generics-syntax-revision.md).**
 >
 > **Status:** Accepted 2026-07-27; syntax revision 2026-08-07.
+> **Human Sign-off:** Reviewed-by: mniedre · Date: 2026-08-07 · Verdict: LOCKED
 >
 > **See also:** [`TRAITS.md`](TRAITS.md),
 > [`TYPE_INFERENCE.md`](TYPE_INFERENCE.md),

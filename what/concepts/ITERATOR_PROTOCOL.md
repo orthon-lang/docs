@@ -3,6 +3,7 @@
 > **✅ ACCEPTED — [EDR-022](../how/decision_records/architecture/EDR-022-iterator-protocol.md).**
 >
 > **Status:** Accepted 2026-07-27.
+> **Human Sign-off:** Reviewed-by: mniedre · Date: 2026-08-05 · Verdict: LOCKED (IntoIterator rename open → `how/syntax/`)
 >
 > **See also:** [`LAZY_SEQUENCE_GENERATORS.md`](LAZY_SEQUENCE_GENERATORS.md),
 > [`RANGE.md`](RANGE.md),

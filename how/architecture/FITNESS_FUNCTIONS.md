@@ -295,4 +295,19 @@ decisions are flagged.
 
 ---
 
+## Human Sign-off Coverage
+
+**Source:** [concept-design-review.md](../concept-design-review.md) — Step 6 Convergence Check; [SYNTAX_PIPELINE.md](../SYNTAX_PIPELINE.md) — Stage 6b
+
+Every accepted concept and syntax decision must carry a dated Human
+Sign-off field — `Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict:
+[LOCKED / changes]` — populated by the solo author. Agents/GSD flows
+must not self-certify it.
+
+**Measured by:** Audit of `what/concepts/*.md` and `what/syntax/*.md` for
+a populated Human Sign-off line. Accepted concepts or syntax records
+without one are flagged before the phase is marked complete.
+
+---
+
 *This catalogue is extensible. New fitness functions may be added as the language evolves, following the same pattern: source, description, and measurement criteria.*

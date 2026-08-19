@@ -64,6 +64,11 @@ Why were alternatives rejected?
 
 References to ADRs, logs of rejected approaches, and key trade-offs that were accepted.
 
+> **Human Sign-off:** `Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict: [LOCKED / changes]`
+> Required before the concept's EDR may be filed (Concept Design Review
+> Step 6 — Convergence Check). Agents/GSD flows must not self-certify
+> this field; only the solo author's explicit confirmation counts.
+
 ---
 
 ### Affected Documents

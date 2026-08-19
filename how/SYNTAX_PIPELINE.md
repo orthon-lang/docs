@@ -57,6 +57,9 @@ Language Design Gate (relevant)     ◄── OPERATIONAL CHECKLIST (_language-d
         │                                Named equivalence, all canonical forms, explicitness,
         │                                orthogonality, LLM generability.
         ▼
+Human Sign-off (Stage 6b)           ◄── NON-AUTOMATABLE GATE (solo author confirms)
+        │                                Reviewed-by · Date · Verdict [LOCKED / changes]
+        ▼
 EDR (Architecture category)         ◄── FORMAL RECORD (one per syntax decision)
         │
         ▼
@@ -152,6 +155,20 @@ syntax-relevant items: **Named equivalence** (if symbolic, the named form
 exists), **All canonical forms** documented, **Explicitness** (semantic
 changes syntactically visible), **Orthogonality** (no context-dependent
 behavior), **LLM generability** (no ambiguities an LLM can misparse).
+
+### Stage 6b — Human Sign-off
+
+The solo author explicitly confirms the chosen surface form before any
+EDR is written. This is the syntax-pipeline counterpart of the Concept
+Design Review's Convergence Check (Step 6) — a **non-automatable** gate:
+agents/GSD flows must NOT self-certify it. Record:
+
+`Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict: [LOCKED / changes]`
+
+**Rule:** An EDR may not be filed until this sign-off is populated. The
+EDR is a **record** of a stable, human-approved syntax decision, not a
+draft for iteration. The hypothesis doc's «Decision Pipeline Run» and
+the gate verdicts remain the EDR's validation trail.
 
 ### Stage 7 — EDR (Architecture category)
 
