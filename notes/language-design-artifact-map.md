@@ -38,6 +38,7 @@ deferred work or deliberate scope decisions.
 | **Goals & Non-Goals** | Concrete aims with acceptance criteria + what the language explicitly does **not** try to do | ✅ `why/GOALS.md` |
 | **Zen / Aphorisms** | Quick path to a guiding principle for design decisions | ✅ `why/ZEN.md` |
 | **Working Backwards** | From programmer pain-point → to language solution | ✅ `why/WORKING_BACKWARDS.md` |
+| **Strategy / Positioning** | Compact statement of the problem, why it is central, the chosen approach, and explicit non-goals | ✅ `why/POSITIONING.md` |
 
 ---
 
