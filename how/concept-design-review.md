@@ -1,6 +1,6 @@
 # Concept Design Review
 
-> The 7-step procedure for designing and validating each language
+> The 8-step procedure for designing and validating each language
 > concept during Milestone 2 of the design process.
 >
 > **Applies to:** [ROADMAP](../when/ROADMAP.md) § Milestone 2
@@ -15,7 +15,7 @@
 
 The Concept Design Review is the core design workflow of the Orthon
 project. Each concept identified in the Language Inventory (Milestone 1)
-undergoes a uniform 7-step procedure that ensures the design is:
+undergoes a uniform 8-step procedure that ensures the design is:
 
 - **Problem-driven** — starts from a real programmer need, not a
   technically interesting idea.
@@ -35,11 +35,11 @@ govern language design decisions. They serve distinct roles:
 
 | Artifact | Role | Answers | Applied |
 |----------|------|---------|---------|
-| **7-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
-| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 7-step output |
+| **8-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
+| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 8-step output |
 | **Language Design Gate** (`_language-design.md`) | **Checklist** — what to verify concretely | *Did we check everything?* | Operationalises the gates into a review form |
 
-**The flow:** The 7-step procedure produces a concept design. That design
+**The flow:** The 8-step procedure produces a concept design. That design
 is then evaluated through the seven Decision Validation gates. The
 `_language-design.md` checklist records the outcome of each check. Only
 concepts that pass all gates and satisfy the checklist are accepted.
@@ -57,24 +57,25 @@ concepts that pass all gates and satisfy the checklist are accepted.
 
 ---
 
-## 7-Step Procedure
+## 8-Step Procedure
 
-Each concept goes through the following 7 steps in order. Procedure steps
+Each concept goes through the following 8 steps in order. Procedure steps
 capture the creative design work; the deliverable (EDR + concept document)
-is handled separately in the Output section below. Steps 1–5 produce the
-design; Step 6 (Convergence Check) is the pre-EDR gate that requires an
-explicit Human Sign-off; Step 7 (EDR) records the settled, human-approved
+is handled separately in the Output section below. Steps 1–6 produce the
+design; Step 7 (Convergence Check) is the pre-EDR gate that requires an
+explicit Human Sign-off; Step 8 (EDR) records the settled, human-approved
 decision.
 
 | # | Step | Purpose | Answer |
 |---|------|---------|--------|
 | 1 | Idea/Problem | What problem does this concept solve? | Problem description |
-| 2 | Minimal Solution | What is the simplest valid solution? | Solution sketch |
-| 3 | Principle Check | Which Design Principles does it satisfy? | Principle mapping |
-| 4 | Examples | Show all canonical forms | Examples list |
-| 5 | Tooling Implications | Does this concept imply tooling requirements? | Tooling requirement(s) or "none" |
-| 6 | Convergence Check | Is the design baked and human-approved? | Sign-off field + verdict |
-| 7 | EDR | Record the decision with rationale | EDR file |
+| 2 | Alternatives | What solution space exists before converging? | Comparison table + Selection row |
+| 3 | Minimal Solution | Which alternative is the simplest valid solution? | Solution sketch + Selection reference |
+| 4 | Principle Check | Which Design Principles does it satisfy? | Principle mapping |
+| 5 | Examples | Show all canonical forms | Examples list |
+| 6 | Tooling Implications | Does this concept imply tooling requirements? | Tooling requirement(s) or "none" |
+| 7 | Convergence Check | Is the design baked and human-approved? | Sign-off field + verdict |
+| 8 | EDR | Record the decision with rationale | EDR file |
 
 ### Step Details
 
@@ -87,15 +88,39 @@ this step.
 **Output:** A clear problem statement that a competent programmer would
 recognise as genuine.
 
-#### 2. Minimal Solution
+#### 2. Alternatives
 
-Describe the simplest valid solution. What is the minimum semantic
-addition that solves the problem? If the solution requires multiple
-simultaneous additions, it is not orthogonal — split the concept.
+Generate the solution space **before** converging. Enumerate at least
+three candidate solutions, including the reject baselines. The canonical
+candidate set maps directly to the Decision Pipeline exit paths:
 
-**Output:** A solution sketch describing the minimal semantic addition.
+| # | Candidate | Description |
+|---|-----------|-------------|
+| A | Language construct | Full new semantics (primitive or pattern) |
+| B | Syntactic sugar | Desugarable to existing primitives, no new semantics |
+| C | Library / composition | Expressible as a library or pattern — not language |
+| D | Do nothing | Accept the friction; problem not worth a construct |
 
-#### 3. Principle Check
+At most one additional "wild" alternative beyond this set (5 candidates
+max). Score every candidate against the same fixed criteria used by the
+validation gates (Design Principles, minimality, orthogonality, LLM
+Generability Gate) in a comparison table.
+
+**Output:** a comparison table with a Selection row — the chosen candidate
+becomes the input to Step 3 (Minimal Solution). The table is carried
+verbatim into the EDR's "Alternatives Considered" field (Step 8).
+
+#### 3. Minimal Solution
+
+Select the winner of Step 2 (Alternatives). Describe the simplest valid
+solution — the minimum semantic addition that solves the problem. If the
+selected alternative requires multiple simultaneous additions, it is not
+orthogonal — split the concept or revisit the alternatives.
+
+**Output:** a solution sketch describing the minimal semantic addition,
+referencing the Selection row of the Step 2 comparison table.
+
+#### 4. Principle Check
 
 Map the concept to `DESIGN_PRINCIPLES.md`. Which principles does it
 satisfy? Does it violate any principle? If it violates any
@@ -105,7 +130,7 @@ and is ineligible for solo-author acceptance.
 **Output:** A table of principles with pass/fail per principle, and
 notes for any flagged violations.
 
-#### 4. Examples
+#### 5. Examples
 
 Write all canonical forms — every equivalent way to express this
 feature. Follow the *Show All Canonical Forms* principle from
@@ -114,7 +139,7 @@ feature. Follow the *Show All Canonical Forms* principle from
 **Output:** Code examples demonstrating minimal, typical, edge case,
 and incorrect usage categories.
 
-#### 5. Tooling Implications
+#### 6. Tooling Implications
 
 Before finalising the concept, check whether it has implications
 for developer tooling, LLM agent tooling, or the implementation repo
@@ -134,12 +159,14 @@ If yes, create a Tooling Requirement in `how/tooling/` using the
 > the spec but are implemented post-freeze (M2–M4). See
 > [`how/tooling/README.md`](tooling/README.md) for the full process.
 
-#### 6. Convergence Check
+#### 7. Convergence Check
 
 Before writing the EDR, verify the design is "baked". This is a lightweight
-pre-EDR gate — it prevents premature formalisation. All five sub-checks
+pre-EDR gate — it prevents premature formalisation. All six sub-checks
 must pass:
 
+- [ ] **Alternatives documented** — Step 2 produced at least three
+      candidates with a Selection row recorded before selection
 - [ ] **Syntax reviewed** — no conflicts with existing syntax (Semantic
       Purity, `()` as call, occupied keywords, naming collisions)
 - [ ] **Edge cases probed** — counterexamples considered: composition with
@@ -154,7 +181,7 @@ must pass:
 - [ ] **No remaining ambiguity** — all terms defined; no "decide later"
       items that could change fundamental semantics
 
-If any item fails → return to step 2 (Minimal Solution) and iterate.
+If any item fails → return to step 3 (Minimal Solution) and iterate.
 
 **Rule:** An EDR may not be filed until the Human sign-off field is
 populated. The EDR is a **record** of a stable, human-approved decision,
@@ -162,13 +189,14 @@ not a draft for iteration.
 
 **Output:** A completed Convergence Check with the Human sign-off field.
 
-#### 7. EDR
+#### 8. EDR
 
 Create an Engineering Decision Record (Architecture category) accepting
 the concept. Use the [`_edr-architecture.md`](templates/_edr-architecture.md)
 template. The EDR must cite the Problem, Solution, and Principle Check
-from steps 1-4, and must not be filed before the Human sign-off from
-step 6 is populated.
+from steps 1, 3, and 4, carry the Step 2 comparison table verbatim into
+its "Alternatives Considered" field, and must not be filed before the
+Human sign-off from step 7 is populated.
 
 **Output:** One `decision_records/architecture/EDR-NNN-concept-name.md` file.
 
@@ -176,7 +204,7 @@ step 6 is populated.
 
 ## Validation
 
-After the 7-step procedure is complete, the concept design must be
+After the 8-step procedure is complete, the concept design must be
 validated through all 7 Decision Validation gates defined in
 [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — see that
 document for the gate catalogue with criteria tables and gate selection
@@ -217,7 +245,7 @@ The transition from **DRAFT** (concept research in `how/concepts/research/`) to
 | Criteria | Requirement |
 |----------|-------------|
 | **Owner** | Solo author (per `TODO.md` convention) |
-| **Procedure** | All 7 Concept Design Review steps completed |
+| **Procedure** | All 8 Concept Design Review steps completed |
 | **EDR** | Architecture-category EDR filed in `decision_records/architecture/` |
 | **Gate validation** | Passes all 7 Decision Validation gates (`DECISION_VALIDATION.md`) |
 | **LLM Generability Gate** | Passes the 5-criteria LLM Generability Gate check — see [`llm-native-concept-shortlist.md`](../notes/llm-native-concept-shortlist.md) § LLM Generability Gate Requirement |

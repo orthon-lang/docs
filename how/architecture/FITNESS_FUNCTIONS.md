@@ -297,7 +297,7 @@ decisions are flagged.
 
 ## Human Sign-off Coverage
 
-**Source:** [concept-design-review.md](../concept-design-review.md) — Step 6 Convergence Check; [SYNTAX_PIPELINE.md](../SYNTAX_PIPELINE.md) — Stage 6b
+**Source:** [concept-design-review.md](../concept-design-review.md) — Step 7 Convergence Check; [SYNTAX_PIPELINE.md](../SYNTAX_PIPELINE.md) — Stage 6b
 
 Every accepted concept and syntax decision must carry a dated Human
 Sign-off field — `Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict:

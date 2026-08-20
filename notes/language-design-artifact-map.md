@@ -76,7 +76,7 @@ deferred work or deliberate scope decisions.
 | **Implementation Strategies** | How semantics map to different execution environments | ✅ `how/strategies/` (Default, Embedded, High-Performance, LLM) |
 | **Evolution Model** | Versioning, deprecation, experimental features, feature gates | 🔜 `how/EVOLUTION_MODEL.md` (Phase 8.1) |
 | **Documentation Principles** | Standards for writing and maintaining docs | ✅ `how/DOCUMENTATION_PRINCIPLES.md` |
-| **Concept Design Review Procedure** | 7-step pipeline for designing each concept | ✅ `how/concept-design-review.md` |
+| **Concept Design Review Procedure** | 8-step pipeline for designing each concept | ✅ `how/concept-design-review.md` |
 
 ---
 

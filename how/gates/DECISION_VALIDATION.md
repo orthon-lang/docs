@@ -397,7 +397,7 @@ established during the Concept Design Review (Milestone 2):
 | Gate | Precondition |
 |------|-------------|
 | `USER_VALUE_GATE` | A clear **Problem statement** must exist (step 1 of Concept Design Review). Without a well-defined problem, user value cannot be assessed. |
-| `ARCHITECTURAL_INTEGRITY_GATE` | **Interactions** with all existing concepts must be documented (step 7 of Concept Design Review). The gate evaluates fit within the architecture, which requires knowing how the concept composes with existing ones. |
+| `ARCHITECTURAL_INTEGRITY_GATE` | **Interactions** with all existing concepts must be documented during the Cross-Cutting Review (`CONCEPT_PIPELINE.md` Stage 11). The gate evaluates fit within the architecture, which requires knowing how the concept composes with existing ones. |
 
 These preconditions ensure that no gate is applied in isolation — each
 builds on analysis done earlier in the design process.

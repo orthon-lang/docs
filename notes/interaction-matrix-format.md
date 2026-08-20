@@ -13,8 +13,9 @@ between language concepts during the Cross-cutting Review (Milestone 3).
 
 Until the investigation is complete, adopt a **dual approach**:
 
-1. **Per-concept "Interactions" sections** (Milestone 2, step 7) —
-   Each Concept Design Review document includes an "Interactions"
+1. **Per-concept "Interactions" sections** (deferred to the Cross-cutting
+   Review — `CONCEPT_PIPELINE.md` Stage 11) —
+   Each Concept Design Review document may include an "Interactions"
    section that describes how the concept interacts with all existing
    accepted concepts.
 

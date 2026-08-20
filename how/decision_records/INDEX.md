@@ -90,6 +90,7 @@
 | EDR-085 | Architecture | [Execution Context Invocation — Unified Invocation Model](architecture/EDR-085-execution-context-invocation.md) | Accepted | 2026-08-06 | Supersedes EDR-033, EDR-047; adds 10th primitive |
 | EDR-086 | Architecture | [Generics Syntax Revision — Angle-Bracket Parameters and `as` Bounds](architecture/EDR-086-generics-syntax-revision.md) | Accepted | 2026-08-07 | Supersedes EDR-024 (syntax) |
 | EDR-087 | Process | [Syntax Acceptance Process — `how/syntax/` Working Entity](process/EDR-087-syntax-acceptance-process.md) | Accepted | 2026-08-15 | — |
+| EDR-088 | Process | [Concept Design Review — Alternatives Phase](process/EDR-088-alternatives-phase.md) | Accepted | 2026-08-20 | — |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -203,6 +204,7 @@
 | EDR-011 | [Process Inventory](process/EDR-011-process-inventory.md) | Accepted | 2026-07-18 |
 | EDR-015 | [Decision Log](process/EDR-015-decision-log.md) | Accepted | 2026-07-27 |
 | EDR-087 | [Syntax Acceptance Process](process/EDR-087-syntax-acceptance-process.md) | Accepted | 2026-08-15 |
+| EDR-088 | [Concept Design Review — Alternatives Phase](process/EDR-088-alternatives-phase.md) | Accepted | 2026-08-20 |
 
 ### Quality
 | ID | Title | Status | Date |
@@ -218,7 +220,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 61 |
+| Accepted | 62 |
 | **Rejected** | **4** |
 | Proposed | 0 |
 | Deprecated | 0 |
@@ -226,4 +228,4 @@
 
 ---
 
-*Last updated: 2026-08-15* (EDR-087 added — Syntax Acceptance Process, Process; establishes `how/syntax/`, `how/SYNTAX_PIPELINE.md`, `what/syntax/` and the `SYNTAX.md` hub. Prior: EDR-086 — Generics Syntax Revision, Architecture; supersedes EDR-024 syntax aspects. Prior: EDR-085 — Execution Context Invocation, Architecture; supersedes EDR-033/EDR-047, adds 10th primitive; C-003 amendment applied — PRIMITIVE_BLOCKS 10 primitives, EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES/DECLARATIVE_CONSTRUCTS updated, DELEGATE rewritten, SCOPED_RESOURCE_LIFECYCLE superseded. Prior: EDR-083 Range + EDR-084 Slice — Range/Slice package. Prior: EDR-082 — 1-Based Indexing. By Category table backfilled with EDR-079 through EDR-081. See also: EDR-075 through EDR-078 rejected, EDR-063 through EDR-074 prior wave)
+*Last updated: 2026-08-20* (EDR-088 added — Concept Design Review — Alternatives Phase, Process; procedure 7→8 steps. Prior: EDR-087 — Syntax Acceptance Process, Process; establishes `how/syntax/`, `how/SYNTAX_PIPELINE.md`, `what/syntax/` and the `SYNTAX.md` hub. Prior: EDR-086 — Generics Syntax Revision, Architecture; supersedes EDR-024 syntax aspects. Prior: EDR-085 — Execution Context Invocation, Architecture; supersedes EDR-033/EDR-047, adds 10th primitive; C-003 amendment applied — PRIMITIVE_BLOCKS 10 primitives, EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES/DECLARATIVE_CONSTRUCTS updated, DELEGATE rewritten, SCOPED_RESOURCE_LIFECYCLE superseded. Prior: EDR-083 Range + EDR-084 Slice — Range/Slice package. Prior: EDR-082 — 1-Based Indexing. By Category table backfilled with EDR-079 through EDR-081. See also: EDR-075 through EDR-078 rejected, EDR-063 through EDR-074 prior wave)

@@ -160,7 +160,7 @@ behavior), **LLM generability** (no ambiguities an LLM can misparse).
 
 The solo author explicitly confirms the chosen surface form before any
 EDR is written. This is the syntax-pipeline counterpart of the Concept
-Design Review's Convergence Check (Step 6) — a **non-automatable** gate:
+Design Review's Convergence Check (Step 7) — a **non-automatable** gate:
 agents/GSD flows must NOT self-certify it. Record:
 
 `Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict: [LOCKED / changes]`

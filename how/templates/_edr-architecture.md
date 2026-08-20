@@ -53,6 +53,9 @@ How will we verify this architectural decision is followed?
 
 ### Alternatives Considered
 
+> Populated from Concept Design Review Step 2 (Alternatives). The
+> comparison table is carried verbatim from that step.
+
 | Alternative | Rationale for Rejection |
 |-------------|-------------------------|
 | … | … |

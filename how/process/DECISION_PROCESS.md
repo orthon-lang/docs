@@ -51,6 +51,6 @@ what priority.
 4. **No feature without pipeline.** Every feature runs through the
    Decision Pipeline before detailed design begins.
 5. **No EDR without human sign-off.** Tier 1–2 decisions require the
-   solo author's explicit Human Sign-off (Concept Design Review Step 6
+   solo author's explicit Human Sign-off (Concept Design Review Step 7
    — Convergence Check; Syntax Pipeline Stage 6b) before an EDR may be
    filed. Agents/GSD flows must not self-certify the sign-off.

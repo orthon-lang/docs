@@ -34,8 +34,8 @@ in this directory. These documents are:
 
 1. **Ad-hoc** — during any language design work, if you think "this
    concept implies a tool", create a `.md` file here.
-2. **In Concept Design Review** — after step 5 (EDR), check whether the
-   concept has tooling implications and create a file if needed.
+2. **In Concept Design Review** — during step 6 (Tooling Implications),
+   check whether the concept has tooling implications and create a file if needed.
 
 ---
 

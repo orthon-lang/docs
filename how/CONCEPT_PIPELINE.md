@@ -43,12 +43,14 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
            ▼
 ┌─────────────────────────────┐
 │ Concept Design Review       │  ◄── DETAILED DESIGN
-│ (6 steps)                   │      1. Idea/Problem
-│ how/concept-design-review.md│      2. Minimal Solution
-│                             │      3. Principle Check
-│                             │      4. Examples
-│               ▲             │      5. Convergence Check ★
-│               │ iteration   │      6. EDR (only when baked)
+│ (8 steps)                   │      1. Idea/Problem
+│ how/concept-design-review.md│      2. Alternatives
+│                             │      3. Minimal Solution
+│                             │      4. Principle Check
+│                             │      5. Examples
+│                             │      6. Tooling Implications
+│               ▲             │      7. Convergence Check ★
+│               │ iteration   │      8. EDR (only when baked)
 │               │             │
 └───────────────┼─────────────┘
                 │ (pass)
@@ -193,7 +195,7 @@ composition formula. See EDR-012 for the full classification rule.
 
 ---
 
-### 5. Concept Design Review (7 Steps)
+### 5. Concept Design Review (8 Steps)
 
 **Document:** [`how/concept-design-review.md`](concept-design-review.md)
 
@@ -203,22 +205,25 @@ procedure with step descriptions and gate mappings.
 
 ```
   1. Idea/Problem
-  2. Minimal Solution
-  3. Principle Check
-  4. Examples
-  5. Tooling Implications
+  2. Alternatives
+  3. Minimal Solution
+  4. Principle Check
+  5. Examples
+  6. Tooling Implications
       │
       ▼  ← iteration loop (if check fails)
-  6. Convergence Check (Human sign-off) ◄── pre-EDR gate
+  7. Convergence Check (Human sign-off) ◄── pre-EDR gate
       │
       ▼
-  7. EDR
+  8. EDR
 ```
 
-**Step 6 — Convergence Check (pre-EDR gate).** Before writing the EDR,
+**Step 7 — Convergence Check (pre-EDR gate).** Before writing the EDR,
 verify the design is "baked". This is a lightweight checklist, not a
 full validation gate — it prevents premature formalisation:
 
+- [ ] **Alternatives documented** — Step 2 produced at least three
+      candidates with a Selection row recorded before selection
 - [ ] **Syntax reviewed** — no conflicts with existing syntax (Semantic Purity,
       `()` as call, occupied keywords, naming collisions)
 - [ ] **Edge cases probed** — counterexamples considered: composition with
@@ -233,7 +238,7 @@ full validation gate — it prevents premature formalisation:
 - [ ] **No remaining ambiguity** — all terms defined; no "decide later"
       items that could change fundamental semantics
 
-If any item fails → return to step 2 (Minimal Solution) and iterate.
+If any item fails → return to step 3 (Minimal Solution) and iterate.
 **Do NOT proceed to the EDR until the Human sign-off field is populated.**
 EDR is a **record** of a stable, human-approved decision, not a draft
 for iteration.
@@ -242,7 +247,7 @@ Convergence typically requires 1-3 dialogue cycles: first analysis
 reveals surface-level issues, user probing reveals deeper constraints,
 final review confirms no surprises remain.
 
-**Step 7 (EDR)** creates the Architecture-category EDR file.
+**Step 8 (EDR)** creates the Architecture-category EDR file.
 Interactions analysis is deferred to Phase 6 (Cross-Cutting Review)
 and is not part of the individual Concept Design Review.
 
@@ -252,7 +257,7 @@ and is not part of the individual Concept Design Review.
 
 **Document:** [`how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md)
 
-After the 7-step design, the concept is evaluated through 7 independent
+After the 8-step design, the concept is evaluated through 7 independent
 validation gates. Each gate produces a binary verdict (pass / fail) or
 a conditional flag. Any **fail** or unresolved **flag** means the
 concept must be revised.
@@ -362,7 +367,7 @@ pipeline pass.
 [`notes/interaction-matrix-format.md`](../notes/interaction-matrix-format.md)
 
 Happens after multiple concepts are accepted (M1, Phase 6). Each concept's
-interaction data (from Concept Design Review Step 7) feeds into the
+interaction data (from Concept Design Review Step 8) feeds into the
 pair-wise interaction matrix. Conflicts are tracked in the Conflict Registry
 with resolution status. Goal: zero open conflicts at end of Phase 6.
 
