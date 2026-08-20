@@ -1,12 +1,13 @@
 # Positioning
 
 > **Canonical block.** This document distills Orthon's strategic
-> answers to four questions — what problem we solve, why it is the
-> central one, what approach we chose, and what we gave up — into one
-> readable statement. It consolidates decisions already recorded in
-> [`VISION.md`](VISION.md), [`GOALS.md`](GOALS.md),
+> answers — what problem we solve, why it is the central one, what
+> approach we chose, what we gave up, how we measure success, and what
+> can go wrong — into one readable statement. It consolidates decisions
+> already recorded in [`VISION.md`](VISION.md), [`GOALS.md`](GOALS.md),
 > [`MANIFESTO.md`](MANIFESTO.md), and
-> [`WORKING_BACKWARDS.md`](WORKING_BACKWARDS.md). It introduces no new
+> [`WORKING_BACKWARDS.md`](WORKING_BACKWARDS.md); the concrete actions
+> live in [`ROADMAP.md`](../when/ROADMAP.md). It introduces no new
 > design decisions.
 
 ## Strategy in One Paragraph
@@ -147,7 +148,76 @@ explicitly gives up the following.
 - From Java: ceremonial verbosity, the everything-is-an-object dogma,
   checked-exception fatigue, a stagnant standard library.
 
-## 5. Cross-References
+## 5. How We Measure Success
+
+Success is not a single KPI; it is a set of acceptance criteria that
+the design must satisfy, measured at three levels. Each level already
+exists as a concrete artifact — this section only names them.
+
+**At the level of the whole language** — the Success Criteria in the
+canonical block of [`VISION.md`](VISION.md):
+
+- **Stable semantics** — programs from v1.0 run correctly on v10.0.
+- **Small core** — all features decompose to a minimal primitive set.
+- **Predictable evolution** — extensions through libraries, not core
+  changes.
+- **LLM generability** — LLMs can reliably produce correct Orthon code.
+- **Execution portability** — the same program runs identically in any
+  conforming Engine.
+
+**At the level of each goal** — the acceptance criteria attached to the
+six goals in [`GOALS.md`](GOALS.md). Every design decision is judged
+against them; a decision that advances a non-goal at the expense of a
+goal is rejected.
+
+**At the level of each construct and milestone** — the gates and exit
+criteria:
+
+- Each construct must pass the validation gates in
+  [`DECISION_VALIDATION.md`](../how/gates/DECISION_VALIDATION.md),
+  including the LLM Generability Gate.
+- The design is protected against decay by the measurable checks in
+  [`FITNESS_FUNCTIONS.md`](../how/architecture/FITNESS_FUNCTIONS.md).
+- Each phase of the roadmap defines its own exit criteria; a phase is
+  not complete until they are satisfied
+  ([`ROADMAP.md`](../when/ROADMAP.md)).
+
+There is no business-style kill criterion — this is a solo-authored,
+documentation-only project. The equivalent of an exit condition is the
+freeze audit: v0.1 is accepted only when the specification is
+self-consistent, every cross-reference resolves, and the validation
+suite passes (Phase 8 of [`ROADMAP.md`](../when/ROADMAP.md)).
+
+## 6. Risks
+
+What can go wrong, and what already exists to counter it.
+
+- **Core creep.** The language accumulates features and special cases —
+  the very accretion Orthon criticizes. *Control:* Design Principles are
+  locked as constitutional and change only via EDR; Phase 8.2 enforces
+  global minimality.
+- **Layer mixing.** A "Why" argument smuggled into a "What" document, or
+  roadmap detail pulled into the vision layer. *Control:* layer-integrity
+  rules and the English-only gate in [`AGENTS.md`](../AGENTS.md), plus
+  the repository-wide link audit.
+- **A decorative LLM gate.** "LLM generability" is claimed but never
+  actually verified, so the headline differentiator stays a slogan.
+  *Control:* the LLM Generability Gate is mandatory for acceptance, and
+  Phase 8.4 runs real LLM generation tests and a conformance suite.
+- **Implementing before the design is frozen.** The pull to start the
+  compiler before M1 completes, breaking the design contract. *Control:*
+  the "Design before implement" principle and the documentation-only
+  scope of this repository ([`ROADMAP.md`](../when/ROADMAP.md)).
+- **Solo-author drift.** Without reviewers, decisions quietly drift from
+  the principles. *Control:* self-imposed rigor — Concept Design Review,
+  validation gates, and the mandatory human sign-off before consequential
+  EDRs ([`AGENTS.md`](../AGENTS.md) §7.4).
+- **An incoherent freeze.** The final specification has dangling
+  cross-references or contradictions between concepts. *Control:* the
+  Phase 8.5 freeze audit — full link audit and a self-consistency check
+  before tagging v0.1.
+
+## 7. Cross-References
 
 - [`VISION.md`](VISION.md) — the full rationale: pain, pillars, and the
   LLM-era framing.
@@ -159,3 +229,5 @@ explicitly gives up the following.
   statement of why Orthon exists.
 - [`AGENTS.md`](../AGENTS.md) — contribution protocol and document map
   (English-only rule, §10.9).
+- [`ROADMAP.md`](../when/ROADMAP.md) — the coherent actions: ordered
+  phases and milestones that turn the strategy into deliverables.
