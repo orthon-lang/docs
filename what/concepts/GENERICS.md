@@ -227,11 +227,21 @@ Static dispatch via monomorphisation with trait bounds. Invariant by default. `w
 
 ## Open Questions
 
-1. Should higher-kinded types (HKT) be supported in v0.2+? (Not in v0.1.)
+1. Should higher-kinded types (HKT) be supported in the v0.2+? (Not in v0.1.)
 2. Should associated type defaults be allowed? (E.g., `type Item = T` as fallback.)
 3. How does monomorphisation interact with the Execution Program model — can monomorphised code be cached across builds?
 4. Should negative trait bounds (`where T as !Hash`) be supported in v0.2+?
 5. How does generics interact with the Metadata Protocol (`@`) — should `T@name` expose the concrete type name?
+6. **Multi-bound readability** (2026-08-21): when a generic function has
+   three or more trait bounds (`<Hash + Eq + Ord + Clone as T>`), the inline
+   syntax becomes verbose. The
+   [`TYPE_ALIAS`](../../how/concepts/research/important/TYPE_ALIAS.md)
+   hypothesis § Bound Conjunction Alias proposes naming a bound conjunction
+   (`alias TotalOrd = Eq + Hash + Ord + Clone`) so the call site reads
+   `fun sort<TotalOrd as T>(T items)`. The alias is transparent sugar over
+   the existing `+` conjunction operator (EDR-086 #3) and introduces no new
+   trait (trait inheritance is rejected by EDR-019, so alias is the only
+   mechanism to name a bound set). Status: hypothesis, not yet accepted.
 
 ## Decision History
 
