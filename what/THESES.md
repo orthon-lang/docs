@@ -106,3 +106,32 @@ not by merging them into a single type.
 > `Option` (absence is normal), `?` on `Result`/`!T` (failure must be
 > propagated or handled). Orthogonality is why Orthon separates
 > narrowable `Option` from non-narrowable `Result` (EDR-028).
+
+### Compile-Time Execution — three orthogonal axes
+
+**Status:** DRAFT
+**Source:** [`what/concepts/COMPILE_TIME_EXECUTION.md`](concepts/COMPILE_TIME_EXECUTION.md) § Synthesis,
+[EDR-031](../how/decision_records/architecture/EDR-031-compile-time-execution.md),
+[EDR-086](../how/decision_records/architecture/EDR-086-generics-syntax-revision.md)
+
+**Thesis:** Compile-time execution is needed — it moves work from the
+runtime to the compiler. But "comptime" is not one homogeneous
+mechanism: it names three orthogonal things by nature, each with its own
+surface form — generics/type inference via `<>` (EDR-086),
+metadata/reflection via `@` (Metadata Protocol), and the phase axis
+(when code runs) via one explicit phase marker whose granularity
+(parameter/block/function) is still open.
+
+> Elaboration: axes 1 and 2 are already settled and never use the word
+> "comptime" — `<>` and `@` mark compile-time-ness implicitly. Only the
+> phase axis needs an explicit marker, and only for work the other two
+> do not cover. The `comptime T: type` parameter form (EDR-031) is where
+> the type axis was expressed through the phase axis — the conflation
+> that causes the syntax tension. Granularity is not settled: a block is
+> the irreducible form (compile-time constants, assertions, local
+> metaprogramming); a function marker is sugar whose specialised case
+> already exists as `@macro` (EDR-029); a parameter marker narrows to
+> reflection helpers once generics live in `<>`.
+> What it does NOT claim: it does not decide the granularity (OQ 4), the
+> block syntax/terminology (OQ 6), or the phase keyword — those are
+> Phase 5 decisions.

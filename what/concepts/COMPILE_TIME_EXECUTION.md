@@ -143,10 +143,138 @@ The LLM generability constraint is the primary reason Orthon's comptime model di
 1. Should comptime code support cross-module evaluation (evaluating comptime code from dependencies)?
 2. How should comptime interact with incremental compilation — can comptime results be cached?
 3. Should comptime support compile-time allocation with arena semantics?
+4. **Comptime granularity — parameter vs. block vs. function.** Is comptime a
+   property of a single parameter (`comptime T: type`), a block
+   (`comptime:` / `comptime {}`), or a whole function? The three are not
+   interchangeable:
+   - **Parameter** passes a `type` as a value; it is needed only if `type`
+     remains a first-class comptime value. If generics migrate to `<>`
+     (EDR-086), parameter-level comptime narrows to reflection helpers.
+   - **Block** is the only way to express non-macro compile-time work —
+     compile-time constants, compile-time assertions, local metaprogramming —
+     and cannot be reduced to a parameter.
+   - **Function** already exists in specialised form as `@macro` (EDR-029);
+     a general non-macro comptime function marker is sugar over "all
+     parameters comptime + body comptime", not a new semantic.
+   Resolution order: settle generics first (EDR-031 vs EDR-086), since
+   parameter-level necessity depends on that outcome; block-level necessity
+   is independent of it.
+5. **Comptime as deferred invocation (delegate analogy).** Orthon's unified
+   Invocation model (EDR-085) already models deferred execution:
+   `delegate(obj)` hands an object to a serialised actor context, `defer(obj)`
+   to a coroutine, and `<-` sends messages. Should comptime be modelled by
+   the same analogy — comptime code "hands control to the compiler" for
+   execution during compilation? Open sub-questions:
+   - The target differs: `delegate`/`defer` hand control to a *runtime*
+     context (actor/coroutine); comptime would hand control to the
+     *compiler*. Is this the same Invocation pattern (EDR-085) or a distinct
+     axis?
+   - Reusing `<-` would overload the message-send operator; what symbol or
+     keyword would mark "hand control to the compiler"?
+   - EDR-031 Principle #3 ("comptime is not a separate language — the same
+     Orthon code runs at comptime") already rules out a separate execution
+     model; a delegate-style comptime must remain the same language, merely
+     an earlier phase, not a distinct runtime.
+6. **Block syntax and terminology.** The accepted block form `comptime:` reads
+   awkwardly; candidates include brace blocks (`comptime {}`), a full-word
+   marker (`compiletime {}`), or a mode keyword. Constraint: `#` (unhygienic
+   macro access, EDR-029), `@` (metadata/reflection prefix), `with`
+   (copy-with-modify, EDR-042), and `const`/`static` (literal preservation
+   EDR-043 / Static allocation policy) are all already loaded. This must be
+   resolved consistently with Orthon's block style (colon-blocks such as
+   `using x = expr:` vs brace-blocks in research examples).
+7. **Symbolic comptime markers (`@` / `#` / `<>`).** Could a symbol replace
+   the `comptime` keyword? Analysis: `@` is already the Metadata Protocol
+   prefix (reflection `@typeInfo`, `@derive`, `@macro`); `#` is already
+   unhygienic macro access (EDR-029); `<>` is already type parameters and
+   type application (EDR-086). Reusing any of them for a comptime
+   phase/parameter marker would overload a loaded symbol and conflate
+   orthogonal axes (type vs value vs phase). Proposals to treat `<>` as a
+   general "compile-time frame" for expressions/blocks additionally collide
+   with the `<`/`>` comparison operators. The simplification is not a new
+   symbol: remove `comptime T: type` from the generics path (generics =
+   `<>`), leaving `@` (metadata) + one phase/block keyword (OQ 6).
+8. **`requires` is not a trait bound.** `requires` is a boolean predicate
+   over *values* — CONSTRAINED_TYPES (EDR-080: `type Age = Int requires
+   v >= 0 && v <= 150`) and CONTRACTS (EDR-056: `requires x >= 0.0`) —
+   enforced at value boundaries. A trait bound is an assertion about a
+   *type* (trait satisfaction), resolved at compile time. Proposals such as
+   `fun max(a: T, b: T): T requires Comparable as T` conflate value
+   constraint with type constraint. The signature tail already separates
+   them: `where T as Hash + Eq` for types vs `requires` for values. Call
+   sites use type inference (`max(1, 2)`) or turbofish (`max::<Int>(1, 2)`),
+   not `using T` — `using` is taken by resource (`using x = expr:`) and
+   context (`(using ord: Ord[A])`) clauses.
+9. **Comptime as invocation-in-context.** EDR-085 unifies deferred execution
+   under context constructors (`delegate`, `defer`, `spawn`, `fork`) with
+   submission operators (`<-`, `|>`) and materialisation (`take`, `await`,
+   `next`). Could comptime be a fifth execution policy — an invocation
+   evaluated during compilation? Analysis: conceptually yes — comptime is an
+   execution-policy axis ("when code runs"), and the colourless-function
+   model extends naturally. Syntactically no: the delegate/actor machinery
+   (persistent context object, mailbox, message queue, ownership transfer,
+   runtime lifetime) has no compile-time analogue. `@typeInfo(Point)` is
+   already a "comptime invocation" — the `call` primitive evaluated in the
+   comptime phase, marked by `@`. There is no `comptime_ctx <- fn(args)`;
+   comptime has no runtime lifecycle. Invocation-with-context is a runtime
+   mechanism; comptime is a phase mechanism — orthogonal axes.
+
+## Synthesis (Draft Thesis — 2026-08-22)
+
+> The distilled thesis is captured in
+> [`THESES.md`](../THESES.md) § Compile-Time Execution — three
+> orthogonal axes. This section records the full analysis behind it.
+
+Compile-time execution (Zig-style comptime) is needed: it moves work from
+the runtime to the compiler. But "comptime" is not one homogeneous
+mechanism — it names three different things by nature, each answering a
+different question:
+
+1. **Type inference / generics** — *which types does this code work with?*
+   Answered at compile time by type inference and specialisation. Surface
+   form: the angle-bracket diamond `<>` (EDR-086) or an equivalent
+   `where`-clause form. Already settled — and it never needs the word
+   "comptime": `<>` marks the compile-time nature implicitly.
+2. **Metadata / reflection during compilation** — *what is the structure
+   of this type or value?* Answered at compile time via the Metadata
+   Protocol. Surface form: `@` — `@typeInfo`, `@field`, `@hasDecl`,
+   `@derive`, `@macro`. Already unified; `@` marks the compile-time
+   evaluation implicitly.
+3. **Comptime parameters, blocks, or whole functions** — *when does this
+   code run?* The phase axis, and the only axis that needs an explicit
+   phase marker. Granularity is open (OQ 4), but the candidates are not
+   equal:
+   - **Block** — the irreducible form: the only way to express non-macro
+     compile-time work (compile-time constants, compile-time assertions,
+     local metaprogramming). Cannot be reduced to a parameter or a
+     function marker.
+   - **Function** — sugar, not a primitive: "this function runs at
+     compile time" = "all parameters comptime + body executes in a
+     comptime context". Its specialised case already exists as `@macro`
+     (EDR-029) — a function executed in the comptime phase to generate
+     AST.
+   - **Parameter** (`comptime T: type`) — needed only while `type`
+     remains a first-class comptime value; once generics live in `<>`
+     (EDR-086), parameter-level comptime narrows to reflection helpers.
+
+Key observation: axes 1 and 2 are already settled and never use the word
+"comptime" — their markers (`<>`, `@`) denote compile-time-ness implicitly.
+Only axis 3 needs an explicit phase marker, and only for work the other two
+do not cover. The `comptime T: type` parameter form (EDR-031) is exactly
+where axis 1 (types) was expressed through axis 3 (phase) — the conflation
+that causes the syntax tension. Keeping the three axes separate (types via
+`<>`, metadata via `@`, phase via one keyword) dissolves the tension: no
+`comptime T: type`, no `@`/`#`/`<>` reuse, no `requires`-as-bound. Status:
+draft thesis for Phase 5, not a decision.
 
 ## Decision History
 
 - **2026-07-27:** Accepted via EDR-031. Unified comptime model adopted (Zig-inspired) with explicit trait bounds for LLM discoverability. Cross-ref with GENERICS established — comptime IS the generic mechanism. Cross-ref with AST_MACROS established — macros execute in comptime. LLM Generability Gate identified as critical with documented restrictions.
+- **2026-08-22:** Design review recorded the comptime syntax tension. Open
+  Questions 4–9 added (granularity, delegate analogy, block syntax,
+  symbolic markers, `requires` vs bounds, comptime invocation). Draft
+  thesis: comptime splits into three orthogonal axes — generics (`<>`),
+  metadata (`@`), and phase (one keyword). No decision; feeds Phase 5.
 
 ---
 
