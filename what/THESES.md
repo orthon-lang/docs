@@ -135,3 +135,30 @@ metadata/reflection via `@` (Metadata Protocol), and the phase axis
 > What it does NOT claim: it does not decide the granularity (OQ 4), the
 > block syntax/terminology (OQ 6), or the phase keyword — those are
 > Phase 5 decisions.
+
+### Compile-Time Execution — phase marker `bake` at the call site
+
+**Status:** DRAFT
+**Source:** [`what/concepts/COMPILE_TIME_EXECUTION.md`](concepts/COMPILE_TIME_EXECUTION.md) § Phase marker position & keyword (Exploration note 2026-08-23),
+[`.planning/notes/2026-08-23-comptime-phase-marker-bake.md`](../.planning/notes/2026-08-23-comptime-phase-marker-bake.md)
+
+**Thesis:** The phase axis's explicit marker is applied at the **call
+site**, not the declaration — functions are colourless — and its leading
+keyword candidate is **`bake`**: `TABLE = bake generate_table(256)`
+evaluates the expression during compilation and embeds the result.
+
+> Elaboration: `bake` was chosen over `consteval` (C++ constexpr/
+> consteval baggage) and `comptime`; symbols `#`/`@`/`<>` are blocked by
+> Semantic Purity and loaded meanings (`#` = line comment + unhygienic
+> macro escape, EDR-029; `@` = Metadata Protocol; `<>` = generics,
+> EDR-086). `const TABLE = expr` was rejected — the expression-level
+> marker is required for the general case (asserts, args), so a separate
+> `const` binding concept is not introduced (resolves
+> `DECLARATION_BY_ASSIGNMENT.md` OQ3). Comptime safety (no IO/FS/network)
+> is checked transitively at the call site.
+> What it does NOT claim: `bake` is not an accepted keyword — marker
+> position and keyword are DRAFT candidates feeding Phase 5. EDR-031
+> Principle 5 ("marker at the definition site") still stands and must be
+> amended via an EDR with Human Sign-off before this thesis can be
+> VERIFIED. It does not resolve the block form (OQ 6) or granularity
+> (OQ 4).
