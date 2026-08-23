@@ -3,7 +3,7 @@ date: "2026-08-23 00:00"
 promoted: false
 ---
 
-## Comptime phase marker: `bake` at the call site
+## Compile time phase marker: `bake` at the call site
 
 ### The question
 
@@ -38,6 +38,39 @@ mailbox, no runtime lifetime, no materialisation vocabulary
 - **`const TABLE = expr` rejected** — since the expression-level marker
   is required for the general case, no separate `const` binding concept.
   Resolves OQ3 in `what/concepts/DECLARATION_BY_ASSIGNMENT.md`.
+
+### Considered and rejected: `@bake` (2026-08-23)
+
+Proposal: use `@bake` as the phase marker by analogy with `@macro`
+(EDR-029). Rejected — three reasons:
+
+1. **Different granularity and position.** `@macro` is a declaration-site
+   annotation on a function (`@macro fun generate(...)`); `bake` is a
+   call-site/expression marker (`TABLE = bake generate_table(256)`). Per
+   the three-axis thesis, `@macro` is the specialised case of a comptime
+   function; the general phase marker must cover expressions and blocks,
+   so the analogy does not transfer.
+2. **Axis conflation.** `@` is the Metadata Protocol (axis 2 — *what
+   structure*); the phase marker is axis 3 (*when it runs*). `@bake`
+   would give `@` two meanings depending on the following token
+   (`@typeInfo` vs `@bake`) — exactly what Semantic Purity forbids, and
+   the axis conflation the thesis dissolves. `@` remains blocked for the
+   phase marker (OQ7).
+3. **The block form.** The irreducible comptime form is a block; `@bake
+   { ... }` does not fit the established `@` grammar (`@name(args)` or
+   `expr@op`). One keyword `bake` covers both `bake expr` and
+   `bake: block` with a single grammar; `@bake` would require two marker
+   styles for one concept.
+
+Consistent alternative acknowledged: a *declaration-site* marker for a
+general non-macro comptime function could be `@`-annotated like `@macro`
+(e.g. `@bake fun f(...)`). But per the thesis that is sugar (function
+comptime = all parameters comptime + body comptime), and the call-site
+model makes such a marker unnecessary — the colourless function's phase is
+visible at the call site.
+
+**Conclusion:** `bake` stays a keyword at the call site (expression +
+block), not `@bake`.
 
 ### Tension flagged
 
