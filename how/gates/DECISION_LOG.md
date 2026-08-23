@@ -6038,3 +6038,27 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 ### Status
 
 - **RESOLVED** — the previously blocked Panic → PROGRAM_ERROR item is released and applied. The rename is more than a name change: it upgrades the unnamed escape hatch into a classified, diagnosable system error (diagnostic contract + fault-owner attribution per EDR-089).
+
+---
+
+## Entry: SYSTEM_ERROR — Step 5 syntax verification (closure)
+
+**Date:** 2026-08-23
+**Artifact validated:** `SYSTEM_ERROR` (EDR-089) + `Panic → PROGRAM_ERROR` amendment (EDR-020)
+**Decision recorded as:** **CLOSED** — no syntax required.
+
+### What was verified
+
+- `what/syntax/`, `how/syntax/`, `what/SYNTAX.md`, `how/SYNTAX_PIPELINE.md` contain no
+  mention of `SYSTEM_ERROR`, `PROGRAM_ERROR`, `EXECUTION_ERROR`, `PLATFORM_ERROR`, or `Panic`.
+- The `how/syntax/` decision queue holds only unrelated items (function/type/rebinding
+  syntax); nothing routes to the error taxonomy.
+- `CORE_CONCEPTS.md` § SYSTEM_ERROR already records: "No new primitive, no new syntax, no Core change."
+- The taxonomy is a naming + contract layer (fault-owner names for existing Execution
+  Environment layers; defined diagnostic + termination contract), not a syntactic construct —
+  so the EDR-087 syntax acceptance pipeline has nothing to accept.
+
+### Status
+
+- **Plan complete:** hypothesis (Steps 1–2) → Concept Design Review + EDR-089 (Step 3) →
+  PANIC → PROGRAM_ERROR amendment (Step 4) → syntax verification (Step 5). All steps done.
