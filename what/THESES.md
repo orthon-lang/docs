@@ -162,3 +162,45 @@ evaluates the expression during compilation and embeds the result.
 > amended via an EDR with Human Sign-off before this thesis can be
 > VERIFIED. It does not resolve the block form (OQ 6) or granularity
 > (OQ 4).
+
+### AST Macros — expander contract, not phase sugar
+
+**Status:** DRAFT
+**Source:** [`what/concepts/AST_MACROS.md`](concepts/AST_MACROS.md),
+[EDR-029](../how/decision_records/architecture/EDR-029-ast-macros.md),
+[`what/concepts/COMPILE_TIME_EXECUTION.md`](concepts/COMPILE_TIME_EXECUTION.md) § Relationship to Existing Mechanisms / § Synthesis,
+[`how/gates/DECISION_LOG.md`](../how/gates/DECISION_LOG.md) (EDR-029 pipeline Q5/Q7),
+review lock 2026-08-23 (Q3: `@macro` vs `bake` / `@`)
+
+**Thesis:** `@macro` is a **compiler-recognized AST expander contract**,
+not syntactic sugar over the phase marker (`bake` / comptime) and not
+reducible to Metadata Protocol (`@`). It marks a function whose job is
+**AST → AST code generation** (typed AST in, typed AST out, splice into
+the program under hygiene and single-pass expansion). The phase engine
+runs the body at compile time; `@` may supply structure; neither
+substitutes for expansion.
+
+> Elaboration: four duties stay distinct —
+> (1) **types/generics** via `<>` (EDR-086);
+> (2) **metadata/reflection** via `@` (read structure: `@typeInfo`, …);
+> (3) **phase** via an explicit marker at the call site (candidate
+> `bake`) for value-level compile-time evaluation;
+> (4) **AST codegen/expansion** via `@macro` / `@derive` (declaration-
+> driven expand pass: parse → expand → type-check expanded AST).
+>
+> `bake f(x)` embeds a **value**. A `@macro` / `@derive` invocation
+> splices **AST nodes** (`ImplBlock`, `Expr`, …). Decision Log for
+> EDR-029: the macro mechanism adds **new semantics** (Q5); only
+> `@derive` is sugar over `@macro` (Q7). Typed AST signatures are part
+> of the contract, not the whole of it — also required: expansion
+> participation, splice, hygiene-by-default, single-pass ordering, and
+> post-expansion verification.
+>
+> What it does NOT claim: it does not accept `bake` as a keyword; it
+> does not amend EDR-031 Principle 5; it does not decide the unhygienic
+> escape sigil (`#` vs alternatives — open, Q4); it does not require
+> call-site `bake` on macro invocations (expansion finds `@macro` /
+> `@derive` without a phase keyword). It refines the three-axis comptime
+> thesis: `@macro` is not merely “function-level comptime sugar” — it is
+> the specialised **codegen/expansion** surface that builds *on* the
+> phase engine.
