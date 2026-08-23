@@ -114,3 +114,14 @@ All seven gates are required per `DECISION_VALIDATION.md` § Gate Selection (new
 ### Supersedes
 
 *None* — this is a new decision, not a replacement.
+
+### Amendment (2026-08-23)
+
+The `Panic` alternative strategy named in
+[`what/concepts/ERROR_HANDLING.md`](../../../what/concepts/ERROR_HANDLING.md)
+has been renamed to **PROGRAM_ERROR** and absorbed into the
+[SYSTEM_ERROR taxonomy](EDR-089-system-error-taxonomy.md). No change to
+the `Result<T, E>` decision of this EDR — only the terminology and
+contract for the unrecoverable complement (diagnostic contract +
+fault-owner attribution per EDR-089). Human Sign-off:
+`Reviewed-by: mniedre · Date: 2026-08-23 · Verdict: LOCKED`.

@@ -5983,7 +5983,7 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 
 - **Pipeline verdict: ACCEPT** (all 10 questions locked, 2026-08-23).
 - **Next steps:** Concept Design Review → EDR (Architecture category) → `what/concepts/` + `CORE_CONCEPTS.md` per the research README graduation steps.
-- **Blocked item:** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — requires Human Sign-off (AGENTS.md §7.4); released only after hypothesis acceptance.
+- **Blocked item:** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — requires Human Sign-off (AGENTS.md §7.4); **RESOLVED 2026-08-23** after hypothesis acceptance — see `## Entry: Panic → PROGRAM_ERROR (EDR-020 amendment)` below.
 - **Note:** Allocation-failure semantics folded from the former SYSMEM_ERROR hypothesis (2026-08-23) — classification follows the Allocation Policy (recoverable domain error under `Arena`/`Static`; terminal PLATFORM_ERROR under `Heap`/GC; impossible under `no_alloc`); a dedicated MEMORY_ERROR class is deliberately not introduced.
 
 ---
@@ -6018,4 +6018,23 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 ### Status
 
 - **Verdict: ACCEPTED via EDR-089** (2026-08-23). Concept graduated to `what/concepts/SYSTEM_ERROR.md`; registered in `CORE_CONCEPTS.md`; research file retained as provenance.
-- **Blocked item (unchanged):** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — requires Human Sign-off (AGENTS.md §7.4); released after hypothesis acceptance (now accepted), sequenced as a separate amendment step.
+- **Blocked item:** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — **COMPLETED 2026-08-23** — see `## Entry: Panic → PROGRAM_ERROR (EDR-020 amendment)` below.
+
+---
+
+## Entry: Panic → PROGRAM_ERROR (EDR-020 amendment)
+
+**Date:** 2026-08-23
+**Artifact validated:** `what/concepts/ERROR_HANDLING.md` (EDR-020) + `what/GLOSSARY.md` — terminology amendment
+**Decision recorded as:** **COMPLETED** — "Panic" renamed to **PROGRAM_ERROR** and absorbed into the SYSTEM_ERROR taxonomy (EDR-089).
+**Sign-off:** Human Sign-off per AGENTS.md §7.4 — `Reviewed-by: mniedre · Date: 2026-08-23 · Verdict: LOCKED`.
+
+### What changed
+
+- `what/concepts/ERROR_HANDLING.md` — Alternative Strategies: `Panic` row renamed to `PROGRAM_ERROR` (fault owner = the program; defined diagnostic contract; never catchable, never recoverable); `.unwrap()` description updated; note added after the table linking the unrecoverable complement to the SYSTEM_ERROR taxonomy; Decision History entry appended; header cross-link to `SYSTEM_ERROR.md`.
+- `what/GLOSSARY.md` — added terms: **System Error** (family), **Program Error**, **Execution Error**, **Platform Error** — closing the graduation register gap for EDR-089 (AGENTS.md §6).
+- `how/decision_records/architecture/EDR-020-error-handling.md` — Amendment note (2026-08-23) linking the rename to EDR-089.
+
+### Status
+
+- **RESOLVED** — the previously blocked Panic → PROGRAM_ERROR item is released and applied. The rename is more than a name change: it upgrades the unnamed escape hatch into a classified, diagnosable system error (diagnostic contract + fault-owner attribution per EDR-089).

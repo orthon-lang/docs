@@ -6,7 +6,8 @@
 >
 > **See also:** [`SEMANTIC_MODEL.md`](../SEMANTIC_MODEL.md) § Ownership,
 > [`GLOSSARY.md`](../GLOSSARY.md) § Result Type, Error Propagation,
-> [`PRIMITIVE_BLOCKS.md`](../PRIMITIVE_BLOCKS.md)
+> [`PRIMITIVE_BLOCKS.md`](../PRIMITIVE_BLOCKS.md),
+> [`SYSTEM_ERROR.md`](SYSTEM_ERROR.md) § SYSTEM_ERROR family
 
 ---
 
@@ -100,7 +101,7 @@ match divide(a, b):
 | `.map(fn)` | `Result<U, E>` where `fn: T -> U` | Transform success value |
 | `.and_then(fn)` | `Result<U, E>` where `fn: T -> Result<U, E>` | Chain fallible operations |
 | `.or_else(fn)` | `Result<T, F>` where `fn: E -> Result<T, F>` | Recover from error |
-| `.unwrap()` | `T` | Unwrap or panic (use sparingly) |
+| `.unwrap()` | `T` | Unwrap or terminate with a `PROGRAM_ERROR` (use sparingly) |
 | `.unwrap_or(default)` | `T` | Unwrap or return default |
 | `.unwrap_or_else(fn)` | `T` where `fn: E -> T` | Unwrap or compute default |
 | `.is_ok()` | `Bool` | Check if `Ok` |
@@ -156,10 +157,15 @@ All errors use the `Result<T, E>` model. The `?` operator is the canonical propa
 
 | Strategy | Description | When to Use |
 |----------|-------------|-------------|
-| Panic | Unrecoverable errors abort the program (for invariants, bounds checks) | Invariant violations, programmer errors |
+| PROGRAM_ERROR | A program bug: the program violated its own invariant (e.g., forced unwrap `!` on `None`, out-of-bounds access that escaped static analysis). Terminates with a defined diagnostic (code, severity, location, repair hint); never catchable, never recoverable | Invariant violations, programmer errors |
 | Checked exceptions | Java-style declared exception list in function signature | Rejected: hidden control flow, no composability |
 | Dynamic errors | `Result<T, dyn Error>` — error type is erased, runtime dispatch | Interop layers, plugin systems |
 | Error Union | Union of error types for multi-source error handling | Complex systems with multiple error domains |
+
+The unrecoverable complement — `PROGRAM_ERROR`, `EXECUTION_ERROR`,
+`PLATFORM_ERROR` — is classified by the
+[`SYSTEM_ERROR`](SYSTEM_ERROR.md) taxonomy (EDR-089): each is a defined
+terminal condition with a structured diagnostic, never a value.
 
 ## Open Questions
 
@@ -177,6 +183,7 @@ All errors use the `Result<T, E>` model. The `?` operator is the canonical propa
 - **Combinators (map, and_then, or_else)** adopted. Rationale: Enables composable error transformation and recovery without nested match blocks.
 - **Error Union relationship** noted for future specification. Rationale: Multiple error sources naturally compose; ERROR_UNION (Plan 04-02) defines the formal semantics.
 - **Accepted via EDR-020** on 2026-07-27.
+- **`Panic` renamed to `PROGRAM_ERROR`** on 2026-08-23. Rationale: the SYSTEM_ERROR taxonomy (EDR-089) gives the escape hatch a home — a defined fault owner (the program), a diagnostic contract (code, severity, location, repair hint), and defined termination. More than a rename: it upgrades an unnamed alternative into a classified, diagnosable system error. Human Sign-off: `Reviewed-by: mniedre · Verdict: LOCKED`.
 
 ---
 

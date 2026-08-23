@@ -687,6 +687,18 @@ Execution Program
 - **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Execution Engine
 - **See also:** [Execution Program](#execution-program), [Program Enricher](#program-enricher)
 
+### Execution Error
+
+A member of the [System Error](#system-error) taxonomy whose fault owner
+is the execution engine / Implementation Strategy. The runtime failed to
+honour the language contract — e.g., a codegen bug, an allocator or
+scheduler strategy failure, GC corruption. Not representable as a value
+and not catchable; terminates with a defined diagnostic (code, severity,
+location, repair hint).
+
+- **Source:** `../what/concepts/SYSTEM_ERROR.md` § SYSTEM_ERROR family (EDR-089)
+- **See also:** [System Error](#system-error), [Program Error](#program-error), [Platform Error](#platform-error), [Result Type](#result-type)
+
 ### Execution Model Policy
 
 An Implementation Policy that controls how a fully-defined Execution
@@ -1368,6 +1380,19 @@ Each language construct solves exactly one problem and combines freely with othe
 
 ## P
 
+### Platform Error
+
+A member of the [System Error](#system-error) taxonomy whose fault owner
+is the platform (OS / hardware). The environment failed the program —
+e.g., stack overflow, hardware fault, signal-delivered termination,
+missing platform capability, or true out-of-memory under an
+unrecoverable `Heap`/GC Allocation Policy. Not representable as a value
+and not catchable; terminates with a defined diagnostic (code, severity,
+location, repair hint).
+
+- **Source:** `../what/concepts/SYSTEM_ERROR.md` § SYSTEM_ERROR family (EDR-089)
+- **See also:** [System Error](#system-error), [Program Error](#program-error), [Execution Error](#execution-error), [Result Type](#result-type)
+
 ### Policy
 
 See [Implementation Policy](#implementation-policy).
@@ -1440,6 +1465,19 @@ Program + Execution Descriptor
 
 - **Source:** `../how/concepts/research/EXECUTION_PROGRAM.md` § Program Enricher
 - **See also:** [Execution Descriptor](#execution-descriptor), [Execution Engine](#execution-engine), [Execution Program](#execution-program)
+
+### Program Error
+
+A member of the [System Error](#system-error) taxonomy whose fault owner
+is the program itself: the program violated its own invariant — a bug
+(e.g., forced unwrap `!` on `None`, out-of-bounds access that escaped
+static analysis, unreachable state). Formerly the unnamed "Panic"
+strategy in [`ERROR_HANDLING.md`](../what/concepts/ERROR_HANDLING.md)
+(EDR-020). Not representable as a value and not catchable; terminates
+with a defined diagnostic (code, severity, location, repair hint).
+
+- **Source:** `../what/concepts/SYSTEM_ERROR.md` § SYSTEM_ERROR family (EDR-089)
+- **See also:** [System Error](#system-error), [Execution Error](#execution-error), [Platform Error](#platform-error), [Result Type](#result-type)
 
 ---
 
@@ -1767,6 +1805,21 @@ named constant, or iota construct.
 
 - **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md`, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
 - **See also:** [Algebraic Data Type](#algebraic-data-type), [Product Type](#product-type), [Exhaustiveness](#exhaustiveness), [Tagged Union](#tagged-union)
+
+### System Error
+
+The family of non-domain, unrecoverable failures — failures not
+representable as a value in the program's type system (the complement of
+`Result<T, E>` / Error Union `!T`). Classified by fault owner into
+[Program Error](#program-error) (the program — formerly "Panic"),
+[Execution Error](#execution-error) (the runtime / Implementation
+Strategy), and [Platform Error](#platform-error) (OS / hardware). Each
+member is not catchable and terminates with a defined diagnostic (code,
+severity, location, repair hint). `COMPILE_ERROR` is a separate phase, not
+a system-error class; `LANGUAGE_ERROR` is a forbidden meta-state.
+
+- **Source:** `../what/concepts/SYSTEM_ERROR.md` (EDR-089)
+- **See also:** [Program Error](#program-error), [Execution Error](#execution-error), [Platform Error](#platform-error), [Result Type](#result-type)
 
 ---
 
