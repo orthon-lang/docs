@@ -14,9 +14,10 @@ full 5-stage lifecycle from research inbox to registry entry.
 
 ## Current Status
 
-**Populated** — 51 accepted concept specification documents reside in
-this directory, covering all essential-tier (17) and important-tier (34)
-Language and StdLib concepts accepted during Phase 4.
+**Populated** — 52 accepted concept specification documents reside in
+this directory, covering all essential-tier (18) and important-tier (34)
+Language and StdLib concepts accepted during Phase 4, plus the
+post-Phase-4 acceptance of SYSTEM_ERROR (EDR-089, 2026-08-23).
 
 Each concept here has passed the full pipeline:
 Decision Pipeline → Primitive Decomposition → Concept Design Review →

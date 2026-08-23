@@ -6,7 +6,7 @@
 > Orthon-specific specifications belong here — research and draft analyses
 > live in `how/concepts/research/`.
 >
-> **Status:** 54 concepts accepted (49 Phase 4 accepted concept files plus 4
+> **Status:** 55 concepts accepted (49 Phase 4 accepted concept files plus 4
 > governance-completion concept files created in Phase 4.1: CONCURRENCY,
 > PUSH_STREAMS, OBJECT_INITIALIZATION, REQUIRE_USING_DEPENDENCY_SLOTS).
 > Earlier waves — Waves 1–2 (essential core: 13 concepts) plus Wave 4
@@ -35,7 +35,11 @@
 > for the full classification summary and [`EDR-079`](../how/decision_records/architecture/EDR-079-aggregating-p4.md)
 > for the aggregating acceptance record.
 >
-> **Last updated:** 2026-08-05
+> Post-Phase-4 acceptance (2026-08-23): **SYSTEM_ERROR** — first concept
+> accepted after Phase 4 via the full Concept Design Review pipeline
+> ([EDR-089](../how/decision_records/architecture/EDR-089-system-error-taxonomy.md)).
+>
+> **Last updated:** 2026-08-23
 
 ---
 
@@ -714,3 +718,15 @@ The resolution process is defined in
 | **Classification** | Language Pattern (Level 2 — D-03) |
 | **Summary** | `require`/`using` keyword split for dependency declaration and resolution. `require` declares what a function/class needs; `using` provides it at the call/construction site. Class-level dependency slots group shared dependencies, filled per-instance at construction with compile-time initialization guarantee. Refines EDR-037 (Context Parameters) by eliminating `using`/`using` ambiguity. |
 | **Primitive Decomposition** | `require` clause → `function` parameter declaration in context space (EDR-037); `using` clause → `call`-site argument provision; class-level slots → `scope`-visible fields with `assignment` at construction. Fully decomposable to EDR-037's Dual Parameter Model. No new compiler primitives. |
+
+### SYSTEM_ERROR
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **EDR** | [EDR-089](../how/decision_records/architecture/EDR-089-system-error-taxonomy.md) |
+| **Specification** | [`concepts/SYSTEM_ERROR.md`](concepts/SYSTEM_ERROR.md) |
+| **Classification** | Language (D-03) |
+| **Summary** | Domain/system boundary by representability: a failure representable as a value (`Result<T,E>` / `!T`) is a domain error; everything else is a SYSTEM_ERROR family member classified by fault owner — PROGRAM_ERROR (ex-Panic), EXECUTION_ERROR (runtime/strategy), PLATFORM_ERROR (OS/hardware). Not catchable; each class carries a machine-readable diagnostic (code, severity, location, repair hint) and defined termination (EDR-030). Allocation-failure classification follows the Allocation Policy (domain error under `Arena`/`Static`, terminal PLATFORM_ERROR under `Heap`/GC, impossible under `no_alloc`). COMPILE_ERROR is a separate phase; LANGUAGE_ERROR is a forbidden meta-state. No new primitive, no new syntax, no Core change. |
+| **Primitive Decomposition** | Not decomposable — a naming + contract layer over existing primitives; classes name existing Execution Environment layers. |
+| **Open Questions** | • Process-level contract (exit codes, signals, termination timing) — `what/concepts/SYSTEM_ERROR.md` § Open Questions (OQ4) • FFI/plugin application of the boundary (OQ7) |

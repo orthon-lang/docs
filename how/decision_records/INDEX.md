@@ -91,6 +91,7 @@
 | EDR-086 | Architecture | [Generics Syntax Revision — Angle-Bracket Parameters and `as` Bounds](architecture/EDR-086-generics-syntax-revision.md) | Accepted | 2026-08-07 | Supersedes EDR-024 (syntax) |
 | EDR-087 | Process | [Syntax Acceptance Process — `how/syntax/` Working Entity](process/EDR-087-syntax-acceptance-process.md) | Accepted | 2026-08-15 | — |
 | EDR-088 | Process | [Concept Design Review — Alternatives Phase](process/EDR-088-alternatives-phase.md) | Accepted | 2026-08-20 | — |
+| EDR-089 | Architecture | [System Error Taxonomy — Domain/System Boundary and Fault-Owner Classification](architecture/EDR-089-system-error-taxonomy.md) | Accepted | 2026-08-23 | — |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.

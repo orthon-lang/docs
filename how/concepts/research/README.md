@@ -50,6 +50,27 @@ proposals:
 > refinement types (`REFINEMENT_TYPES.md`). See
 > `../../../syntax/FUNCTION_RETURNING_FUNCTION.md` for the function-type
 > synonym coupling.
+>
+> **Note (2026-08-23):** `SYSTEM_ERROR.md` added to `essential/` — failure
+> taxonomy hypothesis: the domain/system boundary (representable-as-value vs
+> defined-termination) and the SYSTEM_ERROR family classified by fault owner
+> (PROGRAM_ERROR / EXECUTION_ERROR / PLATFORM_ERROR), with COMPILE_ERROR as
+> a separate phase and LANGUAGE_ERROR as a forbidden meta-state. Allocation
+> failure is policy-dependent: recoverable domain error under
+> `Arena`/`Static`, terminal PLATFORM_ERROR under `Heap`/GC.
+>
+> **Note (2026-08-23):** `SYSMEM_ERROR.md` folded into `SYSTEM_ERROR.md` —
+> allocation failure is not a separate class. Recoverable exhaustion
+> (`Arena`/`Static`) is a domain error; terminal exhaustion (`Heap`/GC) is
+> **PLATFORM_ERROR**. The classification rule and open questions now live in
+> `SYSTEM_ERROR.md`; a dedicated MEMORY_ERROR class is deliberately not
+> introduced.
+>
+> **Note (2026-08-23):** `SYSTEM_ERROR.md` **graduated** — accepted as an
+> Orthon concept via [EDR-089](../../decision_records/architecture/EDR-089-system-error-taxonomy.md)
+> (Concept Design Review, 2026-08-23). The accepted concept lives at
+> [`what/concepts/SYSTEM_ERROR.md`](../../../what/concepts/SYSTEM_ERROR.md);
+> this research file is retained as provenance.
 
 ## Adding Research
 

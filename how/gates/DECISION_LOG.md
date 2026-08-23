@@ -5950,3 +5950,72 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 ### Overall
 
 **Verdict: CONVERGED (2026-08-06).** Pre-filter → **ACCEPT as a Language (Core) decision, Level 1/2**. Validation gates: 4 Pass, 3 Flag, 0 Fail — all flags non-blocking (constructor surface, two-operator debt, distribution glyph). Ready to draft EDR-085, which applies the C-003 cross-concept amendments.
+
+---
+
+## Entry: SYSTEM_ERROR (Hypothesis — Decision Pipeline)
+
+**Date:** 2026-08-23
+**Artifact validated:** [`how/concepts/research/essential/SYSTEM_ERROR.md`](../../concepts/research/essential/SYSTEM_ERROR.md) (open hypothesis — not yet accepted)
+**Decision recorded as:** Pending — hypothesis passed the pipeline (ACCEPT); Concept Design Review → EDR to follow
+**Pipeline applied:** Full 10-question Decision Pipeline per `DECISION_PIPELINE.md`
+
+### Pipeline Q&A
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem? | The error model (`Result<T, E>`, Error Union `!T` — EDR-020/023) covers expected, recoverable failures only. Non-representable failures are undefined: Panic has no diagnostic contract, memory exhaustion is unspecified, runtime/platform defects are unnamed. The complement of the value-representable error space needs a defined taxonomy. |
+| Q2 | Language/StdLib/Policy? | **Language.** System errors are not values and not catchable; defined termination + structured diagnostics (EDR-030) + the process contract are language-level semantics a library cannot define. The allocation-failure sub-rule is deliberately Policy-dependent (EDR-006): the semantic contract is Language, the classification follows the active Policy. |
+| Q3 | Existing primitives? | No. `Result`/Error Union can only represent failures as values; a system error is by definition the non-representable complement. Defined termination and non-catchability cannot be composed from value-returning primitives. |
+| Q4 | Violates principle? | No. Strengthens Data First (representability boundary), Explicitness (visible termination + diagnostics), Minimal Core (no new primitive — classes name existing Execution Environment layers), Deterministic Behavior, Consistency. Open tension: recoverable-allocation visibility (Explicitness) — tracked as an open question, not a violation. |
+| Q5 | New semantics? | **New semantics.** Non-catchability of system errors, defined termination per class (process contract), structured diagnostic contract (code / severity / location / repair hint), representability boundary, fault-owner classification. Even Panic → PROGRAM_ERROR upgrades semantics (adds diagnostic contract + attribution), not just a rename. |
+| Q6 | Composition? | No — the complement of value-representable failures cannot be assembled from value-producing primitives; the fault-owner axis names existing layers, not a combination of primitive operations. |
+| Q7 | Sugar over primitives? | No — there is no hidden semantics in the primitives that sugar could expose; the semantics are genuinely new. |
+| Q8 | Optimisation? | No — it defines the meaning of terminal states, not how they are realised; belongs in semantics, not `OPTIMIZATION_MODEL`. |
+| Q9 | Backward compat? | N/A — pre-v1.0. Caveat: Panic → PROGRAM_ERROR amends accepted `ERROR_HANDLING.md` (EDR-020) terminology; a deliberate change requiring Human Sign-off (AGENTS.md §7.4), blocked until hypothesis acceptance. |
+| Q10 | Worth adding? | **Yes.** Without it the error model covers half the space; EDR-030's diagnostic contract has no named recipients for terminal states; the process contract is undefined; the LLM toolchain cannot rely on deterministic terminal behaviour. v0.1 is not self-consistent without it. |
+
+**Classification per D-03:** Language. New semantics (defined termination, non-catchability, structured diagnostics, fault-owner taxonomy) not expressible via composition of existing primitives; the compiler must know the taxonomy for diagnostics and the process contract. The allocation-failure classification is a Policy sub-rule (D-04 reduced gate set) inside a Language concept.
+
+**Primitive decomposition path:** Not decomposable to existing primitives — it is the defined complement of the value-representable error space. PROGRAM_ERROR / EXECUTION_ERROR / PLATFORM_ERROR name fault owners already present in the Execution Environment (Compiler · Runtime · Platform); no new primitive is introduced. COMPILE_ERROR is the ERROR severity of the verification layers (EDR-030), not a system-error class.
+
+### Status
+
+- **Pipeline verdict: ACCEPT** (all 10 questions locked, 2026-08-23).
+- **Next steps:** Concept Design Review → EDR (Architecture category) → `what/concepts/` + `CORE_CONCEPTS.md` per the research README graduation steps.
+- **Blocked item:** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — requires Human Sign-off (AGENTS.md §7.4); released only after hypothesis acceptance.
+- **Note:** Allocation-failure semantics folded from the former SYSMEM_ERROR hypothesis (2026-08-23) — classification follows the Allocation Policy (recoverable domain error under `Arena`/`Static`; terminal PLATFORM_ERROR under `Heap`/GC; impossible under `no_alloc`); a dedicated MEMORY_ERROR class is deliberately not introduced.
+
+---
+
+## Entry: SYSTEM_ERROR → EDR-089 (Concept Design Review)
+
+**Date:** 2026-08-23
+**Artifact validated:** `SYSTEM_ERROR` — accepted via [EDR-089](../../decision_records/architecture/EDR-089-system-error-taxonomy.md); accepted concept at [`what/concepts/SYSTEM_ERROR.md`](../../what/concepts/SYSTEM_ERROR.md)
+**Decision recorded as:** **Accepted** — Concept Design Review (8 steps) completed; Step 7 Convergence Check passed with Human Sign-off (`Reviewed-by: mniedre · Verdict: LOCKED`); EDR-089 filed.
+**Procedure applied:** Concept Design Review per `concept-design-review.md` — Steps 1–8 (Idea/Problem, Alternatives, Minimal Solution, Principle Check, Examples, Tooling Implications, Convergence Check, EDR).
+
+### Gate Validation (7 Decision Validation gates)
+
+| Gate | Method | Verdict | Notes |
+|------|--------|---------|-------|
+| `USER_VALUE_GATE` | [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md) | Pass | Real programmer need: undefined complement, LLM/process terminal contract, cause separation |
+| `LOGICAL_CONSISTENCY_GATE` | [Socratic Method](methods/SOCRATIC_METHOD.md) | Pass | Boundary is a decidable binary predicate; family names existing layers; no contradiction with EDR-020/EDR-023 |
+| `CONCEPTUAL_SIMPLICITY_GATE` | [Scientific Method](methods/SCIENTIFIC_METHOD.md) | Pass | No new primitive; three classes; parsimonious |
+| `ARCHITECTURAL_INTEGRITY_GATE` | [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md) | Pass | Strengthens Minimal Core and Explicitness; no closed principle violated |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | [TRIZ](methods/TRIZ_METHOD.md) | Pass | Classification follows the active Strategy (EDR-006); semantics stable |
+| `LONG_TERM_MAINTAINABILITY_GATE` | [Einstein's Method](methods/EINSTEIN_METHOD.md) | Pass | One documented family; deferred refinements don't alter fundamentals |
+| `LLM_GENERABILITY_GATE` | [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md) | Pass | Deterministic per-class diagnostic + termination contract (EDR-030) |
+
+**Gates not applied:** none — all seven gates apply and pass.
+
+### Key review outcomes
+
+- **Alternatives (Step 2):** 5 candidates (A–E) scored; **Selection: A — Language construct**, with allocation-failure classification as a Policy sub-rule (D-04). Table carried verbatim into EDR-089 § Alternatives Considered.
+- **Principle Check (Step 4):** no closed-for-modification principle violated → eligible for solo-author acceptance (Human Sign-off remains mandatory).
+- **Tooling Implications (Step 6):** none — no new Tooling Requirement; the diagnostic contract is already mandated by EDR-030.
+
+### Status
+
+- **Verdict: ACCEPTED via EDR-089** (2026-08-23). Concept graduated to `what/concepts/SYSTEM_ERROR.md`; registered in `CORE_CONCEPTS.md`; research file retained as provenance.
+- **Blocked item (unchanged):** Panic → PROGRAM_ERROR amendment to `ERROR_HANDLING.md` (EDR-020) + `GLOSSARY.md` — requires Human Sign-off (AGENTS.md §7.4); released after hypothesis acceptance (now accepted), sequenced as a separate amendment step.
