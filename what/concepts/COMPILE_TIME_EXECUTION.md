@@ -194,6 +194,15 @@ The LLM generability constraint is the primary reason Orthon's comptime model di
    with the `<`/`>` comparison operators. The simplification is not a new
    symbol: remove `comptime T: type` from the generics path (generics =
    `<>`), leaving `@` (metadata) + one phase/block keyword (OQ 6).
+
+   > **Exploration note (2026-08-23):** `#` is doubly blocked — it is the
+   > line-comment marker used throughout the docs AND the unhygienic
+   > macro escape (EDR-029). `@`/`<>` remain blocked (Metadata Protocol /
+   > generics). `const` rejected (Orthon is immutable-by-default; the
+   > expression-level phase marker is still required for asserts/args).
+   > Keyword candidates: `bake` (leading — no C++ baggage, LLM-neutral),
+   > `consteval` (fallback — exact semantics but C++ constexpr/consteval
+   > confusion). Draft; feeds Phase 5.
 8. **`requires` is not a trait bound.** `requires` is a boolean predicate
    over *values* — CONSTRAINED_TYPES (EDR-080: `type Age = Int requires
    v >= 0 && v <= 150`) and CONTRACTS (EDR-056: `requires x >= 0.0`) —
@@ -218,6 +227,13 @@ The LLM generability constraint is the primary reason Orthon's comptime model di
    comptime phase, marked by `@`. There is no `comptime_ctx <- fn(args)`;
    comptime has no runtime lifecycle. Invocation-with-context is a runtime
    mechanism; comptime is a phase mechanism — orthogonal axes.
+
+   > **Exploration note (2026-08-23):** Design exploration re-confirmed
+   > this. The "hand control to the compiler" analogy fails — the
+   > compiler is not a runtime Execution Context: no state object, no
+   > mailbox, no runtime lifetime, no materialisation vocabulary
+   > (`take`/`await`/`next`). Comptime is an orthogonal phase axis, not a
+   > fifth execution policy. Draft; feeds Phase 5.
 
 ## Synthesis (Draft Thesis — 2026-08-22)
 
@@ -267,6 +283,26 @@ that causes the syntax tension. Keeping the three axes separate (types via
 `comptime T: type`, no `@`/`#`/`<>` reuse, no `requires`-as-bound. Status:
 draft thesis for Phase 5, not a decision.
 
+### Phase marker position & keyword (Exploration note — 2026-08-23)
+
+The phase axis (axis 3) needs a marker; exploration narrowed it to:
+
+- **Position: the call site, not the declaration.** Functions are
+  colourless: `TABLE = bake generate_table(256)`;
+  `process(bake generate_table(64))`. Comptime safety (no IO/FS/network)
+  is checked transitively at the call site.
+- **Keyword: `bake` (candidate).** `#`/`@`/`<>` blocked (Semantic
+  Purity + loaded meanings); `const` binding form rejected; `consteval`
+  is the fallback.
+- **`const TABLE = expr` rejected** — since the expression-level marker
+  is required for the general case (asserts, args), no separate `const`
+  binding concept is introduced.
+
+Tension flagged: EDR-031 Principle 5 ("marker at the definition site")
+conflicts with the call-site position. Any change requires an EDR
+amendment with Human Sign-off (AGENTS.md §7.4) — not changed here.
+Draft; feeds Phase 5.
+
 ## Decision History
 
 - **2026-07-27:** Accepted via EDR-031. Unified comptime model adopted (Zig-inspired) with explicit trait bounds for LLM discoverability. Cross-ref with GENERICS established — comptime IS the generic mechanism. Cross-ref with AST_MACROS established — macros execute in comptime. LLM Generability Gate identified as critical with documented restrictions.
@@ -275,6 +311,12 @@ draft thesis for Phase 5, not a decision.
   symbolic markers, `requires` vs bounds, comptime invocation). Draft
   thesis: comptime splits into three orthogonal axes — generics (`<>`),
   metadata (`@`), and phase (one keyword). No decision; feeds Phase 5.
+- **2026-08-23:** Exploration: comptime is orthogonal to Execution
+  Context (OQ9 confirmed, not a fifth policy); phase marker candidate at
+  the call site (colourless functions); keyword candidate `bake`
+  (`#`/`@`/`<>` blocked; `const` form rejected). Flags EDR-031 Principle
+  5 for amendment (requires Human Sign-off). Draft — feeds Phase 5; no
+  decision.
 
 ---
 

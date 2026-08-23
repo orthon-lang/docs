@@ -63,11 +63,23 @@ Declaration by assignment with compile-time definite assignment analysis. First 
 1. Should `let` for shadowing be required in all cases or only when the shadowed variable is still in scope?
 2. How does declaration by assignment interact with pattern matching destructuring?
 3. Should `const` (compile-time constant) be a separate concept from immutable variables?
+
+   > **Exploration note (2026-08-23):** Resolved in exploration — no
+   > separate `const` concept. Orthon is immutable-by-default; the phase
+   > marker `bake` at the expression level (`TABLE = bake
+   > generate_table(256)`) is required for the general case (asserts,
+   > args) anyway, so a binding-level `const` would only duplicate it.
+   > Draft; feeds Phase 5. See
+   > [`COMPILE_TIME_EXECUTION.md`](COMPILE_TIME_EXECUTION.md).
 4. Which type-annotation syntax should Orthon use (`x: Type` vs `Type x` vs `as Type`)? Deferred to Phase 5 — see [TYPE_ANNOTATION_SYNTAX.md](../../how/syntax/TYPE_ANNOTATION_SYNTAX.md).
 
 ## Decision History
 
 - **EDR-074:** Declaration by Assignment accepted — borderline with Phase 5 (Syntax). The declaration model affects how variables are introduced and the concrete syntax for type annotations, shadowing, and mutability. The semantic decisions (first-assignment-is-declaration, definite assignment analysis, type inference from initializer) are specified here. The concrete syntax choices (keyword vs. no-keyword, annotation syntax) are deferred to Phase 5.
+- **2026-08-23:** Exploration: `const` as a separate compile-time-constant
+  binding concept rejected — the phase marker lives at the expression
+  level (`bake`, candidate). Draft; feeds Phase 5. See
+  `COMPILE_TIME_EXECUTION.md`.
 - **Classification per D-03:** Borderline with Phase 5 (Syntax). The semantic core (first assignment declares, definite assignment analysis, immutability by default) is language-level. Concrete syntax (how type annotations look, whether `let` is required for shadowing) belongs to Phase 5. The semantic decisions are processed here; syntax is deferred.
 - **Phase 5 boundary:** The following are deferred to Phase 5: concrete syntax for type annotations (`: Type` vs `as Type`), the exact keyword for shadowing (`let` vs `var` vs other), and whether `mut` is a keyword or a modifier. The annotation syntax must also account for the `:` overload in other contexts (e.g., dictionaries). The range conflict (`0..10:step(2)`) is already closed — `:` is never used in ranges (EDR-083, see [RANGE_STEP.md](../../how/concepts/research/important/RANGE_STEP.md)). Phase 5 inputs: [TYPE_ANNOTATION_SYNTAX.md](../../how/syntax/TYPE_ANNOTATION_SYNTAX.md) and [SHADOWING_SYNTAX.md](../../how/syntax/SHADOWING_SYNTAX.md).
 
