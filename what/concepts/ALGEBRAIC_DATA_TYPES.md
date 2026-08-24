@@ -90,6 +90,138 @@ type Widget = Button(label: String, onClick: Action)
             | Panel(children: List<Widget>)
 ```
 
+### Behaviour: traits over data, not methods on data
+
+`type` declares a data shape only. Behaviour attaches externally — through
+traits (EDR-019) and separate `impl` blocks (EDR-039 §4). ADT variants never
+carry inherent methods. Two canonical shapes follow from this rule.
+
+**Path A — one closed ADT, one implementation, dispatch via `match`.** Use this
+when the variants form a closed family and behaviour is defined for the family
+as a whole:
+
+```orthon
+type Shape = Circle(radius: Float)
+           | Rectangle(w: Float, h: Float)
+
+trait Area
+    fun area(self) -> Float
+
+impl Area for Shape
+    fun area(self) -> Float
+        match self:
+            Circle(r)        -> pi * r * r
+            Rectangle(w, h)  -> w * h
+```
+
+Adding a variant (`Triangle`) makes the `match` non-exhaustive — a compile-time
+error at every call site that consumes `Shape` by matching.
+
+**Path B — independent named types sharing a behavioural contract.** Use this
+when `Circle` and `Rectangle` are genuinely independent types that happen to
+share behaviour. Each is a bare product type; each gets its own `impl` block:
+
+```orthon
+type Circle(radius: Float)      # bare record — no methods
+type Rectangle(w: Float, h: Float)
+
+trait Area
+    fun area(self) -> Float
+
+impl Area for Circle            # separate block, outside the declaration
+    fun area(self) -> Float
+        return pi * self.radius * self.radius
+
+impl Area for Rectangle
+    fun area(self) -> Float
+        return self.w * self.h
+```
+
+Polymorphism over Path B types is trait-based: statically via generics
+(`fun total<Area as T>(List[T] shapes)`, monomorphised — the default), or
+dynamically via `dyn Area` (opt-in vtable).
+
+In both paths the `impl` block is **external** to the `type` declaration. The
+paths answer different questions: Path A models "data is one of several known
+forms" (closed, exhaustive); Path B models "independent types share behaviour"
+(trait polymorphism). Neither attaches implementation inside the type — that is
+the Java/C# class-with-methods model, which Orthon rejects.
+
+#### The Expression Problem
+
+The data/behaviour split is a solution to the **Expression Problem** — the
+classic language-design problem of extending a system in two dimensions without
+modifying existing code: adding *new types* and adding *new operations* over
+them.
+
+- **Path A (ADT + match) optimises adding operations.** A new function (e.g.,
+  `perimeter`) is a new `match` over existing variants — no existing code
+  changes. Adding a *new variant* (`Triangle`) forces changes at every match
+  site; exhaustiveness turns this into a compile-time error.
+- **Path B (traits) optimises adding types.** A new type (`Triangle`) is a new
+  record plus a new `impl Area for Triangle` — no existing code changes. Adding
+  a *new operation* is a new trait plus impls for the types that need it.
+
+Path B therefore inverts the responsibility for defining operations: behaviour
+is not owned by the type, so both extension dimensions stay open without
+touching existing code.
+
+#### Scientific Grounding
+
+- **The Expression Problem** was formulated by Philip Wadler: a system should
+  be extensible along two axes — new data variants and new operations — without
+  modifying existing code. Traits / type classes are the accepted elegant
+  solution.
+- **Traits as composable units of behaviour** were formalised in *"Traits:
+  Composable Units of Behaviour"* (Schärli, Ducasse, Nierstrasz, Black, 2002) —
+  a formal model of traits as groups of methods that act as building blocks for
+  classes, overcoming the flaws of multiple inheritance.
+- Orthon inherits this lineage: TRAITS (EDR-019) adopts the Rust-style trait
+  model (explicit `impl`, coherence / orphan rule, static dispatch by default),
+  which itself descends from Haskell type classes and the traits research of
+  the 2000s.
+
+#### Comparison with Other Languages
+
+| Language | Model | How it compares |
+|---|---|---|
+| Rust | `enum` ADT + separate `impl`/`trait` | Closest match: variants carry data; behaviour lives in external trait and impl blocks. |
+| Haskell / OCaml | `data` + typeclasses | Behaviour separate from data; exhaustiveness enforced. Orthon uses explicit `impl` (Rust-style) rather than implicit typeclass instances. |
+| Swift | Structs + protocols + extensions | Protocols with extensions attach behaviour to existing types externally; extensions can also add methods without a protocol. |
+| Scala | Case classes + traits / type classes | Traits and type classes are the standard solution to the Expression Problem; Scala 3 makes the approach more natural. |
+| Go | Structs + structural interfaces | Interfaces are satisfied structurally (implicitly) by method shape — no explicit `impl`; Orthon requires explicit satisfaction. |
+| C++ | Types + Concepts (C++20) + templates | Static polymorphism via templates and Concepts; dynamic polymorphism via inheritance and virtual functions. |
+| Kotlin | Sealed classes + extension functions | Sealed hierarchy with behaviour outside the class. Orthon makes the closed set the default rather than opt-in. |
+| TypeScript | Discriminated unions + functions | Untagged and erased at runtime; no exhaustiveness. Orthon keeps a tag and compile-time exhaustiveness. |
+| Java / C# | Classes bind methods to data | The rejected alternative: behaviour lives inside the type, enabling inheritance and the fragile-base-class problem. |
+| Python | Dynamic classes + ABC / Protocols (typing) | Dynamic languages can add methods at runtime (monkey patching); static contracts come from ABCs or Protocols rather than a compiler-enforced trait model. |
+
+#### Trade-offs
+
+**Advantages.**
+
+- **Behaviour stays orthogonal to data.** A type is a pure value; contracts can
+  be added or combined without inheritance and without editing the type — no
+  fragile base classes, no hierarchy-forced method collisions.
+- **One sum-type mechanism.** ADT subsumes enums ("One concept, one syntax").
+- **Compile-time exhaustiveness** over closed variant sets.
+- **LLM-readiness.** External `impl` blocks and sealed variant sets give a code
+  generator a single, unambiguous contract per type; `@derive` removes
+  boilerplate the generator would otherwise emit.
+
+**Disadvantages.**
+
+- **Verbosity.** Behaviour requires a separate `impl` block; the reader must
+  cross-reference the `type` declaration and its `impl` blocks. This is more
+  ceremony than a class-with-methods.
+- **Unfamiliarity.** Programmers coming from OOP expect methods on the type; the
+  data/behaviour split is a mental shift.
+- **No inherent methods** on variants — a free function or a trait impl is always
+  needed to attach behaviour.
+
+Mitigations: trait default methods (Template Method), blanket impls, and
+`@derive` reduce the ceremony; see [TRAITS](TRAITS.md).
+
 ## Default Strategy
 
 ADTs use a **tagged union** memory layout: a discriminant (tag) followed by the variant's fields. The compiler optimises layout by packing the tag into padding bytes where possible (niche optimisation, like Rust's NonNull for `Option<&T>`). Pattern matching compiles to a jump table on the tag.
@@ -105,7 +237,7 @@ ADTs use a **tagged union** memory layout: a discriminant (tag) followed by the 
 
 ## Open Questions
 
-1. Should ADTs support method-like functions directly on variants (Rust `impl` block syntax), or should all behaviour go through traits?
+1. ~~Should ADTs support method-like functions directly on variants (Rust `impl` block syntax), or should all behaviour go through traits?~~ **Resolved by EDR-039 §4** — all behaviour goes through traits; `impl` blocks are separate; variants carry no inherent methods. See [Behaviour: traits over data](#behaviour-traits-over-data-not-methods-on-data).
 2. Should the compiler support automatic `@derive` for all structural traits when an ADT is declared (opt-out rather than opt-in)?
 3. How do recursive ADTs interact with the Allocation Policy — minimum size bounds for arena allocation?
 
