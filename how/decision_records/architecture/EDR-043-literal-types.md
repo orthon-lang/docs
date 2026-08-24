@@ -18,7 +18,7 @@ With EDR-039 establishing Algebraic Data Types as Orthon's single sum-type mecha
 
 The key tension: **literal types overlap with simple ADTs** (`type Method = GET | POST | PUT` vs. `type Method = "GET" | "POST" | "PUT"`). Both solve "a fixed set of distinct values." Per the Manifesto's "One concept — one syntax," Orthon should not ship two overlapping closed-set mechanisms.
 
-The research document at `how/concepts/research/important/LITERAL_TYPES.md` explores this in depth, including the widening rule (whether `let x = "GET"` infers as `"GET"` the literal type or `String` the base type).
+The research document at `how/concepts/research/important/LITERAL_TYPES.md` explores this in depth, including the widening rule (whether `x = "GET"` infers as `"GET"` the literal type or `String` the base type).
 
 ---
 
@@ -28,7 +28,7 @@ The research document at `how/concepts/research/important/LITERAL_TYPES.md` expl
 
 ```orthon
 # Literal type in annotation
-let method: "GET" = "GET"
+method: "GET" = "GET"
 
 # Closed union of literal types
 type Method = "GET" | "POST" | "PUT"
@@ -38,14 +38,16 @@ type Port = 80 | 443 | 8080
 type Flag = true | false
 ```
 
-**2. Widening is explicit.** A binding's type is the literal type if:
-- It is an immutable binding (`let`) with a literal initializer → preserves the literal type.
-- It is a mutable binding (`var`) with a literal initializer → widens to the base type.
+**2. Widening is explicit.** A declaration's type is the literal type if:
+- It is an immutable declaration (by assignment, no keyword) with a literal initializer → preserves the literal type.
+- It is a `var` declaration (mutable) with a literal initializer → widens to the base type.
 
-This is simpler than TypeScript's context-dependent widening. The rule is: **immutable bindings preserve literal types; mutable bindings widen to base types.** This is one explicit, always-applicable rule.
+`let` is the shadowing marker (EDR-074, Declaration by Assignment) and is orthogonal to widening: a `let`-shadowed value's type follows its own mutability.
+
+This is simpler than TypeScript's context-dependent widening. The rule is: **immutable declarations preserve literal types; `var` declarations widen to base types.** This is one explicit, always-applicable rule.
 
 ```orthon
-let x = "GET"    # type: "GET" (literal preserved)
+x = "GET"        # type: "GET" (literal preserved)
 var y = "GET"    # type: String (widened — mutable)
 ```
 
@@ -74,14 +76,14 @@ Both benefit from pattern matching exhaustiveness, but ADTs provide stronger gua
   - Adds complexity to the type system — literal types must be tracked, narrowed, and widened.
   - Weaker exhaustiveness than ADTs — a literal type union has no compiler-enforced "all variants" beyond syntactic membership. Adding a new arm silently changes the type.
   - Overlaps with simple ADTs for payload-free variants (e.g., `type Method = GET | POST` vs. `type Method = "GET" | "POST"`).
-  - Widening rule adds a semantic distinction between `let` and `var` beyond mutability.
+  - Widening rule adds a semantic distinction between immutable declarations and `var` declarations.
 
 ---
 
 ### Compliance
 
-1. Every literal in immutable binding position must produce a singleton literal type.
-2. Every literal in mutable binding position must widen to its base type.
+1. Every literal in an immutable declaration position must produce a singleton literal type.
+2. Every literal in a `var` declaration position must widen to its base type.
 3. Literal types must narrow correctly in pattern matching (e.g., `match method { case "GET" => ... }` narrows `method` to `"GET"` in the arm).
 4. Literal type unions must participate in type-level computation intrinsics (`keyof`, conditional types).
 
@@ -108,6 +110,18 @@ Both benefit from pattern matching exhaustiveness, but ADTs provide stronger gua
 | `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | Pass | Builds on the existing type system — no new architectural layer. Literal types are a natural extension of the type inference mechanism (EDR-027). |
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | Pass | Literal type semantics (singleton types, widening, narrowing) are independent of any memory layout or allocation strategy. |
 | `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | Pass | Literal types are a well-understood feature (TypeScript, Scala 3, Python typing). The restricted scalar-only scope limits long-term complexity. |
-| `LLM_GENERABILITY_GATE` | Empirical Analysis | Pass | The single widening rule (`let` preserves, `var` widens) is LLM-generable. Literal type union syntax (`"GET" | "POST"`) is unambiguous. |
+| `LLM_GENERABILITY_GATE` | Empirical Analysis | Pass | The single widening rule (immutable declarations preserve, `var` widens) is LLM-generable. Literal type union syntax (`"GET" | "POST"`) is unambiguous. |
 
 **Detailed reasoning:** See `DECISION_LOG.md` entry for EDR-043 for per-gate reasoning trail.
+
+---
+
+### Amendment (2026-08-24) — Binding-model re-expression (Type B)
+
+Decision #2 is re-expressed on the declaration-by-assignment binding model
+(EDR-074): **immutable declarations preserve literal types; `var` declarations
+widen to base types; `let` is the shadowing marker, orthogonal to widening.**
+The widening semantics are unchanged; the binding-form syntax in the examples
+is corrected. Recorded in `DECISION_LOG.md` with gate impact assessment.
+
+**Human sign-off:** `Reviewed-by: <author> · Date: 2026-08-24 · Verdict: LOCKED`

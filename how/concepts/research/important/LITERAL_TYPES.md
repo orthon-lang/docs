@@ -1,11 +1,12 @@
 # Literal Types
 
-> **⚠️ DRAFT — This document is a preliminary draft.**
-> It was created as exploratory research material for the Concept Design Review
-> process (Milestone 2). A concept is registered only after
-> acceptance via EDR (Architecture category).
+> **✅ CLOSED — resolved by [EDR-043](../../../decision_records/architecture/EDR-043-literal-types.md).**
+> Re-verified 2026-08-24. Literal types are accepted (EDR-043); the
+> authoritative specification lives in
+> [`what/concepts/LITERAL_TYPES.md`](../../../what/concepts/LITERAL_TYPES.md).
+> This draft is retained for its rationale and language-comparison material.
 >
-> **Last updated:** 2026-07-22
+> **Last updated:** 2026-08-24
 >
 > **⚠️ Syntax note:** Code examples use abstract syntax. Final syntax is subject
 > to language-wide agreement and will be specified in Phase 5 (Syntax).
@@ -117,6 +118,13 @@ const y = "GET";  // type "GET" (literal preserved)
    form — Orthon already distinguishes `=` mutable vs. `:=` immutable
    bindings per `GRADUAL_TYPING.md` — rather than TypeScript's opt-in
    `as const`?
+
+   > **Resolved (2026-08-24):** Widening is governed by Orthon's binding
+   > model per `DECLARATION_BY_ASSIGNMENT.md` — a first assignment declares
+   > the binding (immutable), `var` marks a mutable declaration (which widens
+   > a literal to its base type), and **`let` is the shadowing keyword**, not
+   > an immutable-binding form. The `let`/`var` framing in the accepted
+   > concept must be read in these terms.
 3. Does adopting literal types make `ENUM_ALTERNATIVES.md`'s Option A
    (named constants) redundant, or do the two serve genuinely different
    needs (external string/JSON-facing values vs. internal enumerations)?
@@ -126,7 +134,15 @@ const y = "GET";  // type "GET" (literal preserved)
 
 ## Decision History
 
-Initial research — no decisions recorded yet.
+- **2026-07-22 — Initial research.** Draft created as a Phase 1 hypothesis.
+- **2026-08-24 — Re-verified and closed.** The hypothesis is resolved: literal
+  types are accepted via
+  [EDR-043](../../../decision_records/architecture/EDR-043-literal-types.md).
+  Key finding: **`let` is the shadowing keyword** (per
+  [`DECLARATION_BY_ASSIGNMENT.md`](DECLARATION_BY_ASSIGNMENT.md)) — a first
+  declaration is an assignment, `var` marks mutability (widening a literal to
+  its base type). The widening rule in the accepted concept must be expressed
+  with this binding model, not with `let`/`var` binding forms.
 
 ---
 
@@ -136,3 +152,4 @@ Initial research — no decisions recorded yet.
 - [UNION_INTERSECTION_TYPES.md](UNION_INTERSECTION_TYPES.md)
 - [ALGEBRAIC_DATA_TYPES.md](ALGEBRAIC_DATA_TYPES.md)
 - [GRADUAL_TYPING.md](GRADUAL_TYPING.md)
+- [DECLARATION_BY_ASSIGNMENT.md](DECLARATION_BY_ASSIGNMENT.md) — binding model: `let` is shadowing
