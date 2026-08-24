@@ -80,6 +80,7 @@ language construct.
 | The problem is justified by `../../why/VISION.md` | Directly serves a Vision pillar | Indirectly aligned | Contradicts or ignores Vision |
 | A realistic code example shows the pain point | Concise, concrete example | Example exists but is contrived | No example provided |
 | The benefit outweighs the cognitive cost | Obvious net gain | Marginal trade-off | Cognitive cost exceeds benefit |
+| The problem is grounded in a known classical problem or evidence | Maps to a classical PLT problem (`what/LANGUAGE_PROBLEMS.md`) or has direct evidence | No classical analogue; plausible but unproven | Speculative — no evidence real code would need it |
 
 **Fail conditions:**
 - The problem does not exist outside the compiler implementer's
@@ -87,7 +88,8 @@ language construct.
 - The feature could be implemented as a library without language
   changes.
 - The use case is speculative (no evidence that real code would need
-  it).
+  it) — a proposal that maps to a known classical problem (see
+  `what/LANGUAGE_PROBLEMS.md`) carries its evidence with it.
 
 ---
 
@@ -233,6 +235,7 @@ simply, it is not yet ready.
 | Conceptual debt assessed | No conceptual debt | Minor debt with documented mitigation | Significant conceptual debt |
 | Reversible decision | Decision can be deprecated without ecosystem breakage | Deprecation is costly but possible | Decision is irreversible once adopted |
 | Compatibility impact is bounded | Affects only new or isolated scope | Affects existing syntax minimally | Breaks existing code or mental models |
+| Precedent in other languages | Mechanism has working precedent in ≥1 production language (Rust, Haskell, ...) | Similar but unproven pattern | No precedent — novel, untested approach |
 
 **Fail conditions:**
 - The proposal paints the language into a corner where a desirable
@@ -396,7 +399,7 @@ established during the Concept Design Review (Milestone 2):
 
 | Gate | Precondition |
 |------|-------------|
-| `USER_VALUE_GATE` | A clear **Problem statement** must exist (step 1 of Concept Design Review). Without a well-defined problem, user value cannot be assessed. |
+| `USER_VALUE_GATE` | A clear **Problem statement** must exist (step 1 of Concept Design Review), including a mapping to a known classical PLT problem if one applies (see `what/LANGUAGE_PROBLEMS.md`). Without a well-defined problem, user value cannot be assessed. |
 | `ARCHITECTURAL_INTEGRITY_GATE` | **Interactions** with all existing concepts must be documented during the Cross-Cutting Review (`CONCEPT_PIPELINE.md` Stage 11). The gate evaluates fit within the architecture, which requires knowing how the concept composes with existing ones. |
 
 These preconditions ensure that no gate is applied in isolation — each

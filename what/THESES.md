@@ -204,3 +204,35 @@ substitutes for expansion.
 > thesis: `@macro` is not merely “function-level comptime sugar” — it is
 > the specialised **codegen/expansion** surface that builds *on* the
 > phase engine.
+
+### Traits and ADTs — data and behaviour are separated; both Expression Problem axes stay open
+
+**Status:** VERIFIED
+**Source:** [EDR-019](../how/decision_records/architecture/EDR-019-traits.md),
+[EDR-039 §4](../how/decision_records/architecture/EDR-039-algebraic-data-types.md),
+[`what/concepts/TRAITS.md`](concepts/TRAITS.md),
+[`what/concepts/ALGEBRAIC_DATA_TYPES.md`](concepts/ALGEBRAIC_DATA_TYPES.md) § Behaviour,
+[`LANGUAGE_PROBLEMS.md`](LANGUAGE_PROBLEMS.md) § The Expression Problem
+
+**Thesis:** Orthon separates **data from behaviour** at the type level:
+`type` declares a data shape only (product records, ADT variants), and
+behaviour attaches externally — through traits (EDR-019) and separate
+`impl` blocks (EDR-039 §4). ADT variants never carry inherent methods.
+
+> Elaboration: two canonical shapes follow. Path A — one closed ADT
+> (`type Shape = Circle(...) | Rectangle(...)`) with a single
+> `impl Area for Shape` dispatching via `match`; adding a variant breaks
+> exhaustiveness (compile-time error). Path B — independent product
+> types (`type Circle(radius: Float)`, `type Rectangle(...)`) each with
+> its own `impl Area for Circle` / `impl Area for Rectangle`;
+> polymorphism via generics (`<Area as T>`, static, default) or `dyn`
+> (opt-in vtable). In both paths the `impl` block is external to the
+> `type` declaration — the Java/C# class-with-methods model is rejected.
+> This is Orthon's resolution of the Expression Problem: Path A
+> optimises adding operations, Path B optimises adding types, and Path B
+> inverts responsibility for defining operations so both extension axes
+> stay open without editing existing code.
+> What it does NOT claim: it does not permit methods inside a `type`
+> declaration; it does not pick a single mechanism — both paths are
+> permitted; trait inheritance stays rejected (EDR-019) — composition
+> via bounds `where T as A + B`, not hierarchy.

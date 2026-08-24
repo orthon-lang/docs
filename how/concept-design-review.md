@@ -85,8 +85,16 @@ What problem does this concept solve for the programmer? State the gap
 or friction. If it solves no independently-statable problem, reject at
 this step.
 
+If the problem maps to a known classical programming-language theory
+problem (e.g., the Expression Problem), name it and reference the entry
+in `what/LANGUAGE_PROBLEMS.md`; add a registry entry if none exists — a
+missing entry may signal a novel problem worth recording. Cite scientific
+grounding where it exists (e.g., Wadler's Expression Problem, the traits
+literature).
+
 **Output:** A clear problem statement that a competent programmer would
-recognise as genuine.
+recognise as genuine, plus (where applicable) the classical-problem
+mapping and scientific grounding.
 
 #### 2. Alternatives
 
@@ -105,6 +113,14 @@ At most one additional "wild" alternative beyond this set (5 candidates
 max). Score every candidate against the same fixed criteria used by the
 validation gates (Design Principles, minimality, orthogonality, LLM
 Generability Gate) in a comparison table.
+
+Before scoring, enumerate how other languages solve this problem (e.g.,
+Rust `enum` + external `impl`, Haskell typeclasses, Kotlin sealed
+classes). These are concrete candidates, not abstractions: their
+trade-offs feed the comparison table, and the closest one typically
+becomes a real alternative or the reject baseline. The chosen mapping
+also flows into the concept doc's "Alternative Strategies" and the
+`what/LANGUAGE_PROBLEMS.md` entry's "Analogies in other languages".
 
 **Output:** a comparison table with a Selection row — the chosen candidate
 becomes the input to Step 3 (Minimal Solution). The table is carried
