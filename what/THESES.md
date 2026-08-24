@@ -236,3 +236,32 @@ behaviour attaches externally — through traits (EDR-019) and separate
 > declaration; it does not pick a single mechanism — both paths are
 > permitted; trait inheritance stays rejected (EDR-019) — composition
 > via bounds `where T as A + B`, not hierarchy.
+
+### Binding keywords — `let` (shadowing) and `var` (mutability)
+
+**Status:** DRAFT
+**Source:** [`../how/syntax/REBINDING_SYNTAX.md`](../how/syntax/REBINDING_SYNTAX.md)
+(Locked Decisions, 2026-08-19),
+[`../how/syntax/SHADOWING_SYNTAX.md`](../how/syntax/SHADOWING_SYNTAX.md),
+[`concepts/DECLARATION_BY_ASSIGNMENT.md`](concepts/DECLARATION_BY_ASSIGNMENT.md) (EDR-074)
+
+**Thesis:** `let` marks **shadowing (rebinding)** — a new binding over a
+name already in scope; `var` marks **explicit mutability**. The
+immutable default needs no keyword (`x = 1`); `val` is rejected as
+redundant and misleading.
+
+> Elaboration: the semantic core is EDR-074 — no implicit shadowing
+> (any name reuse must be syntactically visible, Principle 5), immutable
+> by default, mutation requires an explicit marker. The keyword names
+> are Phase 5 syntax candidates, not accepted syntax: `let` is the
+> candidate for same-scope rebinding; `var` is a mutability marker, not
+> a declaration keyword; `val` was rejected (2026-08-19) — corpus-wide
+> `val` means immutable (Kotlin, Scala), which conflicts with LLM
+> Generability and is redundant with the keyword-free immutable default.
+> What it does NOT claim: it does not settle the Phase 5 keyword names
+> (Decision Queue Open, Human sign-off Pending); it does not decide
+> whether the same-scope pipeline idiom (`data = parse(data)`) is
+> `let`-rebinding or `var`-reassignment (REBINDING_SYNTAX Axis 1 open);
+> it does not claim doc convergence — concept-level sources
+> (MUTABILITY.md, DECLARATION_BY_ASSIGNMENT.md, GLOSSARY.md) still use
+> `mut` for the mutable marker.
