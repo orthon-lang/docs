@@ -38,6 +38,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Semantic Model** - Define identity, ownership, mutation, evaluation, visibility, and lifetime as one unified model (completed 2026-07-27)
 - [x] **Phase 3: Primitive Blocks** - Identify the minimal orthogonal set of primitive building blocks
 - [x] **Phase 4: Derived Features & Decision Pipeline** - Design every outstanding concept through the Decision Pipeline and accept via EDR
+- [x] **Phase 04.1: Concepts Human's Verification** (INSERTED) - Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist and close governance gaps G1-G8, producing a clean, confirmed concept inventory for Phase 5
+- [ ] **Phase 04.2: Classical PLT Problem Mapping** (INSERTED) - Bind every accepted concept in `what/concepts/` to the classical programming-language theory (PLT) problem it solves, establish its scientific grounding, and register each problem in `what/LANGUAGE_PROBLEMS.md` before Phase 5
 - [ ] **Phase 5: Syntax Design** - Derive syntax from the semantic model for every accepted concept
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
 - [ ] **Phase 7: Execution & Optimization Model** - Define the boundary between language semantics and implementation
@@ -205,6 +207,22 @@ Plans:
 - [x] 04.1-16-PLAN.md — Wave 4: VB16 — Metaprogramming and Derive
 - [x] 04.1-17-PLAN.md — Wave 5: Governance sync (G1-G5 closure, G4 inventory, registry updates, human sign-off)
 
+---
+
+### Phase 04.2: Classical PLT Problem Mapping (INSERTED)
+
+**Goal**: Every accepted concept in `what/concepts/` is bound to the classical programming-language theory (PLT) problem it solves — identify the problem, establish its scientific grounding, and register it in `what/LANGUAGE_PROBLEMS.md` — so Phase 5 (Syntax Design) and all downstream phases reference concepts with an explicit, verifiable theoretical lineage instead of relying on informal motivation.
+**Depends on**: Phase 04.1 (verified concept inventory), Phase 4 (concepts accepted via EDR)
+**Requirements**: CONCEPT-ESS-01, CONCEPT-IMP-01
+**Plans**: TBD
+
+**Success Criteria** (what must be TRUE):
+
+  1. Every accepted concept in `what/concepts/` is mapped to at least one classical PLT problem, or is explicitly recorded in `what/LANGUAGE_PROBLEMS.md` as solving no classical problem (with rationale), and each mapping is confirmed against the concept's own research document and EDR(s).
+  2. Each registered problem carries verified scientific grounding — a named origin (author, year, paper/formalisation) — traced to the cited concept docs and EDRs, not merely asserted.
+  3. `what/LANGUAGE_PROBLEMS.md` follows its documented conventions (one problem per entry; Problem, Orthon's solution, Mechanisms, EDRs, Scientific grounding, Analogies in other languages, Status) and cross-references each mapped concept back to its `what/concepts/` document.
+  4. The registry is complete before Phase 5 begins — the Decision Pipeline (Q1) and Concept Design Review (Step 1) pointers to `what/LANGUAGE_PROBLEMS.md` resolve to a populated registry, and any concept that introduces a new classical problem registers it.
+
 ### Phase 5: Syntax Design
 
 **Goal**: Design syntax as the external interface of the semantic model — derived from semantics, not designed independently — for every concept accepted in Phase 4.
@@ -287,7 +305,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
+Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 4.1 → 4.2 → 5 → 6 → 7 → 8 → 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|-----------------|--------|-----------|
@@ -296,6 +314,8 @@ Phases execute in numeric order: 1 → 1.1 → 2 → 3 → 4 → 5 → 6 → 7 �
 | 2. Semantic Model | 1/1 | Complete    | 2026-07-27 |
 | 3. Primitive Blocks | 0/TBD | Not started | - |
 | 4. Derived Features & Decision Pipeline | 0/TBD | Not started | - |
+| 4.1. Concepts Human's Verification (INSERTED) | 18/18 | Complete | 2026-08-04 |
+| 4.2. Classical PLT Problem Mapping (INSERTED) | 0/TBD | Not started | - |
 | 5. Syntax Design | 0/TBD | Not started | - |
 | 6. Cross-Cutting Review | 0/TBD | Not started | - |
 | 7. Execution & Optimization Model | 0/TBD | Not started | - |
