@@ -265,3 +265,49 @@ redundant and misleading.
 > it does not claim doc convergence — concept-level sources
 > (MUTABILITY.md, DECLARATION_BY_ASSIGNMENT.md, GLOSSARY.md) still use
 > `mut` for the mutable marker.
+
+### Literal Types — immutable declaration preserves the literal type
+
+**Status:** VERIFIED
+**Source:** [EDR-043](../how/decision_records/architecture/EDR-043-literal-types.md),
+[EDR-074](../how/decision_records/architecture/EDR-074-declaration-by-assignment.md),
+[`concepts/LITERAL_TYPES.md`](concepts/LITERAL_TYPES.md)
+
+**Thesis:** An immutable declaration (first assignment, no keyword) with a
+literal initializer preserves the singleton literal type: `x = "GET"` has
+type `"GET"`, not `String`. "Preserves" means the compiler does not widen —
+the binding is typed as the exact literal.
+
+> Elaboration: the singleton literal type is sound for an immutable
+> declaration because the value can never change, so committing to the
+> exact literal loses nothing. This is one half of the single explicit
+> widening rule (EDR-043, amended 2026-08-24); the other half is the
+> "`var` (mutable) widens" thesis. `let` is the shadowing marker and is
+> orthogonal to widening.
+
+```orthon
+method = "GET"    # method: "GET" — not String
+```
+
+### Literal Types — `var` (mutable) declaration widens to the base type
+
+**Status:** VERIFIED
+**Source:** [EDR-043](../how/decision_records/architecture/EDR-043-literal-types.md),
+[EDR-074](../how/decision_records/architecture/EDR-074-declaration-by-assignment.md),
+[`concepts/LITERAL_TYPES.md`](concepts/LITERAL_TYPES.md)
+
+**Thesis:** A `var` (mutable) declaration with a literal initializer widens
+the literal to its base type: `var y = "GET"` has type `String`, not
+`"GET"`. Widening is required because a mutable value can change — a fixed
+singleton type would make reassignment a type error.
+
+> Elaboration: both halves of the widening rule share one root cause — the
+> singleton literal type is only sound while the value cannot change.
+> Immutable declarations preserve; `var` declarations widen. This is one
+> explicit, always-applicable rule (LLM-generable; no TypeScript-style
+> context-dependent widening).
+
+```orthon
+var method = "GET"    # method: String — literal widened
+method = "POST"       # legal: type is String
+```
