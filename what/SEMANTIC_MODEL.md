@@ -296,6 +296,11 @@ above.
 explicit, opt-in act, both at the binding site and at the declaration
 site.
 
+This section is the enforcement-level statement of the constitutional
+guarantee *Data Is Immutable by Default* — see
+[`DESIGN_PRINCIPLES.md`](../how/DESIGN_PRINCIPLES.md) § Data Is Immutable
+by Default and [EDR-090](../how/decision_records/architecture/EDR-090-data-oriented-programming.md).
+
 **Binding-level mutability:**
 
 ```

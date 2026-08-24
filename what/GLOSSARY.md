@@ -256,7 +256,7 @@ tuple(1, 2, 3) → the same data, now explicitly a Tuple
 ```
 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data, `how/concepts/research/DATA_MODEL.md`
-- **See also:** [Data Modifier](#data-modifier), [Representation](#representation)
+- **See also:** [Data Modifier](#data-modifier), [Representation](#representation), [Data-Oriented Programming](#data-oriented-programming)
 
 ### Data Modifier
 
@@ -264,6 +264,23 @@ A construct that transforms data from one representation to another. Modifiers e
 
 - **Source:** `how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md` § Data Modifiers
 - **See also:** [Data](#data), [Representation](#representation)
+
+### Data-Oriented Programming
+
+The programming paradigm — codified by Yehonathan Sharvit (*Data-Oriented
+Programming*, 2022) — that Orthon's data model explicitly follows
+([EDR-090](../how/decision_records/architecture/EDR-090-data-oriented-programming.md)).
+DOP's four principles and their realization in Orthon:
+
+| DOP principle | Realized in Orthon |
+|---|---|
+| Separate code from data | [Data First](../how/DESIGN_PRINCIPLES.md) — Data vs. [Data Modifier](#data-modifier) |
+| Represent data with generic structures | The seven [Representations](#representation) |
+| Data is immutable | [Data Is Immutable by Default](../how/DESIGN_PRINCIPLES.md); `SEMANTIC_MODEL.md` § Mutation |
+| Schema separate from representation | [Schema Separate from Representation](../how/DESIGN_PRINCIPLES.md); gradual typing (EDR-059), constrained types (EDR-080) |
+
+- **Source:** [EDR-090](../how/decision_records/architecture/EDR-090-data-oriented-programming.md), [`DESIGN_PRINCIPLES.md`](../how/DESIGN_PRINCIPLES.md) § Data First
+- **See also:** [Data](#data), [Data Modifier](#data-modifier), [Representation](#representation), [Schema](#schema)
 
 ### Data Operations Primitive
 
@@ -1643,6 +1660,23 @@ information, while `Option` represents mere absence.
 ---
 
 ## S
+
+### Schema
+
+The nominal or constraint label imposed on data — an ADT variant, a trait
+bound, a Constrained Type. Schema is optional and is applied at the
+boundary (construction, assignment, parameter passing), never embedded in
+the data representation itself. Schema is orthogonal to
+[Representation](#representation): representation is the always-present,
+transparent structural shape of data; schema is the optional semantic label
+applied at boundaries. Gradual typing
+([EDR-059](../how/decision_records/architecture/EDR-059-gradual-typing.md))
+makes schema optional; constrained types
+([EDR-080](../how/decision_records/architecture/EDR-080-constrained-types.md))
+validate at entry boundaries only.
+
+- **Source:** [EDR-090](../how/decision_records/architecture/EDR-090-data-oriented-programming.md), [`DESIGN_PRINCIPLES.md`](../how/DESIGN_PRINCIPLES.md) § Schema Separate from Representation
+- **See also:** [Representation](#representation), [Data](#data), [Constrained Type](#constrained-type), [Gradual Typing](#gradual-typing)
 
 ### Semantic Dimension
 

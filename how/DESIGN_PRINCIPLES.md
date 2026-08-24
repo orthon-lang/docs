@@ -13,6 +13,8 @@ another, the resolution is guided by the goals it serves.
 ```
 Core Philosophy
 ├── Data First
+├── Data Is Immutable by Default
+├── Schema Separate from Representation
 ├── Intent Over Implementation
 ├── Orthogonality
 ├── Semantic Purity
@@ -52,6 +54,64 @@ Software Design Principles
 Data is the primary abstraction.
 
 Language constructs operate by transforming data into different representations.
+
+**Lineage — Data-Oriented Programming.** Orthon's data model is an explicit
+instance of the **Data-Oriented Programming (DOP)** paradigm (Yehonathan
+Sharvit, *Data-Oriented Programming*, 2022). DOP's four principles and their
+realization in Orthon: separate code from data (Data vs. Data Modifier),
+represent data with generic structures (the seven Representations), data is
+immutable ([Data Is Immutable by Default](#data-is-immutable-by-default)),
+and schema is separate from representation
+([Schema Separate from Representation](#schema-separate-from-representation)).
+See [EDR-090](../how/decision_records/architecture/EDR-090-data-oriented-programming.md)
+and [`GLOSSARY.md`](../what/GLOSSARY.md) § Data-Oriented Programming.
+
+
+## Data Is Immutable by Default
+
+Data does not mutate. Transforming data produces a new version of it; the
+original remains unchanged.
+
+Immutable-by-default is the semantic baseline for all bindings and values
+([`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Mutation). Mutation is an
+explicit, opt-in exception marked with `mut`, and — per Explicitness — a
+mutation that does occur must be visible in the surface form of the code.
+The compiler may use copy-on-write, structural sharing, or another
+implementation as long as observable behaviour matches immutability
+([EDR-061](../how/decision_records/architecture/EDR-061-copy-on-write.md),
+[EDR-069](../how/decision_records/architecture/EDR-069-persistent-data-structures.md)).
+
+Consequences: equality can be structural by default
+([`EQUALITY.md`](../what/concepts/EQUALITY.md)), collections are immutable
+by default ([EDR-041](../how/decision_records/architecture/EDR-041-collection-literal-syntax.md)),
+and value semantics — assignment copies — holds without hidden aliasing
+([`SEMANTIC_MODEL.md`](../what/SEMANTIC_MODEL.md) § Identity).
+
+
+## Schema Separate from Representation
+
+The schema imposed on data is separate from the data's representation.
+
+Two orthogonal axes must not be conflated:
+
+- **Representation** — the structural shape of data (Value, Tuple,
+  Reference, Sequence, Set, Option, Result). Representation is always
+  present and transparent: it is part of the type and visible in the type
+  signature ([`DATA_MODEL.md`](../how/concepts/research/essential/DATA_MODEL.md)
+  § Transparent representation).
+- **Schema** — the nominal or constraint label imposed on data (an ADT
+  variant, a trait bound, a Constrained Type). Schema is optional and is
+  applied at the boundary — construction, assignment, parameter passing —
+  never embedded in the representation itself.
+
+Data carries no imposed semantic meaning until a Data Modifier or a schema
+at a boundary interprets it. Gradual typing
+([EDR-059](../how/decision_records/architecture/EDR-059-gradual-typing.md))
+makes annotations optional; constrained types
+([EDR-080](../how/decision_records/architecture/EDR-080-constrained-types.md))
+place validation at entry boundaries only. This principle makes the
+schema/representation split explicit and reconciles it with transparent
+representation.
 
 
 ## Intent Over Implementation
