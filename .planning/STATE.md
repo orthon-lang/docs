@@ -6,7 +6,7 @@ current_phase: 04.1
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-08-04T10:56:12.559Z"
+last_updated: "2026-08-24T06:52:14.076Z"
 last_activity: 2026-08-04
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
 progress:
@@ -109,6 +109,7 @@ None yet.
 | 260726-s31 | Rewrite REQUIREMENTS.md Phase 2/3/4 sections to match actual concept inventory — SEM-01..03/PRIM-01..03 now name their 10 real essential-tier source files each, CONCEPT-01..13 (stale 13-item list) replaced with 4 tier-scaled requirements (CONCEPT-ESS-01/IMP-01/DEFER-01/REJECT-01), Traceability/Coverage corrected (a pre-existing 79-vs-66 miscount was also fixed), and caveat notes added to SEED-001 and the research README | 2026-07-26 | b99f075, 5978d7a, 8c2ee5d | [260726-s31-rewrite-requirements-md-phase-2-3-4-sect](./quick/260726-s31-rewrite-requirements-md-phase-2-3-4-sect/) |
 | 260727-flc | Renumber duplicate EDR-011 architecture record (LLM Generability Gate) to EDR-014, repoint its 6 live cross-references, and index it in INDEX.md — resolves the ID collision flagged by 02-VERIFICATION.md | 2026-07-27 | 9bd7614 | [260727-flc-renumber-duplicate-edr-011-architecture-](./quick/260727-flc-renumber-duplicate-edr-011-architecture-/) |
 | 260727-ge5 | Add missing how/gates/methods/EMPIRICAL_ANALYSIS_METHOD.md and fix stale note in DECISION_LOG.md section 7 | 2026-07-27 | dc39811, 4f5ee29 | [260727-ge5-add-missing-how-gates-methods-empirical-](./quick/260727-ge5-add-missing-how-gates-methods-empirical-/) |
+| 14 | Add Phase 04.2 (Classical PLT Problem Mapping) to roadmap before Phase 5 — bind every accepted concept in what/concepts/ to the classical PLT problem it solves, establish scientific grounding, and register problems in what/LANGUAGE_PROBLEMS.md | 2026-08-24 | b97f2ca | — |
 
 ### Roadmap Evolution
 
