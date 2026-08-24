@@ -29,7 +29,7 @@
     "ui_safety_gate": true,
     "ai_integration_phase": true,
     "api_coverage_gate": true,
-    "human_verify_mode": "per-task",
+    "human_verify_mode": "mid-flight",
     "context_guard_mode": "warn",
     "text_mode": true,
     "research_before_questions": false,
@@ -93,5 +93,8 @@
   "intel": {
     "enabled": true
   },
-  "response_language": "russian"
+  "response_language": "russian",
+  "graphify": {
+    "enabled": true
+  }
 }
