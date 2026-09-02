@@ -167,3 +167,29 @@ Orthon is to reach "on par with Python/Node/bash as an LLM tool,"
 planning should sequence LLM-facing components (schema, analyser,
 introspection, MCP, sandbox contract) as the first implementation
 milestone rather than the general-purpose compiler first.
+
+---
+
+## Addendum — ODCS Scoping (2026-09-02)
+
+Reviewed whether the Open Data Contract Standard (ODCS) has a role in the
+LLM-native toolchain. The conclusion is a scope boundary, not a feature:
+
+- **Not applicable to the language layer.** ODCS describes *data* (schema,
+  quality, SLA at a producer/consumer boundary), not *code*. It must not be
+  used for language constructs, public module APIs, or the Schema Provider —
+  API/type conformance is the Static Analyser's job against the real
+  language schema, and the Schema Provider remains the single source of
+  truth.
+- **Only legitimate domain: the I/O boundary.** An Execution Program's
+  declared inputs/outputs *as data* are the one place a data-contract
+  standard could apply.
+- **Deferred, not designed.** I/O contracts already live as Orthon types;
+  ODCS adds nothing over them until a real external consumer (data catalog,
+  quality tool, agent harness) needs a standard, interoperable contract
+  document. Decide by fact when that consumer exists — do not pre-build
+  ODCS integration.
+
+**Reusable rule:** when any external standard is proposed for Orthon, first
+ask whether it describes *data at the boundary* or *language/API*. The
+latter is never an external standard's job.
