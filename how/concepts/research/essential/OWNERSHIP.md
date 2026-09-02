@@ -74,6 +74,7 @@ Arena-based allocation with ownership and static borrow checking (Rust-style). N
 | Tracing GC | Full garbage collection for cyclic graphs (opt-in). |
 | Region-based | Bump allocation with region scope for short-lived workloads. |
 | Linear types | Values must be used exactly once; no implicit drop. |
+| Quantitative Type Theory (QTT) | Resource multiplicities (0, 1, ω) on bindings — a unified formalization of linear/affine usage and erasure. Enforcement-level counterpart to the single-owner invariant; a Strategy option, not Core-Language semantics (see `.planning/notes/qtt-vs-orthon.md`). |
 
 ## Open Questions
 
