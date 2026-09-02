@@ -44,6 +44,51 @@ fn sqrt(x: Float) -> Float
 - **`result`** — implicit variable binding the function's return value in the `ensures` clause.
 - **`old`** — implicit variable capturing a parameter's value at function entry (useful in `ensures` for mutable data).
 
+A function may declare several preconditions; the caller must satisfy every `requires` before the call:
+
+```orthon
+fn withdraw(balance: Int, amount: Int) -> Int
+    requires amount > 0
+    requires amount <= balance
+    ensures result == balance - amount
+    return balance - amount
+```
+
+Postconditions are **relational** — they tie the output to the inputs, which a typed signature alone cannot express. A function that returned `balance + amount` would be just as well-typed as one returning `balance - amount`; the `ensures` clause is what states which relation is intended. Postconditions may also bound the output without naming it:
+
+```orthon
+fn clamp(x: Int, lo: Int, hi: Int) -> Int
+    requires lo <= hi
+    ensures result >= lo
+    ensures result <= hi
+```
+
+Contract expressions are pure and may call other pure functions, so shared domain predicates can be reused across signatures (see [Contract Expressions](#contract-expressions)).
+
+#### Where Contracts Are Evaluated (Lexical vs. Execution Position)
+
+Syntactic position is not execution position. Contract clauses appear between the header and the body only because that is where a signature lives — visible to the caller and to the compiler — but they are not statements that run in the sequence of the body. Execution is hoisted to the function boundary: `requires` is evaluated on entry, before the body runs, and `ensures` on every normal exit, after the body has already produced its value.
+
+This is why `result` is a **ghost binding**, not a variable of the body's scope. It exists only inside `ensures` expressions: it cannot be assigned, it does not leak into ordinary code, and it is unavailable in `requires` and `invariant` clauses. The compiler binds `result` to the value the function is about to return at the moment the postcondition is evaluated — and because that moment comes *after* the value exists, the reference is valid even though the clause is written above the body.
+
+The compiler instruments the boundary, not the body: the callee's source is untouched, and checks are placed around it. Desugaring (illustrative — the exact rewrite depends on the final return/body syntax):
+
+```text
+fn withdraw(balance: Int, amount: Int) -> Int
+    # ENTRY — requires, evaluated before the body
+    assert amount > 0
+    assert amount <= balance
+    old := snapshot(balance)            # only if `old` is used
+
+    # BODY — as written; each normal exit is rewritten:
+    result := <returned value>
+    # EXIT — ensures, evaluated after the body produced a value
+    assert result == balance - amount
+    return result
+```
+
+Because the check is attached to the boundary rather than written as a trailing statement, `ensures` covers every normal exit — branches, early returns, and tail expressions — and applies only to successful exits, matching the definition above ("after every successful return"). Where the compiler can prove a contract statically, no runtime check is emitted. The remaining checks behave as assertions in debug and test builds and are elided in release builds unless `--enforce-contracts` is passed.
+
 ### Object/Module Invariants
 
 Types and modules can declare invariants that must hold at every public boundary:
@@ -57,6 +102,8 @@ class Queue<T>
         requires size < capacity
         ensures size == old.size + 1
 ```
+
+Invariants attach to the aggregate — a type or a module — not to individual free functions: a free function states its guarantees with `requires`/`ensures`, while an `invariant` declares what must hold across every public operation of the aggregate. Invariants are checked on entry and exit of each public method, so methods do not restate them: `enqueue` above does not repeat `size >= 0` and `size <= capacity` — they already hold when the method runs and must hold again when it returns.
 
 ### Contract Expressions
 
