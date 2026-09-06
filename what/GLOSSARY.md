@@ -901,8 +901,10 @@ and `return value ->`. Generators are lazy by default (values produced
 on demand) and support infinite sequences. Composition with iterator
 combinators does not allocate intermediate collections.
 
-**Bidirectional generators** (EDR-050) extend the model with `yield`,
-which optionally receives a value from the consumer.
+> **Amended 2026-09-06 (S2):** an earlier bidirectional extension
+> (EDR-050) that received consumer values via `yield` is withdrawn —
+> generators are emit-only. The bidirectional form survives as a
+> hypothesis: [`COROUTINE_ON_YIELD.md`](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md).
 
 - **Source:** `../what/concepts/LAZY_SEQUENCE_GENERATORS.md`
 - **See also:** [Iterator Protocol](#iterator-protocol), [Lazy Sequence](#lazy-sequence), [Yield](#yield)
@@ -1816,6 +1818,16 @@ Explicit `impl` blocks always take priority over structural matching.
 Ambiguity conflicts (a type matching two structural traits with
 conflicting signatures) produce a compile-time error.
 
+`structural` is a satisfaction **mode**, not a distinct kind of trait: a
+structural trait's contract (method set) is identical to a nominal
+trait's — only how conformance is established differs. Structural mode is
+a per-trait choice made by the trait author at declaration; being a
+Standard Library trait is not the criterion (for a type you own,
+`Eq`/`Hash`/`Show` are normally obtained via `@derive`, which generates
+explicit `impl` blocks). The term "protocol" is not used as a synonym for
+a structural trait — in Orthon, "protocol" already denotes behavioural
+conventions such as the Iterator Protocol and the Metadata Protocol.
+
 - **Source:** `../what/concepts/STRUCTURAL_TYPING.md`, [EDR-044](../how/decision_records/architecture/EDR-044-structural-typing.md)
 - **See also:** [Trait](#trait), [Trait Bound](#trait-bound), [Derive](#derive)
 
@@ -2346,24 +2358,15 @@ for infinite loops.
 
 ### Yield
 
-A keyword in generators that produces a value and suspends execution.
-`yield` without a consumer interaction is equivalent to `emit` (one-way
-production). `yield expr` optionally receives a value from the consumer
-(bidirectional yield), enabling interactive coroutine patterns.
+> **⚠️ NOT a language keyword — withdrawn 2026-09-06 (S2).** The `yield`
+> keyword (the one-way alias for `emit` and the bidirectional form) was
+> introduced by EDR-050 and has been withdrawn. Generators use `emit`
+> only. The bidirectional construct — a synchronous, caller-driven
+> coroutine — is preserved as a hypothesis:
+> [`COROUTINE_ON_YIELD.md`](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md).
 
-```orthon
-# One-way (equivalent to emit)
-yield value
-
-# Bidirectional — receives value from consumer
-let response = yield value
-```
-
-Bidirectional `yield` requires the generator to implement
-`BidirectionalGenerator[T, U]` with a `send(value: U)` method.
-
-- **Source:** `../what/concepts/GENERATORS.md` (EDR-050)
-- **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence), [Intermediate Result](#intermediate-result)
+- **Source:** `../what/concepts/GENERATORS.md` (EDR-050, amended 2026-09-06)
+- **See also:** [Generator](#generator), [Generator Expression](#generator-expression), [Lazy Sequence](#lazy-sequence), [Intermediate Result](#intermediate-result)
 
 ---
 

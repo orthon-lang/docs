@@ -363,8 +363,8 @@ The resolution process is defined in
 | **EDR** | [EDR-050](../how/decision_records/architecture/EDR-050-generators.md) |
 | **Specification** | [`concepts/GENERATORS.md`](concepts/GENERATORS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Bidirectional `yield` — consumer can send values back to generator during iteration. `yield` without expression ≡ `emit` (EDR-021). Generator expressions — parenthesised inline syntax: `(x * x for x in 1..10)`. `yield from` for generator delegation. `BidirectionalGenerator[T, U]` trait. Builds on LAZY_SEQUENCE_GENERATORS (EDR-021). |
-| **Primitive Decomposition** | `yield` without expr → equivalent to `emit` (EDR-021); bidirectional `yield expr` → `emit` + consumer receive slot in state machine; generator expression → desugaring to anonymous generator function; `yield from` → `for` loop calling `emit` on sub-generator. The bidirectional state machine slot adds compiler-level semantics beyond EDR-021's one-way `emit`. |
+| **Summary** | Generator expressions — parenthesised inline syntax: `(x * x for x in 1..10)`; delegation by composition (`for v in sub: emit v`). Generators are emit-only (one-way, EDR-021). **Amended 2026-09-06:** bidirectional `yield`, the `yield`/`yield from` keywords, and `BidirectionalGenerator[T, U]` withdrawn — demoted to the [COROUTINE_ON_YIELD](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis. |
+| **Primitive Decomposition** | Generator expression → desugaring to an anonymous `emit`-based generator function; delegation → `for` loop calling `emit` on a sub-generator (EDR-021). No compiler-level semantics beyond EDR-021's one-way `emit` — generator expressions are sugar. Bidirectional machinery withdrawn 2026-09-06 (S2). |
 
 ### EMIT_AS_INTERMEDIATE_RESULT
 

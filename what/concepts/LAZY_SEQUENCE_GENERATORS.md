@@ -157,8 +157,12 @@ Per the Named Before Symbolic principle, each form has equivalents:
 ```orthon
 emit value                    # keyword form
 return sequence(value)         # named form
-yield(value)                   # free function form (legacy alias)
 ```
+
+The `yield(value)` free-function alias was removed 2026-09-06 (S2) —
+`yield` is no longer part of the language; see the
+[`COROUTINE_ON_YIELD`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md)
+hypothesis.
 
 ### Relationship with Iterator Protocol
 

@@ -116,7 +116,7 @@ The compiler generates a state machine that:
 ## Open Questions
 
 1. Should `.final()` be callable only after the iterator is fully consumed, or at any time?
-2. How does intermediate-result `emit` interact with bidirectional generators (EDR-050)?
+2. How does intermediate-result `emit` interact with a coroutine-on-yield, if that hypothesis ([COROUTINE_ON_YIELD](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md)) is ever accepted?
 3. Should there be a way to yield intermediate results without building the full iterator state machine?
 
 ## Decision History

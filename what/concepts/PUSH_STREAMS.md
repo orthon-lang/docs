@@ -101,6 +101,6 @@ asynchronously via subscription callbacks.
 
 - **EDR-051:** Push Streams accepted as StdLib — observable-style reactive
   streams built on delegate + channel. The conceptual model (`return` → single
-  value, `yield`/`emit` → pull sequence, `push` → push sequence) is elegant,
+  value, `emit` → pull sequence, `push` → push sequence) is elegant,
   but the push side is fully expressible via composition.
 - **Classification per D-03:** StdLib. No new compiler-level semantics required.

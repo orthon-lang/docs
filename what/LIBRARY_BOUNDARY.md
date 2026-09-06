@@ -77,7 +77,7 @@ Important-tier concepts add ergonomics, expressiveness, and safety guarantees be
 4. UNION_INTERSECTION_TYPES — structural union combinator `A | B`
 5. TYPE_LEVEL_COMPUTATION — closed set of 8 compiler intrinsics
 6. ASYNC_AWAIT — async as explicit modifier on proc/fun/new
-7. GENERATORS — bidirectional yield and generator expressions
+7. GENERATORS — generator expressions (emit-based)
 8. EMIT_AS_INTERMEDIATE_RESULT — semantic refinement of EDR-021
 9. ITERATION_LOOP — for/while/loop constructs
 10. UNPACKING — destructuring assignment matching pack/unpack

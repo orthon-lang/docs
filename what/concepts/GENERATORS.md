@@ -1,79 +1,66 @@
-# Generators — Bidirectional Yield and Generator Expressions
+# Generators — Generator Expressions over `emit`
 
 > **✅ ACCEPTED — [EDR-050](../how/decision_records/architecture/EDR-050-generators.md).**
 >
-> **Status:** Accepted 2026-07-27.
+> **Status:** Accepted 2026-07-27. **Amended 2026-09-06** — the
+> bidirectional form is withdrawn from the language model (S2): the
+> `yield` / `yield from` keywords and the `BidirectionalGenerator[T, U]`
+> trait are removed. Generators are **emit-only** — one-way production.
+> The withdrawn bidirectional form is preserved as a hypothesis:
+> [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md).
 >
 > **See also:** [`LAZY_SEQUENCE_GENERATORS.md`](LAZY_SEQUENCE_GENERATORS.md),
 > [`ITERATOR_PROTOCOL.md`](ITERATOR_PROTOCOL.md),
 > [`EMIT_AS_INTERMEDIATE_RESULT.md`](EMIT_AS_INTERMEDIATE_RESULT.md),
-> [`GLOSSARY.md`](../GLOSSARY.md) § Generator, Yield
+> [`GLOSSARY.md`](../GLOSSARY.md) § Generator, Generator Expression
 
 ---
 
 ## Issue (Why)
 
-The lazy sequence model (EDR-021) established the `emit` keyword for one-way lazy production — values produced on demand, consumer pulls via `next()`. However, there are patterns where the consumer needs to communicate back to the producer mid-iteration:
+The lazy sequence model (EDR-021) established `emit` as the one-way
+production keyword — values produced on demand, consumer pulls via
+`next()`. Two gaps remained:
 
-- **Interactive coroutines** — The consumer sends configuration or context to the producer between values.
-- **Two-way protocols** — A generator acts as a state machine where each emitted value depends on the consumer's previous response.
-- **Concise inline sequences** — Writing a full generator function for a simple transformation is verbose.
-- **Generator delegation** — Combining multiple generators without manual iteration.
+- **Concise inline sequences** — Writing a full generator function for a
+  simple transformation is verbose.
+- **Generator delegation** — Combining multiple generators without manual
+  iteration loops.
 
-The core problem: **the one-way `emit` model cannot express producer-consumer interaction**, and there is no concise syntax for simple lazy sequences.
+The core problem: there is no concise inline syntax for simple lazy
+sequences. This concept adds **generator expressions** (sugar over
+`emit`) and documents delegation as composition. It deliberately does not
+add a consumer-to-producer (bidirectional) form — producers do not
+consume; see the amendment note above and the
+[`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md)
+hypothesis.
 
 ## Principles
 
-1. **`yield` extends `emit`** — `yield` is a superset of `emit`. `yield` without a consumer return value is equivalent to `emit`. `yield expr` additionally receives a value from the consumer.
+1. **`emit` is the sole production keyword** — Generators produce values
+   one-way via `emit` (EDR-021). There is no second keyword.
 
-2. **Laziness by construction** — Generator functions produce values on demand, not eagerly.
+2. **Laziness by construction** — Generator expressions produce values on
+   demand, never eagerly. Materialisation is explicit (`.collect()`).
 
-3. **Automatic state** — The compiler preserves function state between yields; no manual field management.
+3. **Automatic state** — Generator functions preserve function state
+   between emits; no manual field management.
 
-4. **Composable** — Generators can be combined via `yield from` (delegation) and iterator combinators.
+4. **Composable** — Generators combine via iterator combinators and via
+   delegation (re-emitting a sub-generator's values).
 
-5. **Minimal syntactic addition** — Generator expressions provide concise inline syntax; `yield from` provides composition; both are sugar over existing primitives.
+5. **Minimal syntactic addition** — Generator expressions are the only new
+   syntax; delegation is a composition pattern, not a keyword.
 
 ## Policy Footprint
 
 | Policy Type | Role in the concept |
 |---|---|
 | Generator Model Policy | Governs stackless (default) vs. stackful generator semantics |
-| Bidirectional Policy | Controls whether generators support consumer-to-producer communication (default: enabled via `yield expr`) |
-| Desugaring Policy | Formalises generator expression and `yield from` desugaring |
-| Iterator Protocol Policy | Normal generators implement `Iterator[T]`; bidirectional generators implement `BidirectionalGenerator[T, U]` |
+| Desugaring Policy | Formalises generator expression desugaring to `emit`-based generator functions |
+| Iterator Protocol Policy | Generators implement `Iterator[T]` — the production side of the protocol pair |
 
 ## Model (What)
-
-### Bidirectional `yield`
-
-`yield` provides two-way communication: producing a value and optionally receiving a value from the consumer.
-
-```orthon
-# One-way yield (equivalent to emit)
-fun counter() -> Iterator[Int]
-    let i = 0
-    while i < 10:
-        yield i          # produce value, no consumer interaction
-        i = i + 1
-
-# Bidirectional yield (receives value from consumer)
-fun interactive() -> Iterator[String]
-    let prefix = yield "ready"    # emit "ready", receive value
-    yield prefix ++ ": working"   # use received value
-    yield prefix ++ ": done"
-```
-
-The bidirectional form uses `BidirectionalGenerator[T, U]` trait where `next()` returns `T` and `send(value: U)` sends a value back:
-
-```orthon
-let gen = interactive()
-let msg = gen@next()        # "ready" (first yield without receiver)
-gen@send("user")            # send "user" back to generator
-msg = gen@next()            # "user: working"
-gen@send("admin")
-msg = gen@next()            # "admin: done"
-```
 
 ### Generator Expressions
 
@@ -100,58 +87,58 @@ Generator expressions are lazy by default — they produce an `Iterator[T]` with
 let squares = (x * x for x in 1..10)
 # → let squares = fun () -> Iterator[Int]:
 #       for x in 1..10:
-#           yield x * x
+#           emit x * x
 ```
 
-### `yield from` — Generator Delegation
+### Generator Delegation (Composition)
 
-Delegate production to a sub-generator:
+Combine generators by re-emitting a sub-generator's values. Delegation is
+a composition pattern — there is no dedicated keyword:
 
 ```orthon
 fun combined() -> Iterator[Int]
-    yield from fib(10)      # delegate to fib(10)
-    yield from fib(20)      # then to fib(20)
-
-# Equivalent to:
-fun combined() -> Iterator[Int]
-    for v in fib(10):
-        yield v
-    for v in fib(20):
-        yield v
+    for v in fib(10):     # delegate to fib(10)
+        emit v
+    for v in fib(20):     # then to fib(20)
+        emit v
 ```
 
 ### Relationship to `emit` (EDR-021)
 
-The `emit` keyword (established in EDR-021) remains the canonical one-way form. The relationship:
+`emit` (established in EDR-021) is the sole production keyword. Generator
+expressions and delegation are sugar and composition over it:
 
-| Construct | Direction | Consumer interaction | When to use |
-|-----------|-----------|---------------------|-------------|
-| `emit value` | One-way | None | Default for lazy sequences |
-| `yield value` | One-way | None | Equivalent to `emit` |
-| `yield expr` | Two-way | Receives value from consumer | Interactive generators |
+| Construct | Nature |
+|---|---|
+| `emit value` | One-way production (EDR-021) — the canonical keyword |
+| `(expr for x in src if cond)` | Sugar: anonymous `emit`-based generator function |
+| `for v in sub: emit v` | Composition: delegation to a sub-generator |
 
 ## Default Strategy
 
-Stackless generators (state machine). One-way by default. `yield` without expression ≡ `emit`. Bidirectional `yield` tracks a single "consumer sent value" slot in the state machine.
+Stackless generators (state machine) implementing `Iterator[T]` (EDR-021).
+One-way by default — `emit` is the only production keyword. Generator
+expressions compile to anonymous generator functions; delegation is
+ordinary iteration plus `emit`.
 
 ## Alternative Strategies
 
 | Strategy | Description |
 |---|---|
-| Stackful generators | Separate call stack per generator; can yield from nested calls (Lua coroutines). Higher memory overhead. |
-| Bidirectional via channels | Use channels for producer-consumer communication instead of `send()` on the generator. More flexible but more verbose. |
+| Stackful generators | Separate call stack per generator; can emit from nested calls (Lua coroutines). Higher memory overhead. |
+| Dedicated delegation keyword | A `yield from`-style keyword for delegation — rejected: composition (`for v in sub: emit v`) suffices. |
 | Eager production | Traditional list/array building — no laziness. Breaks infinite sequences. |
 
 ## Open Questions
 
-1. Should `BidirectionalGenerator` be a separate trait or a parameterised `Iterator[T, U]`?
-2. How does `yield from` compose with bidirectional generators?
-3. Should generator expressions support async (`async (x for x in stream)`)?
-4. How does bidirectional yield interact with ownership (sending owned values to the generator)?
+1. Should generator expressions support async sources (`async (x for x in stream)`)? Depends on the async model (EDR-085).
+2. Does `emit` move or borrow the emitted value (ownership)?
 
 ## Decision History
 
-- **2026-07-27** — Accepted via EDR-050. Classification: Language. Builds on LAZY_SEQUENCE_GENERATORS (EDR-021). Adds bidirectional yield, generator expressions, and yield-from delegation.
+- **2026-07-27** — Accepted via EDR-050. Classification: Language. Added bidirectional `yield`, generator expressions, and `yield from` delegation on top of LAZY_SEQUENCE_GENERATORS (EDR-021).
+- **2026-09-06** — **Amended (S2):** bidirectional `yield`, the `yield` / `yield from` keywords, and `BidirectionalGenerator[T, U]` are withdrawn. Generators are emit-only; delegation is composition. The bidirectional form is demoted to the [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis ([EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md)).
+- **2026-09-06** — **Generator-expression syntax locked:** the parenthesised form `(expr for x in src if cond)` is the single syntax; a `gen(...)` call form is rejected as a redundant synonym. The named escape hatches remain the full `fun` with `emit` and combinator chains.
 
 ---
 
