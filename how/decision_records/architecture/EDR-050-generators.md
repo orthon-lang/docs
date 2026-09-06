@@ -69,6 +69,16 @@ Adopt the following generator extensions for Orthon:
 
 **Relationship to EDR-021:** EDR-021 establishes the core `emit` model. This EDR extends it with bidirectional communication (`yield`) and syntactic sugar (generator expressions). The `emit` keyword remains the canonical one-way form.
 
+**Amendment (2026-09-06, S2):** Decision items 1 and 5 — bidirectional
+`yield` and the `BidirectionalGenerator[T, U]` trait — together with the
+`yield` / `yield from` keywords are **withdrawn**. Generators are
+emit-only (one-way, EDR-021). Retained: generator expressions (items 2–3);
+delegation (item 4) is kept as composition (`for v in sub: emit v`), not
+as a `yield from` keyword. The rationale and the sync-vs-async coroutine
+comparison are recorded in
+[`COROUTINE_ON_YIELD.md`](../../concepts/research/deferrable/COROUTINE_ON_YIELD.md).
+Formal EDR: [EDR-091](./EDR-091-withdraw-bidirectional-yield.md).
+
 ---
 
 ### Consequences
