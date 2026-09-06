@@ -61,6 +61,8 @@ fun main():
     result = parse(data)         # boundary check: data must be String-like
 ```
 
+> **Terminology note:** In Orthon, "dynamic" (as in "fully dynamic", "dynamic — no type known") denotes the **untyped** side of the typed/untyped boundary — values with no static contract, checked at boundaries or at runtime. This is distinct from *dynamic dispatch* of a statically-checked trait object (`dyn Trait`), where the contract is known and only the concrete implementation is selected at runtime. The two senses must not share a keyword (see Open Question 4).
+
 ## Default Strategy
 
 Type inference uses a **bidirectional algorithm** (local type information + top-level propagation). Unannotated functions are treated as dynamic at their boundaries but internally inferred. The compiler runs a **global consistency pass** as an optional lint, not a hard error.
@@ -79,6 +81,7 @@ Type inference uses a **bidirectional algorithm** (local type information + top-
 1. How does gradual typing interact with algebraic data types and pattern matching exhaustiveness?
 2. Performance cost of boundary checks — can they be optimised away when types align?
 3. How to handle generic functions in a gradual system — full monomorphisation or erased at boundaries?
+4. **Keyword for the untyped side.** Orthon's descriptive term for untyped/gradual values is "dynamic", which reserves that word for the untyped side of the typed/untyped boundary. Whether it becomes an explicit type keyword, remains an implicit default, or is replaced by a more literal keyword (e.g. `untyped`) is open, and is **coupled** to the Phase 5 naming of the trait-object dispatch marker: a dynamically-dispatched trait object must not share a keyword with the untyped escape hatch. Candidate pairs are `untyped` (this side) + `dynamic` (trait object), or `dynamic` (this side) + `any` (trait object).
 
 ## Decision History
 

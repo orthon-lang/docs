@@ -97,6 +97,8 @@ This lets the programmer inspect generated code without running a separate tool.
 
 Macros are expanded in a single pass during compilation, before type checking of expanded code. All macros are compiled as ordinary Orthon functions and executed in the comptime interpreter. The `@derive` registry is populated by the standard library and can be extended by user code.
 
+Macro semantics are Implementation-Strategy-independent: the `@macro` mechanism is a Language-level (Core) construct, the comptime execution engine is a compiler concern, and the concrete derive macros are Standard Library code registered in the registry. No Implementation Strategy may change how macros expand.
+
 ## Alternative Strategies
 
 | Strategy | Trade-offs |
@@ -110,6 +112,8 @@ Macros are expanded in a single pass during compilation, before type checking of
 1. Should macro expansion support conditional expansion (expand only if a feature gate is enabled)?
 2. How should the `@derive` registry interact with traits defined in external dependencies?
 3. Should macros be able to inspect the AST of imported modules, or only the current module?
+4. What syntax registers a user-defined derive target? The registry is "populated by the standard library and can be extended by user code" (Default Strategy), but how an `@macro` function is associated with the trait name used in `@derive(...)` is not yet specified.
+5. How are macros made visible to a module? Since macros are ordinary functions they arrive with their module through ordinary imports; whether a separate macro/derive import surface is needed, and how a downstream module extends the registry, is unresolved (coupled with OQ 2 and 3).
 
 ## Decision History
 
@@ -120,6 +124,6 @@ Macros are expanded in a single pass during compilation, before type checking of
 ### Affected Documents
 
 - [x] `what/CORE_CONCEPTS.md`
-- [ ] `GLOSSARY.md` — added "Macro", "Derive", "Hygienic Macro"
+- [x] `GLOSSARY.md` — added "Macro", "Derive", "Hygienic Macro"
 - [ ] `COMPILE_TIME_EXECUTION.md` — cross-reference
 - [ ] `PRIMITIVE_BLOCKS.md`

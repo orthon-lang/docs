@@ -6,6 +6,7 @@
 >
 > **See also:** [`SEMANTIC_MODEL.md`](../SEMANTIC_MODEL.md) § Identity,
 > [`GLOSSARY.md`](../GLOSSARY.md) § Trait, Trait Bound, Orphan Rule,
+> [`STRUCTURAL_TYPING.md`](STRUCTURAL_TYPING.md),
 > [`PRIMITIVE_BLOCKS.md`](../PRIMITIVE_BLOCKS.md)
 
 ---
@@ -21,7 +22,7 @@ The core problem: Orthon needs a mechanism for types to declare that they satisf
 ## Principles
 
 1. **Behaviour separate from data** — Traits define only behaviour (method signatures, associated types), never data fields. Data belongs to types (structs, enums).
-2. **Explicit satisfaction** — A type must explicitly declare that it implements a trait. No structural (implicit) satisfaction. Explicitness over convenience.
+2. **Explicit satisfaction** — A type must explicitly declare that it implements a trait. No structural (implicit) satisfaction for nominal traits; structural satisfaction exists only as an explicit opt-in `structural` mode on the trait declaration ([`STRUCTURAL_TYPING.md`](STRUCTURAL_TYPING.md), EDR-044). Explicitness over convenience.
 3. **Static dispatch by default** — Trait bounds on generic parameters use static dispatch (monomorphisation). Dynamic dispatch (`dyn Trait`) is opt-in, syntactically visible.
 4. **Coherence** — A trait implementation must be defined in the same module as either the trait or the type. At most one implementation of a trait for any type. No orphan implementations.
 5. **Associated types** — Traits can declare associated types, allowing a single trait to model type families (e.g., `Iterator` with `Item`).
@@ -73,6 +74,8 @@ fun process<Processor as T>(T item)
 fun process_dyn(dyn Processor item)
     item.process()
 ```
+
+The `dyn` marker sits on the **receiver's type**, not on the method call: dynamic dispatch is a property of a value whose type is *erased* to the trait (an existential type position), so every call on such a value is dynamic by construction. A nameless anonymous bound — an `impl Trait`-style parameter, i.e. `fun process<Processor as T>(T item)` with the type-parameter name dropped — is **not** erasure: it is still static monomorphisation with a fresh concrete instantiation per call site. Erasure requires placing the value in an existential type position (`dyn Processor`); only there is the concrete type hidden and dispatch resolved through a vtable at runtime. `dyn Trait` remains a dynamically-dispatched handle, not a subtype (see Subtyping Policy). The concrete keyword for the marker is provisional Phase 5 syntax — see Open Question 6.
 
 ### Associated Types
 
@@ -182,6 +185,7 @@ Traits with explicit `impl` blocks. Static dispatch by default — generic funct
 3. How do traits interact with Orthon's Metadata Protocol (`@`)?
 4. Should trait bounds be expressible in the Schema Provider for LLM querying?
 5. What is the precise interaction between traits and Orthon's Declaration Kinds (`fun`/`proc`/`new`)? Can a trait declare a `proc` method that requires mutable access?
+6. **Keyword for the trait-object marker.** `dyn` is provisional abstract syntax for the erased, dynamically-dispatched handle. Concrete naming is a Phase 5 syntax decision, coupled with the untyped side of gradual typing — [`GRADUAL_TYPING.md`](GRADUAL_TYPING.md) Open Question 4 reserves "dynamic" for that side. Candidate keywords are `dyn`, `any`, and `dynamic` (the latter only if the gradual/untyped side takes `untyped`).
 
 ## Decision History
 

@@ -21,7 +21,7 @@ The core problem: Orthon's TRAITS (EDR-019) are nominally typed. Should Orthon a
 ## Principles
 
 1. **Nominal by default** — Most traits require explicit `impl Trait for Type`. Structural satisfaction is opt-in via the `structural` keyword on the trait declaration.
-2. **`structural` keyword makes it explicit** — The choice between nominal and structural mode is visible in the trait declaration.
+2. **`structural` is a mode, not a kind** — The keyword selects *how* conformance is established (automatically by method shape) while leaving *what* the trait requires (its method contract) unchanged. A structural trait is the same kind of entity as a nominal trait — a behavioural contract — differing only in its satisfaction rule. The choice is visible in the trait declaration.
 3. **Explicit `impl` overrides structural matching** — An explicit `impl` block always takes priority over structural satisfaction for a given trait-type pair.
 4. **Static dispatch by default** — Structural resolution happens at compile time with static dispatch. Dynamic dispatch (`dyn Trait`) is opt-in.
 5. **`@derive` generates explicit `impl` blocks** — Derived implementations take priority over structural matching.
@@ -36,6 +36,13 @@ The core problem: Orthon's TRAITS (EDR-019) are nominally typed. Should Orthon a
 | Coherence Policy | Prevents conflicting structural/nominal matches — explicit `impl` always wins |
 
 ## Model (What)
+
+### Mode, not a kind; origin is not the criterion
+
+`structural` modifies *how* a trait is satisfied, not *what* the trait means: the contract of a structural trait (method signatures, associated types, defaults) is identical to that of a nominal trait — only the conformance rule differs (automatic by shape vs. explicit `impl`). Two consequences follow:
+
+- **System traits are not automatically structural.** Whether a trait is satisfied structurally is a per-trait choice made by the trait author at declaration time. Living in the Standard Library (`Eq`, `Hash`, `Show`) is not the criterion: a system trait is structural only if declared so, and a user-defined trait may equally be declared `structural`. For a type you own, `Eq`/`Hash`/`Show` are normally obtained via `@derive` — which generates explicit `impl` blocks (EDR-029) — not by relying on structural matching.
+- **Structural mode targets interop.** Its primary niche is a type that already has methods of the required shape but for which no `impl` can or should be written — typically a type you do not own (the orphan rule prevents downstream `impl`s of foreign traits on foreign types).
 
 ### Structural trait declaration
 
