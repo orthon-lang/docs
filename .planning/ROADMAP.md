@@ -234,6 +234,12 @@ Plans:
   2. `what/SYNTAX.md` documents syntax for every accepted Language concept, with all canonical forms shown together (per AGENTS.md §4.2), consistent across concepts.
   3. Syntax is validated: no ambiguous or context-dependent parses, LLM generability check passed, and a readability check confirms a human can predict the syntax from semantics alone.
   4. `how/architecture/PARSER.md` is updated with the concrete grammar.
+  5. Keyword decisions deferred from concept reviews are resolved and recorded in `what/syntax/` — the trait-object dispatch marker (provisional `dyn`) and the trait-implementation keyword (`impl` vs `implement`).
+
+**Deferred keyword decisions (Phase 5 input — from the STRUCTURAL_TYPING review, 2026-09-06):**
+
+  - **Trait-object dispatch marker** (`dyn Trait`). `dyn` is provisional abstract syntax for the erased, dynamically-dispatched trait handle. Concrete naming is coupled to the gradual-typing untyped-side keyword, since "dynamic" is reserved for that side: candidate keywords are `dyn`, `any`, and `dynamic` (the last only if the untyped side takes `untyped`). Sources: `what/concepts/TRAITS.md` Open Question 6; `what/concepts/GRADUAL_TYPING.md` Open Question 4.
+  - **Trait-implementation keyword** (`impl` vs `implement`). No recorded decision exists; `impl` is Rust-inherited abstract syntax from the EDR-019 trait model. Decide and record the concrete keyword. Source: `what/concepts/TRAITS.md` and `what/concepts/STRUCTURAL_TYPING.md` (EDR-019/044 syntax).
 
 **Plans**: TBD
 
