@@ -92,17 +92,17 @@
       (`docs/how/concepts/research/important/DISCRIMINATED_UNIONS.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-  - **Ref:** Pydantic `DiscriminatedUnion(discriminator='kind')` — явный дискриминатор для union types; LLM-native: LLM точно знает, какое поле писать
+  - **Ref:** Pydantic `DiscriminatedUnion(discriminator='kind')` — an explicit discriminator for union types; LLM-native: the LLM knows exactly which field to write
 - [ ] research Strict/Lax Modality concept
       (`docs/how/concepts/research/deferrable/STRICT_LAX_MODALITY.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-  - **Ref:** Pydantic `model_config(strict=True)` — явный выбор строгого/либерального режима на уровне типа/модуля; пересекается с Execution Model и TYPE_SYSTEM.md
+  - **Ref:** Pydantic `model_config(strict=True)` — an explicit strict/lax mode choice at the type or module level; overlaps with the Execution Model and `TYPE_SYSTEM.md`
 - [ ] research Dual-Use Schema concept (validation + serialization + prompt generation)
       (`docs/how/concepts/research/deferrable/DUAL_USE_SCHEMA.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-  - **Ref:** Pydantic одна модель → `model_validate_json()` + `model_dump()` + JSON Schema; Orthon разделяет эти concerns — нужно исследовать unified подход
+  - **Ref:** Pydantic ships one model → `model_validate_json()` + `model_dump()` + JSON Schema; Orthon separates these concerns — a unified approach needs research
 
 ## Milestone 2 — Anti-pattern & Declarative Design Analysis
 
@@ -257,7 +257,7 @@ projection of conclusions onto Orthon's design. Each topic has a file in
       (`docs/how/concepts/research/important/AGENT_DEPENDENCY_INJECTION.md`)
   - **Owner:** Solo author
   - **Target:** Phase 3
-  - **Ref:** PydanticAI `Dep()` / `RunContext[Deps]`; пересекается с Execution Program Model (семантика программы отделена от стратегии получения ресурсов)
+  - **Ref:** PydanticAI `Dep()` / `RunContext[Deps]`; overlaps with the Execution Program Model (program semantics decoupled from the strategy used to obtain resources)
 
 ## Post-Acceptance — ITERATOR_PROTOCOL review (2026-08-05)
 
