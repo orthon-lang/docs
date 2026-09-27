@@ -247,6 +247,25 @@ Convergence typically requires 1-3 dialogue cycles: first analysis
 reveals surface-level issues, user probing reveals deeper constraints,
 final review confirms no surprises remain.
 
+**Convergence in practice.** Observations from accepted concepts
+(CONSTRAINED_TYPES, 2026-07-30; confirmed by EXECUTION_CONTEXT_INVOCATION,
+2026-08-06):
+
+- **Do not formalise early.** In CONSTRAINED_TYPES the EDR was written before
+  review converged, and the design (syntax, construction model) changed
+  afterwards — the EDR had to be amended in place. A premature EDR is a draft
+  by another name; resolve the open questions first.
+- **Probe actively.** The agent is expected to attack its own proposal —
+  "what if..." questions on syntax collisions, construction, mutation, and
+  boundary values. The author's "one thing though..." reactions are the
+  highest-value signal in the loop; treat them as findings, not objections.
+- **Surface syntax before semantic depth.** The first questions tend to be about
+  spelling and collisions (`()` ambiguity, an occupied keyword). Answer those
+  first — they can invalidate a semantic discussion that assumed a spelling.
+- **Amendment after acceptance.** If an issue surfaces after the EDR is filed
+  but does not change the core decision, use the Type B path (§ Stage 10): log it
+  with a gate-impact assessment; do not re-run the full pipeline.
+
 **Step 8 (EDR)** creates the Architecture-category EDR file.
 Interactions analysis is deferred to Phase 6 (Cross-Cutting Review)
 and is not part of the individual Concept Design Review.
