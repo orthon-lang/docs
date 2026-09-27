@@ -88,6 +88,8 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `what/EXECUTION_MODEL.md` | What | Execution semantics — what the language guarantees about execution |
 | `what/OPTIMIZATION_MODEL.md` | What | Semantics vs. optimisation boundary |
 | `how/EVOLUTION_MODEL.md` | How | Versioning, deprecation, experimental features, feature gates |
+| `how/tooling/README.md` | How | Tooling Requirement artifact type — forward-looking tooling, ecosystem, and LLM agent UX requirements (implemented in M3/M4) |
+| `how/tooling/{NAME}.md` | How | Individual Tooling Requirement documents, one per requirement, status-tracked (open / deferred / incorporated) |
 
 Convention: **one file, one coherent topic**. Do not create a file titled "Miscellaneous" or "Various."
 
@@ -353,6 +355,29 @@ gate: agents/GSD flows must not self-certify it. See the Concept Design
 Review Step 7 (Convergence Check) and `SYNTAX_PIPELINE.md` Stage 6b. An
 EDR may not be filed until the sign-off is populated.
 
+### 7.5 Theses Capture (for distilled understanding anchors)
+
+When the author asks to save a thesis ("save thesis <Thesis>", or the equivalent
+in another language), record it as a **Thesis** in [`what/THESES.md`](what/THESES.md)
+— not as specification:
+
+1. Add the entry following the filed format — **Status**, **Source**, **Thesis**,
+   plus optional elaboration. `Source` must point to the canonical document
+   (concept doc, EDR, or glossary entry).
+2. If the thesis introduces or redefines a term, update
+   [`what/GLOSSARY.md`](what/GLOSSARY.md) as well (alphabetical; `Source` and
+   `See also` links).
+3. Default status is `DRAFT`; use `VERIFIED` only once the claim has been checked
+   against its canonical source.
+4. Incorrect or superseded theses are marked `REJECTED` and kept (anti-memory) —
+   never silently deleted.
+5. Theses about keywords or syntax (`let`, `var`, literals) MUST carry an `orthon`
+   code block after the elaboration — one example per claim.
+
+Theses are distilled, verifiable claims that restore understanding. They are not
+specification; canonical truth stays in the linked sources. THESES.md lives in
+`what/` (semantics layer), not `how/`.
+
 ---
 
 ## 8. Proposal Structure
@@ -462,3 +487,86 @@ Agents operating in this repository must follow these rules:
     The body may contain additional detail after a blank line. Multiple
     changes in the same commit should share the same prefix; if they do
     not, prefer separate commits.
+11. **Heading anchors keep underscores.** GitHub anchors are generated from the
+    heading text verbatim: `### EXECUTION_CONTEXT_INVOCATION` anchors to
+    `#execution_context_invocation`, not `#execution-context-invocation`. Verify a
+    heading exists before linking to it — do not invent anchors (for example,
+    `what/GLOSSARY.md` has no `### Scope` heading).
+12. **Index tables are duplicated.** `how/decision_records/INDEX.md` lists EDRs in
+    BOTH the main (All Records) table and the By-Category table. A new EDR row must
+    be added to both, and because row text repeats, edits need unique surrounding
+    context.
+13. **Cross-reference depth from research tiers.** Links from
+    `how/concepts/research/{tier}/` to decision records use
+    `../../../decision_records/...` (matching the `RANGE_SLICE.md` precedent).
+
+---
+
+## 11. Working With the Author
+
+Behavioural expectations for any agent working in this repository. These apply to
+_interaction_, not to file content (see §10.9 for file-language rules).
+
+### 11.1 Connected Prose
+
+Formulate questions, points, and review comments as coherent prose — a self-contained
+train of thought that opens with the logic, builds with explicit connecting words, and
+lands on a conclusion. Avoid lists of weakly connected jargon terms: technical terms
+belong inside sentences, not as bare labels. A paragraph of connected reasoning beats a
+bullet list of fragments.
+
+### 11.2 One Question at a Time
+
+When reviewing a concept or design document with the author:
+
+1. Restate the author's questions and list them first (numbered).
+2. Answer them **one at a time**, never all at once; wait for the author's follow-up
+   on the current question.
+3. Iterate on that single question until the outcome is **LOCKED** — a document
+   clarification, a partial or full concept revision plus EDR, or an explicit
+   "not a problem — skip".
+4. State the lock explicitly, then ask whether to move to the next question.
+5. Compact the context between questions when the session grows long.
+6. Expect questions to be added mid-review ("add one more question ...").
+
+Answering everything at once mixes concerns and produces decisions that do not hold.
+A review may not fit in one session; leftover questions are reviewed in a separate one.
+
+### 11.3 Uncertainty Before Solution
+
+Do not jump to a solution while uncertainty is open. Widen first (stakeholder
+questions, assumptions, metrics, options), then narrow (criteria, plan), then verify
+against real data, people, or the system. Generating options is cheap; removing
+uncertainty is not. A plausible answer to the wrong problem is the default failure mode.
+
+---
+
+## 12. Workstation & Research Notes
+
+Environment-specific notes for this workstation. They are **not** project rules — they
+record how the tooling actually behaves here so that work is not blocked. If this
+section outgrows a screen, move it to `notes/agent-environment.md` and leave a pointer.
+
+### 12.1 macOS CLI
+
+- BSD `cat` has no `-A` flag ("illegal option -- A"). Use `cat -et` (= `-vET`): tabs
+  become `^I`, line ends `$`, non-printing characters become visible.
+- Do not add the npx cache directory (`~/.npm/_npx/<hash>/node_modules/.bin`) to the
+  permanent `PATH` — the path is ephemeral and may be cleaned. Symlink the required
+  binary into `~/.local/bin` (already on `PATH`) instead.
+- PDF text extraction: `pdftotext`, `mutool`, `gs`, and `qpdf` are not installed here.
+  Use `pip install pypdf` and `pypdf.PdfReader(path).extract_text()`.
+
+### 12.2 Researching Paywalled Sources
+
+- Substack: probe `https://<domain>/api/v1/posts/<slug>`. The JSON reports `audience`
+  (`only_paid` / `everyone`), `truncated_body_text`, and `wordcount`, which reveals
+  whether the text is truncated before an ingest plan is built.
+- `web.archive.org` does not bypass a Substack paywall, and `r.jina.ai` frequently
+  returns "Failed to extract meaningful content" on such pages — do not rely on it.
+- To find mirrors, use `https://html.duckduckgo.com/html/?q=...` (the plain
+  `duckduckgo.com/html` endpoint returns an interstitial).
+- When an article is paid but its images are served openly, the poster often carries the
+  payload: fetch originals from `<bucket>.s3.amazonaws.com/public/images/<uuid>_<WxH>.<ext>`.
+  The `substackcdn.com` variant is a compressed progressive JPEG; the S3 original is
+  lossless.
