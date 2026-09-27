@@ -38,6 +38,14 @@
   - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #5
   - **Req:** SEM-03 (Phase 2)
 
+## Documentation Debt
+
+- [ ] **DOC-01:** Restore the correctness-by-construction glossary terms dropped by commit `8dcf201` — Boolean Blindness, Correctness by Construction (CbC), Frame Condition, Invariant Classification, Parse Don't Validate, Refinement Type
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/restore-cbc-glossary-terms.md` (evidence: `git show 8dcf201 -- what/GLOSSARY.md`)
+  - **Req:** DEBT-18
+
 ## Milestone 0 — Vision
 
 - [x] review Manifesto (`docs/why/MANIFESTO.md`), Vision (`docs/why/VISION.md`), Zen (`docs/why/ZEN.md`) using Working Backwards rationale (`docs/why/WORKING_BACKWARDS.md`)

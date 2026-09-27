@@ -30,6 +30,13 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 
 **Status:** All 17 executed and verified 2026-07-20 (`.planning/phases/01-concerns-remediation/01-01-SUMMARY.md`).
 
+### Documentation Debt (open, surfaced 2026-09-27)
+
+- [ ] **DEBT-18**: Restore the correctness-by-construction glossary terms dropped from `what/GLOSSARY.md` by commit `8dcf201` — Boolean Blindness, Correctness by Construction (CbC), Frame Condition, Invariant Classification, Parse Don't Validate, Refinement Type; each needs a definition plus `Source` and `See also` links
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/restore-cbc-glossary-terms.md` (evidence: `git show 8dcf201 -- what/GLOSSARY.md`)
+
 ### Foundation Completion (resolves CONCERNS.md governance/process gaps) — Phase 1.1 ✅
 
 - [x] **PROC-01**: Concept acceptance gate defined — documents the DRAFT → Accepted transition (owner, criteria, EDR linkage)
