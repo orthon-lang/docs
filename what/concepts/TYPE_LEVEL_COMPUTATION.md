@@ -110,6 +110,7 @@ Intrinsics are evaluated by the compiler during type checking. Each intrinsic ha
 1. Should additional intrinsics be added for array/sequence type operations (e.g., `ElementOf<T>`, `LengthOf<T>`)?
 2. Should `Omit<T, K>` and `Pick<T, K>` support union-typed keys, or only single literal keys?
 3. Should there be a syntax for user-defined type aliases over intrinsics (e.g., `type PublicUser = Omit<User, "password">`)?
+4. How should `Record<K, V>` express a mapping whose keys have *different* value types (e.g. `a: Int`, `b: String`)? The current form `Record<"a" | "b", Int>` assigns the single value type `V` to every key, so a heterogeneous mapping cannot be written this way. Should a heterogeneous variant exist (some `Record`-like intrinsic pairing each key with its own value type), or should such cases fall back to writing an explicit record type — e.g. `{ a: Int, b: String }` — with `Record<K, V>` reserved for the homogeneous case only?
 
 ## Decision History
 
