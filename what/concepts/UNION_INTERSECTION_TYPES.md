@@ -87,6 +87,15 @@ type Payment = Cash | CreditCard(card_number: String) | Crypto(txid: String)
 type PaymentInput = String | Int     # Either a card number or a transaction ID
 ```
 
+> **The `|` in these two declarations means different things.** In the ADT
+> (`Payment`), `|` separates **variant constructors** — new names introduced by
+> this declaration (`Cash`, `CreditCard`, `Crypto`), which are not standalone
+> types. In the union (`PaymentInput`), `|` combines **existing types**
+> (`String`, `Int`) that were already defined elsewhere. An ADT is tagged and
+> exhaustively checked; a union is untagged with no exhaustiveness. Consequently
+> only existing named or literal types may appear in a union — a variant
+> constructor such as `CreditCard(...)` cannot.
+
 ## Default Strategy
 
 Union type values use the same memory representation as the active member — no boxing, no tag. Narrowing is flow-sensitive following EDR-028 rules. The compiler generates dispatch code at pattern match sites based on member types.
