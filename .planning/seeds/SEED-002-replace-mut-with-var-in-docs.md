@@ -37,3 +37,13 @@ This seed will surface during `$gsd-new-milestone` when the milestone scope matc
 ## Notes
 
 _Captured via one-shot seed capture. Enrich with trigger, why, and scope at your convenience._
+
+## Measured (2026-09-27)
+
+- Recount confirms the scope: `mut` appears in **12 files** under `what/`
+  (~41 matches). Documentation-only sweep — no semantics change.
+- Direction confirmed during the EDR-074 re-review (2026-08-24): `var` is the
+  mutability marker, `let` is a shadowing marker only. Concrete keyword choice
+  remains a Phase 5 (Syntax) decision; this seed is the docs-side sweep that
+  follows it.
+- Companion seed: `SEED-003` (`let` as the general immutable form).
