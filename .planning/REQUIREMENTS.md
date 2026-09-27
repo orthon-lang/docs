@@ -36,6 +36,10 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
   - **Owner:** Solo author
   - **Target:** unscheduled
   - **Ref:** `.planning/todos/pending/restore-cbc-glossary-terms.md` (evidence: `git show 8dcf201 -- what/GLOSSARY.md`)
+- [ ] **DEBT-19**: Translate the remaining non-English content in repository files (~170 Russian lines across five files) so the §10.9 English-only rule holds; then re-run the Cyrillic scan and consider adding it as a fitness function
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/translate-non-english-content.md`
 
 ### Foundation Completion (resolves CONCERNS.md governance/process gaps) — Phase 1.1 ✅
 

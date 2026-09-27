@@ -45,6 +45,11 @@
   - **Target:** unscheduled
   - **Ref:** `.planning/todos/pending/restore-cbc-glossary-terms.md` (evidence: `git show 8dcf201 -- what/GLOSSARY.md`)
   - **Req:** DEBT-18
+- [ ] **DOC-02:** Translate the remaining non-English content in repository files — ~170 Russian lines across five files: `how/concepts/research/essential/EXECUTION_POLICY_HYPOTHESIS.md` (14), `how/concepts/research/deferrable/DIALECTS.md` (1), `notes/idioms-overview.md` (35), `notes/idioms-deep-dive.md` (48), `notes/prototype-vs-trait.md` (72)
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/translate-non-english-content.md` (scan: `git grep -lP '[\x{0400}-\x{04FF}]' -- '*.md'`)
+  - **Req:** DEBT-19
 
 ## Milestone 0 — Vision
 

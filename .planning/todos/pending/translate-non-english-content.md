@@ -33,8 +33,9 @@ agent.
 1. Translate each file in place, preserving meaning and code fences; leave the
    `orthon` code examples untouched.
 2. Re-run the scan:
-   `grep -rl '[А-Яа-яЁё]' --include='*.md' . --exclude-dir=.git --exclude-dir=graphify-out --exclude-dir=.planning`
-   (`.planning/` holds GSD artifacts with their own conventions — check separately.)
+   `git grep -lP '[\x{0400}-\x{04FF}]' -- '*.md'`
+   Seven `.planning/` files also match (graph reports, phase discussion logs, UAT) — GSD
+   working artifacts with their own conventions; decide separately whether they are in scope.
 3. Consider adding this scan as a fitness function so the rule cannot regress
    silently.
 
