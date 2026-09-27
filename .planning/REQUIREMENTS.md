@@ -34,6 +34,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 
 - [x] **PROC-01**: Concept acceptance gate defined — documents the DRAFT → Accepted transition (owner, criteria, EDR linkage)
 - [x] **PROC-02**: Concept Design Review process fully documented and collapsed from its former 12-step procedure to a 5-step pipeline for solo authorship (`docs/how/concept-design-review.md`)
+  - **Superseded:** the 5-step collapse was an interim state; the canonical review is the **8-step** procedure with a Convergence Check (Human Sign-off) as Step 7 (`docs/how/concept-design-review.md`).
 - [x] **PROC-03**: Milestone/TODO tracking model defined for solo authorship — every TODO.md item converted into a tracked GSD requirement with explicit status
 - [x] **PROC-04**: Template-compliance process defined for the 8-section concept template (`_concept.md`) — audit checklist or equivalent
 - [x] **PROC-05**: `docs/how/process/DECISION_PROCESS.md` (one-page decision authority) finalized from DRAFT to Accepted, referenced from `AGENTS.md`/`README.md`, alongside a finalized `docs/how/process/DECISION_PIPELINE.md` (10-question feature pipeline)

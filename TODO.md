@@ -21,6 +21,7 @@
   - **Target:** Phase 1.1
   - **Ref:** `docs/notes/pipeline-throughput-gaps.md` § Top-5 #2, § Minimal Pipeline
   - **Req:** PROC-02
+  - **Superseded:** The 5-step collapse was an interim state. The canonical review is now the **8-step** procedure with a Convergence Check (Human Sign-off) as Step 7 — `docs/how/concept-design-review.md`, `docs/how/CONCEPT_PIPELINE.md` § 5.
 - [x] **GAP-03:** Create `DECISION_PROCESS.md` — one-page decision authority extracted from `AGENTS.md` and `concept-design-review.md`; update `README.md` and `AGENTS.md` to reference it
   - **Owner:** Solo author
   - **Target:** Phase 1.1
