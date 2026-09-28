@@ -64,6 +64,15 @@ type Option<T> = Some(value: T) | None
 type Result<T, E> = Ok(value: T) | Error(err: E)
 ```
 
+> **Variants are not standalone types.** `type Payment = Cash | CreditCard(...)`
+> introduces the type `Payment` — not types `Cash` or `CreditCard`. The names
+> between `|` are **variants** of `Payment`, each with a same-named **data
+> constructor** that builds a `Payment` value. You cannot write
+> `fun charge(c: CreditCard)`; only `Payment` is a type. When the alternatives
+> should instead be real types with their own fields and behaviour, declare each
+> as a standalone product type and unify them through a shared trait — see
+> [Path B](#behaviour-traits-over-data-not-methods-on-data).
+
 ### Pattern matching with ADTs
 
 Each ADT variant can be destructured in a `match` expression:
@@ -89,6 +98,21 @@ type Widget = Button(label: String, onClick: Action)
             | TextInput(placeholder: String, value: String)
             | Panel(children: List<Widget>)
 ```
+
+### Construction and smart constructors
+
+Each variant has exactly one structural constructor — there is no
+OOP-style constructor overloading. Alternative construction paths, and any
+validation, are expressed as ordinary free functions ("smart constructors")
+that return the ADT (often wrapped in `Result`/`Option`):
+
+```orthon
+fun credit_card_from_token(token: String) -> Result<Payment, Error>
+    ...   # validate, then return CreditCard(...)
+```
+
+This keeps the structural constructor simple and pushes validity into a named
+function; see the *Parse, don't validate* idiom.
 
 ### Behaviour: traits over data, not methods on data
 
