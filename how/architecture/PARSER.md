@@ -40,6 +40,32 @@ Per [ARCHITECTURE.md](ARCHITECTURE.md), the Parser is part of the Syntax layer. 
 4. **Support for incremental parsing** — The parser is designed to support re-parsing of individual modules or top-level declarations when source changes, enabling fast IDE feedback and incremental compilation.
 5. **Explicit syntax for all constructs** — Every Core Language construct has a distinct syntactic form. No syntactic ambiguity between constructs is permitted.
 
+## Grammar
+
+Concrete grammar productions are recorded here as they are accepted, in
+standard **EBNF** (`::=` for a production, `|` for alternation, `( )` for
+grouping, `*` for zero-or-more, quoted literals for terminals). Only accepted
+syntax appears; open hypotheses stay in [`how/syntax/`](../syntax/README.md).
+
+### Generator expression
+
+Per [EDR-092](../decision_records/architecture/EDR-092-generator-expression-syntax.md),
+the generator-expression surface form is the reserved comprehension production
+`gen(...)` (accepted record:
+[`what/syntax/GENERATOR_EXPRESSION_SYNTAX.md`](../../what/syntax/GENERATOR_EXPRESSION_SYNTAX.md)):
+
+```ebnf
+GeneratorExpr ::= "gen" "(" Expr ForClause ( ForClause | IfClause )* ")"
+ForClause     ::= "for" Pattern "in" Expr
+IfClause      ::= "if" Expr
+```
+
+This accepts the filtered form `gen(x for x in 1..100 if x % 2 == 0)` and the
+nested / flattening form `gen(v for s in subs for v in s)`. `gen` is a
+**reserved production keyword**: the parser recognises `gen(` as the opening of
+a comprehension, never as a call, so it cannot be an identifier, be shadowed,
+or be passed as a value (EDR-092).
+
 ## Relationships
 
 | Document | Relationship |
@@ -48,7 +74,7 @@ Per [ARCHITECTURE.md](ARCHITECTURE.md), the Parser is part of the Syntax layer. 
 | [TYPE_SYSTEM.md](TYPE_SYSTEM.md) | Parser AST is consumed after name resolution for type checking |
 | [IR.md](IR.md) | Parser AST is the raw material from which typed IR is constructed |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Parser is the Syntax layer component |
-| Core Language concepts | Parser syntax conforms to Core Language semantics (see [FOUNDATIONAL_ABSTRACTIONS.md](../how/concepts/research/FOUNDATIONAL_ABSTRACTIONS.md) and [DATA_MODEL.md](../how/concepts/research/DATA_MODEL.md)) |
+| Core Language concepts | Parser syntax conforms to Core Language semantics (see [FOUNDATIONAL_ABSTRACTIONS.md](../concepts/research/essential/FOUNDATIONAL_ABSTRACTIONS.md) and [DATA_MODEL.md](../concepts/research/essential/DATA_MODEL.md)) |
 
 ## Open Questions
 

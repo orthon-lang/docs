@@ -145,3 +145,9 @@ new core primitive is introduced, and the language/library boundary is preserved
 (grammar, not a stdlib function or macro). Per the EDR-091 precedent, a full
 seven-gate table is not reproduced for a locked sugar decision over settled
 constructs.
+
+**Validation trail:** the Syntax Pipeline run backing this decision — the
+Decision Pipeline Run, Coupling & Overload Check, Syntax Principles, and gate
+verdicts — is recorded in
+[`how/syntax/GENERATOR_EXPRESSION_SYNTAX.md`](../../syntax/GENERATOR_EXPRESSION_SYNTAX.md)
+(SYNTAX_PIPELINE.md Stage 7).
