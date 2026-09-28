@@ -39,6 +39,7 @@ per construct — see [`what/syntax/README.md`](syntax/README.md) for the index.
 | Invocation context operators `<-` / `\|>` | [`what/syntax/INVOCATION_SYNTAX.md`](syntax/INVOCATION_SYNTAX.md) | EDR-085 |
 | Range literal `1..N`, `range(a,b)`, `.step(n)` | [`what/syntax/RANGE_SYNTAX.md`](syntax/RANGE_SYNTAX.md) | EDR-083 |
 | Generics: `<>` parameters, `as` bounds | [`what/syntax/GENERICS_SYNTAX.md`](syntax/GENERICS_SYNTAX.md) | EDR-086 |
+| Generator expression `gen(...)` | [`what/syntax/GENERATOR_EXPRESSION_SYNTAX.md`](syntax/GENERATOR_EXPRESSION_SYNTAX.md) | EDR-092 |
 
 **Open syntax questions** (Phase 5 input) live in the hypothesis inbox:
 [`how/syntax/`](../how/syntax/) with its decision queue

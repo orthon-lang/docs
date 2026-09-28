@@ -202,6 +202,6 @@ Governing records: [EDR-050](../../how/decision_records/architecture/EDR-050-gen
 - [x] `what/CORE_CONCEPTS.md`
 - [x] `what/GLOSSARY.md`
 - [x] `what/concepts/LAZY_SEQUENCE_GENERATORS.md` (Open Question 2 closed by EDR-092)
-- [ ] `what/SYNTAX.md`
+- [x] `what/SYNTAX.md`
 - [ ] `what/EXECUTION_MODEL.md`
 - [ ] `../how/IMPLEMENTATION_POLICIES.md`
