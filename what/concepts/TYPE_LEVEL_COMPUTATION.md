@@ -56,8 +56,8 @@ Partial<User>               # { id?: Int, name?: String, email?: String, passwor
 # Required<T> — all keys required (inverse of Partial)
 Required<PartialUser>
 
-# Record<K, V> — type with keys K and values V
-Record<"a" | "b", Int>     # { a: Int, b: Int }
+# Record<K, V> — homogeneous map type from key type K to value type V
+Record<String, Int>        # map from String keys to Int values
 
 # Readonly<T> — all keys read-only
 Readonly<User>
