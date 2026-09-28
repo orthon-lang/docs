@@ -50,7 +50,15 @@ let squares = fun () -> Iterator<Int>:
 6. **Rejected forms.** `gen(sub)` wrapping a bare value is rejected — a
    redundant synonym for `.iter()` / identity that breaks the "`gen(` always
    opens a comprehension" invariant; and the marker-less bare parenthesised
-   form `(expr for x in src if cond)` is withdrawn (EDR-092 Alternatives).
+   form `(expr for x in src if cond)` is withdrawn. Two further surface
+   variants were considered and rejected: a source-first, lambda-style
+   ordering `for x in src if cond -> expr` (overloads `->`; its data-flow
+   reading is already served by combinator chains; result-first is stronger
+   for LLM generability) and an unwrapped infix marker
+   `expr gen x in src if cond` (a comprehension is not a binary operator, so
+   an infix `gen` needs global precedence and context-dependent `in` / `if`
+   scoping and cannot bound multi-clause flattening). See EDR-092
+   Alternatives Considered for the full rationale.
 7. **`emit` never appears inside lambdas / closures.** `gen(...)` is a
    comprehension production, not a closure that captures an ambient `emit`
    sink — this closes
