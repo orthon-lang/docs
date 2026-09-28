@@ -20,11 +20,11 @@ Consider a function that returns a filtered, mapped iterator chain:
 ```orthon
 // Without opaque return types: the programmer must either:
 // Option A: Expose the full concrete type (brittle, leaks internals)
-fn search(query: String) -> Filter<Map<Iter<[Item]>, fn(Item) -> bool>, fn(Item) -> Item>
+fun search(query: String) -> Filter<Map<Iter<[Item]>, fn(Item) -> bool>, fn(Item) -> Item>
     items.iter().map(transform).filter(predicate)
 
 // Option B: Box into dyn Trait (runtime overhead)
-fn search(query: String) -> dyn Iterator[Item]
+fun search(query: String) -> dyn Iterator[Item]
     items.iter().map(transform).filter(predicate).collect()  // heap allocation
 ```
 
@@ -282,12 +282,12 @@ Per [`how/process/DECISION_PIPELINE.md`](../../../process/DECISION_PIPELINE.md):
 If accepted, Orthon's opaque return type would follow the Rust model:
 
 ```orthon
-fn make_counter(start: Int) -> impl Iterator[Int]
+fun make_counter(start: Int) -> impl Iterator[Int]
     // The concrete type is a compiler-generated state machine.
     // Callers only see `impl Iterator[Int]`.
     return (start..).iter()
 
-fn main()
+fun main()
     let c = make_counter(10)
     // c: impl Iterator[Int] — concrete type hidden, trait visible
     let first = c.next()  // Some(10)

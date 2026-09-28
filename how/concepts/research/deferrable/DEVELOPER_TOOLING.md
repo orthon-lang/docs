@@ -191,7 +191,7 @@ Behaviour:
 > x = 42
 > :type x
 Int
-> fn greet(name) = "Hello, {name}!"
+> fun greet(name) = "Hello, {name}!"
 > greet("World")
 "Hello, World!"
 > # (edit greet to return "Hi, {name}!" in editor)

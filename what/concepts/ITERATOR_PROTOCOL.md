@@ -58,7 +58,7 @@ Orthon's solution: the **`Iterator[T]` trait** defines a lazy consumption protoc
 
 ```orthon
 trait Iterator[T]
-    fn next(self) -> Option[T]
+    fun next(self) -> Option[T]
 ```
 
 A type implements `Iterator[T]` by providing a `next` method that returns `Some(value)` for each element and `None` when the sequence is exhausted. The trait is single-use: after `next` returns `None`, calling `next` again may return `None` or behave unpredictably.
@@ -163,7 +163,7 @@ Types that can produce iterators implement `IntoIterator[T]`:
 
 ```orthon
 trait IntoIterator[T]
-    fn iter(self) -> Iterator[T]
+    fun iter(self) -> Iterator[T]
 ```
 
 This trait is what the `for` loop and combinator entry points actually accept. `Iterator[T]` itself implements `IntoIterator[T]` (returning `self`), so both iterators and collections work with `for`:

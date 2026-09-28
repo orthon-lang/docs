@@ -34,20 +34,20 @@
 ```orthon
 // Объявление trait — контракт поведения
 trait Printable
-    fn format(self) -> String
+    fun format(self) -> String
 
 // Реализация для конкретного типа
 impl Printable for User
-    fn format(self) -> String
+    fun format(self) -> String
         return "User({self.name})"
 
 // Generic-функция со статической диспетчеризацией (по умолчанию)
-fn print_all(items: [T]) where T: Printable
+fun print_all(items: [T]) where T: Printable
     for item in items
         print(item.format())
 
 // Динамическая диспетчеризация — opt-in через dyn
-fn process_dyn(item: dyn Processor)
+fun process_dyn(item: dyn Processor)
     item.process()
 ```
 
@@ -55,12 +55,12 @@ fn process_dyn(item: dyn Processor)
 // Associated types
 trait Collection
     type Item
-    fn get(self, index: Int) -> Option<Self::Item>
-    fn len(self) -> Int
+    fun get(self, index: Int) -> Option<Self::Item>
+    fun len(self) -> Int
 
 // Default implementation
 trait Stringifiable
-    fn to_string(self) -> String
+    fun to_string(self) -> String
         return "<opaque>"
 
 impl Stringifiable for Int
@@ -84,7 +84,7 @@ Prototype **не будет синтаксической конструкцие�
 //    Это конфликтует с explicitness и статической типизацией.
 
 let animal = proto {
-    fn speak(self) -> String
+    fun speak(self) -> String
         return "{self.name} makes a sound."
 }
 
@@ -111,7 +111,7 @@ dog.speak()  // Неявная делегация → недопустимо
 
 // 1. Определяем поведение через trait
 trait Speaker
-    fn speak(self) -> String
+    fun speak(self) -> String
 
 // 2. Определяем тип c именем
 struct Animal
@@ -119,7 +119,7 @@ struct Animal
 
 // 3. Реализуем trait для типа
 impl Speaker for Animal
-    fn speak(self) -> String
+    fun speak(self) -> String
         return "{self.name} makes a sound."
 
 // 4. Композиция вместо цепочки прототипов
@@ -128,7 +128,7 @@ struct Dog
     breed: String
 
 impl Speaker for Dog
-    fn speak(self) -> String
+    fun speak(self) -> String
         return self.animal.speak()  // Явная, а не неявная делегация
 ```
 
@@ -150,11 +150,11 @@ struct Delegator<T>
 
 impl<T> Delegator<T>
     // Явный метод lookup, а не неявный обход цепочки
-    fn lookup(self, key: String) -> Option<fn>
+    fun lookup(self, key: String) -> Option<fn>
         // Логика поиска метода у delegate
         ...
 
-    fn set_delegate(self, new: T)
+    fun set_delegate(self, new: T)
         self.delegate = new
 
 // Использование — явное:
@@ -201,23 +201,23 @@ impl Speaker for Dog {
 
 ```orthon
 trait Speaker
-    fn speak(self) -> String
+    fun speak(self) -> String
 
 struct Animal
     name: String
 
 impl Speaker for Animal
-    fn speak(self) -> String
+    fun speak(self) -> String
         return "{self.name} makes a sound."
 
 struct Dog
     animal: Animal
 
 impl Speaker for Dog
-    fn speak(self) -> String
+    fun speak(self) -> String
         return self.animal.speak() + " Woof!"
 
-fn main()
+fun main()
     let rex = Dog { animal: Animal { name: "Rex" } }
     print(rex.speak())  // "Rex makes a sound. Woof!"
     // ✅ Полностью статически типизировано

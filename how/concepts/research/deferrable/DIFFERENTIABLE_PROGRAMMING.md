@@ -61,7 +61,7 @@ The core problem: **gradient computation is not a library problem alone — it r
 The `grad` operator takes a function and returns its gradient function:
 
 ```orthon
-fn f(x: Float) -> Float
+fun f(x: Float) -> Float
     x * x + 3.0 * x + 1.0
 
 let df = grad(f)
@@ -74,7 +74,7 @@ let df = grad(f)
 For functions with multiple parameters, `grad` returns a tuple of partial derivatives:
 
 ```orthon
-fn loss(predicted: Tensor, actual: Tensor) -> Float
+fun loss(predicted: Tensor, actual: Tensor) -> Float
     (predicted - actual).square().mean()
 
 let d_loss = grad(loss)
@@ -89,7 +89,7 @@ For functions that close over parameters (e.g., model weights), `grad` can compu
 let weights = Tensor.randn([784, 256])
 let biases = Tensor.zeros([256])
 
-fn forward(x: Tensor) -> Tensor
+fun forward(x: Tensor) -> Tensor
     x.matmul(weights).add(biases).relu()
 
 let d_weights = grad(forward, wrt: [weights, biases])
@@ -101,7 +101,7 @@ let d_weights = grad(forward, wrt: [weights, biases])
 `grad` can be composed to compute second derivatives:
 
 ```orthon
-fn f(x: Float) -> Float
+fun f(x: Float) -> Float
     x.pow(3.0)
 
 let df = grad(f)      # first derivative: 3*x^2
@@ -115,7 +115,7 @@ assert d2f(2.0) ≈ 6.0
 The `grad` operator differentiates through control flow correctly:
 
 ```orthon
-fn relu(x: Float) -> Float
+fun relu(x: Float) -> Float
     if x > 0.0 then x
     else 0.0
 

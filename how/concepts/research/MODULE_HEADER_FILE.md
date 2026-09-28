@@ -59,8 +59,8 @@ module net
 ---
 
 # Public API — signatures only (no implementations)
-pub fn resolve(host: String) -> Result<IpAddress, Error>
-pub fn connect(addr: IpAddress) -> Result<Connection, Error>
+pub fun resolve(host: String) -> Result<IpAddress, Error>
+pub fun connect(addr: IpAddress) -> Result<Connection, Error>
 ```
 
 Sibling `.orthon` files in the same directory contribute to the same module.

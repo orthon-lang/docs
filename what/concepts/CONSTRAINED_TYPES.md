@@ -109,7 +109,7 @@ let input = Age(read_int()) // ✅ runtime check on read_int() result
 The backing value is accessed via the field name (consistent with struct field access):
 
 ```orthon
-fn is_adult(age: Age) -> Bool
+fun is_adult(age: Age) -> Bool
     return age.value >= 18
 ```
 

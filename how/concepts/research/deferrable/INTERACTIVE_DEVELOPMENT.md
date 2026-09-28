@@ -85,7 +85,7 @@ In practice, REPL-driven development combines a text editor with the REPL:
 
 ```orthon
 # In editor: user writes this function
-fn process(items: List[Int]) -> List[Int]
+fun process(items: List[Int]) -> List[Int]
     items.filter(fn x -> x > 0).map(fn x -> x * 2)
 
 # User sends the definition to the REPL
@@ -96,7 +96,7 @@ fn process(items: List[Int]) -> List[Int]
 # Send to REPL => [4, 8]
 
 # User modifies the function:
-fn process(items: List[Int]) -> List[Int]
+fun process(items: List[Int]) -> List[Int]
     items.filter(fn x -> x > 0).map(fn x -> x * x)
 
 # Send updated definition to REPL

@@ -62,7 +62,7 @@ Annotations use `@` syntax and are attached to declarations:
 @description("Computes the square root of a non-negative number")
 @example("sqrt(4.0) == 2.0")
 @example("sqrt(0.0) == 0.0")
-fn sqrt(x: Float) -> Float
+fun sqrt(x: Float) -> Float
     requires x >= 0.0
     ensures result * result ≈ x
 ```
@@ -87,7 +87,7 @@ Users can define their own annotation namespaces. The compiler validates syntax 
 ```orthon
 @metric("latency_p50")
 @metric("latency_p99")
-fn process_request(req: Request) -> Response
+fun process_request(req: Request) -> Response
 ```
 
 ### LLM-Oriented Annotations
@@ -98,7 +98,7 @@ Annotations specifically targeting LLM consumption:
 @llm:hint("This function is commonly used with sort_descending")
 @llm:context("Call this after authentication is established")
 @llm:pattern("Factory method — returns a configured instance")
-fn create_processor(config: Config) -> Processor
+fun create_processor(config: Config) -> Processor
 ```
 
 ### Annotation on Parameters and Types
@@ -106,7 +106,7 @@ fn create_processor(config: Config) -> Processor
 Annotations can be attached to any declaration:
 
 ```orthon
-fn connect(
+fun connect(
     @description("Hostname or IP address") host: String,
     @description("TCP port, typically 80 or 443") port: Int,
     @sensitive() password: String

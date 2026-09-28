@@ -32,11 +32,11 @@ The core tension: structural typing offers flexibility (no prior arrangement nee
 ```orthon
 # Nominal — explicit impl required (default)
 trait Serializable
-    fn serialize(self) -> String
+    fun serialize(self) -> String
 
 # Structural — implicit satisfaction by method shape
 structural trait Show
-    fn show(self) -> String
+    fun show(self) -> String
 ```
 
 When a trait is `structural`:

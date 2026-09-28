@@ -31,9 +31,9 @@ A type implements a trait by composing with a contained instance. The standard l
 
 ```orthon
 trait List[T]:
-    fn size(self) -> Int
-    fn get(self, index: Int) -> T
-    fn append(mut self, item: T)
+    fun size(self) -> Int
+    fun get(self, index: Int) -> T
+    fun append(mut self, item: T)
 
 struct LoggingList[T]:
     inner: List[T]
@@ -41,7 +41,7 @@ struct LoggingList[T]:
     @delegate(List[T]) to inner
     # Compiler generates forwarding for size(), get(), append()
     # Selective override:
-    fn append(mut self, item: T):
+    fun append(mut self, item: T):
         log("appending {item}")
         self.inner.append(item)
 ```
@@ -61,10 +61,10 @@ Any type implementing a standard `Get` (and optionally `Set`) protocol can be a 
 
 ```orthon
 trait Get[T]:
-    fn get(this_ref: Any, prop: PropertyMetadata) -> T
+    fun get(this_ref: Any, prop: PropertyMetadata) -> T
 
 trait Set[T]:
-    fn set(this_ref: Any, prop: PropertyMetadata, value: T)
+    fun set(this_ref: Any, prop: PropertyMetadata, value: T)
 ```
 
 ## Default Strategy

@@ -28,7 +28,7 @@ Orthon does **not** define a separate `Iterable` concept. Instead:
 
 ```orthon
 trait IntoIterator[T]
-    fn iter(self) -> Iterator[T]
+    fun iter(self) -> Iterator[T]
 ```
 
 This is what `for` loops and combinator entry points accept. It covers:
@@ -110,8 +110,8 @@ collection
 
 Combinator signatures:
 ```orthon
-fn map[U](self, fn: T -> U) -> Iterator[U]
-fn filter(self, pred: T -> Bool) -> Iterator[T]
+fun map[U](self, fn: T -> U) -> Iterator[U]
+fun filter(self, pred: T -> Bool) -> Iterator[T]
 ```
 
 ### B. Named function equivalents (Named Before Symbolic)

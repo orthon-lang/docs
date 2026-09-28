@@ -59,7 +59,7 @@ Three specific gaps motivate contracts as a first-class Orthon feature:
 A function declares its contract as part of its signature:
 
 ```orthon
-fn sqrt(x: Float) -> Float
+fun sqrt(x: Float) -> Float
     requires x >= 0.0
     ensures result * result ≈ x
 ```
@@ -78,7 +78,7 @@ class Queue<T>
     invariant size >= 0
     invariant size <= capacity
 
-    fn enqueue(item: T)
+    fun enqueue(item: T)
         requires size < capacity
         ensures size == old.size + 1
 ```
@@ -88,7 +88,7 @@ class Queue<T>
 Functions accepting functions can constrain their arguments:
 
 ```orthon
-fn apply_twice(f: (Int) -> Int, x: Int) -> Int
+fun apply_twice(f: (Int) -> Int, x: Int) -> Int
     requires f.requires(x)              # caller ensures x satisfies f's precondition
     ensures result == f(f(x))
     requires f.ensures(f(x)) ≈ ...      # composition constraint

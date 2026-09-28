@@ -70,7 +70,7 @@ let x = 42
 let y: Float = 42    // 42 is inferred as Float, not Int
 
 // Bidirectional: generic type argument inferred from usage
-fn identity[T](value: T) -> T
+fun identity[T](value: T) -> T
     return value
 
 let z = identity(42)  // T is inferred as Int from the argument
@@ -81,12 +81,12 @@ let w: Float = identity(42)  // T is inferred as Float from expected return type
 
 ```orthon
 // Parameter and return types are explicit
-fn add(a: Int, b: Int) -> Int
+fun add(a: Int, b: Int) -> Int
     let result = a + b     // inferred: result is Int
     return result
 
 // Generic parameters may be inferred from usage at call sites
-fn first[T](list: List[T]) -> Option<T>
+fun first[T](list: List[T]) -> Option<T>
     if list.is_empty()
         return None
     return list[0]
@@ -98,7 +98,7 @@ let item = first([1, 2, 3])  // T inferred as Int
 
 ```orthon
 // Literal types are inferred when used in const-like positions
-fn create_array() -> Array<Int, 3>
+fun create_array() -> Array<Int, 3>
     return [0, 0, 0]   // size 3 inferred from literal count
 
 // Type widening: literal Int widens to Float when context demands it
@@ -109,7 +109,7 @@ let threshold: Float = 100   // 100 widened to Float(100)
 
 ```orthon
 // Module A — public API
-pub fn parse(input: String) -> Result<Json>
+pub fun parse(input: String) -> Result<Json>
     // full inference inside body
     let trimmed = input.trim()
     let parsed = json_decode(trimmed)

@@ -53,7 +53,7 @@ let x = 42
 let y: Float = 42    # 42 is inferred as Float, not Int
 
 // Bidirectional: generic type argument inferred from both sides
-fn identity[T](value: T) -> T
+fun identity[T](value: T) -> T
     return value
 
 let z = identity(42)          # T inferred as Int from argument
@@ -65,7 +65,7 @@ let w: Float = identity(42)   # T inferred as Float from expected return type
 Within a function body, every local expression, variable, and intermediate type is inferred:
 
 ```orthon
-fn compute(a: Int, b: Int) -> Int
+fun compute(a: Int, b: Int) -> Int
     let sum = a + b             # sum is Int
     let doubled = sum * 2       # doubled is Int
     let strings = ["a", "b"]    # strings is List[String]
@@ -91,7 +91,7 @@ let result: Option<Float> = first(data)  # T inferred from expected return type
 When inference is ambiguous, turbofish `::<T>` disambiguates:
 
 ```orthon
-fn parse[T](input: String) -> Result<T, ParseError>
+fun parse[T](input: String) -> Result<T, ParseError>
 
 let num = parse::<Int>("42")        # explicit type argument
 let text = parse::<String>("hello") # explicit type argument
@@ -103,12 +103,12 @@ Function parameters and return types at public API surfaces require explicit ann
 
 ```orthon
 // Public API — fully annotated
-pub fn find_user(id: Int) -> Result<User, DbError>
+pub fun find_user(id: Int) -> Result<User, DbError>
     let query = "SELECT * FROM users WHERE id = ?"   # inferred inside body
     return db.execute(query, id)
 
 // Private function — inference recommended but not required
-fn internal_helper(data: String) -> Int    # explicit, acts as documentation
+fun internal_helper(data: String) -> Int    # explicit, acts as documentation
     let parsed = parse_config(data)        # inferred
     return parsed.count
 ```

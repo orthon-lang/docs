@@ -34,7 +34,7 @@ Three specific gaps motivate contracts as a first-class Orthon feature:
 A function declares its contract as part of its signature:
 
 ```orthon
-fn sqrt(x: Float) -> Float
+fun sqrt(x: Float) -> Float
     requires x >= 0.0
     ensures result * result ≈ x
 ```
@@ -47,7 +47,7 @@ fn sqrt(x: Float) -> Float
 A function may declare several preconditions; the caller must satisfy every `requires` before the call:
 
 ```orthon
-fn withdraw(balance: Int, amount: Int) -> Int
+fun withdraw(balance: Int, amount: Int) -> Int
     requires amount > 0
     requires amount <= balance
     ensures result == balance - amount
@@ -57,7 +57,7 @@ fn withdraw(balance: Int, amount: Int) -> Int
 Postconditions are **relational** — they tie the output to the inputs, which a typed signature alone cannot express. A function that returned `balance + amount` would be just as well-typed as one returning `balance - amount`; the `ensures` clause is what states which relation is intended. Postconditions may also bound the output without naming it:
 
 ```orthon
-fn clamp(x: Int, lo: Int, hi: Int) -> Int
+fun clamp(x: Int, lo: Int, hi: Int) -> Int
     requires lo <= hi
     ensures result >= lo
     ensures result <= hi
@@ -98,7 +98,7 @@ class Queue<T>
     invariant size >= 0
     invariant size <= capacity
 
-    fn enqueue(item: T)
+    fun enqueue(item: T)
         requires size < capacity
         ensures size == old.size + 1
 ```

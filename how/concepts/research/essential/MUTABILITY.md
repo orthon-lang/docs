@@ -61,12 +61,12 @@ mut counter = 0
 counter += 1      # OK
 
 # Mutable parameter
-fn increment(mut value: Int) -> Int
+fun increment(mut value: Int) -> Int
     value += 1
     value
 
 # Mutable reference (ownership transfer for mutation)
-fn update(mut data: &mut Data)
+fun update(mut data: &mut Data)
     data.field = new_value
 ```
 

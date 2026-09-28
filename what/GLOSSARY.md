@@ -1060,7 +1060,7 @@ collections work uniformly with `for`.
 
 ```orthon
 trait IntoIterator[T]
-    fn iter(self) -> Iterator[T]
+    fun iter(self) -> Iterator[T]
 ```
 
 - **Source:** `../what/concepts/ITERATOR_PROTOCOL.md` § IntoIterator[T] for Collections
@@ -1098,7 +1098,7 @@ The consumption side of Orthon's sequence model. Defined by the
 
 ```orthon
 trait Iterator[T]
-    fn next(self) -> Option[T]
+    fun next(self) -> Option[T]
 ```
 
 Key properties: **lazy** (elements produced on demand), **single-pass**
@@ -1304,7 +1304,7 @@ layer (EDR-029). Default values are ordinary expressions evaluated at
 call time.
 
 ```orthon
-fn connect(host: String, port: Int = 80, useSsl: Bool = false)
+fun connect(host: String, port: Int = 80, useSsl: Bool = false)
 connect(host: "example.com", useSsl: true)    # named, skip port
 ```
 
@@ -1702,7 +1702,7 @@ User-defined equality via the `==` operator, implemented through the `Eq` trait.
 
 ```orthon
 impl Eq for Person
-    fn ==(self, other: Person) -> Bool
+    fun ==(self, other: Person) -> Bool
         self.id === other.id
 ```
 
@@ -1811,7 +1811,7 @@ opt-in via the `structural` keyword on a trait declaration. Nominal
 
 ```orthon
 structural trait Show
-    fn show(self) -> String
+    fun show(self) -> String
 ```
 
 Explicit `impl` blocks always take priority over structural matching.
@@ -1948,7 +1948,7 @@ expressions, top-down from expected type), but explicit annotations
 are required at public API boundaries (parameters and return types).
 
 ```orthon
-fn process(items: [Int]) -> Int
+fun process(items: [Int]) -> Int
     let doubled = items.map(fn (x) -> x * 2)   # all inferred
     return doubled.sum()
 ```

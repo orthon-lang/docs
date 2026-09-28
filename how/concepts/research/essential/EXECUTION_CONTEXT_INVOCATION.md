@@ -261,7 +261,7 @@ The caller picks a context: `defer(obj)`/`delegate(obj)` for owner state
 
 ```orthon
 # Before:
-async fn fetch(url) -> String
+async fun fetch(url) -> String
     return await httpClient.get(url)
 let data = await fetch(url)
 
