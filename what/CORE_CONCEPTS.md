@@ -360,10 +360,10 @@ The resolution process is defined in
 | Field | Value |
 |-------|-------|
 | **Status** | Accepted |
-| **EDR** | [EDR-050](../how/decision_records/architecture/EDR-050-generators.md) |
+| **EDR** | [EDR-050](../how/decision_records/architecture/EDR-050-generators.md), [EDR-092](../how/decision_records/architecture/EDR-092-generator-expression-syntax.md) |
 | **Specification** | [`concepts/GENERATORS.md`](concepts/GENERATORS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Generator expressions — parenthesised inline syntax: `(x * x for x in 1..10)`; delegation by composition (`for v in sub: emit v`). Generators are emit-only (one-way, EDR-021). **Amended 2026-09-06:** bidirectional `yield`, the `yield`/`yield from` keywords, and `BidirectionalGenerator[T, U]` withdrawn — demoted to the [COROUTINE_ON_YIELD](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis. |
+| **Summary** | Generator expressions — the `gen(...)` reserved comprehension production: `gen(x * x for x in 1..10)`; delegation by composition (`for v in sub: emit v`). Generators are emit-only (one-way, EDR-021). **Amended 2026-09-28 ([EDR-092](../how/decision_records/architecture/EDR-092-generator-expression-syntax.md)):** the surface form is `gen(...)` — a reserved comprehension production (not a stdlib function, not a macro), pure sugar with no new primitive; the bare parenthesised form is withdrawn and `gen(sub)` rejected. **Amended 2026-09-06:** bidirectional `yield`, the `yield`/`yield from` keywords, and `BidirectionalGenerator[T, U]` withdrawn — demoted to the [COROUTINE_ON_YIELD](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis. |
 | **Primitive Decomposition** | Generator expression → desugaring to an anonymous `emit`-based generator function; delegation → `for` loop calling `emit` on a sub-generator (EDR-021). No compiler-level semantics beyond EDR-021's one-way `emit` — generator expressions are sugar. Bidirectional machinery withdrawn 2026-09-06 (S2). |
 
 ### EMIT_AS_INTERMEDIATE_RESULT

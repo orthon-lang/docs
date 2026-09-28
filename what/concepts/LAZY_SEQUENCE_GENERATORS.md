@@ -190,6 +190,7 @@ Generator functions compile to state machines (stackless coroutines) that implem
 
 1. Can `emit` be used outside of generator functions (e.g., in regular functions that return `Iterator[T]`)?
 2. Should generators support `emit` from within nested closures?
+   **Resolved (negatively) — 2026-09-28, [EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md).** `emit` does not appear inside lambdas / closures: the generator-expression production `gen(...)` is a comprehension, not a closure that captures an ambient `emit` sink, and there is no construct through which `emit` could escape into a lambda body. Generators remain emit-only. (Original question kept as anti-memory.)
 3. Interaction with ownership: does `emit` move or borrow the emitted value?
 4. Should generators support `emit` with a destructor/cleanup for cleanup on early termination?
 5. Can generators be parallelised automatically, or is that always explicit?
