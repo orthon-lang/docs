@@ -261,7 +261,7 @@ The caller picks a context: `defer(obj)`/`delegate(obj)` for owner state
 
 ```orthon
 # Before:
-async fn fetch(url) -> String
+async fun fetch(url) -> String
     return await httpClient.get(url)
 let data = await fetch(url)
 
@@ -767,7 +767,7 @@ Design Review (Convergence Check) process.
 5. **`spawn` vs `fork`** — separate contexts. `spawn` = threads (shared memory),
    `fork` = processes (isolated memory). Not merged into `delegate`.
 6. **Generator protocol** — primary extraction for `spawn`/`fork`:
-   `next() -> Option[T]` (blocks until next result, `none` when depleted),
+   `next() -> Option<T>` (blocks until next result, `none` when depleted),
    `stop()` (cancel pending, clean up resources).
 7. **`grab`/`gather`** — StdLib sugar over the generator, not language
    primitives. `grab` = `next()` + `stop()`, `gather` = `next()` loop.

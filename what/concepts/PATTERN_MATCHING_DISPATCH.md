@@ -128,7 +128,7 @@ fun process(match a: Bool, match b: Bool)
 ```orthon
 // Prefer trait dispatch for single-receiver behaviour
 impl Processable for IntLiteral
-    fn process(self) -> Int = self.value
+    fun process(self) -> Int = self.value
 
 // Use pattern matching dispatch for multi-argument dispatch
 fun combine(match a: Expr, match b: Expr) -> Expr

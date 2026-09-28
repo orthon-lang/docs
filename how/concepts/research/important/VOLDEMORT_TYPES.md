@@ -20,11 +20,11 @@ Consider a function that returns a filtered, mapped iterator chain:
 ```orthon
 // Without opaque return types: the programmer must either:
 // Option A: Expose the full concrete type (brittle, leaks internals)
-fn search(query: String) -> Filter<Map<Iter<[Item]>, fn(Item) -> bool>, fn(Item) -> Item>
+fun search(query: String) -> Filter<Map<Iter<[Item]>, fn(Item) -> bool>, fn(Item) -> Item>
     items.iter().map(transform).filter(predicate)
 
 // Option B: Box into dyn Trait (runtime overhead)
-fn search(query: String) -> dyn Iterator[Item]
+fun search(query: String) -> dyn Iterator<Item>
     items.iter().map(transform).filter(predicate).collect()  // heap allocation
 ```
 
@@ -34,7 +34,7 @@ changes the public API signature. **Option B** introduces runtime overhead
 
 The core problem: **type-level encapsulation at API boundaries is sacrificed
 to performance, or performance is sacrificed to encapsulation.** There is
-no way to say "this function returns *some type* that implements `Iterator[Item]`,
+no way to say "this function returns *some type* that implements `Iterator<Item>`,
 but the concrete type is an implementation detail."
 
 This is the problem that D's Voldemort types, Rust's `impl Trait`, C++'s
@@ -44,17 +44,17 @@ This is the problem that D's Voldemort types, Rust's `impl Trait`, C++'s
 
 | Scenario | Without opaque types | With opaque types |
 |----------|---------------------|-------------------|
-| Iterator chains | Expose `Filter<Map<Iter<...>>>` in signature | Return `impl Iterator[Item]` |
+| Iterator chains | Expose `Filter<Map<Iter<...>>>` in signature | Return `impl Iterator<Item>` |
 | Builder patterns | Expose internal builder state type | Return `impl Builder` |
 | Factory functions | Expose concrete implementation type | Return `impl Service` |
-| Async combinators | Expose `AndThen<Map<Future<...>>>` in signature | Return `impl Future[Output = T]` |
+| Async combinators | Expose `AndThen<Map<Future<...>>>` in signature | Return `impl Future<Output = T>` |
 | Proxy/delegate wrappers | Expose wrapper struct type | Return `impl Delegate` |
 
 ## Principles
 
 Which principles must not be violated? Reference: [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md).
 
-1. **Explicitness** — "The meaning of code should be apparent from its surface form." A signature `fn foo() -> auto` reveals nothing about the return type. A signature `fn foo() -> impl Iterator[Item]` reveals the trait contract but hides the concrete type. Which level of explicitness is sufficient?
+1. **Explicitness** — "The meaning of code should be apparent from its surface form." A signature `fn foo() -> auto` reveals nothing about the return type. A signature `fn foo() -> impl Iterator<Item>` reveals the trait contract but hides the concrete type. Which level of explicitness is sufficient?
 2. **Declarative With Static Guarantees** — the compiler must still verify that the returned type satisfies the declared interface. Opaque types are not dynamic types — they are statically known to the compiler, just hidden from the caller.
 3. **Orthogonality** — opaque return types must compose with generics, traits, error handling, and all other language constructs without special cases.
 4. **LLM Generability** — can an LLM generate correct code using `impl Trait` return types? The LLM knows the trait contract (from the signature), knows the concrete type (from the function body it generates), and can verify the match. This is LLM-generable with proper tooling.
@@ -282,14 +282,14 @@ Per [`how/process/DECISION_PIPELINE.md`](../../../process/DECISION_PIPELINE.md):
 If accepted, Orthon's opaque return type would follow the Rust model:
 
 ```orthon
-fn make_counter(start: Int) -> impl Iterator[Int]
+fun make_counter(start: Int) -> impl Iterator<Int>
     // The concrete type is a compiler-generated state machine.
-    // Callers only see `impl Iterator[Int]`.
+    // Callers only see `impl Iterator<Int>`.
     return (start..).iter()
 
-fn main()
+fun main()
     let c = make_counter(10)
-    // c: impl Iterator[Int] — concrete type hidden, trait visible
+    // c: impl Iterator<Int> — concrete type hidden, trait visible
     let first = c.next()  // Some(10)
 ```
 

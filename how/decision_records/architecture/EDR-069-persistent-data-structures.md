@@ -12,14 +12,14 @@
 
 ### Context
 
-Orthon's collection model has mutable `List[T]` and conditionally immutable `Tuple`. This leaves a gap for guaranteed-immutable collections needed for hash keys, concurrent access, caching, and versioning. Persistent data structures with structural sharing provide immutable collections where "modification" returns a new version sharing internal nodes with the old.
+Orthon's collection model has mutable `List<T>` and conditionally immutable `Tuple`. This leaves a gap for guaranteed-immutable collections needed for hash keys, concurrent access, caching, and versioning. Persistent data structures with structural sharing provide immutable collections where "modification" returns a new version sharing internal nodes with the old.
 
 ---
 
 ### Decision
 
 Persistent data structures are a **StdLib** concept:
-- The StdLib provides persistent collection types: `PersistentList[T]`, `PersistentMap[K, V]`, `PersistentSet[T]`.
+- The StdLib provides persistent collection types: `PersistentList<T>`, `PersistentMap<K, V>`, `PersistentSet<T>`.
 - The core defines an `Immutable` marker trait that persistent types implement.
 - The compiler can use the `Immutable` marker for optimisations (hash-key usage, copy elision).
 - Conversion functions between mutable and persistent variants.

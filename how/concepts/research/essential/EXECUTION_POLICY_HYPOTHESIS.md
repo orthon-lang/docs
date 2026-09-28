@@ -161,7 +161,7 @@ context and the call. This mirrors natural language: "context performs action."
 
 ```orthon
 # Before:
-async fn fetch(url) -> String
+async fun fetch(url) -> String
     return await httpClient.get(url)
 let data = await fetch(url)
 

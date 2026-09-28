@@ -51,7 +51,7 @@ class Sorter[A](using ord: Ord[A]):
 
 - **Context is not passed explicitly.** If a matching `given` definition (an analogue of a context provider) is available in the lexical scope, the compiler plugs it in automatically.
 - **Context resolution is static, at compile time.** Visibility and priority rules apply: local `given` overrides imported ones, a more specific type beats a more general one. Ambiguity produces a compile-time error, which the developer resolves by specifying the candidate explicitly.
-- **Context can be captured via partial application.** `val sortInt = sort[Int](using summon[Ord[Int]])` turns a context-parameterized function into an ordinary data-only function. This provides natural currying over environment.
+- **Context can be captured via partial application.** `val sortInt = sort[Int](using summon[Ord<Int>])` turns a context-parameterized function into an ordinary data-only function. This provides natural currying over environment.
 - **Context is not required to be immutable.** A transaction, metrics collector, or logger may mutate — they remain context because they describe the environment, not the entities being processed. What matters is the semantic role, not immutability.
 - **Compatibility with effects and mutation.** Data parameters, context parameters, effects, and mutation become orthogonal function dimensions:
 

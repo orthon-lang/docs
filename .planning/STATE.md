@@ -1,19 +1,20 @@
 ---
-gsd_state_version: 1.0
+gsd_state_version: "1.0"
 milestone: v0.1
-milestone_name: milestone
-current_phase: 04.1
+current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-08-24T06:52:14.076Z"
+last_updated: "2026-09-28T11:18:29.672Z"
 last_activity: 2026-08-04
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
+state_head: 81a5f6dd03cb0ba891f6d4b115b39993225bceff
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 35
   completed_plans: 33
+milestone_name: milestone
 ---
 
 # Project State
@@ -110,6 +111,8 @@ None yet.
 | 260727-flc | Renumber duplicate EDR-011 architecture record (LLM Generability Gate) to EDR-014, repoint its 6 live cross-references, and index it in INDEX.md — resolves the ID collision flagged by 02-VERIFICATION.md | 2026-07-27 | 9bd7614 | [260727-flc-renumber-duplicate-edr-011-architecture-](./quick/260727-flc-renumber-duplicate-edr-011-architecture-/) |
 | 260727-ge5 | Add missing how/gates/methods/EMPIRICAL_ANALYSIS_METHOD.md and fix stale note in DECISION_LOG.md section 7 | 2026-07-27 | dc39811, 4f5ee29 | [260727-ge5-add-missing-how-gates-methods-empirical-](./quick/260727-ge5-add-missing-how-gates-methods-empirical-/) |
 | 14 | Add Phase 04.2 (Classical PLT Problem Mapping) to roadmap before Phase 5 — bind every accepted concept in what/concepts/ to the classical PLT problem it solves, establish scientific grounding, and register problems in what/LANGUAGE_PROBLEMS.md | 2026-08-24 | b97f2ca | — |
+| 260928-9ah | Adopt gen(...) generator-expression production (EDR-092); rewrite GENERATORS.md (Variant-B delegation); resolve LAZY_SEQUENCE OQ2; repoint CORE_CONCEPTS; repo-wide fn->fun and [T]-><T> migrations | 2026-09-28 | 78697ed | [260928-9ah-implement-locked-generators-gen-decision](./quick/260928-9ah-implement-locked-generators-gen-decision/) |
+| 260928-fcr | Complete Syntax Pipeline for gen(...) (EDR-087): reasoning trail (how/syntax), accepted record (what/syntax) + hub/queue provenance, PARSER grammar, EDR-092 validation-trail cite | 2026-09-28 | 81a5f6d | [260928-fcr-complete-syntax-pipeline-for-gen-generat](./quick/260928-fcr-complete-syntax-pipeline-for-gen-generat/) |
 
 ### Roadmap Evolution
 

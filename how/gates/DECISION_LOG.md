@@ -1265,7 +1265,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The Result-based e
 
 **Hypothesis.** "The generator model is minimal — removing any component makes lazy sequence production incomplete."
 
-**Simplest experiment.** Remove `emit`: forces manual iterator class implementation. Remove lazy evaluation: breaks infinite sequences. Remove `Iterator[T]` conformance: forces a separate consumption protocol. Remove stackless compilation: forces heap allocation per generator instance.
+**Simplest experiment.** Remove `emit`: forces manual iterator class implementation. Remove lazy evaluation: breaks infinite sequences. Remove `Iterator<T>` conformance: forces a separate consumption protocol. Remove stackless compilation: forces heap allocation per generator instance.
 
 **Verdict: Pass.** All components are necessary.
 
@@ -1273,7 +1273,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The Result-based e
 
 #### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
 
-**State the premises.** Generators operate at Level 1–2 boundary (Primitive Operations / Language Patterns). `emit` composes `function`, `call`, `scope` into a state-machine pattern. Generators implement `Iterator[T]` (Level 2 trait).
+**State the premises.** Generators operate at Level 1–2 boundary (Primitive Operations / Language Patterns). `emit` composes `function`, `call`, `scope` into a state-machine pattern. Generators implement `Iterator<T>` (Level 2 trait).
 
 **Test for contradiction.** Do generators require StdLib? No — the generator mechanism is core language. Iterator conformance is specified at the trait level, not the library level.
 
@@ -1309,11 +1309,11 @@ All seven gates Pass outright. No gate returned Flag or Fail. The Result-based e
 
 | Criterion | Verdict | Basis |
 |---|---|---|
-| Schema-serializable | Pass | Generator signature `fn name() -> Iterator[T]` is expressible in the type system |
+| Schema-serializable | Pass | Generator signature `fn name() -> Iterator<T>` is expressible in the type system |
 | Predictable generation (≥90%) | Pass | Pattern matches Python `yield` and Rust generators |
 | No hallucination surface | Pass | `emit` has exactly one meaning |
 | Strategy-aware default | Pass | Lazy evaluation works identically under all Strategies |
-| Self-correctable | Pass | Missing `Iterator[T]` return type is a compile error |
+| Self-correctable | Pass | Missing `Iterator<T>` return type is a compile error |
 
 **Verdict: Pass.** The `emit` pattern matches established generator syntax across languages.
 
@@ -1339,19 +1339,19 @@ All seven gates Pass outright. No gate returned Flag or Fail. The lazy sequence 
 | Q# | Question | Answer |
 |----|----------|--------|
 | Q1 | What problem are we solving? | How does a language provide lazy, composable, memory-efficient iteration over sequences without forcing the programmer to manage iterator state manually? |
-| Q2 | Is this a language problem or a library problem? | **Language.** The `Iterator` trait is a protocol definition with special `for` loop desugaring. The compiler must recognize `Iterator[T]` to desugar `for` loops, enforce type constraints, and enable optimisations. Combinators (map, filter, etc.) are StdLib. |
+| Q2 | Is this a language problem or a library problem? | **Language.** The `Iterator` trait is a protocol definition with special `for` loop desugaring. The compiler must recognize `Iterator<T>` to desugar `for` loops, enforce type constraints, and enable optimisations. Combinators (map, filter, etc.) are StdLib. |
 | Q3 | Can it be solved with existing primitives? | No. `for` loop desugaring to `next()` calls requires compiler recognition of the `Iterator` trait. The `IntoIterator` trait for collection-to-iterator conversion requires type-system support. |
 | Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (one protocol covers all iteration: generators, collections, ranges, I/O streams), Orthogonality (Iterator is the consumption side, generators are the production side), Composition (combinators chain without intermediate allocation). |
-| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** `Iterator[T]` trait defines a consumption protocol. `for` loop desugaring is compiler-level. Combinators return lazy iterators (one-to-one mapping from source protocol). Single-pass semantics — iterator consumed on traversal. |
-| Q6 | Can it be expressed through composition? | No. `for` loop desugaring requires the compiler to recognize `Iterator[T]` and generate the loop-expansion code. |
+| Q5 | Does it add new semantics (vs. syntactic sugar)? | **New semantics.** `Iterator<T>` trait defines a consumption protocol. `for` loop desugaring is compiler-level. Combinators return lazy iterators (one-to-one mapping from source protocol). Single-pass semantics — iterator consumed on traversal. |
+| Q6 | Can it be expressed through composition? | No. `for` loop desugaring requires the compiler to recognize `Iterator<T>` and generate the loop-expansion code. |
 | Q7 | Can it be syntactic sugar over existing primitives? | Partially. `for` desugars to a loop calling `next()`, but the compiler must know which traits to look for. |
 | Q8 | Is this an optimisation, not semantics? | No. Iteration semantics — lazy, single-pass, composable — are semantic properties, not optimisations. |
 | Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
 | Q10 | Is it worth adding at all? | **Yes.** Essential for any practical language. The iterator protocol is the foundation for all sequence consumption: collections, generators, ranges, I/O streams, and combinator chains. |
 
-**Classification per D-03:** Language. Protocol definition (`next() -> Option[T]`) is a compiler-level concept (trait with special `for` loop desugaring). Combinators should be StdLib.
+**Classification per D-03:** Language. Protocol definition (`next() -> Option<T>`) is a compiler-level concept (trait with special `for` loop desugaring). Combinators should be StdLib.
 
-**Primitive decomposition path:** `Iterator[T]` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; combintors (map, filter, etc.) → `function` implementations on `Iterator[T]` (StdLib, not core). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition.
+**Primitive decomposition path:** `Iterator<T>` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; combintors (map, filter, etc.) → `function` implementations on `Iterator<T>` (StdLib, not core). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition.
 
 ### Gate Validation
 
@@ -1361,7 +1361,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The lazy sequence 
 
 **User story.** As an Orthon programmer, I want to iterate over a sequence and transform it — filter, map, take — without writing temporary collections or manual loops. A four-operation chain should not allocate a single intermediate array.
 
-**Press release.** *Orthon's iterator protocol makes lazy, zero-cost iteration natural. One trait — `Iterator[T]` — unifies all sequence consumption. `for` loops desugar to protocol calls. Combinators chain without allocation. Ranges compile to tight counter loops. Production and consumption are separated: generators produce, iterators consume.*
+**Press release.** *Orthon's iterator protocol makes lazy, zero-cost iteration natural. One trait — `Iterator<T>` — unifies all sequence consumption. `for` loops desugar to protocol calls. Combinators chain without allocation. Ranges compile to tight counter loops. Production and consumption are separated: generators produce, iterators consume.*
 
 **FAQ.**
 - *What's the difference between `Iterator` and `IntoIterator`?* — `Iterator` is the consumption protocol. `IntoIterator` is how collections expose iterators. `for` accepts `IntoIterator`.
@@ -1374,7 +1374,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The lazy sequence 
 
 #### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
 
-**Define all terms.** `Iterator[T]` = consumption protocol with `fn next(self) -> Option[T]`. `IntoIterator[T]` = convert-to-iterator. `for` = desugared `next()` loop. Combinators = lazy method implementations. Range = counter-based iterator. `@` = protocol access prefix.
+**Define all terms.** `Iterator<T>` = consumption protocol with `fn next(self) -> Option<T>`. `IntoIterator<T>` = convert-to-iterator. `for` = desugared `next()` loop. Combinators = lazy method implementations. Range = counter-based iterator. `@` = protocol access prefix.
 
 **Test with counterexamples.**
 - *What happens when `for` is used on a non-iterable type?* — Compile-time error. Type must implement `IntoIterator`.
@@ -1389,7 +1389,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The lazy sequence 
 
 **Hypothesis.** "The iterator protocol is minimal — removing any component makes sequence consumption incomplete."
 
-**Simplest experiment.** Remove `Iterator[T]`: leaves no consumption protocol. Remove `IntoIterator[T]`: forces every `for` loop to call `.iter()` explicitly. Remove combinatorial laziness: every combinator eagerly materialises. Remove `@` protocol access: conflates attribute and protocol access. Remove range expressions: forces manual counter loops.
+**Simplest experiment.** Remove `Iterator<T>`: leaves no consumption protocol. Remove `IntoIterator<T>`: forces every `for` loop to call `.iter()` explicitly. Remove combinatorial laziness: every combinator eagerly materialises. Remove `@` protocol access: conflates attribute and protocol access. Remove range expressions: forces manual counter loops.
 
 **Verdict: Pass.** All components are necessary.
 
@@ -1427,7 +1427,7 @@ All seven gates Pass outright. No gate returned Flag or Fail. The lazy sequence 
 
 #### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
 
-**Structural analysis:** `Iterator[T]`, `next()`, `for item in`, ranges (`0..10`), combinator chains, and `@next()` each have a single, unambiguous meaning.
+**Structural analysis:** `Iterator<T>`, `next()`, `for item in`, ranges (`0..10`), combinator chains, and `@next()` each have a single, unambiguous meaning.
 
 **Apply the five-criterion table:**
 
@@ -2515,11 +2515,11 @@ Six gates Pass outright; one gate (Conceptual Simplicity) flags mild complexity 
 | Q# | Question | Answer |
 |----|----------|--------|
 | Q1 | What problem are we solving? | Manual index-based loops, empty accumulator lists, and explicit search flags force the programmer to describe *how* instead of *what*. |
-| Q2 | Is this a language problem or a library problem? | **StdLib.** `.map()`, `.filter()`, `.reduce()` are compositions of `Iterator[T].next()` calls. No new language semantics required — the Iterator Protocol (EDR-022) provides everything. |
-| Q3 | Can it be solved with existing primitives? | Yes. Each combinator is implementable as a method on `Iterator[T]` using existing `function`, `call`, `scope`, and `pack`/`unpack` primitives. |
+| Q2 | Is this a language problem or a library problem? | **StdLib.** `.map()`, `.filter()`, `.reduce()` are compositions of `Iterator<T>.next()` calls. No new language semantics required — the Iterator Protocol (EDR-022) provides everything. |
+| Q3 | Can it be solved with existing primitives? | Yes. Each combinator is implementable as a method on `Iterator<T>` using existing `function`, `call`, `scope`, and `pack`/`unpack` primitives. |
 | Q4 | Does it violate any Design Principle? | No. Aligns with Minimal Core (StdLib is the right home), Intent Over Implementation (declarative combinators over imperative loops). |
 | Q5 | Does it add new semantics (vs. syntactic sugar)? | **No new semantics.** Each combinator is a function composition. Loop fusion is an optimisation, not semantics. |
-| Q6 | Can it be expressed through composition? | Yes — of `Iterator[T].next()` calls. |
+| Q6 | Can it be expressed through composition? | Yes — of `Iterator<T>.next()` calls. |
 | Q7 | Can it be syntactic sugar over existing primitives? | Yes — combinators are function calls, fully expressible via primitive operations. |
 | Q8 | Is this an optimisation, not semantics? | The operations themselves are semantic (map, filter, reduce). Loop fusion (combining multiple passes) is a pure optimisation. |
 | Q9 | Does it affect backward compatibility? | N/A — pre-v1.0. |
@@ -2535,7 +2535,7 @@ Six gates Pass outright; one gate (Conceptual Simplicity) flags mild complexity 
 
 **User story.** As an Orthon programmer, I want to transform collections without writing index-based loops, accumulator lists, or explicit search flags — I want to say *what* (map, filter, reduce) instead of *how* (for, if, accumulate).
 
-**Press release.** *Orthon's Standard Library provides lazy composable collection operations — `.map()`, `.filter()`, `.reduce()`, and more — building on the Iterator Protocol (EDR-022). Zero language additions needed: every combinator is a method on `Iterator[T]`.*
+**Press release.** *Orthon's Standard Library provides lazy composable collection operations — `.map()`, `.filter()`, `.reduce()`, and more — building on the Iterator Protocol (EDR-022). Zero language additions needed: every combinator is a method on `Iterator<T>`.*
 
 **FAQ.**
 - *Why no comprehension syntax?* — Comprehensions are deferred to v0.2+ as syntactic sugar over combinator chains. The combinator API is sufficient for v0.1.
@@ -2548,19 +2548,19 @@ Six gates Pass outright; one gate (Conceptual Simplicity) flags mild complexity 
 
 #### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
 
-**Define all terms.** Combinator (method on `Iterator[T]` that returns a new lazy `Iterator[T]`), lazy evaluation (computation deferred until materialisation), materialisation (explicit call to `.collect()`, `.to_list()`, etc.), loop fusion (optimisation combining multiple combinator passes into one loop).
+**Define all terms.** Combinator (method on `Iterator<T>` that returns a new lazy `Iterator<T>`), lazy evaluation (computation deferred until materialisation), materialisation (explicit call to `.collect()`, `.to_list()`, etc.), loop fusion (optimisation combining multiple combinator passes into one loop).
 
 **Test with counterexamples.** Counterexample: `.map(|x| f(x)).map(|x| g(x))` — logically two passes, semantics say two mappings occur. Loop fusion would optimise to one pass, but semantics guarantee the same result. No contradiction.
 
-**Verdict: Pass.** All combinators are compositions of `Iterator[T].next()`. No new semantic axioms needed.
+**Verdict: Pass.** All combinators are compositions of `Iterator<T>.next()`. No new semantic axioms needed.
 
 ---
 
 #### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
 
-**Hypothesis.** Composable collection operations can be fully implemented as Standard Library methods on `Iterator[T]` without any language-level additions.
+**Hypothesis.** Composable collection operations can be fully implemented as Standard Library methods on `Iterator<T>` without any language-level additions.
 
-**Simplest experiment.** Implement `.map()`, `.filter()`, and `.fold()` as methods on `Iterator[T]` using the existing `function`, `call`, and `scope` primitives. Verify no compiler changes are required.
+**Simplest experiment.** Implement `.map()`, `.filter()`, and `.fold()` as methods on `Iterator<T>` using the existing `function`, `call`, and `scope` primitives. Verify no compiler changes are required.
 
 **Verdict: Pass.** StdLib classification is the simplest possible answer — no language changes needed.
 
@@ -2568,9 +2568,9 @@ Six gates Pass outright; one gate (Conceptual Simplicity) flags mild complexity 
 
 #### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
 
-**State the premises.** (1) `Iterator[T]` is a Language-layer trait (EDR-022). (2) Combinator methods on `Iterator[T]` live in the Standard Library. (3) The Standard Library builds on the Language layer, not the reverse.
+**State the premises.** (1) `Iterator<T>` is a Language-layer trait (EDR-022). (2) Combinator methods on `Iterator<T>` live in the Standard Library. (3) The Standard Library builds on the Language layer, not the reverse.
 
-**Verdict: Pass.** Combinators operate entirely within the Standard Library layer, depending on `Iterator[T]` (Language layer).
+**Verdict: Pass.** Combinators operate entirely within the Standard Library layer, depending on `Iterator<T>` (Language layer).
 
 ---
 
@@ -2600,7 +2600,7 @@ Six gates Pass outright; one gate (Conceptual Simplicity) flags mild complexity 
 
 | Criterion | Verdict | Basis |
 |---|---|---|
-| Schema-serializable | Pass | Each combinator has a well-defined function signature: `Iterator[T].map(U)(f: T -> U) -> Iterator[U]`. |
+| Schema-serializable | Pass | Each combinator has a well-defined function signature: `Iterator<T>.map(U)(f: T -> U) -> Iterator<U>`. |
 | Predictable generation (≥90%) | Pass | Map/filter/reduce pattern is one of the most reliably generated patterns across all languages. |
 | No hallucination surface | Pass | Combinator signatures are explicit; type errors on wrong signature produce standard type-checking diagnostics. |
 | Strategy-aware default | Pass | Lazy-by-default semantics are consistent across all strategies (eager strategies must still honour lazy API contract). |
@@ -3325,7 +3325,7 @@ The following important-tier concepts were processed through the Decision Pipeli
 
 | Criterion | Verdict | Basis |
 |---|---|---|
-| Schema-serializable | Pass | `async fun name() -> Future[T]` is fully expressible in the type system |
+| Schema-serializable | Pass | `async fun name() -> Future<T>` is fully expressible in the type system |
 | Predictable generation (≥90%) | Pass | Async/await is one of the most LLM-generable patterns across Python, JS, Rust |
 | No hallucination surface | Pass | Single unambiguous meaning for each keyword |
 | Strategy-aware default | Pass | Stackless coroutines are the universal default |
@@ -3643,7 +3643,7 @@ All applied gates Pass outright.
 
 **Define all terms.** All terms are precisely defined and consistent with EDR-021. The intermediate result model is a conceptual refinement, not a semantic change. `emit` + `return` pattern is already supported by EDR-021; `.final()` accessor is a minor extension to the existing state machine.
 
-**Test with counterexamples.** Does a function with `emit` but no `return` still return `Iterator[T]`? Yes — per EDR-021. Does `.final()` work on a generator that never terminates? It blocks (the function must complete to produce a final value).
+**Test with counterexamples.** Does a function with `emit` but no `return` still return `Iterator<T>`? Yes — per EDR-021. Does `.final()` work on a generator that never terminates? It blocks (the function must complete to produce a final value).
 
 **Verdict: Pass.**
 
@@ -3651,7 +3651,7 @@ All applied gates Pass outright.
 
 #### 2. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
 
-**State the premises.** The refinement operates entirely within EDR-021's existing model. `emit` remains a Core Language construct. `.final()` is an accessor on the existing `Iterator[T]` type.
+**State the premises.** The refinement operates entirely within EDR-021's existing model. `emit` remains a Core Language construct. `.final()` is an accessor on the existing `Iterator<T>` type.
 
 **Verdict: Pass.** No layer violations.
 
@@ -4441,7 +4441,7 @@ Six gates Pass outright. One gate (`LONG_TERM_MAINTAINABILITY_GATE`) returns a F
 
 **User story.** As an Orthon programmer, after checking `if value is Type`, I expect the compiler to know that `value` is now `Type` — no redundant explicit cast needed.
 
-**Press release.** *After `if value is Type`, the compiler narrows `value` to `Type` in the true branch. After `value isnt None`, `Option[T]` unwraps to `T`. Smart cast applies to immutable variables only — conservative by default, never unsound.*
+**Press release.** *After `if value is Type`, the compiler narrows `value` to `Type` in the true branch. After `value isnt None`, `Option<T>` unwraps to `T`. Smart cast applies to immutable variables only — conservative by default, never unsound.*
 
 **FAQ.** Does smart cast work across function calls? No — narrowing does not propagate through function boundaries. Does it work on mutable variables? No — only effectively-immutable variables (val, or local vars provably unmodified).
 
@@ -5607,7 +5607,7 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
 - **Not a keyword, not a primitive:** `enumerate(items) ≡ zip(1..=len(items), items)` —
   a pure Level 2 composition over the inclusive range norm (B4) + `zip`.
   Both `enumerate` and `zip` are plain Standard Library methods on
-  `Iterator[T]` (EDR-022/EDR-032) — no compiler special-casing, no new syntax.
+  `Iterator<T>` (EDR-022/EDR-032) — no compiler special-casing, no new syntax.
   Strengthens `CONCEPTUAL_SIMPLICITY` (one counting convention for index
   production and consumption) and `LLM_GENERABILITY` (single, teachable
   formula).
@@ -5620,7 +5620,7 @@ Option (b) is consistent with Minimal Core and matches the existing Metadata Pro
   Intent Over Implementation); a `from:`/start parameter (non-orthogonal — the
   offset is a range concern, not an `enumerate` concern).
 - **Cross-concept amendment:** ITERATOR_PROTOCOL (EDR-022) `.enumerate()`
-  ("Pair each element with its index", `Iterator[(Int, T)]`) — base pinned to
+  ("Pair each element with its index", `Iterator<(Int, T)>`) — base pinned to
   1; applied at EDR-082 acceptance (recorded under C-001 in
   `CONFLICT_REGISTRY.md`). `enumerate` remains a Standard Library combinator
   (LIBRARY_BOUNDARY); only its *base* is a Core commitment of the 1-based
@@ -5691,7 +5691,7 @@ Advisory items made concrete (none blocks EDR-082):
 **Blockers before EDR-082:**
 - **B1 (decomposition):** ✅ **RESOLVED (2026-08-05)** — `a[i]` is a Level 2 pattern over `a@get(i)` (Metadata Protocol, `@`-prefix); no new primitive; `INDEXING_ONE_BASED.md` § Impact on Primitive Blocks corrected. See the resolution note under Primitive Decomposition Check.
 - **B2 (SPAN):** ✅ **RESOLVED (2026-08-05)** — single-base rule: Span is 1-based like every collection; FFI raw buffers translate at the boundary (`0..<N`), never a second base. Cross-concept amendment to SPAN/EDR-064 pinned at EDR-082. See the B2 Resolution note above.
-- **B3 (enumerate):** ✅ **RESOLVED (2026-08-05)** — `enumerate` defaults to 1 (matching the collection base); composition `enumerate(items) ≡ zip(1..=len(items), items)`; `enumerate`/`zip` are StdLib methods on `Iterator[T]` (EDR-022/EDR-032), not keywords; no start parameter — offsets use an explicit preliminary range; Python-style default 0 rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL EDR-022 pinned at EDR-082. See the B3 Resolution note below.
+- **B3 (enumerate):** ✅ **RESOLVED (2026-08-05)** — `enumerate` defaults to 1 (matching the collection base); composition `enumerate(items) ≡ zip(1..=len(items), items)`; `enumerate`/`zip` are StdLib methods on `Iterator<T>` (EDR-022/EDR-032), not keywords; no start parameter — offsets use an explicit preliminary range; Python-style default 0 rejected (index/`@get` desync). Cross-concept amendment to ITERATOR_PROTOCOL EDR-022 pinned at EDR-082. See the B3 Resolution note below.
 - **B4 (retroactive amendment):** ✅ **RESOLVED (2026-08-05)** — range norm locked: inclusive-inclusive `1..N` everywhere (incl. slices); language owns `+1` (`len(slice)`); empty slice = `end < start`; `0..<N` is FFI-boundary-only. Cross-concept amendment to ITERATION_LOOP EDR-053 / ITERATOR_PROTOCOL EDR-022 recorded as Type C (C-001) in `CONFLICT_REGISTRY.md`, applied at EDR-082. See the B4 Resolution note above.
 
 **Advisory (not blocking) — resolved 2026-08-05:**
@@ -5746,7 +5746,7 @@ Apparent contradiction: "zero-cost counter loop" (seems strategy-dependent) vs "
 
 ### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
 
-One-sentence test: "A range is a first-class inclusive-inclusive run of integers that can be iterated or sliced." Remove-one-thing: removing ranges forces manual counter loops and `+1` arithmetic everywhere. Evolution: `Range[T]` over other ordered `pack` types is a StdLib extension.
+One-sentence test: "A range is a first-class inclusive-inclusive run of integers that can be iterated or sliced." Remove-one-thing: removing ranges forces manual counter loops and `+1` arithmetic everywhere. Evolution: `Range<T>` over other ordered `pack` types is a StdLib extension.
 
 **Verdict: Pass.**
 

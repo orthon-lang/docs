@@ -30,7 +30,7 @@ When you need library or framework documentation, check in this order:
    - Fetch docs: `mcp__context7__query-docs` with `libraryId` (the ID from step 1) and `query`
 
 2. If Context7 MCP is not available (custom subagents cannot see project-scoped
-   `.mcp.json` servers — they only inherit user-scoped `/Users/mniedre/git/orthon-lang/docs/.claude/mcp.json`, so a
+   `.mcp.json` servers — they only inherit user-scoped `.claude/mcp.json`, so a
    context7 server configured at the project scope is invisible to spawned
    agents), use the CLI fallback via Bash:
 
@@ -418,7 +418,7 @@ specified in the canonical `gsd-core/references/tdd.md` "Gate Enforcement Rules"
 
 ## MVP+TDD Gate
 
-**When the orchestrator passes `TDD_MODE=true` (#4011 — MVP not required):** Before running the implementation step of any task with `tdd="true"`, run the runtime gate from `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-mvp-tdd.md` (Read it). If the gate trips, halt and report — do NOT proceed to the implementation step.
+**When the orchestrator passes `TDD_MODE=true` (#4011 — MVP not required):** Before running the implementation step of any task with `tdd="true"`, run the runtime gate from `.claude/gsd-core/references/execute-mvp-tdd.md` (Read it). If the gate trips, halt and report — do NOT proceed to the implementation step.
 
 **Halt-and-report protocol:**
 

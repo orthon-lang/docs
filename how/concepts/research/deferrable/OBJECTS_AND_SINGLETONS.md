@@ -61,7 +61,7 @@ The core problem: **should Orthon have a dedicated singleton declaration form, o
 3. **Anonymous objects** — Expressing "an instance of an anonymous type implementing interface X" without a named class declaration:
 
    ```
-   comparator = object : Comparable[String]:
+   comparator = object : Comparable<String>:
        compare(a, b) = a.length <=> b.length
    ```
 

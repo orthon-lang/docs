@@ -26,7 +26,7 @@ with no place in a language built on the Data abstraction.
   uniform across index access, slices, and iteration. The language owns the
   `+1` length arithmetic (`len(slice)` = element count). Empty slice =
   `end < start`. `0..<N` is an FFI-boundary interop utility only.
-- **`enumerate` defaults to 1** — a plain StdLib method on `Iterator[T]`,
+- **`enumerate` defaults to 1** — a plain StdLib method on `Iterator<T>`,
   defined as `enumerate(items) ≡ zip(1..len(items), items)` (spelling per EDR-083; the `..=` form is eliminated). No start
   parameter; offsets use an explicit preliminary range.
 - **Single-base rule: `Span` is 1-based** — raw C buffers translate at the FFI

@@ -2,7 +2,7 @@
 
 ## Issue (Why)
 
-Orthon's current collection model has mutable `List[T]` and conditionally immutable `Tuple`. This leaves a gap: what if a programmer wants guaranteed immutability of a collection as a whole — including its contents — without relying on discipline?
+Orthon's current collection model has mutable `List<T>` and conditionally immutable `Tuple`. This leaves a gap: what if a programmer wants guaranteed immutability of a collection as a whole — including its contents — without relying on discipline?
 
 Scenarios where persistent (immutable, structural-sharing) collections matter:
 1. **Hash keys / set membership** — Mutable collections cannot safely be used as hash map keys.
@@ -35,7 +35,7 @@ The standard library provides persistent collection types built on structural sh
 trait Immutable
 
 # Persistent list — structural sharing on "modification"
-type PersistentList[T] is Immutable
+type PersistentList<T> is Immutable
 
 # "Modification" returns a new collection, shares structure with old
 let new_list = list.append(42)
@@ -47,9 +47,9 @@ let new_list = list.append(42)
 
 | Type | Mutation | Copy semantics | Sharing across versions |
 |---|---|---|---|
-| `List[T]` | Mutable | Reference (CoW on shared mutation) | No |
+| `List<T>` | Mutable | Reference (CoW on shared mutation) | No |
 | `Tuple` | Conditionally immutable | Value (deep copy on assignment) | No |
-| `PersistentList[T]` | Immutable (returns new version) | Value (structural sharing) | Yes |
+| `PersistentList<T>` | Immutable (returns new version) | Value (structural sharing) | Yes |
 
 ## Default Strategy
 
@@ -59,7 +59,7 @@ Persistent Data Structures is a **StdLib** concept. The standard library provide
 
 | Strategy | Description |
 |---|---|
-| No persistent collections | Rely on `Tuple` for fixed-size immutable data and `List[T]` + CoW for dynamic data. |
+| No persistent collections | Rely on `Tuple` for fixed-size immutable data and `List<T>` + CoW for dynamic data. |
 | Persistent only | All collections are persistent by default (Clojure model). |
 | Freeze operation | `list.freeze()` returns an immutable view. Weaker guarantee (underlying list still mutable). |
 

@@ -106,7 +106,7 @@ print(z)         // ERROR: `z` not declared in this scope
 // Code: E201 | Severity: ERROR | Candidates: `x`, `y` in current scope
 
 // Layer 3 failure — type mismatch
-fn greet(name: String)
+fun greet(name: String)
     print(name)  // OK
 
 greet(42)        // ERROR: expected `String`, found `Int`

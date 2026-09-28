@@ -53,7 +53,7 @@ a is b                   # false — different tuple objects
 
 # User-defined semantic equality
 impl Eq for Person
-    fn ==(self, other: Person) -> Bool
+    fun ==(self, other: Person) -> Bool
         self.id === other.id
 
 alice = Person(id=42, name="Alice")

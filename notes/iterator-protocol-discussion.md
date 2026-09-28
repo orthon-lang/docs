@@ -14,26 +14,26 @@ Three-layer relationship:
 ```
 Sequence (abstract concept — what the result is, not how it's produced)
     ↑ production: emit (generators) — LAZY_SEQUENCE_GENERATORS.md
-    ↑ consumption: Iterator[T] (protocol) — ITERATOR_PROTOCOL.md
+    ↑ consumption: Iterator<T> (protocol) — ITERATOR_PROTOCOL.md
 ```
 
 - **Sequence** is a fundamental type: "values produced over time". It describes *what*, not *how*.
 - **Generator** (`emit`) produces a Sequence.
-- **Iterator** (`Iterator[T]` trait) consumes a Sequence.
+- **Iterator** (`Iterator<T>` trait) consumes a Sequence.
 - The two sides are **orthogonal** — you can have iteration without generation (collection iteration) and generation without iteration (producing values).
 
-## 2. No Separate `Iterable` — `IntoIterator[T]` Fills That Role
+## 2. No Separate `Iterable` — `IntoIterator<T>` Fills That Role
 
 Orthon does **not** define a separate `Iterable` concept. Instead:
 
 ```orthon
-trait IntoIterator[T]
-    fn iter(self) -> Iterator[T]
+trait IntoIterator<T>
+    fun iter(self) -> Iterator<T>
 ```
 
 This is what `for` loops and combinator entry points accept. It covers:
-- Collections (implement `IntoIterator[T]`)
-- `Iterator[T]` itself (implements `IntoIterator[T]`, returning `self`)
+- Collections (implement `IntoIterator<T>`)
+- `Iterator<T>` itself (implements `IntoIterator<T>`, returning `self`)
 - Range expressions (`0..10`, `0..=10`)
 - I/O streams
 
@@ -70,7 +70,7 @@ loop:
 
 Key mechanisms:
 - **`collection@iter()`** — calls `IntoIterator::iter()` via `@` protocol access (D-07).
-- **`it@next()`** — calls `Iterator::next()`, returns `Option[T]`.
+- **`it@next()`** — calls `Iterator::next()`, returns `Option<T>`.
 - Compiler rejects non-iterable types at compile time.
 - `@` prefix distinguishes protocol method access from attribute access.
 
@@ -110,8 +110,8 @@ collection
 
 Combinator signatures:
 ```orthon
-fn map[U](self, fn: T -> U) -> Iterator[U]
-fn filter(self, pred: T -> Bool) -> Iterator[T]
+fun map<U>(self, fn: T -> U) -> Iterator<U>
+fun filter(self, pred: T -> Bool) -> Iterator<T>
 ```
 
 ### B. Named function equivalents (Named Before Symbolic)
@@ -176,8 +176,8 @@ The `i=i` problem only arises when a lambda **outlives** its iteration (stored i
 
 ## Open Questions from the Document
 
-1. Should `Iterator[T]` support `size_hint()` for optimising collection pre-allocation?
-2. Should there be a `DoubleEndedIterator[T]` (`.next_back()`) for bidirectional traversal?
+1. Should `Iterator<T>` support `size_hint()` for optimising collection pre-allocation?
+2. Should there be a `DoubleEndedIterator<T>` (`.next_back()`) for bidirectional traversal?
 3. Should combinators support parallel execution (`.par_map()`) or should that be a separate concept?
 4. Should `for` accept owned collections directly (via `IntoIterator`) or only references?
 5. How does the iterator protocol interact with the `delegate` execution policy?
@@ -204,7 +204,7 @@ convergence (CONCEPT_PIPELINE.md Stage 10, Type B).
 | Item | Decision / Routing |
 |------|--------------------|
 | A1 | Match-arm syntax conflict (`case ... =>` per EDR-025 vs `Some(...) -> ...` in iterator docs) → `what/CONFLICT_REGISTRY.md`, resolve in Phase 6 |
-| A2 | `IntoIterator[T]` = immutable iterator only (`fun iter(self) -> Iterator[&T]`). Mutable iteration → MUTABLE_ITERATOR (receiver-type dispatch `&C`/`&mut C`, `proc next`) |
+| A2 | `IntoIterator<T>` = immutable iterator only (`fun iter(self) -> Iterator<&T>`). Mutable iteration → MUTABLE_ITERATOR (receiver-type dispatch `&C`/`&mut C`, `proc next`) |
 | A3 | `break` unification (`break` ≡ `break Void`) → BREAK_UNIFICATION → EDR after Decision Pipeline |
 | B1 | Systematic `fn` → `fun`/`proc`/`new` sweep → TODO.md task IP-B1 |
 | B2 | Step outside the range literal, `:` never used in ranges, `(0..10).step(2)` → RANGE_STEP + SEQUENCE_METHODS |

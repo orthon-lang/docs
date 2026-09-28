@@ -57,10 +57,10 @@ The core problem: **incremental construction requires a way to mark "I'll fill t
 A hole is written as `??` optionally followed by a name for readability:
 
 ```orthon
-fn sort(list: List<Int>) -> List<Int>
+fun sort(list: List<Int>) -> List<Int>
     ??
 
-fn find_user(id: Uuid) -> Result<User, Error>
+fun find_user(id: Uuid) -> Result<User, Error>
     ??find_user
 ```
 
@@ -90,10 +90,10 @@ Available bindings:
 A hole as a function body marks the function as incomplete:
 
 ```orthon
-fn process(config: Config) -> Result<Status, Error>
+fun process(config: Config) -> Result<Status, Error>
     ??process
 
-fn validate(data: String) -> Bool
+fun validate(data: String) -> Bool
     if data.is_empty() then
         ??validate_empty    # sub-hole: expected Bool
     else
@@ -105,7 +105,7 @@ fn validate(data: String) -> Bool
 Holes can appear in type positions, leaving types to be inferred:
 
 ```orthon
-fn cache<T>(key: String, value: T) -> ??
+fun cache<T>(key: String, value: T) -> ??
     # Hole expected type: Result<Cached<T>, CacheError>
     # (inferred from usage context)
 ```
@@ -115,7 +115,7 @@ fn cache<T>(key: String, value: T) -> ??
 Holes compose naturally — a hole at expression level can contain sub-holes:
 
 ```orthon
-fn render(item: Item) -> String
+fun render(item: Item) -> String
     let header = ??  # expected: String
     let body = ??    # expected: String
     header ++ body   # type checks even with holes

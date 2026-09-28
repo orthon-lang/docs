@@ -12,7 +12,7 @@
 
 ### Context
 
-Orthon's iterator protocol (EDR-022) defines `Iterator[T]` trait and `IntoIterator[T]` trait as the consumption side of the sequence model. The `for` loop desugars to the iterator protocol. The iterator protocol specification (in `what/concepts/ITERATOR_PROTOCOL.md`) describes the desugaring:
+Orthon's iterator protocol (EDR-022) defines `Iterator<T>` trait and `IntoIterator<T>` trait as the consumption side of the sequence model. The `for` loop desugars to the iterator protocol. The iterator protocol specification (in `what/concepts/ITERATOR_PROTOCOL.md`) describes the desugaring:
 
 ```orthon
 for item in collection:
@@ -53,7 +53,7 @@ The Decision Pipeline classified ITERATION_LOOP as **Language**: `for`/`while` l
 
 Adopt the following loop model for Orthon:
 
-1. **`for item in sequence`** — The only iteration loop construct. Operates on any type implementing `IntoIterator[T]`. Desugars to the iterator protocol per EDR-022.
+1. **`for item in sequence`** — The only iteration loop construct. Operates on any type implementing `IntoIterator<T>`. Desugars to the iterator protocol per EDR-022.
 
     ```orthon
     for item in items:
@@ -120,7 +120,7 @@ Adopt the following loop model for Orthon:
 4. `break` and `continue` must have defined semantics in both `for` and `while`.
 5. `loop { ... }` must execute forever unless `break` is called.
 6. `break value` must be supported in `loop` constructs (expression-oriented).
-7. Range syntax (`0..n`) must produce an `Iterator[Int]` value. *(Range syntax/semantics per EDR-083 — inclusive-inclusive `1..N`; `Range` implements `IntoIterator`.)*
+7. Range syntax (`0..n`) must produce an `Iterator<Int>` value. *(Range syntax/semantics per EDR-083 — inclusive-inclusive `1..N`; `Range` implements `IntoIterator`.)*
 8. Destructuring in loop variables must follow the same pattern syntax as PATTERN_MATCHING (EDR-025).
 
 ---

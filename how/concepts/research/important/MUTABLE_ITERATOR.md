@@ -17,8 +17,8 @@ cannot coexist (return type is not part of method resolution).
 
 ## Accepted Constraint (2026-08-05)
 
-`IntoIterator[T]` is implemented as an **immutable iterator** only:
-`fun iter(self) -> Iterator[&T]`.
+`IntoIterator<T>` is implemented as an **immutable iterator** only:
+`fun iter(self) -> Iterator<&T>`.
 
 ## Problem
 
@@ -32,13 +32,13 @@ A collection type has two `IntoIterator` implementations:
 
 ```orthon
 impl IntoIterator for &Collection      # shared borrow
-    fun iter(self) -> Iterator[&T]     # element &T
+    fun iter(self) -> Iterator<&T>     # element &T
 
 impl IntoIterator for &mut Collection  # exclusive borrow
-    fun iter(self) -> Iterator[&mut T] # element &mut T
+    fun iter(self) -> Iterator<&mut T> # element &mut T
 ```
 
-`Iterator[T]::next()` is declared `proc` (it advances the cursor — mutates
+`Iterator<T>::next()` is declared `proc` (it advances the cursor — mutates
 `self`). This is the answer to TRAITS.md Open Q5: a trait may declare a `proc`
 method; calls to it require exclusive access, which the borrow checker enforces.
 

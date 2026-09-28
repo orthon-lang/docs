@@ -74,13 +74,13 @@ pub type Connection
 pub type Request
 pub type Response
 
-pub fn connect(host: String, port: Int) -> Result<Connection, Error>
-pub fn send(request: Request) -> Result<Response, Error>
-pub fn close(conn: Connection) -> Result<Void, Error>
+pub fun connect(host: String, port: Int) -> Result<Connection, Error>
+pub fun send(request: Request) -> Result<Response, Error>
+pub fun close(conn: Connection) -> Result<Void, Error>
 
 # Private — not visible outside the module
 type InternalBuffer
-fn parse_response(raw: Bytes) -> Result<Response, Error>
+fun parse_response(raw: Bytes) -> Result<Response, Error>
 ```
 
 ### Dependency Declaration
@@ -106,8 +106,8 @@ Effects are declared as a set. The compiler verifies that the module's body does
 module pure_math
 effects: none                 # no side effects at all
 
-pub fn factorial(n: Int) -> Int
-pub fn fibonacci(n: Int) -> Int
+pub fun factorial(n: Int) -> Int
+pub fun fibonacci(n: Int) -> Int
 
 # compiler error if body tries I/O, allocation, or mutation
 ```
@@ -116,8 +116,8 @@ pub fn fibonacci(n: Int) -> Int
 module logger
 effects: io, alloc
 
-pub fn log(level: Level, message: String)
-pub fn set_log_level(level: Level)
+pub fun log(level: Level, message: String)
+pub fun set_log_level(level: Level)
 ```
 
 ### Context Window Budget

@@ -55,7 +55,7 @@ Adopt push streams as a **Standard Library abstraction** built on existing const
 
 2. **Construction patterns** — Streams can be created from:
    - Delegate-based producers (delegate pushes values via `send`)
-   - Generator conversions (pull → push bridge: consuming an `Iterator[T]` and pushing values to subscribers)
+   - Generator conversions (pull → push bridge: consuming an `Iterator<T>` and pushing values to subscribers)
    - Event sources (timers, I/O, GUI events)
    - Manual `emit` + `complete` + `error` control
 

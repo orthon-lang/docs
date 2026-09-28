@@ -51,11 +51,11 @@ A trait may be declared `structural` to enable automatic satisfaction by method 
 ```orthon
 # Nominal — explicit impl required (default)
 trait Serializable
-    fn serialize(self) -> String
+    fun serialize(self) -> String
 
 # Structural — implicit satisfaction by method signature
 structural trait Show
-    fn show(self) -> String
+    fun show(self) -> String
 ```
 
 ### Structural satisfaction
@@ -64,7 +64,7 @@ Any type with methods matching a structural trait's signature satisfies the trai
 
 ```orthon
 structural trait Show
-    fn show(self) -> String
+    fun show(self) -> String
 
 type Point(x: Int, y: Int)
 
@@ -82,7 +82,7 @@ An explicit `impl` block takes priority over structural matching:
 
 ```orthon
 impl Show for Point:
-    fn show(self) -> String
+    fun show(self) -> String
         "Custom: ($self.x, $self.y)"
 ```
 
@@ -101,18 +101,18 @@ If a type structurally matches two traits with the same method name but incompat
 
 ```orthon
 structural trait A:
-    fn process(self) -> Int
+    fun process(self) -> Int
 
 structural trait B:
-    fn process(self) -> String
+    fun process(self) -> String
 
 type Value(x: Int)
-    fn process(self) -> Int = self.x
-    fn process(self) -> String = "value: $(self.x)"
+    fun process(self) -> Int = self.x
+    fun process(self) -> String = "value: $(self.x)"
 
 # Error: Value.process matches both A and B — provide explicit impl
 impl A for Value:
-    fn process(self) -> Int = self.x
+    fun process(self) -> Int = self.x
 ```
 
 ## Default Strategy

@@ -69,7 +69,7 @@ Hypothesis: Level 1–2 (Primitive / Derived)
 
 Library test:   Can refinement types be a StdLib construct?
 
-                A library can provide `Refined[A, P]` as a wrapper with
+                A library can provide `Refined<A, P>` as a wrapper with
                 runtime predicate checks (like the `refined` Scala lib).
                 But it cannot make `where _ in 1..65535` a part of the
                 type itself, nor statically reject invalid literals at

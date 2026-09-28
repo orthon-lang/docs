@@ -48,9 +48,9 @@ pub type Connection
 pub type Request
 pub type Response
 
-pub fn connect(host: String, port: Int) -> Result<Connection, Error>
-pub fn send(request: Request) -> Result<Response, Error>
-pub fn close(conn: Connection) -> Result<Void, Error>
+pub fun connect(host: String, port: Int) -> Result<Connection, Error>
+pub fun send(request: Request) -> Result<Response, Error>
+pub fun close(conn: Connection) -> Result<Void, Error>
 ```
 
 ### Context Window Budget

@@ -132,7 +132,7 @@ list.sort(by: fn (a, b) -> a.name < b.name)
 
 ## Open Questions
 
-1. Should Orthon provide a standard `Comparator[T]` function type alias
+1. Should Orthon provide a standard `Comparator<T>` function type alias
    (`fn (T, T) -> Bool`), or leave strategy signatures entirely to user code?
 2. How do first-class function strategies interact with named/default
    parameters — can a strategy parameter have a default?

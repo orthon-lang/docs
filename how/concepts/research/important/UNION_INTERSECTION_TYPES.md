@@ -32,7 +32,7 @@ with no runtime object created.
 Orthon's own research corpus already assumes a union combinator exists
 without defining it: [`DYNAMIC_COLLECTIONS.md`](DYNAMIC_COLLECTIONS.md)
 describes heterogeneous collections "via explicit union types
-(`List[Int | String]`)" and uses `Int | String` directly in a code sample,
+(`List<Int | String>`)" and uses `Int | String` directly in a code sample,
 but never specifies whether this is a structural combinator over arbitrary
 types or shorthand for an already-declared sum type. That gap is exactly
 what this file exists to close.
@@ -121,7 +121,7 @@ type checker; nothing is allocated, instantiated, or tagged at runtime.
    unless the union is closed and tagged. Recommend either omitting general
    structural unions from the core, or restricting them to a narrow set of
    built-in cases (e.g. `T | None` for optionality, already covered by
-   `NULL_SAFETY.md`'s `Option[T]`), leaving the general "one of several
+   `NULL_SAFETY.md`'s `Option<T>`), leaving the general "one of several
    named forms" need to `ALGEBRAIC_DATA_TYPES.md` exclusively.
 
 ## Open Questions

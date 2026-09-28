@@ -14,7 +14,7 @@ range(a, b)         # named canonical form; range(a, b) ≡ a..b
 (1..10).step(2)     # strided Range value (method, not syntax): 1, 3, 5, 7, 9
 (1..5).step(-1)     # negative step iterates descending: 5, 4, 3, 2, 1
 
-for i in 1..10      # Range implements IntoIterator[Int]; usable directly
+for i in 1..10      # Range implements IntoIterator<Int>; usable directly
 ```
 
 ## Rules

@@ -61,7 +61,7 @@ The core problem: **should Orthon have runtime reflection at all, or should all 
 2. **`reified` generics in inline functions** — Inside inline (or equivalent) functions, generic type parameters are reified — the compiler substitutes the concrete type, enabling type inspection without reflection:
 
    ```
-   inline fun typeName[T]() -> String:
+   inline fun typeName<T>() -> String:
        return T.name     // available because T is reified
    ```
 

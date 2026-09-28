@@ -163,7 +163,7 @@ The implications touch three levels:
 | Level | Concern |
 |---|---|
 | **Core** | Are delegates first-class? Can they capture state (closures)? Do they have a type that can be abstracted over? |
-| **Stdlib** | Provide `Undoable[T]`, `CommandQueue`, `Macro` compositors if the language itself doesn't need them. |
+| **Stdlib** | Provide `Undoable<T>`, `CommandQueue`, `Macro` compositors if the language itself doesn't need them. |
 | **Framework** | UI frameworks, middleware, task schedulers — but these are downstream consumers of the core delegate model. |
 
 ## Proposal
@@ -195,7 +195,7 @@ greet()
 ### 3. Commands with Return Values
 
 ```orthon
-fetch: () -> Result[Data] = || http.get(url)
+fetch: () -> Result<Data> = || http.get(url)
 data = fetch()
 ```
 
@@ -220,7 +220,7 @@ cmd.undo()
 
 ```orthon
 // Queue of commands with different types — all () -> void
-queue: List[() -> void] = []
+queue: List<() -> void> = []
 queue.append(|| print("A"))
 queue.append(|| process(data))
 queue.append(|| notify(user))
@@ -263,7 +263,7 @@ or **idiom** rather than language features:
 | Observer | Delegate list + event dispatch in stdlib |
 | Template Method | Higher-order function accepting delegate |
 | Visitor | Pattern matching + delegates per case |
-| Null Object | Optional[T] + default value |
+| Null Object | Optional<T> + default value |
 
 ## Trade-offs
 
@@ -283,7 +283,7 @@ or **idiom** rather than language features:
     - **Mitigation:** Type aliases: `type LogCommand = () -> void` restores semantic naming.
 - **Undo requires discipline.** The paired-delegate approach (`execute` + `undo`) requires the programmer to pass both explicitly. There is no compiler enforcement that an undo reverses the execute.
     - **Note:** This is inherent — even a `Command` interface with `undo()` does not guarantee correctness.
-- **No built-in composability constraints.** A `List[() -> void]` can mix related and unrelated commands. Traditional `MacroCommand` classes enforce homogeneity at the type level.
+- **No built-in composability constraints.** A `List<() -> void>` can mix related and unrelated commands. Traditional `MacroCommand` classes enforce homogeneity at the type level.
     - **Mitigation:** This is a feature, not a bug — type-level restriction is opt-in via newtypes.
 - **Tooling/debugging.** Anonymous closures are harder to name in stack traces and profiling. Named functions (or explicit delegate variables) mitigate this.
 - **LLM generability consideration.** A lambda-based Command is simpler for an LLM to generate (one expression) than a class hierarchy. The mental model is "capture and defer" rather than "implement interface." This aligns with Orthon's LLM Readiness pillar.
@@ -296,7 +296,7 @@ or **idiom** rather than language features:
 | **Functions** (`FUNCTIONS.md`) | First-class functions are the prerequisite — delegates are typed function references. |
 | **Closures** (implicit in delegate model) | Closure capture is what makes a delegate a *parameterized* command without explicit parameter fields. |
 | **Active Object** (`deferrable/ACT_AS_ACTIVE_OBJECT.md`) | Active Object *uses* commands by queuing them as delegates. The delegate-is-Command hypothesis is a prerequisite for the Active Object mailbox model. |
-| **Async/Await** (`important/ASYNC_AWAIT.md`) | Commands queued for async execution are delegates. Async schedulers consume `() -> Future[T]` delegates. |
+| **Async/Await** (`important/ASYNC_AWAIT.md`) | Commands queued for async execution are delegates. Async schedulers consume `() -> Future<T>` delegates. |
 | **Pipelines / Chains** | Processing pipelines are composable delegate chains. Middleware is `(Request, () -> Response) -> Response`. |
 
 ## Alternatives
@@ -322,14 +322,14 @@ principle. Conflicts with `delegate` concept overlap — what makes
 **Verdict:** Reject. A dedicated keyword adds ceremony without semantic
 value. The delegate model already covers all use cases.
 
-### B. Stdlib `Command[T]` Type Only (No Core Change)
+### B. Stdlib `Command<T>` Type Only (No Core Change)
 
 Provide a standard library type:
 
 ```orthon
 type Command = () -> void
-type CommandWithResult[T] = () -> T
-type Undoable[T] = (execute: () -> T, undo: () -> void)
+type CommandWithResult<T> = () -> T
+type Undoable<T> = (execute: () -> T, undo: () -> void)
 ```
 
 **Pros:** Zero language changes. Pure library.

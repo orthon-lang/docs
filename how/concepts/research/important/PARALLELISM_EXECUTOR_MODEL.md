@@ -112,15 +112,15 @@ await expr  →  let __tmp = expr; __tmp.wait()
 ```
 
 This is ~3 lines in the language spec. The compiler does not need to know
-about `Poll[T]`, `Waker`, `Context`, or `Pin`. All async runtime protocol
+about `Poll<T>`, `Waker`, `Context`, or `Pin`. All async runtime protocol
 details live in stdlib.
 
 ```orthon
 // Core: await sugar
 // Stdlib defines:
-class Task[T]:
+class Task<T>:
     fun wait(self) -> T       // called implicitly by await
-    fun try_wait(self) -> Option[T]
+    fun try_wait(self) -> Option<T>
 ```
 
 ### Stdlib: Executor + Parallel Scope
@@ -134,7 +134,7 @@ class Task[T]:
 class Executor(workers: Int):
     /// Submit a closure for parallel execution.
     /// Ownership transfers to the executor via `move`.
-    fun submit[T](self, task: move () -> T) -> Task[T]
+    fun submit<T>(self, task: move () -> T) -> Task<T>
 
 /// Default shared executor (number of CPU cores).
 fun default() -> &Executor
@@ -289,7 +289,7 @@ path to GPU or remote execution without more keywords.
 #### Alternative B: Core `Executor` Trait (Rust model)
 
 ```orthon
-trait Executor[F, T]:
+trait Executor<F, T>:
     fun execute(self, task: F) -> T
 ```
 

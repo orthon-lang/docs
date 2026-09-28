@@ -116,7 +116,7 @@ print(z)         // ERROR: `z` not declared in this scope
 // Code: E201 | Severity: ERROR | Candidates: `x`, `y` in current scope
 
 // Layer 3 failure — type mismatch
-fn greet(name: String)
+fun greet(name: String)
     print(name)  // OK
 
 greet(42)        // ERROR: expected `String`, found `Int`
@@ -129,7 +129,7 @@ data.push(4)     // ERROR: cannot borrow `data` as mutable while borrowed
 // Code: E401 | Severity: ERROR | Note: immutable borrow at line 2
 
 // Layer 5 failure — effect violation
-fun fn compute() -> Int
+fun compute() -> Int
     // This function declares no mutation
     state.counter += 1   // ERROR: mutation not allowed in `fun` context
 // Code: E501 | Severity: ERROR | Note: declare as `proc` to allow mutation

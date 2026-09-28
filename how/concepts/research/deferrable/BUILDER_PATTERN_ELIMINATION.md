@@ -69,7 +69,7 @@ pizza = Pizza {
        size: Int = 10
        cheese: Bool = false
        pepperoni: Bool = false
-       toppings: List[String] = []
+       toppings: List<String> = []
 
    // Usage — only specify non-defaults
    pizza1 = Pizza()

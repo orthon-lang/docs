@@ -145,12 +145,12 @@ without abstract classes, `virtual`, or `override`:
 
 ```orthon
 trait DataImporter
-    fn open(self)                   // hook — declared in trait signature
-    fn parse(self)                  // hook — declared in trait signature
-    fn close(self)                  // hook — declared in trait signature
+    fun open(self)                   // hook — declared in trait signature
+    fun parse(self)                  // hook — declared in trait signature
+    fun close(self)                  // hook — declared in trait signature
 
     // default implementation = template method
-    fn import(self)
+    fun import(self)
         self.open()
         self.parse()
         self.close()
@@ -160,9 +160,9 @@ A concrete type then implements only the hook methods:
 
 ```orthon
 impl DataImporter for CsvImporter
-    fn open(self)    // file open logic
-    fn parse(self)   // CSV parsing logic
-    fn close(self)   // resource cleanup
+    fun open(self)    // file open logic
+    fun parse(self)   // CSV parsing logic
+    fun close(self)   // resource cleanup
 ```
 
 The template method `import()` is inherited from the default — it cannot be

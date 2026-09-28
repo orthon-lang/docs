@@ -12,7 +12,7 @@
 
 ### Context
 
-Orthon's lazy sequence model was established in [EDR-021](./EDR-021-lazy-sequence-generators.md): generator functions using the `emit` keyword, compiled to stackless state machines implementing `Iterator[T]`. LAZY_SEQUENCE_GENERATORS defines the **core `emit` semantics** for lazy production.
+Orthon's lazy sequence model was established in [EDR-021](./EDR-021-lazy-sequence-generators.md): generator functions using the `emit` keyword, compiled to stackless state machines implementing `Iterator<T>`. LAZY_SEQUENCE_GENERATORS defines the **core `emit` semantics** for lazy production.
 
 The research document at `how/concepts/research/important/GENERATORS.md` proposes extending the generator model with:
 - **Bidirectional generators** — `yield` optionally accepts values back from the consumer (two-way generators, like Python's `generator.send(value)`)
@@ -25,7 +25,7 @@ The question: **do these extensions add new semantics beyond LAZY_SEQUENCE_GENER
 Analysis:
 - **Bidirectional generators** (`yield expr` where `expr` receives a value from the caller) add new two-way communication semantics not present in the one-way `emit` model. The function can receive values from the consumer during iteration.
 - **Generator expressions** are syntactic sugar — they desugar to generator functions.
-- **Iterator combinators** are StdLib (per EDR-032) — they are method implementations on `Iterator[T]`.
+- **Iterator combinators** are StdLib (per EDR-032) — they are method implementations on `Iterator<T>`.
 - **Async generators** depend on the async model (EDR-047) — they combine `async` with `emit`. Deferred to async streams specification.
 
 The Decision Pipeline classified GENERATORS as **Language**: Bidirectional yield adds producer-consumer communication semantics (send values back to generator) not present in EDR-021's one-way `emit` model. Generator expressions require compiler-level desugaring.
@@ -39,7 +39,7 @@ Adopt the following generator extensions for Orthon:
 1. **`yield` as bidirectional `emit`** — The `yield` keyword provides two-way communication: producing a value and optionally receiving a value from the consumer. `yield expr` emits `expr` to the consumer and receives a value back; `yield` with no expression is equivalent to `emit` (one-way).
 
     ```orthon
-    fun interactive() -> Iterator[String]
+    fun interactive() -> Iterator<String>
         let prefix = yield "ready"
         emit prefix ++ ": working"
     
@@ -60,17 +60,17 @@ Adopt the following generator extensions for Orthon:
 4. **`yield from` (delegation)** — Delegate generation to a sub-generator:
 
     ```orthon
-    fun combined() -> Iterator[Int]
+    fun combined() -> Iterator<Int>
         yield from fib(10)
         yield from fib(20)
     ```
 
-5. **Bidirectional generator trait** — A `BidirectionalGenerator[T, U]` trait where `next()` returns `T` and `send(value: U)` sends `U` back to the generator.
+5. **Bidirectional generator trait** — A `BidirectionalGenerator<T, U>` trait where `next()` returns `T` and `send(value: U)` sends `U` back to the generator.
 
 **Relationship to EDR-021:** EDR-021 establishes the core `emit` model. This EDR extends it with bidirectional communication (`yield`) and syntactic sugar (generator expressions). The `emit` keyword remains the canonical one-way form.
 
 **Amendment (2026-09-06, S2):** Decision items 1 and 5 — bidirectional
-`yield` and the `BidirectionalGenerator[T, U]` trait — together with the
+`yield` and the `BidirectionalGenerator<T, U>` trait — together with the
 `yield` / `yield from` keywords are **withdrawn**. Generators are
 emit-only (one-way, EDR-021). Retained: generator expressions (items 2–3);
 delegation (item 4) is kept as composition (`for v in sub: emit v`), not
@@ -105,7 +105,7 @@ Formal EDR: [EDR-091](./EDR-091-withdraw-bidirectional-yield.md).
 3. `yield expr` (where `expr` receives a value from the consumer) must track the received value in the state machine.
 4. Generator expressions must desugar to generator functions with the same semantics — no special runtime behaviour.
 5. `yield from` must delegate to the sub-generator's iterator protocol.
-6. `BidirectionalGenerator[T, U]` must be a trait that extends `Iterator[T]` with a `send(value: U)` method.
+6. `BidirectionalGenerator<T, U>` must be a trait that extends `Iterator<T>` with a `send(value: U)` method.
 7. All generator extensions must be implementable as stackless state machine transformations (default strategy).
 
 ---

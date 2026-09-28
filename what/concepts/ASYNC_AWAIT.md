@@ -58,7 +58,7 @@ Asynchronous programming requires expressing suspension without syntactic overhe
 
 ```orthon
 async proc save(self)          # async procedure (may mutate self)
-async fun fetch(url) -> String # async function (returns Future[String])
+async fun fetch(url) -> String # async function (returns Future<String>)
 async new create(name) -> T    # async constructor
 ```
 
@@ -80,11 +80,11 @@ An `async` function returns `Future<T>`. Calling an `async` function without `aw
 
 ```orthon
 # Await required only when result is needed
-let future = fetchData(url)     # Future[String], no suspension
+let future = fetchData(url)     # Future<String>, no suspension
 let result = await future       # suspension, unwrap to String
 
 # Functional composition with futures
-let futures = urls.map(fetchData)  # List of Future[String]
+let futures = urls.map(fetchData)  # List of Future<String>
 let results = futures.map(await)   # List of String (waits for each)
 ```
 
@@ -95,7 +95,7 @@ Rule: **`await` is required only when the current code needs the result.**
 `spawn` creates a new concurrent task running in parallel with the current one:
 
 ```orthon
-async fun loadAll() -> Pair[Image, Image]
+async fun loadAll() -> Pair<Image, Image>
     let t1 = spawn async loadImage("a.jpg")
     let t2 = spawn async loadImage("b.jpg")
     let img1 = await t1

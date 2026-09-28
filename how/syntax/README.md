@@ -128,5 +128,6 @@ agents/GSD flows must not self-certify it.
 | Invocation context operators `<-` / `|>` | [INVOCATION_SYNTAX.md](../../what/syntax/INVOCATION_SYNTAX.md) | EDR-085 | Resolved | EDR-085 (accepted) |
 | Range literal `1..N`, `range(a,b)`, `.step(n)` | [RANGE_SYNTAX.md](../../what/syntax/RANGE_SYNTAX.md) | EDR-083 | Resolved | EDR-083 (accepted) |
 | Generics: `<>` parameters, `as` bounds, `+` conjunction | [GENERICS_SYNTAX.md](../../what/syntax/GENERICS_SYNTAX.md) | EDR-086 | Resolved | EDR-086 (accepted) |
+| Generator expression `gen(...)` | [GENERATOR_EXPRESSION_SYNTAX.md](../../what/syntax/GENERATOR_EXPRESSION_SYNTAX.md) | EDR-092 | Resolved | EDR-092 (accepted) |
 | Collection literals `[1,2,3]`, `{"a":1}`, `{1,2,3}` | EDR-041 (concept) | EDR-041 | Resolved (record in `what/syntax/` pending Phase 5) | EDR-041 (accepted) |
 | No significant whitespace | — | EDR-076 (rejected) | Rejected (binding negative) | EDR-076 (rejected) |

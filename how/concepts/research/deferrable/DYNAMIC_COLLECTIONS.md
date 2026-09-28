@@ -24,10 +24,10 @@ A related problem: **should homogeneity be enforced at compile time (generic col
 
 ## Principles
 
-1. **Dynamic by default for general-purpose use** — The primary ordered collection (`List[T]`) is dynamically growable. Fixed-size collections (`Array[T, N]`) are available for performance-sensitive or ABI-stable contexts.
-2. **Type-safe by default** — Collections are homogeneous by default (`List[Int]`, `Array[String, 5]`). Heterogeneous collections are available through explicit union types (`List[Int | String]`) or the `Any` type.
-3. **Value semantics for fixed collections** — `Array[T, N]` has value semantics: copying produces an independent array. `List[T]` has reference semantics: copying shares the underlying data (use `.copy()` for an independent clone).
-4. **Seamless interop** — `List[T]` and `Array[T, N]` share the same iteration and indexing protocols. Code that works on one works on the other (structural typing).
+1. **Dynamic by default for general-purpose use** — The primary ordered collection (`List<T>`) is dynamically growable. Fixed-size collections (`Array<T, N>`) are available for performance-sensitive or ABI-stable contexts.
+2. **Type-safe by default** — Collections are homogeneous by default (`List<Int>`, `Array[String, 5]`). Heterogeneous collections are available through explicit union types (`List<Int | String>`) or the `Any` type.
+3. **Value semantics for fixed collections** — `Array<T, N>` has value semantics: copying produces an independent array. `List<T>` has reference semantics: copying shares the underlying data (use `.copy()` for an independent clone).
+4. **Seamless interop** — `List<T>` and `Array<T, N>` share the same iteration and indexing protocols. Code that works on one works on the other (structural typing).
 5. **No primitive array syntax** — Arrays are not a special syntactic form. They are library types with compiler support for literals.
 
 ## Policy Footprint
@@ -42,11 +42,11 @@ A related problem: **should homogeneity be enforced at compile time (generic col
 
 ## Model (What)
 
-Two primary ordered collection types: `List[T]` (dynamic, growable) and `Array[T, N]` (fixed-size, value semantics). Both share the same iterator and index protocols. Homogeneous by default; heterogeneous via union types.
+Two primary ordered collection types: `List<T>` (dynamic, growable) and `Array<T, N>` (fixed-size, value semantics). Both share the same iterator and index protocols. Homogeneous by default; heterogeneous via union types.
 
 ```
 # List — dynamic, growable, reference semantics
-fruits: List[String] = ["apple", "banana", "cherry"]
+fruits: List<String> = ["apple", "banana", "cherry"]
 fruits.push("date")                    # grows dynamically
 first = fruits[0]                      # indexed access
 
@@ -56,14 +56,14 @@ coordinates: Array[Int, 3] = [10, 20, 30]
 cloned = coordinates                   # value copy — independent
 
 # Homogeneous by default — type-safe
-ints: List[Int] = [1, 2, 3]
+ints: List<Int> = [1, 2, 3]
 # ints.push("hello")                   ← ERROR: expected Int
 
 # Heterogeneous via union types
-mixed: List[Int | String] = [1, "hello", 42]
+mixed: List<Int | String> = [1, "hello", 42]
 
 # Common protocol — both support iteration and indexing
-fun sum(values: Iterable[Int]) -> Int:
+fun sum(values: Iterable<Int>) -> Int:
     total = 0
     for v in values:
         total += v
@@ -74,26 +74,26 @@ print(sum(Array[Int, 3]([4, 5, 6])))  # Array — OK (shared Iterable protocol)
 ```
 
 Key features:
-- **`List[T]`** — growable, reference semantics. Backed by a dynamic array (amortized O(1) append).
-- **`Array[T, N]`** — fixed-size, value semantics. Stack-allocated for small N (configurable threshold), heap-allocated otherwise.
-- **`Iterable[T]`** — shared trait for iteration. Both `List[T]` and `Array[T, N]` implement it.
-- **Literal syntax** — `[value, ...]` produces a `List` by default. Array literals use `Array[T, N]([value, ...])`.
+- **`List<T>`** — growable, reference semantics. Backed by a dynamic array (amortized O(1) append).
+- **`Array<T, N>`** — fixed-size, value semantics. Stack-allocated for small N (configurable threshold), heap-allocated otherwise.
+- **`Iterable<T>`** — shared trait for iteration. Both `List<T>` and `Array<T, N>` implement it.
+- **Literal syntax** — `[value, ...]` produces a `List` by default. Array literals use `Array<T, N>([value, ...])`.
 - **Homogeneous by default** — the type checker enforces that all literal elements have the same type (or a common supertype).
 
 ### Comparison with Java and Python
 
 | Aspect | Java | Python | Orthon (proposed) |
 |---|---|---|---|
-| Primary collection | `ArrayList<T>` | `list` | `List[T]` |
-| Fixed array | `T[]` (special syntax) | `array.array` | `Array[T, N]` (library type) |
+| Primary collection | `ArrayList<T>` | `list` | `List<T>` |
+| Fixed array | `T[]` (special syntax) | `array.array` | `Array<T, N>` (library type) |
 | Heterogeneous | Not allowed (generic) | Always allowed | Via union types |
-| Growable | `ArrayList` only | All lists | `List[T]` |
-| Value semantics | No | No (reference) | `Array[T, N]` only |
+| Growable | `ArrayList` only | All lists | `List<T>` |
+| Value semantics | No | No (reference) | `Array<T, N>` only |
 | Literal syntax | `{1, 2, 3}` (not for arrays) | `[1, 2, 3]` | `[1, 2, 3]` for List |
 
 ## Default Strategy
 
-`List[T]` is the default collection type. Array literals produce a `List`. Fixed-size `Array[T, N]` is available explicitly. Type inference infers the element type from literal elements; if elements have different types, the inferred type is a union.
+`List<T>` is the default collection type. Array literals produce a `List`. Fixed-size `Array<T, N>` is available explicitly. Type inference infers the element type from literal elements; if elements have different types, the inferred type is a union.
 
 ## Alternative Strategies
 
@@ -106,11 +106,11 @@ Key features:
 
 ## Open Questions
 
-1. Should `List[T]` have a syntax shorthand for fixed-capacity pre-allocation (e.g., `List[Int](capacity: 100)`)?
+1. Should `List<T>` have a syntax shorthand for fixed-capacity pre-allocation (e.g., `List<Int>(capacity: 100)`)?
 2. Should slices / views (non-owning references into a collection) be a separate type or part of `List` / `Array`?
-3. How does `Array[T, N]` interact with the Execution Program model — can N be a runtime value or must it be compile-time constant?
+3. How does `Array<T, N>` interact with the Execution Program model — can N be a runtime value or must it be compile-time constant?
 4. Should there be dedicated syntax for tuple-like fixed-size heterogeneous collections (e.g., `(Int, String, Bool)`)?
-5. How do dynamic collections interact with the ownership model — does `List[T]` own its elements or borrow them?
+5. How do dynamic collections interact with the ownership model — does `List<T>` own its elements or borrow them?
 
 ## Decision History
 

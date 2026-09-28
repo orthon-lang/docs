@@ -24,5 +24,5 @@ Arguments: $ARGUMENTS
 </context>
 
 <process>
-Follow /Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/help.md with $ARGUMENTS.
+Follow .claude/gsd-core/workflows/help.md with $ARGUMENTS.
 </process>

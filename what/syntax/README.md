@@ -32,3 +32,4 @@ syntax definitions live here, one file per accepted construct.
 - [INVOCATION_SYNTAX.md](INVOCATION_SYNTAX.md) — invocation context operators `<-` / `|>` (EDR-085).
 - [RANGE_SYNTAX.md](RANGE_SYNTAX.md) — range literal `1..N`, `range(a,b)`, `.step(n)` (EDR-083).
 - [GENERICS_SYNTAX.md](GENERICS_SYNTAX.md) — `<>` parameters, `as` bounds, `+` conjunction (EDR-086).
+- [GENERATOR_EXPRESSION_SYNTAX.md](GENERATOR_EXPRESSION_SYNTAX.md) — generator expression `gen(...)` (EDR-092).

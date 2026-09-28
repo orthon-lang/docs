@@ -203,7 +203,7 @@ the function body *is* the handler, called once per message.
 ```
 act func handler(msg: Message) -> Response
     // persistent state
-    let seen: Mutable(Set[String]) = Set::new()
+    let seen: Mutable(Set<String>) = Set::new()
 
     seen.insert(msg.id)
     process(msg, seen)

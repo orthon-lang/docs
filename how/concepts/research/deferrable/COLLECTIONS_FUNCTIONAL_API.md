@@ -53,7 +53,7 @@ The core problem: **should Orthon have built-in functional operations on collect
 
 ## Implications for Orthon
 
-1. **Functional operations as extension functions on collection types** — `map`, `filter`, `reduce`, `flatMap`, `fold`, `zip`, `partition`, `any`, `all`, `none` are extension functions on `Collection[T]` (see `EXTENSION_FUNCTIONS.md`):
+1. **Functional operations as extension functions on collection types** — `map`, `filter`, `reduce`, `flatMap`, `fold`, `zip`, `partition`, `any`, `all`, `none` are extension functions on `Collection<T>` (see `EXTENSION_FUNCTIONS.md`):
 
    ```
    result = list

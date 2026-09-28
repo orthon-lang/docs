@@ -22,13 +22,13 @@ Consider a proxy that forwards all method calls to an inner object:
 type Proxy
     inner: Service
 
-    fn do_work(self, x: Int) -> Result[String, Error]
+    fun do_work(self, x: Int) -> Result<String, Error>
         return self.inner.do_work(x)
 
-    fn get_status(self) -> Status
+    fun get_status(self) -> Status
         return self.inner.get_status()
 
-    fn reset(self) -> Result[None, Error]
+    fun reset(self) -> Result<None, Error>
         return self.inner.reset()
 
     // ... 50 more forwarding methods — pure boilerplate
@@ -251,7 +251,7 @@ Example of a hypothetical trait-bounded form:
 type Proxy(inner: Service) delegates Service
     // Compiler generates forwarding methods for all Service methods
     // unless explicitly overridden
-    fn get_status(self) -> Status
+    fun get_status(self) -> Status
         log("get_status called")
         return self.inner.get_status()  // override with logging
 ```

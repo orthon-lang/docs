@@ -109,7 +109,7 @@ The Sandbox is the execution environment for the LLM Toolchain's **verification 
 
 ```orthon
 # Toolchain internal flow:
-let generated = llm.generate("fn sort(list) ...")
+let generated = llm.generate("fun sort(list) ...")
 let sandbox = Sandbox.new(resources: {cpu: "200ms", mem: "5MB"})
 
 let test_result = sandbox.run(|ctx|

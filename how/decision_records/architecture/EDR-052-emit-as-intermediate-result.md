@@ -27,7 +27,7 @@ The question: **does this add new semantics beyond LAZY_SEQUENCE_GENERATORS (EDR
 
 Analysis: EDR-021 defines `emit` as the production side of the pull-based iterator protocol — values are produced lazily on demand via `next()`. The "intermediate result" model (function publishes partial results and returns a final value) is semantically equivalent: a generator that produces intermediate values via `emit` and terminates with a final value via `return`.
 
-However, the conceptual framing is important: a function with `emit` returns `Iterator[T]` per EDR-021. The "intermediate result" framing emphasises that:
+However, the conceptual framing is important: a function with `emit` returns `Iterator<T>` per EDR-021. The "intermediate result" framing emphasises that:
 1. A function may have both intermediate (`emit`) and final (`return`) results.
 2. The function is not "a generator" — it's "a computation with incremental output."
 3. The caller can consume intermediate results while the computation continues (if the computation drives itself rather than waiting for `next()`).
@@ -63,17 +63,17 @@ let summary = results.final()           # gets the final return value
 
 **Key semantic specification:**
 
-A function that uses `emit` returns `Iterator[T]` where `T` is the intermediate value type. The function's final `return` value is accessible via a `.final()` method on the iterator. If the function does not use `emit`, the return value is the normal function result (no iterator wrapping).
+A function that uses `emit` returns `Iterator<T>` where `T` is the intermediate value type. The function's final `return` value is accessible via a `.final()` method on the iterator. If the function does not use `emit`, the return value is the normal function result (no iterator wrapping).
 
 ```orthon
 # Equivalent formulations:
-fun parse(file) -> Iterator[ParsedLine]
+fun parse(file) -> Iterator<ParsedLine>
     for line in file:
         emit parseLine(line)
     return statistics     # final value accessible via .final()
 
 # Same semantics, alternative form using emit + return:
-fun parse(file) -> Iterator[ParsedLine]
+fun parse(file) -> Iterator<ParsedLine>
     for line in file:
         emit parseLine(line)
     return statistics
@@ -95,13 +95,13 @@ fun parse(file) -> Iterator[ParsedLine]
 **Negative:**
 - The distinction between "lazy sequence" and "intermediate result" is conceptual — the compiler treats both the same way.
 - `.final()` requires storing the return value in the state machine (already part of EDR-021's state machine).
-- Functions that emit intermediate results must return `Iterator[T]` even if the consumer only cares about the final result.
+- Functions that emit intermediate results must return `Iterator<T>` even if the consumer only cares about the final result.
 
 ---
 
 ### Compliance
 
-1. Any function using `emit` must return `Iterator[T]` (per EDR-021).
+1. Any function using `emit` must return `Iterator<T>` (per EDR-021).
 2. The final `return` value of an emitting function must be accessible via `.final()` on the iterator.
 3. A function using `emit` with a final `return` must store the return value in the state machine for later retrieval.
 4. The intermediate result model does not introduce new syntax or keywords — only specification language.

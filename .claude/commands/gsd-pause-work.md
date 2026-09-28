@@ -31,7 +31,7 @@ State and phase progress are gathered in-workflow with targeted reads.
 
 <process>
 If `--report` is in $ARGUMENTS:
-Read and execute `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/session-report.md` end-to-end.
+Read and execute `.claude/gsd-core/workflows/session-report.md` end-to-end.
 
 **Follow the pause-work workflow**.
 

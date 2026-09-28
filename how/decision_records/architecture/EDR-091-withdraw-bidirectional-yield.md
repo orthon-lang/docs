@@ -38,7 +38,7 @@ state machine.
 ### Decision
 
 1. **Withdraw** decision items 1 and 5 of EDR-050: bidirectional `yield` and
-   the `BidirectionalGenerator[T, U]` trait.
+   the `BidirectionalGenerator<T, U>` trait.
 2. **Withdraw the `yield` and `yield from` keywords entirely (S2).** The
    one-way `yield` ≡ `emit` alias is removed — there is no second production
    keyword. The `yield(value)` free-function alias in LAZY_SEQUENCE_GENERATORS

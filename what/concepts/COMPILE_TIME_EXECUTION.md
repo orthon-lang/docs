@@ -213,7 +213,7 @@ The LLM generability constraint is the primary reason Orthon's comptime model di
    them: `where T as Hash + Eq` for types vs `requires` for values. Call
    sites use type inference (`max(1, 2)`) or turbofish (`max::<Int>(1, 2)`),
    not `using T` — `using` is taken by resource (`using x = expr:`) and
-   context (`(using ord: Ord[A])`) clauses.
+   context (`(using ord: Ord<A>)`) clauses.
 9. **Comptime as invocation-in-context.** EDR-085 unifies deferred execution
    under context constructors (`delegate`, `defer`, `spawn`, `fork`) with
    submission operators (`<-`, `|>`) and materialisation (`take`, `await`,

@@ -46,7 +46,7 @@ The core problem: **a function should be able to publish intermediate results du
 A function that uses both `emit` and `return`:
 
 ```orthon
-fun process_dataset(data: Dataset) -> Iterator[BatchResult]
+fun process_dataset(data: Dataset) -> Iterator<BatchResult>
     for batch in data.batches():
         let result = analyse(batch)
         emit result                     # publish intermediate result
@@ -61,10 +61,10 @@ let summary = results.final()           # gets the final return value
 
 ### Semantic Model
 
-A function that uses `emit` returns `Iterator[T]` where `T` is the intermediate value type. The function's final `return` value is accessible via `.final()` on the iterator:
+A function that uses `emit` returns `Iterator<T>` where `T` is the intermediate value type. The function's final `return` value is accessible via `.final()` on the iterator:
 
 ```orthon
-fun parse(file: File) -> Iterator[ParsedLine]
+fun parse(file: File) -> Iterator<ParsedLine>
     for line in file:
         emit parseLine(line)
     return total_lines(file)
@@ -79,13 +79,13 @@ let count = it.final()      # total_lines result
 
 ```orthon
 # Form 1: emit + return (canonical)
-fun parse(file) -> Iterator[ParsedLine]
+fun parse(file) -> Iterator<ParsedLine>
     for line in file:
         emit parseLine(line)
     return statistics
 
 # Form 2: emit only, return via .final()
-fun parse(file) -> Iterator[ParsedLine]
+fun parse(file) -> Iterator<ParsedLine>
     for line in file:
         emit parseLine(line)
     emit statistics           # final value as last emit
@@ -93,7 +93,7 @@ fun parse(file) -> Iterator[ParsedLine]
 
 ### Behavioural Specification
 
-1. If a function uses `emit`, it returns `Iterator[T]`. The type parameter `T` is inferred from `emit` expressions.
+1. If a function uses `emit`, it returns `Iterator<T>`. The type parameter `T` is inferred from `emit` expressions.
 2. If the function has a final `return value`, the value is stored in the iterator's state and accessible via `.final()`.
 3. If the function does NOT use `emit`, the return value is the normal function result (no iterator wrapping).
 4. Without a final `return`, the iterator is exhausted when the function body completes (no `.final()` value).

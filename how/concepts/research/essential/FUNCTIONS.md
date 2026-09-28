@@ -50,7 +50,7 @@ Functions are first-class values with a single unified call syntax.
 
 ```orthon
 # Named function
-fn add(a: Int, b: Int) -> Int
+fun add(a: Int, b: Int) -> Int
     a + b
 
 # Anonymous closure assigned to variable

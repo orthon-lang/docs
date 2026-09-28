@@ -51,7 +51,7 @@ The core problem: **should Orthon have built-in delegation as a language constru
 1. **Class delegation as language construct** — A type can delegate an interface implementation to a contained field:
 
    ```
-   class LoggingList[T](inner: List[T]) : List[T] by inner
+   class LoggingList<T>(inner: List<T>) : List<T> by inner
    ```
 
    The compiler generates forwarding methods for all `List` methods to `inner`. Selective override is still possible by defining a specific method explicitly.
@@ -67,10 +67,10 @@ The core problem: **should Orthon have built-in delegation as a language constru
 3. **Delegate protocol** — Any type implementing a standard `Get` (and optionally `Set`) protocol can be a property delegate. This is a library interface, not a compiler-intrinsic:
 
    ```
-   trait Get[T]:
+   trait Get<T>:
        fun get(thisRef: Any, prop: PropertyMetadata) -> T
 
-   trait Set[T]:
+   trait Set<T>:
        fun set(thisRef: Any, prop: PropertyMetadata, value: T)
    ```
 

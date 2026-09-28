@@ -82,7 +82,7 @@ carry a compile-time initialization guarantee (no `null`, no uninitialized state
 
 ```orthon
 class UserService require Database db, Logger log:
-    fun find_user(id: Int) -> Option[User]
+    fun find_user(id: Int) -> Option<User>
         // db and log are available here without redeclaration
 
 let prod_svc = UserService(using prod_db, prod_log)

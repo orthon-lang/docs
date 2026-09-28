@@ -90,7 +90,7 @@ let map = Map<String, Int>.new(order: Unordered)
 Time-dependent operations receive their time source explicitly:
 
 ```orthon
-fn log_timestamp(ctx: Context)
+fun log_timestamp(ctx: Context)
     let now = ctx.clock.now()    # explicit: which clock?
     print("[{now}] event logged")
 ```
@@ -98,7 +98,7 @@ fn log_timestamp(ctx: Context)
 Or via a default parameter that can be overridden:
 
 ```orthon
-fn now(clock: Clock = Clock.system) -> DateTime
+fun now(clock: Clock = Clock.system) -> DateTime
     clock.now()
 
 # In tests:

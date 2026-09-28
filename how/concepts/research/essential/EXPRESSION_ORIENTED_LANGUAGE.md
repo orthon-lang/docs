@@ -80,7 +80,7 @@ Expression orientation has cascading effects: it eliminates mutable temporary va
 ## Open Questions
 
 1. Should `return` from a function be an expression (`return value` produces type `Never` / bottom) or reserved as a statement?
-2. How does expression orientation interact with imperative-style loops? Is `for` an expression (producing `Unit` or `List[T]`)?
+2. How does expression orientation interact with imperative-style loops? Is `for` an expression (producing `Unit` or `List<T>`)?
 3. Should assignment (`x = value`) be an expression producing the assigned value (enabling chaining) or a statement only?
 4. How does the compiler report type mismatches in expression-oriented branches — errors or warnings?
 
