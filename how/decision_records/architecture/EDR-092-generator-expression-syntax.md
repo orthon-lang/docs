@@ -12,6 +12,8 @@
 
 **Partially supersedes:** [EDR-050](./EDR-050-generators.md) (the parenthesised generator-expression syntax lock) and [EDR-091](./EDR-091-withdraw-bidirectional-yield.md) (decision item 3 — the prior rejection of the `gen(...)` call form).
 
+**Amended by:** [EDR-093](./EDR-093-generator-expression-single-clause.md) (decision item 4 — the nested / multi-clause scope is withdrawn from v0.1; generator expressions are single-clause only).
+
 ---
 
 ### Context
@@ -133,6 +135,8 @@ form is fixed — the emit-only semantics beneath it are unchanged.
 | The bare parenthesised form `(expr for x in src if cond)` without a `gen` marker | No explicit production marker: indistinguishable at its opening delimiter from a parenthesised expression or tuple, and weakly generable. This is the portion of EDR-050 / EDR-091 (item 3) being reversed. |
 | `gen` as a stdlib function | Its parentheses would then contain an argument expression, not comprehension clause-grammar; a `for`-clause is not a value, so `gen` cannot be an ordinary callable. Would also make `gen` shadowable. |
 | `gen` as an AST macro (EDR-029) | Macros expand within the existing grammar over a typed AST; the comprehension clause form is new surface grammar the parser must recognise directly, which is a language production, not a macro. |
+| Source-first, lambda-style ordering `for x in src if cond -> expr` (binding first, result last) | The `gen` marker already supplies recognisability, so this only reorders the clauses. It overloads `->`, which already denotes the function return type (`-> T`) and the `return value ->` emit form (one symbol → one meaning), and the data-flow reading it aims for is already provided by the combinator chain (`src.filter(...).map(...)`). Result-first matches set-builder notation and the dominant comprehension corpus (LLM generability). |
+| Infix `gen` marker `expr gen x in src if cond` (unwrapped; `gen` as a self-delimiting operator, by analogy with range `..`) | A comprehension is not a binary operation: its left operand is an arbitrary expression and its right side an open-ended clause tail reusing `in` / `if`, so an unwrapped infix `gen` would need global operator precedence plus context-dependent keyword scoping, and multi-clause flattening becomes ambiguous. The wrapping `gen(...)` supplies the bounded scope that keeps `for` / `in` / `if` unambiguous. Range earns bare-literal status only because `..` is a true binary operator over tight operands. |
 
 ### Gate Validation
 

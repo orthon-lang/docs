@@ -1,6 +1,6 @@
 # Generators — Generator Expressions over `emit`
 
-> **✅ ACCEPTED — [EDR-050](../../how/decision_records/architecture/EDR-050-generators.md), [EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md), [EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md).**
+> **✅ ACCEPTED — [EDR-050](../../how/decision_records/architecture/EDR-050-generators.md), [EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md), [EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md), [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md).**
 >
 > **Status:** Accepted 2026-07-27. **Amended 2026-09-06** — the
 > bidirectional form is withdrawn from the language model (S2): the
@@ -18,6 +18,16 @@
 > lambdas / closures, closing LAZY_SEQUENCE_GENERATORS Open Question 2
 > negatively. Human Sign-off: Reviewed-by: mniedre · Date: 2026-09-28 ·
 > Verdict: LOCKED.
+>
+> **Amended 2026-09-28 ([EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md)).**
+> Generator expressions are narrowed to **single-clause** — one `for` clause plus
+> zero or more `if` filters. Multiple `for` clauses in one `gen`
+> (nested / flatten / cartesian) are withdrawn from v0.1 and deferred to v1.x;
+> flatten / cartesian route to the `.flatten()` / `.flat_map(...)` iterator
+> combinators instead. A nested-source `gen(x for x in gen(...))` stays allowed
+> (single-clause with a generator source). Generators remain emit-only and the
+> reserved `gen(` marker is unchanged. Human Sign-off: Reviewed-by: mniedre ·
+> Date: 2026-09-28 · Verdict: LOCKED.
 >
 > **See also:** [`LAZY_SEQUENCE_GENERATORS.md`](LAZY_SEQUENCE_GENERATORS.md),
 > [`ITERATOR_PROTOCOL.md`](ITERATOR_PROTOCOL.md),
@@ -78,15 +88,17 @@ The generator-expression surface form is `gen(...)` — a **reserved
 comprehension production** (per EDR-092). `gen` is grammar, not a stdlib
 function and not a macro: the parser recognises `gen(` as the opening of a
 comprehension, and its contents are comprehension clause-grammar
-(`expr for x in src if cond`), never an argument expression. There are two
-canonical shapes — the single form and the nested / flattening form:
+(`expr for x in src if cond`), never an argument expression. A generator
+expression is **single-clause** (per [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md)):
+exactly one `for` clause plus zero or more `if` filters. Its source may itself
+be a `gen(...)`, which is still single-clause with a generator source:
 
 ```orthon
 # Single form
 let evens_from_sub = gen(v for v in sub)
 
-# Nested / flattening form (multi-clause)
-let flattened = gen(v for s in subs for v in s)
+# Nested-source form (single-clause, generator source)
+let relayed = gen(x for x in gen(...))
 
 # Basic generator expression
 let squares = gen(x * x for x in 1..10)
@@ -100,6 +112,14 @@ let names = gen(user.name for user in users if user.active)
 # With map equivalent
 let doubled = gen(x * 2 for x in items)
 ```
+
+Multiple `for` clauses in one `gen` (nested / flatten / cartesian) are
+withdrawn from v0.1 and deferred to v1.x. Flatten and cartesian route to
+iterator combinators instead: pure flatten uses `.flatten()`, and
+map-then-flatten (a dependent inner iterator or a cartesian product) uses
+`.flat_map(...)` — both defined in
+[`ITERATOR_PROTOCOL.md`](ITERATOR_PROTOCOL.md). `.flatten()` is equivalent to
+`.flat_map(|x| x)`.
 
 Generator expressions are lazy by default — they produce an `Iterator<T>` without materialising. As pure sugar they desugar to stdlib iterator combinators (`.filter` / `.map` / `.flat_map`) or, equivalently, to an anonymous `emit`-based generator function — introducing no new core primitive:
 
@@ -139,9 +159,12 @@ sources, and `.take(n)` short-circuits the whole pull chain after `n` values —
 no delegate value beyond the `n`-th is ever produced.
 
 **Why there is no `yield from` keyword.** The model is emit-only (EDR-021 /
-EDR-091): there is nothing to "forward". Delegation falls out of ordinary
-iteration + `emit` (equivalently, a nested `gen(...)` clause), so a dedicated
-delegation keyword would add surface with no semantic content.
+EDR-091): there is nothing to "forward". Delegation of a single sub-generator
+falls out of ordinary iteration + `emit` (equivalently, the single-clause
+`gen(v for v in sub)`), so a dedicated delegation keyword would add surface with
+no semantic content. Flattening *many* sub-generators is not a `gen` form at
+all — it routes to `.flatten()` / `.flat_map(...)` (per
+[EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md)).
 
 ### Relationship to `emit` (EDR-021)
 
@@ -192,12 +215,14 @@ ordinary iteration plus `emit`.
 - **2026-09-06** — **Amended (S2):** bidirectional `yield`, the `yield` / `yield from` keywords, and `BidirectionalGenerator<T, U>` are withdrawn. Generators are emit-only; delegation is composition. The bidirectional form is demoted to the [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis ([EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md)).
 - **2026-09-06** — **Generator-expression syntax locked:** the parenthesised form `(expr for x in src if cond)` is the single syntax; a `gen(...)` call form is rejected as a redundant synonym. The named escape hatches remain the full `fun` with `emit` and combinator chains. *(superseded by EDR-092, 2026-09-28)*
 - **2026-09-28** — **Adopted `gen(...)` as the single generator-expression surface form** ([EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md)): `gen` is a reserved comprehension production (not a stdlib function, not a macro), pure sugar over `emit` / stdlib combinators with no new core primitive, scope = comprehension only incl. nested `gen(v for s in subs for v in s)`. The bare parenthesised form is withdrawn; `gen(sub)` (wrapping a bare value) is rejected; `emit` inside lambdas is rejected — closing LAZY_SEQUENCE_GENERATORS Open Question 2 negatively. Generators remain emit-only.
+- **2026-09-28** — **Amended by [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md):** generator expressions narrowed to single-clause (one `for` + optional `if`s); multi-clause `gen(...)` withdrawn from v0.1 and deferred to v1.x; flatten/cartesian route to `.flatten()` / `.flat_map()`; nested-source `gen(x for x in gen(...))` stays allowed. Generators remain emit-only.
 
 ---
 
 Governing records: [EDR-050](../../how/decision_records/architecture/EDR-050-generators.md),
 [EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md),
-[EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md).
+[EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md),
+[EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md).
 
 - [x] `what/CORE_CONCEPTS.md`
 - [x] `what/GLOSSARY.md`

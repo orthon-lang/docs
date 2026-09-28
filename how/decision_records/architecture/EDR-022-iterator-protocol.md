@@ -130,3 +130,8 @@ defined by the RANGE concept as inclusive-inclusive `1..N`. The spellings `0..10
 combinator chains directly. ITERATOR_PROTOCOL remains authoritative for the
 `Iterator<T>`/`IntoIterator<T>` traits, `for` desugaring, and StdLib combinators.
 `.enumerate()` base is pinned to 1 per EDR-082 (`enumerate(items) ≡ zip(1..len(items), items)`).
+
+**2026-09-28 — Amended by [EDR-093](./EDR-093-generator-expression-single-clause.md): adds the `.flatten()` combinator.**
+EDR-093 introduces `.flatten()` (one-level flatten, `Iterator<Iterator<T>> -> Iterator<T>`) as a StdLib
+combinator on `Iterator<T>`, alongside the unchanged `.flat_map`. This is an additive pointer only; the
+decision items above are not rewritten.

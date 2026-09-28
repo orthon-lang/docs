@@ -95,6 +95,7 @@
 | EDR-090 | Architecture | [Data-Oriented Programming — Data Model Lineage and Two Core Philosophy Principles](architecture/EDR-090-data-oriented-programming.md) | Accepted | 2026-08-24 | — |
 | EDR-091 | Architecture | [Withdraw Bidirectional Yield — Emit-Only Generators](architecture/EDR-091-withdraw-bidirectional-yield.md) | Accepted | 2026-09-06 | Partially supersedes EDR-050 |
 | EDR-092 | Architecture | [Generator Expression Syntax — gen(...) Reserved Production](architecture/EDR-092-generator-expression-syntax.md) | Accepted | 2026-09-28 | Partially supersedes EDR-050, EDR-091 |
+| EDR-093 | Architecture | [Generator Expression — Single-Clause Only](architecture/EDR-093-generator-expression-single-clause.md) | Accepted | 2026-09-28 | Amends EDR-092 |
 
 > **Note:** EDR-008, EDR-009, EDR-039 through EDR-046 are intentionally skipped. TDR-007 and TDR-008
 > are superseded by EDR-001, not migrated.
@@ -199,6 +200,7 @@
 | EDR-090 | Architecture | [Data-Oriented Programming — Data Model Lineage and Two Core Philosophy Principles](architecture/EDR-090-data-oriented-programming.md) | Accepted | 2026-08-24 | — |
 | EDR-091 | Architecture | [Withdraw Bidirectional Yield — Emit-Only Generators](architecture/EDR-091-withdraw-bidirectional-yield.md) | Accepted | 2026-09-06 | Partially supersedes EDR-050 |
 | EDR-092 | Architecture | [Generator Expression Syntax — gen(...) Reserved Production](architecture/EDR-092-generator-expression-syntax.md) | Accepted | 2026-09-28 | Partially supersedes EDR-050, EDR-091 |
+| EDR-093 | Architecture | [Generator Expression — Single-Clause Only](architecture/EDR-093-generator-expression-single-clause.md) | Accepted | 2026-09-28 | Amends EDR-092 |
 
 ### Process
 | ID | Title | Status | Date |
@@ -228,7 +230,7 @@
 
 | Status | Count |
 |--------|-------|
-| Accepted | 77 |
+| Accepted | 78 |
 | **Rejected** | **4** |
 | Proposed | 0 |
 | Deprecated | 0 |
@@ -236,7 +238,7 @@
 
 ---
 
-*Last updated: 2026-09-28* (Generator Expression Syntax added — the gen(...) reserved comprehension production, Architecture; partially supersedes EDR-050 (syntax lock) and EDR-091 (item 3 — the prior gen(...) rejection). Prior: 2026-09-06 EDR-091 added — Withdraw Bidirectional Yield — Emit-Only Generators, Architecture; partially supersedes EDR-050; bidirectional form demoted to hypothesis COROUTINE_ON_YIELD.md. Prior: 2026-08-24 EDR-090 — Data-Oriented Programming — Data Model Lineage and Two Core Philosophy Principles, Architecture; EDR-089 and EDR-090 backfilled into the By Category table. Prior: EDR-089 — System Error Taxonomy, Architecture. Prior: EDR-088 added — Concept Design Review — Alternatives Phase, Process; procedure 7→8 steps. Prior: EDR-087 — Syntax Acceptance Process, Process; establishes `how/syntax/`, `how/SYNTAX_PIPELINE.md`, `what/syntax/` and the `SYNTAX.md` hub. Prior: EDR-086 — Generics Syntax Revision, Architecture; supersedes EDR-024 syntax aspects. Prior: EDR-085 — Execution Context Invocation, Architecture; supersedes EDR-033/EDR-047, adds 10th primitive; C-003 amendment applied — PRIMITIVE_BLOCKS 10 primitives, EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES/DECLARATIVE_CONSTRUCTS updated, DELEGATE rewritten, SCOPED_RESOURCE_LIFECYCLE superseded. Prior: EDR-083 Range + EDR-084 Slice — Range/Slice package. Prior: EDR-082 — 1-Based Indexing. By Category table backfilled with EDR-079 through EDR-081. See also: EDR-075 through EDR-078 rejected, EDR-063 through EDR-074 prior wave)
+*Last updated: 2026-09-28* (Generator Expression Single-Clause Amendment added — EDR-093, Architecture; amends EDR-092 item 4, withdrawing multi-clause `gen(...)` from v0.1, deferring it to v1.x, and introducing the `.flatten()` StdLib combinator (pure flatten) while routing dependent / cartesian to the unchanged `.flat_map()`. Prior: Generator Expression Syntax added — the gen(...) reserved comprehension production, Architecture; partially supersedes EDR-050 (syntax lock) and EDR-091 (item 3 — the prior gen(...) rejection). Prior: 2026-09-06 EDR-091 added — Withdraw Bidirectional Yield — Emit-Only Generators, Architecture; partially supersedes EDR-050; bidirectional form demoted to hypothesis COROUTINE_ON_YIELD.md. Prior: 2026-08-24 EDR-090 — Data-Oriented Programming — Data Model Lineage and Two Core Philosophy Principles, Architecture; EDR-089 and EDR-090 backfilled into the By Category table. Prior: EDR-089 — System Error Taxonomy, Architecture. Prior: EDR-088 added — Concept Design Review — Alternatives Phase, Process; procedure 7→8 steps. Prior: EDR-087 — Syntax Acceptance Process, Process; establishes `how/syntax/`, `how/SYNTAX_PIPELINE.md`, `what/syntax/` and the `SYNTAX.md` hub. Prior: EDR-086 — Generics Syntax Revision, Architecture; supersedes EDR-024 syntax aspects. Prior: EDR-085 — Execution Context Invocation, Architecture; supersedes EDR-033/EDR-047, adds 10th primitive; C-003 amendment applied — PRIMITIVE_BLOCKS 10 primitives, EXECUTION_MODEL/SYNTAX/GLOSSARY/CORE_CONCEPTS/DESIGN_PRINCIPLES/DECLARATIVE_CONSTRUCTS updated, DELEGATE rewritten, SCOPED_RESOURCE_LIFECYCLE superseded. Prior: EDR-083 Range + EDR-084 Slice — Range/Slice package. Prior: EDR-082 — 1-Based Indexing. By Category table backfilled with EDR-079 through EDR-081. See also: EDR-075 through EDR-078 rejected, EDR-063 through EDR-074 prior wave)
 
 *Editorial notes (no decision change):*
 
