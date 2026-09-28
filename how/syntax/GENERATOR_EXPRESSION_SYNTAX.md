@@ -124,7 +124,7 @@ One-line verdict on the syntax-relevant items from
 [`_language-design.md`](../gates/_language-design.md):
 
 - **Named equivalence** — **PASS.** The block spelling `fun … emit` is the named equivalent of the `gen(...)` expression form; the two are interchangeable (EDR-092 item 6).
-- **All canonical forms documented** — **PASS.** The single, filtered, single-delegate, and nested/flattening forms are all shown in the accepted record.
+- **All canonical forms documented** — **PASS.** The single, filtered, single-delegate, and nested-source (`gen(x for x in gen(...))`) forms are all shown in the accepted record. (The nested / flattening multi-clause form is **not** in the accepted record — it is deferred to v1.x per [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md); flatten / cartesian route to `.flatten()` / `.flat_map(...)`.)
 - **Explicitness** — **PASS.** The generator intent is syntactically visible at the opening `gen(` token.
 - **Orthogonality** — **PASS.** `gen(` has one context-independent meaning and composes freely (nested `gen(...)` clauses, combinator chains).
 - **LLM generability** — **PASS.** No ambiguity an LLM can misparse; the marker removes the tuple/parenthesised-expression confusion of the old form.
@@ -140,6 +140,26 @@ This sign-off is pre-existing and is **NOT** re-created here. Stage 6b is a
 non-automatable gate; agents / GSD flows must not self-certify it. This trail
 merely references the sign-off already given.
 
+## Amendment (EDR-093, 2026-09-28)
+
+[EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md)
+narrows the surface-form decision to **single-clause**: a `gen(...)` generator
+expression is one `for` clause plus zero or more `if` filters. Multi-clause
+`gen(...)` (multiple `for` clauses in one `gen`) is withdrawn from v0.1 and
+deferred to v1.x; pure flatten routes to the `.flatten()` iterator combinator and
+map-then-flatten (dependent inner / cartesian) to `.flat_map(...)` (both in
+[`ITERATOR_PROTOCOL.md`](../../what/concepts/ITERATOR_PROTOCOL.md)). A
+nested-source `gen(x for x in gen(...))` stays allowed (single-clause with a
+generator source).
+
+The **pipeline verdicts above are UNAFFECTED.** `gen(...)` is still pure sugar
+over the emit-only model (EDR-021 / EDR-091), and `gen(` still opens a (now
+single-clause) comprehension — so the Coupling & Overload "one symbol → one
+meaning" result and the Syntax-Principles / Syntax-Acceptance-Gate PASS verdicts
+all stand. This amendment only narrows the clause count; it does not re-decide
+the surface form. The historical pipeline run is retained as provenance of what
+was considered.
+
 ## Cross-References
 
 - [`README.md`](README.md) — syntax hypothesis inbox and decision queue (Resolved row).
@@ -147,6 +167,7 @@ merely references the sign-off already given.
 - [`what/SYNTAX.md`](../../what/SYNTAX.md) — hub.
 - [`what/concepts/GENERATORS.md`](../../what/concepts/GENERATORS.md) — full semantic specification.
 - [EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md) — the deciding record.
+- [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md) — single-clause amendment (multi-clause deferred to v1.x).
 - [`how/SYNTAX_PIPELINE.md`](../SYNTAX_PIPELINE.md) — the acceptance pipeline this run follows.
 - [`how/process/DECISION_PIPELINE.md`](../process/DECISION_PIPELINE.md) — the 10-question pre-filter.
 - [`how/gates/DECISION_VALIDATION.md`](../gates/DECISION_VALIDATION.md) — § Gate Selection ("Syntax change" row).

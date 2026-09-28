@@ -1,6 +1,6 @@
 # Parser
 
-> **Last updated:** 2026-07-20
+> **Last updated:** 2026-09-28
 
 ## Overview
 
@@ -50,21 +50,26 @@ syntax appears; open hypotheses stay in [`how/syntax/`](../syntax/README.md).
 ### Generator expression
 
 Per [EDR-092](../decision_records/architecture/EDR-092-generator-expression-syntax.md),
+as amended by [EDR-093](../decision_records/architecture/EDR-093-generator-expression-single-clause.md),
 the generator-expression surface form is the reserved comprehension production
 `gen(...)` (accepted record:
 [`what/syntax/GENERATOR_EXPRESSION_SYNTAX.md`](../../what/syntax/GENERATOR_EXPRESSION_SYNTAX.md)):
 
 ```ebnf
-GeneratorExpr ::= "gen" "(" Expr ForClause ( ForClause | IfClause )* ")"
+GeneratorExpr ::= "gen" "(" Expr ForClause IfClause* ")"
 ForClause     ::= "for" Pattern "in" Expr
 IfClause      ::= "if" Expr
 ```
 
-This accepts the filtered form `gen(x for x in 1..100 if x % 2 == 0)` and the
-nested / flattening form `gen(v for s in subs for v in s)`. `gen` is a
-**reserved production keyword**: the parser recognises `gen(` as the opening of
-a comprehension, never as a call, so it cannot be an identifier, be shadowed,
-or be passed as a value (EDR-092).
+A generator expression is **single-clause**: exactly one `for` clause plus zero
+or more `if` filters, so this accepts the filtered form
+`gen(x for x in 1..100 if x % 2 == 0)`. Multi-clause (multiple `for` clauses in
+one `gen`): a future v1.x extension — see
+[EDR-093](../decision_records/architecture/EDR-093-generator-expression-single-clause.md);
+flatten / cartesian route to the `.flatten()` / `.flat_map(...)` iterator
+combinators instead. `gen` is a **reserved production keyword**: the parser
+recognises `gen(` as the opening of a comprehension, never as a call, so it
+cannot be an identifier, be shadowed, or be passed as a value (EDR-092).
 
 ## Relationships
 
