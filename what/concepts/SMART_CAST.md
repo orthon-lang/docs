@@ -9,7 +9,7 @@ Smart casting solves this: **the compiler tracks type-narrowing information thro
 ## Principles
 
 1. **Automatic type narrowing after type checks** — After `if value is String`, the compiler narrows the type of `value` to `String` within the true branch.
-2. **Null check narrowing** — After checking `value isnt None`, the compiler unwraps `Option[T]` to `T` in the relevant scope.
+2. **Null check narrowing** — After checking `value isnt None`, the compiler unwraps `Option<T>` to `T` in the relevant scope.
 3. **`when` branch narrowing** — Each branch of a `when` expression narrows the scrutinee's type for that branch (see PATTERN_MATCHING, EDR-025).
 4. **Immutability prerequisite** — Smart cast only applies to effectively-immutable variables (`val` or non-reassigned `let`). If the variable could change between the check and the use, the cast is unsafe.
 5. **No cast in compound expressions** — In `value is String && value.length > 0`, the smart cast applies to the second operand because short-circuit evaluation guarantees the check passed.

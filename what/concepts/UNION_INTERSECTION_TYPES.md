@@ -72,7 +72,7 @@ fun connect(host: String | IPAddress) -> Result<Connection, Error>
 ### Collection element types
 
 ```orthon
-let items: List[String | Int] = ["hello", 42, "world"]
+let items: List<String | Int> = ["hello", 42, "world"]
 ```
 
 ### Interaction with ADTs

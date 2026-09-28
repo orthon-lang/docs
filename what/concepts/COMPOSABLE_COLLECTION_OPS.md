@@ -30,7 +30,7 @@ Orthon eliminates index-based and accumulator-based loops as a primary pattern b
 
 ## Principles
 
-1. **Built on ITERATOR_PROTOCOL** — All composable collection operations are methods on `Iterator[T]`. They require no language-level support beyond what the iterator protocol provides.
+1. **Built on ITERATOR_PROTOCOL** — All composable collection operations are methods on `Iterator<T>`. They require no language-level support beyond what the iterator protocol provides.
 2. **Lazy by default** — Combinator chains produce lazy iterators. Materialisation is explicit (`.collect()`, `.to_list()`, `.to_set()`).
 3. **Declarative over imperative** — The programmer describes *what* to obtain, not *how* to iterate. Manual `for` loops remain available as escape hatches.
 4. **Type-safe** — All combinator operations are fully typed at compile time. No runtime type errors from incorrect transformations.
@@ -48,44 +48,44 @@ Orthon eliminates index-based and accumulator-based loops as a primary pattern b
 
 ### Core Combinators
 
-All combinators are methods on `Iterator[T]`:
+All combinators are methods on `Iterator<T>`:
 
 ```orthon
 # Transformation
-iterator@map(fn: Fun(T) -> U) -> Iterator[U]
-iterator@filter(fn: Fun(T) -> Bool) -> Iterator[T]
+iterator@map(fn: Fun(T) -> U) -> Iterator<U>
+iterator@filter(fn: Fun(T) -> Bool) -> Iterator<T>
 
 # Aggregation
 iterator@fold(initial: U, fn: Fun(U, T) -> U) -> U
-iterator@reduce(fn: Fun(T, T) -> T) -> Option[T]
+iterator@reduce(fn: Fun(T, T) -> T) -> Option<T>
 
 # Selection
-iterator@find(fn: Fun(T) -> Bool) -> Option[T]
+iterator@find(fn: Fun(T) -> Bool) -> Option<T>
 iterator@any(fn: Fun(T) -> Bool) -> Bool
 iterator@all(fn: Fun(T) -> Bool) -> Bool
-iterator@nth(n: Int) -> Option[T]
+iterator@nth(n: Int) -> Option<T>
 
 # Cardinality
 iterator@count() -> Int
-iterator@first() -> Option[T]
-iterator@last() -> Option[T]
+iterator@first() -> Option<T>
+iterator@last() -> Option<T>
 
 # Materialisation
-iterator@collect() -> Vec[T]
-iterator@to_list() -> List[T]
-iterator@to_set() -> Set[T]
-iterator@to_map(fn: Fun(T) -> (K, V)) -> Map[K, V]
+iterator@collect() -> Vec<T>
+iterator@to_list() -> List<T>
+iterator@to_set() -> Set<T>
+iterator@to_map(fn: Fun(T) -> (K, V)) -> Map<K, V>
 
 # Sub-iteration
-iterator@take(n: Int) -> Iterator[T]
-iterator@skip(n: Int) -> Iterator[T]
-iterator@take_while(fn: Fun(T) -> Bool) -> Iterator[T]
-iterator@skip_while(fn: Fun(T) -> Bool) -> Iterator[T]
+iterator@take(n: Int) -> Iterator<T>
+iterator@skip(n: Int) -> Iterator<T>
+iterator@take_while(fn: Fun(T) -> Bool) -> Iterator<T>
+iterator@skip_while(fn: Fun(T) -> Bool) -> Iterator<T>
 
 # Combination
-iterator@chain(other: Iterator[T]) -> Iterator[T]
-iterator@zip(other: Iterator[U]) -> Iterator[(T, U)]
-iterator@enumerate() -> Iterator[(Int, T)]
+iterator@chain(other: Iterator<T>) -> Iterator<T>
+iterator@zip(other: Iterator<U>) -> Iterator<(T, U)>
+iterator@enumerate() -> Iterator<(Int, T)>
 ```
 
 ### Usage Examples
@@ -113,16 +113,16 @@ let first_five = numbers
 
 ### Relationship to ITERATOR_PROTOCOL
 
-The composable collection operations are the **consumption-side combinator layer** on top of `Iterator[T]`. The iterator protocol provides the fundamental `next()` mechanism (one element at a time); combinators provide declarative transformations that compose over that mechanism.
+The composable collection operations are the **consumption-side combinator layer** on top of `Iterator<T>`. The iterator protocol provides the fundamental `next()` mechanism (one element at a time); combinators provide declarative transformations that compose over that mechanism.
 
 ```
-Generator/Collection → Iterator[T] → Combinators (map/filter/...) → Materialise
+Generator/Collection → Iterator<T> → Combinators (map/filter/...) → Materialise
        (production)    (protocol)        (transformation)           (consumption)
 ```
 
 ## Default Strategy
 
-All combinators are provided by the Standard Library as functions on `Iterator[T]`. They are lazy by default: each combinator returns a new `Iterator` value that applies the transformation on demand. Materialisation is explicit (`.collect()`, `.to_list()`, etc.).
+All combinators are provided by the Standard Library as functions on `Iterator<T>`. They are lazy by default: each combinator returns a new `Iterator` value that applies the transformation on demand. Materialisation is explicit (`.collect()`, `.to_list()`, etc.).
 
 Loop fusion is an Implementation Strategy optimisation — the default strategy does not guarantee fusion beyond what monomorphisation naturally achieves.
 
@@ -142,7 +142,7 @@ Loop fusion is an Implementation Strategy optimisation — the default strategy 
 
 ## Decision History
 
-- **2026-07-27:** Accepted via EDR-032. Classified as StdLib — all operations are compositions of `Iterator[T]` protocol methods. Loop fusion deferred to Implementation Strategy. Laziness inherited from Phase 3 D-06.
+- **2026-07-27:** Accepted via EDR-032. Classified as StdLib — all operations are compositions of `Iterator<T>` protocol methods. Loop fusion deferred to Implementation Strategy. Laziness inherited from Phase 3 D-06.
 
 ---
 

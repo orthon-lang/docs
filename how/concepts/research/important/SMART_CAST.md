@@ -49,7 +49,7 @@ The core problem: **to what extent should Orthon's compiler automatically narrow
        print(value.length)   // no cast needed — compiler knows it's String
    ```
 
-2. **Null check narrowing** — After checking `value isnt None`, the compiler unwraps `Option[T]` to `T`:
+2. **Null check narrowing** — After checking `value isnt None`, the compiler unwraps `Option<T>` to `T`:
 
    ```
    if user.email isnt None:

@@ -34,7 +34,7 @@ Chains stay lazy — combinators are lazy by default.
 ## Resolved Questions (2026-08-05, EDR-083)
 
 - A `Range` is a **value type** (a compact descriptor), not itself a `Sequence`
-  representation; it is iterable via `IntoIterator[Int]`.
+  representation; it is iterable via `IntoIterator<Int>`.
 - `Range` is interchangeable with `Iterator` in all combinator entry points that
   accept `IntoIterator`; it does not need to be an `Iterator` itself.
 

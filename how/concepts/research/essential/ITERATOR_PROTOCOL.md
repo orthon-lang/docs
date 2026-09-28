@@ -77,11 +77,11 @@ a first-class concept (see `DATA_MODEL.md`).
 ### 1. The `Iterator` Trait
 
 ```orthon
-trait Iterator[T]
-    fun next(self) -> Option[T]
+trait Iterator<T>
+    fun next(self) -> Option<T>
 ```
 
-A type implements `Iterator[T]` by providing a `next` method that returns
+A type implements `Iterator<T>` by providing a `next` method that returns
 `Some(value)` for each element and `None` when the sequence is exhausted.
 The trait is single-use: after `next` returns `None`, calling `next` again
 may return `None` or behave unpredictably.
@@ -100,25 +100,25 @@ loop:
         None       -> break
 ```
 
-The `for` loop accepts any expression of type `Iterator[T]`. The compiler
+The `for` loop accepts any expression of type `Iterator<T>`. The compiler
 enforces this: passing a non-iterator type to `for` is a compile error.
 
 ### 3. Standard Combinators
 
 All combinators return lazy iterators — they do not allocate intermediate
-collections. Combinators are methods on `Iterator[T]` with default
+collections. Combinators are methods on `Iterator<T>` with default
 implementations:
 
 | Combinator | Signature | Description |
 |------------|-----------|-------------|
-| `.map(fn)` | `Iterator[U]` where `fn: T -> U` | Transform each element |
-| `.filter(pred)` | `Iterator[T]` where `pred: T -> Bool` | Keep elements matching predicate |
-| `.take(n)` | `Iterator[T]` | Yield first `n` elements, then stop |
-| `.skip(n)` | `Iterator[T]` | Skip first `n` elements |
-| `.flat_map(fn)` | `Iterator[U]` where `fn: T -> Iterator[U]` | Map to iterator, then flatten |
-| `.zip(other)` | `Iterator[(T, U)]` where `other: Iterator[U]` | Pair elements from two iterators |
-| `.enumerate()` | `Iterator[(Int, T)]` | Pair each element with its index |
-| `.collect()` | `Collection[T]` | Materialise into a concrete collection |
+| `.map(fn)` | `Iterator<U>` where `fn: T -> U` | Transform each element |
+| `.filter(pred)` | `Iterator<T>` where `pred: T -> Bool` | Keep elements matching predicate |
+| `.take(n)` | `Iterator<T>` | Yield first `n` elements, then stop |
+| `.skip(n)` | `Iterator<T>` | Skip first `n` elements |
+| `.flat_map(fn)` | `Iterator<U>` where `fn: T -> Iterator<U>` | Map to iterator, then flatten |
+| `.zip(other)` | `Iterator<(T, U)>` where `other: Iterator<U>` | Pair elements from two iterators |
+| `.enumerate()` | `Iterator<(Int, T)>` | Pair each element with its index |
+| `.collect()` | `Collection<T>` | Materialise into a concrete collection |
 | `.fold(init, fn)` | `U` where `fn: (U, T) -> U` | Reduce to a single value |
 | `.for_each(fn)` | `Void` where `fn: T -> Void` | Side-effect for each element |
 | `.count()` | `Int` | Count elements (consumes iterator) |
@@ -146,15 +146,15 @@ has_admins = users.any(|u| u.role == Admin)
 
 ### 4. Collection Conversion
 
-Types that can produce iterators implement `IntoIterator[T]`:
+Types that can produce iterators implement `IntoIterator<T>`:
 
 ```orthon
-trait IntoIterator[T]
-    fun iter(self) -> Iterator[T]
+trait IntoIterator<T>
+    fun iter(self) -> Iterator<T>
 ```
 
-This trait is what the `for` loop actually accepts. `Iterator[T]` itself
-implements `IntoIterator[T]` (returning `self`), so both iterators and
+This trait is what the `for` loop actually accepts. `Iterator<T>` itself
+implements `IntoIterator<T>` (returning `self`), so both iterators and
 collections work with `for`.
 
 ### 5. Range Expressions
@@ -200,9 +200,9 @@ no heap allocation.
 sequences lazily. This document focuses on how sequences are *consumed* —
 the trait, the combinators, the `for` desugaring. They are independent:
 
-- A generator function returns an `Iterator[T]` value.
+- A generator function returns an `Iterator<T>` value.
 - The iterator combinators (`.map()`, `.filter()`, etc.) work on any
-  `Iterator[T]`, regardless of whether it was created by a generator, a
+  `Iterator<T>`, regardless of whether it was created by a generator, a
   collection, or a range.
 - You could have generators without combinators (Python's original `yield`
   is just a `for` target), and you could have combinators without generators
@@ -215,20 +215,20 @@ the consumption side; `GENERATORS.md` is the production side.
 
 Some languages (Java, C#) distinguish `Iterator` (pull-based, imperative)
 from `Stream`/`Enumerable` (pull-based, functional with combinators).
-Orthon places combinators directly on `Iterator[T]` for simplicity:
+Orthon places combinators directly on `Iterator<T>` for simplicity:
 one protocol, one set of methods, no type conversion.
 
 The key insight: an iterator **is** a stream — it produces values over time.
 Separating them creates an unnecessary type barrier. If an iterator is
 single-pass (which it is in this proposal), combinators work naturally:
-`.map()` returns a new `Iterator[U]` that calls `next()` on the original,
+`.map()` returns a new `Iterator<U>` that calls `next()` on the original,
 applies the transform, and yields the result.
 
 ## Related Concepts and Alternatives
 
 | Document | Relationship |
 |----------|-------------|
-| [`GENERATORS.md`](../important/GENERATORS.md) | The `yield`-based production mechanism. Generators implement `Iterator[T]` and are consumed through this protocol |
+| [`GENERATORS.md`](../important/GENERATORS.md) | The `yield`-based production mechanism. Generators implement `Iterator<T>` and are consumed through this protocol |
 | [`EMIT_AS_INTERMEDIATE_RESULT.md`](../important/EMIT_AS_INTERMEDIATE_RESULT.md) | `emit` for intermediate results within a computation — related to but distinct from iteration |
 | [`PUSH_STREAMS.md`](../important/PUSH_STREAMS.md) | Push-based streams (observables) — the dual of pull-based iterators. Both are sequence protocols |
 | [`ITERATION_LOOP.md`](../important/ITERATION_LOOP.md) | Loop constructs — the `for` loop desugars to the iterator protocol |
@@ -243,18 +243,18 @@ applies the transform, and yields the result.
 
 | Policy Type | Role in the concept |
 |---|---|
-| Iterator Protocol Policy | Defines the `Iterator[T]` trait, `next()` method, and single-use semantics |
+| Iterator Protocol Policy | Defines the `Iterator<T>` trait, `next()` method, and single-use semantics |
 | Combinator Policy | Determines which combinators are built-in vs. library-defined |
 | Laziness Policy | Governs whether combinator chains are always lazy, or can be eager for optimisation |
-| Collection Policy | Defines `IntoIterator[T]` and how collections expose iterators |
+| Collection Policy | Defines `IntoIterator<T>` and how collections expose iterators |
 | Range Policy | Specifies range syntax (`0..10`, `0..=10`, `.step(n)`) and range iterator semantics |
-| Desugaring Policy | Formalises `for` loop desugaring to `Iterator[T]` protocol |
+| Desugaring Policy | Formalises `for` loop desugaring to `Iterator<T>` protocol |
 
 ## Open Questions
 
-1. Should `Iterator[T]` also support `size_hint()` for optimising collection
+1. Should `Iterator<T>` also support `size_hint()` for optimising collection
    pre-allocation?
-2. Should there be a `DoubleEndedIterator[T]` (`.next_back()`) for iterators
+2. Should there be a `DoubleEndedIterator<T>` (`.next_back()`) for iterators
    that can be traversed from both ends?
 3. Should combinators support parallel execution (e.g., `.par_map()`) or
    should that be a separate concept?

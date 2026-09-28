@@ -154,9 +154,9 @@ standard library wrapper:
 
 ```orthon
 // Hypothetical stdlib API
-class Lazy[T]
+class Lazy<T>
     private let factory: || T
-    private var value: Option[T] = None
+    private var value: Option<T> = None
 
     proc call(self) -> T
         if value is None

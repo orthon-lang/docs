@@ -85,7 +85,7 @@ In practice, REPL-driven development combines a text editor with the REPL:
 
 ```orthon
 # In editor: user writes this function
-fun process(items: List[Int]) -> List[Int]
+fun process(items: List<Int>) -> List<Int>
     items.filter(fn x -> x > 0).map(fn x -> x * 2)
 
 # User sends the definition to the REPL
@@ -96,7 +96,7 @@ fun process(items: List[Int]) -> List[Int]
 # Send to REPL => [4, 8]
 
 # User modifies the function:
-fun process(items: List[Int]) -> List[Int]
+fun process(items: List<Int>) -> List<Int>
     items.filter(fn x -> x > 0).map(fn x -> x * x)
 
 # Send updated definition to REPL
@@ -131,8 +131,8 @@ The compiler supports incremental compilation at the expression level during REP
 ```
 # REPL with Schema Provider integration
 orthon> :schema fn process
-=> Parameters: [items: List[Int]]
-   Returns: List[Int]
+=> Parameters: [items: List<Int>]
+   Returns: List<Int>
    Source: process.orthon:3
 
 orthon> :doc process

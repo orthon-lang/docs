@@ -22,7 +22,7 @@ This requires the compiler to perform flow-sensitive type analysis — tracking 
 
 Smart cast is a **Language** construct:
 - After `if value is Type`, the compiler narrows `value` to `Type` in the true branch.
-- After `value isnt None`, the compiler unwraps `Option[T]` to `T`.
+- After `value isnt None`, the compiler unwraps `Option<T>` to `T`.
 - Each `when` branch narrows the scrutinee's type.
 - Smart cast only applies to effectively-immutable variables.
 - `value as Type` provides an explicit cast escape hatch.

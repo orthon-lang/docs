@@ -197,9 +197,9 @@ candidates include `[]` for lists, `{}` for maps, and `{}`/`[]` for sets.
 
 ### Combinator
 
-A higher-order function on `Iterator[T]` that transforms, filters, or aggregates a sequence without materialising intermediate collections. Combinators are lazy by default — they return new `Iterator` values that apply the transformation on demand. Examples: `map`, `filter`, `fold`, `take`, `skip`, `chain`, `zip`, `enumerate`.
+A higher-order function on `Iterator<T>` that transforms, filters, or aggregates a sequence without materialising intermediate collections. Combinators are lazy by default — they return new `Iterator` values that apply the transformation on demand. Examples: `map`, `filter`, `fold`, `take`, `skip`, `chain`, `zip`, `enumerate`.
 
-Combinators are classified as **StdLib** (EDR-032) — they are method implementations on the `Iterator[T]` trait, not language constructs. Loop fusion (combining multiple combinator passes) is an Implementation Strategy concern.
+Combinators are classified as **StdLib** (EDR-032) — they are method implementations on the `Iterator<T>` trait, not language constructs. Loop fusion (combining multiple combinator passes) is an Implementation Strategy concern.
 
 ```orthon
 let result = numbers@filter(fn(x) -> x > 0)@map(fn(x) -> x * 2)@collect()
@@ -782,7 +782,7 @@ Whenever an operation changes the meaning, lifetime, ownership, or behavior of d
 
 The iteration construct in Orthon: `for item in sequence`. The only loop
 for consuming values from a sequence. Operates on any type implementing
-`IntoIterator[T]`. Desugars to the iterator protocol per EDR-022.
+`IntoIterator<T>`. Desugars to the iterator protocol per EDR-022.
 
 ```orthon
 for item in items:
@@ -884,12 +884,12 @@ HKT or negative bounds in v0.1.
 
 A function that produces a sequence of values lazily, one at a time,
 using the `emit` keyword. Generator bodies are compiled into state
-machines that implement `Iterator[T]`. Generators are the production
+machines that implement `Iterator<T>`. Generators are the production
 side of the sequence model — the iterator protocol is the consumption
 side.
 
 ```orthon
-fun natural_numbers() -> Iterator[Int]
+fun natural_numbers() -> Iterator<Int>
     let i = 0
     loop:
         emit i
@@ -921,7 +921,7 @@ let evens = (x for x in 1..100 if x % 2 == 0)
 ```
 
 Generator expressions are lazy by default — they produce an
-`Iterator[T]` without materialising. Optional `if` filter clause.
+`Iterator<T>` without materialising. Optional `if` filter clause.
 
 - **Source:** `../what/concepts/GENERATORS.md` (EDR-050)
 - **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence)
@@ -954,7 +954,7 @@ a `using` block in the function signature declares a context dependency,
 and the compiler resolves a matching `given` instance from scope.
 
 ```orthon
-fun sort[A](list: List[A])(using ord: Ord[A]): List[A]
+fun sort<A>(list: List<A>)(using ord: Ord<A>): List<A>
 ```
 
 Context parameters are noted as a SEMANTIC_MODEL correction
@@ -1032,12 +1032,12 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 A value produced by a function via `emit` during the course of a
 long-running computation, distinct from the final `return` value. A
-function with both `emit` and `return` produces an `Iterator[T]` of
+function with both `emit` and `return` produces an `Iterator<T>` of
 intermediate values; the final return value is accessible via
 `.final()`.
 
 ```orthon
-fun process_dataset(data: Dataset) -> Iterator[BatchResult]
+fun process_dataset(data: Dataset) -> Iterator<BatchResult>
     for batch in data.batches():
         emit analyse(batch)
     return compute_summary(data)
@@ -1052,18 +1052,18 @@ this pattern technically; this concept documents the dual use explicitly.
 
 ### IntoIterator
 
-A trait that enables a type to be converted into an `Iterator[T]` for
+A trait that enables a type to be converted into an `Iterator<T>` for
 use in `for` loops and combinator chains. Collections implement
-`IntoIterator[T]` to enable direct iteration. `Iterator[T]` itself
-implements `IntoIterator[T]` (returning `self`), so both iterators and
+`IntoIterator<T>` to enable direct iteration. `Iterator<T>` itself
+implements `IntoIterator<T>` (returning `self`), so both iterators and
 collections work uniformly with `for`.
 
 ```orthon
-trait IntoIterator[T]
-    fun iter(self) -> Iterator[T]
+trait IntoIterator<T>
+    fun iter(self) -> Iterator<T>
 ```
 
-- **Source:** `../what/concepts/ITERATOR_PROTOCOL.md` § IntoIterator[T] for Collections
+- **Source:** `../what/concepts/ITERATOR_PROTOCOL.md` § IntoIterator<T> for Collections
 - **See also:** [Iterator Protocol](#iterator-protocol), [Generator](#generator)
 
 ### Invocation
@@ -1094,11 +1094,11 @@ execution policy.
 ### Iterator Protocol
 
 The consumption side of Orthon's sequence model. Defined by the
-`Iterator[T]` trait:
+`Iterator<T>` trait:
 
 ```orthon
-trait Iterator[T]
-    fun next(self) -> Option[T]
+trait Iterator<T>
+    fun next(self) -> Option<T>
 ```
 
 Key properties: **lazy** (elements produced on demand), **single-pass**
@@ -1109,7 +1109,7 @@ eliminates combinator overhead).
 The `for` loop desugars to the iterator protocol: `IntoIterator::iter()`
 + `loop` calling `next()`. Protocol method access uses the `@` prefix
 per D-07 (`iterator@next()`). Standard combinators (map, filter, take,
-fold, collect, etc.) are default method implementations on `Iterator[T]`
+fold, collect, etc.) are default method implementations on `Iterator<T>`
 living in the Standard Library.
 
 - **Source:** `../what/concepts/ITERATOR_PROTOCOL.md`
@@ -1427,7 +1427,7 @@ forward contract; concrete persistent collection types (`PersistentList`,
 
 ```orthon
 trait Immutable    # marker trait — no methods, purely a guarantee
-# v0.2: type PersistentList[T] is Immutable
+# v0.2: type PersistentList<T> is Immutable
 ```
 
 - **Source:** `../what/concepts/PERSISTENT_DATA_STRUCTURES.md` (EDR-069)
@@ -2177,7 +2177,7 @@ Contract expressions are **pure** (no side effects, enforced by compiler). Contr
 A composition pattern where a type implements a trait by forwarding method calls to a contained instance, or where a property delegates getter/setter behaviour to a helper object. Orthon provides delegation via the `@delegate` macro (EDR-029) and StdLib delegate protocols (`lazy`, `observable`, `vetoable`, `map`).
 
 ```orthon
-@delegate(List[T]) to inner
+@delegate(List<T>) to inner
 # Compiler generates forwarding for all List methods
 ```
 

@@ -41,7 +41,7 @@ Orthon's answer: one iteration construct (`for ... in`), one condition-based con
 
 | Policy Type | Role in the concept |
 |---|---|
-| Iteration Policy | Defines which types are iterable (all `IntoIterator[T]` implementors) |
+| Iteration Policy | Defines which types are iterable (all `IntoIterator<T>` implementors) |
 | Loop Model Policy | Determines that `for ... in` is the only iteration construct |
 | Desugaring Policy | Formalises `for` loop desugaring to iterator protocol |
 | Early Termination Policy | Controls `break` and `continue` semantics |
@@ -67,7 +67,7 @@ for {name, age} in people:
     print("{name} is {age} years old")
 ```
 
-The `for` loop accepts any type that implements `IntoIterator[T]`:
+The `for` loop accepts any type that implements `IntoIterator<T>`:
 
 ```orthon
 # Desugaring (per EDR-022)
@@ -138,7 +138,7 @@ for i in (1..10).step(2):  # 1, 3, 5, 7, 9 — step via a method on Range
 
 ## Default Strategy
 
-All iteration is lazy and single-pass. `for` desugaring is a syntactic transformation applied by the compiler. Range types are StdLib types implementing `IntoIterator[T]`.
+All iteration is lazy and single-pass. `for` desugaring is a syntactic transformation applied by the compiler. Range types are StdLib types implementing `IntoIterator<T>`.
 
 ## Alternative Strategies
 

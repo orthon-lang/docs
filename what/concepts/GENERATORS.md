@@ -4,7 +4,7 @@
 >
 > **Status:** Accepted 2026-07-27. **Amended 2026-09-06** — the
 > bidirectional form is withdrawn from the language model (S2): the
-> `yield` / `yield from` keywords and the `BidirectionalGenerator[T, U]`
+> `yield` / `yield from` keywords and the `BidirectionalGenerator<T, U>`
 > trait are removed. Generators are **emit-only** — one-way production.
 > The withdrawn bidirectional form is preserved as a hypothesis:
 > [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md).
@@ -68,7 +68,7 @@ hypothesis.
 |---|---|
 | Generator Model Policy | Governs stackless (default) vs. stackful generator semantics |
 | Desugaring Policy | Formalises generator expression desugaring to `emit`-based generator functions |
-| Iterator Protocol Policy | Generators implement `Iterator[T]` — the production side of the protocol pair |
+| Iterator Protocol Policy | Generators implement `Iterator<T>` — the production side of the protocol pair |
 
 ## Model (What)
 
@@ -101,12 +101,12 @@ let names = gen(user.name for user in users if user.active)
 let doubled = gen(x * 2 for x in items)
 ```
 
-Generator expressions are lazy by default — they produce an `Iterator[T]` without materialising. As pure sugar they desugar to stdlib iterator combinators (`.filter` / `.map` / `.flat_map`) or, equivalently, to an anonymous `emit`-based generator function — introducing no new core primitive:
+Generator expressions are lazy by default — they produce an `Iterator<T>` without materialising. As pure sugar they desugar to stdlib iterator combinators (`.filter` / `.map` / `.flat_map`) or, equivalently, to an anonymous `emit`-based generator function — introducing no new core primitive:
 
 ```orthon
 # Desugaring:
 let squares = gen(x * x for x in 1..10)
-# → let squares = fun () -> Iterator[Int]:
+# → let squares = fun () -> Iterator<Int>:
 #       for x in 1..10:
 #           emit x * x
 # → or, equivalently, to combinators:
@@ -121,7 +121,7 @@ expression form are the **same thing** in two spellings:
 
 ```orthon
 # Block form: fun ... emit, looping over the delegate
-fun combined() -> Iterator[Int]
+fun combined() -> Iterator<Int>
     for v in fib(10):     # delegate to fib(10)
         emit v
     for v in fib(20):     # then to fib(20)
@@ -156,7 +156,7 @@ expressions and delegation are sugar and composition over it:
 
 ## Default Strategy
 
-Stackless generators (state machine) implementing `Iterator[T]` (EDR-021).
+Stackless generators (state machine) implementing `Iterator<T>` (EDR-021).
 One-way by default — `emit` is the only production keyword. Generator
 expressions compile to anonymous generator functions; delegation is
 ordinary iteration plus `emit`.
@@ -189,7 +189,7 @@ ordinary iteration plus `emit`.
 ## Decision History
 
 - **2026-07-27** — Accepted via EDR-050. Classification: Language. Added bidirectional `yield`, generator expressions, and `yield from` delegation on top of LAZY_SEQUENCE_GENERATORS (EDR-021).
-- **2026-09-06** — **Amended (S2):** bidirectional `yield`, the `yield` / `yield from` keywords, and `BidirectionalGenerator[T, U]` are withdrawn. Generators are emit-only; delegation is composition. The bidirectional form is demoted to the [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis ([EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md)).
+- **2026-09-06** — **Amended (S2):** bidirectional `yield`, the `yield` / `yield from` keywords, and `BidirectionalGenerator<T, U>` are withdrawn. Generators are emit-only; delegation is composition. The bidirectional form is demoted to the [`COROUTINE_ON_YIELD.md`](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis ([EDR-091](../../how/decision_records/architecture/EDR-091-withdraw-bidirectional-yield.md)).
 - **2026-09-06** — **Generator-expression syntax locked:** the parenthesised form `(expr for x in src if cond)` is the single syntax; a `gen(...)` call form is rejected as a redundant synonym. The named escape hatches remain the full `fun` with `emit` and combinator chains. *(superseded by EDR-092, 2026-09-28)*
 - **2026-09-28** — **Adopted `gen(...)` as the single generator-expression surface form** ([EDR-092](../../how/decision_records/architecture/EDR-092-generator-expression-syntax.md)): `gen` is a reserved comprehension production (not a stdlib function, not a macro), pure sugar over `emit` / stdlib combinators with no new core primitive, scope = comprehension only incl. nested `gen(v for s in subs for v in s)`. The bare parenthesised form is withdrawn; `gen(sub)` (wrapping a bare value) is rejected; `emit` inside lambdas is rejected — closing LAZY_SEQUENCE_GENERATORS Open Question 2 negatively. Generators remain emit-only.
 

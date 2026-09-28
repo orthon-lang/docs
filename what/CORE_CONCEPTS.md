@@ -120,7 +120,7 @@ The resolution process is defined in
 | **EDR** | [EDR-021](../how/decision_records/architecture/EDR-021-lazy-sequence-generators.md) |
 | **Specification** | [`concepts/LAZY_SEQUENCE_GENERATORS.md`](concepts/LAZY_SEQUENCE_GENERATORS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Generator functions with `emit` keyword for lazy sequence production. Three equivalent canonical forms: `emit value`, `return sequence(value)`, `return value ->`. Lazy by default (Phase 3 D-06). Generators implement `Iterator[T]`. State machine compilation — no heap allocation. Infinite sequences valid. Composition without intermediate allocation. |
+| **Summary** | Generator functions with `emit` keyword for lazy sequence production. Three equivalent canonical forms: `emit value`, `return sequence(value)`, `return value ->`. Lazy by default (Phase 3 D-06). Generators implement `Iterator<T>`. State machine compilation — no heap allocation. Infinite sequences valid. Composition without intermediate allocation. |
 | **Primitive Decomposition** | Generator function → `function` + state-machine transformation (compiler-generated); `emit value` → iterator protocol `next()` call + suspension/resumption; `return sequence(value)` → iterator completion + value emission; `return value ->` → equivalent desugaring. The state-machine transformation and lazy evaluation semantics add compiler-level semantics beyond primitive composition. |
 
 ### ITERATOR_PROTOCOL
@@ -131,8 +131,8 @@ The resolution process is defined in
 | **EDR** | [EDR-022](../how/decision_records/architecture/EDR-022-iterator-protocol.md) |
 | **Specification** | [`concepts/ITERATOR_PROTOCOL.md`](concepts/ITERATOR_PROTOCOL.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Trait-based: `Iterator[T] { fn next(self) -> Option[T] }`. Lazy, single-pass, composable. `for` loop desugars to iterator protocol. `IntoIterator[T]` for collections. Standard combinators as StdLib (map, filter, take, skip, fold, collect, etc.). Range expressions delegated to RANGE (EDR-083). `@` prefix for protocol method calls per D-07. Single-pass semantics. Zero-cost via monomorphisation. |
-| **Primitive Decomposition** | `Iterator[T]` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; range literal `1..N` → syntax desugaring to a `Range` value implementing `IntoIterator` (EDR-083); combinators → `function` implementations on `Iterator[T]` (StdLib). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition. |
+| **Summary** | Trait-based: `Iterator<T> { fn next(self) -> Option<T> }`. Lazy, single-pass, composable. `for` loop desugars to iterator protocol. `IntoIterator<T>` for collections. Standard combinators as StdLib (map, filter, take, skip, fold, collect, etc.). Range expressions delegated to RANGE (EDR-083). `@` prefix for protocol method calls per D-07. Single-pass semantics. Zero-cost via monomorphisation. |
+| **Primitive Decomposition** | `Iterator<T>` trait → trait declaration (`trait` + `function` + `identifier`) per TRAITS model; `for item in iter` → loop + `call` to `next()` + pattern match on `Option`; range literal `1..N` → syntax desugaring to a `Range` value implementing `IntoIterator` (EDR-083); combinators → `function` implementations on `Iterator<T>` (StdLib). The `for` loop desugaring and range-syntax translation add compiler-level semantics beyond primitive composition. |
 
 ---
 
@@ -244,9 +244,9 @@ The resolution process is defined in
 | **Status** | Accepted |
 | **EDR** | [EDR-032](../how/decision_records/architecture/EDR-032-composable-collection-ops.md) |
 | **Specification** | [`concepts/COMPOSABLE_COLLECTION_OPS.md`](concepts/COMPOSABLE_COLLECTION_OPS.md) |
-| **Classification** | **StdLib** (D-03) — all operations are compositions of `Iterator[T]` protocol methods. No new language semantics required. |
+| **Classification** | **StdLib** (D-03) — all operations are compositions of `Iterator<T>` protocol methods. No new language semantics required. |
 | **Summary** | Declarative collection operations built on ITERATOR_PROTOCOL: map, filter, reduce, fold, find, any, all, count, collect, take, skip, chain, zip, enumerate. Lazy by default. Materialisation explicit (`.collect()`, `.to_list()`). Loop fusion is Implementation Strategy concern, not language semantics. No comprehension syntax in v0.1. |
-| **Primitive Decomposition** | Each combinator (`map`, `filter`, `fold`, etc.) → `function` implementation on `Iterator[T]` trait + `call` to `next()` + `scope` + `pack`/`unpack` for result construction + `function` (closure parameter). Fully expressible via primitive composition — no new compiler semantics. |
+| **Primitive Decomposition** | Each combinator (`map`, `filter`, `fold`, etc.) → `function` implementation on `Iterator<T>` trait + `call` to `next()` + `scope` + `pack`/`unpack` for result construction + `function` (closure parameter). Fully expressible via primitive composition — no new compiler semantics. |
 
 ### CONCURRENCY_MODEL
 
@@ -363,7 +363,7 @@ The resolution process is defined in
 | **EDR** | [EDR-050](../how/decision_records/architecture/EDR-050-generators.md), [EDR-092](../how/decision_records/architecture/EDR-092-generator-expression-syntax.md) |
 | **Specification** | [`concepts/GENERATORS.md`](concepts/GENERATORS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Generator expressions — the `gen(...)` reserved comprehension production: `gen(x * x for x in 1..10)`; delegation by composition (`for v in sub: emit v`). Generators are emit-only (one-way, EDR-021). **Amended 2026-09-28 ([EDR-092](../how/decision_records/architecture/EDR-092-generator-expression-syntax.md)):** the surface form is `gen(...)` — a reserved comprehension production (not a stdlib function, not a macro), pure sugar with no new primitive; the bare parenthesised form is withdrawn and `gen(sub)` rejected. **Amended 2026-09-06:** bidirectional `yield`, the `yield`/`yield from` keywords, and `BidirectionalGenerator[T, U]` withdrawn — demoted to the [COROUTINE_ON_YIELD](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis. |
+| **Summary** | Generator expressions — the `gen(...)` reserved comprehension production: `gen(x * x for x in 1..10)`; delegation by composition (`for v in sub: emit v`). Generators are emit-only (one-way, EDR-021). **Amended 2026-09-28 ([EDR-092](../how/decision_records/architecture/EDR-092-generator-expression-syntax.md)):** the surface form is `gen(...)` — a reserved comprehension production (not a stdlib function, not a macro), pure sugar with no new primitive; the bare parenthesised form is withdrawn and `gen(sub)` rejected. **Amended 2026-09-06:** bidirectional `yield`, the `yield`/`yield from` keywords, and `BidirectionalGenerator<T, U>` withdrawn — demoted to the [COROUTINE_ON_YIELD](../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md) hypothesis. |
 | **Primitive Decomposition** | Generator expression → desugaring to an anonymous `emit`-based generator function; delegation → `for` loop calling `emit` on a sub-generator (EDR-021). No compiler-level semantics beyond EDR-021's one-way `emit` — generator expressions are sugar. Bidirectional machinery withdrawn 2026-09-06 (S2). |
 
 ### EMIT_AS_INTERMEDIATE_RESULT
@@ -455,7 +455,7 @@ The resolution process is defined in
 | **EDR** | [EDR-060](../how/decision_records/architecture/EDR-060-smart-cast.md) |
 | **Specification** | [`concepts/SMART_CAST.md`](concepts/SMART_CAST.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Flow-sensitive type narrowing after type checks. After `if value is Type`, compiler narrows `value` to `Type` in the true branch. Null check narrowing: `value isnt None` unwraps `Option[T]` to `T`. `when` branch narrowing per PATTERN_MATCHING (EDR-025). Immutability prerequisite for safety. Explicit cast `as Type` escape hatch. Partially subsumed by PATTERN_MATCHING — handles non-pattern scenarios. |
+| **Summary** | Flow-sensitive type narrowing after type checks. After `if value is Type`, compiler narrows `value` to `Type` in the true branch. Null check narrowing: `value isnt None` unwraps `Option<T>` to `T`. `when` branch narrowing per PATTERN_MATCHING (EDR-025). Immutability prerequisite for safety. Explicit cast `as Type` escape hatch. Partially subsumed by PATTERN_MATCHING — handles non-pattern scenarios. |
 | **Primitive Decomposition** | Narrowed type → compiler-determined, not primitive-expressible. Flow-sensitive analysis across control flow edges adds compiler-level semantics beyond primitive composition. |
 
 ### COPY_ON_WRITE
@@ -558,7 +558,7 @@ The resolution process is defined in
 | **EDR** | [EDR-069](../how/decision_records/architecture/EDR-069-persistent-data-structures.md) |
 | **Specification** | [`concepts/PERSISTENT_DATA_STRUCTURES.md`](concepts/PERSISTENT_DATA_STRUCTURES.md) |
 | **Classification** | StdLib (D-03) |
-| **Summary** | `Immutable` marker trait for compiler optimisation hooks. Persistent collection types (`PersistentList[T]`, `PersistentMap[K,V]`, `PersistentSet[T]`) deferred to v0.2. v0.1 uses Tuple + Copy-on-Write. `Immutable` trait accepted now as interface contract. |
+| **Summary** | `Immutable` marker trait for compiler optimisation hooks. Persistent collection types (`PersistentList<T>`, `PersistentMap<K,V>`, `PersistentSet<T>`) deferred to v0.2. v0.1 uses Tuple + Copy-on-Write. `Immutable` trait accepted now as interface contract. |
 | **Primitive Decomposition** | `Immutable` marker trait → trait with no methods (compiler-recognized guarantee). Persistent collections → `function` implementations with structural sharing algorithms. No new runtime semantics v0.1 — trait is interface contract only. |
 
 ### DERIVE_SERIALIZATION
@@ -580,7 +580,7 @@ The resolution process is defined in
 | **EDR** | [EDR-071](../how/decision_records/architecture/EDR-071-command-pattern-via-delegate.md) |
 | **Specification** | [`concepts/COMMAND_PATTERN_VIA_DELEGATE.md`](concepts/COMMAND_PATTERN_VIA_DELEGATE.md) |
 | **Classification** | Language — existing concept (D-03) |
-| **Summary** | No dedicated Command pattern construct. Orthon's delegate model (EDR-033, EDR-057) and first-class functions subsume all Command use cases: `() -> void` = Command/Runnable, `() -> V` = Callable, `Event -> void` = ActionListener. StdLib provides `Undoable[T]`, `CommandQueue`, `Macro` compositors. Cross-refs PATTERN_MATCHING_DISPATCH (EDR-026). |
+| **Summary** | No dedicated Command pattern construct. Orthon's delegate model (EDR-033, EDR-057) and first-class functions subsume all Command use cases: `() -> void` = Command/Runnable, `() -> V` = Callable, `Event -> void` = ActionListener. StdLib provides `Undoable<T>`, `CommandQueue`, `Macro` compositors. Cross-refs PATTERN_MATCHING_DISPATCH (EDR-026). |
 | **Primitive Decomposition** | Command pattern → existing `function` + `call` + `scope` (closure capture). Undo pattern → `pack` (paired execute/undo delegates). All expressible via existing primitives — no new semantics needed. |
 
 ### CONTEXT_LIMITED_MODULES
@@ -648,7 +648,7 @@ The resolution process is defined in
 | **EDR** | [EDR-083](../how/decision_records/architecture/EDR-083-range.md) |
 | **Specification** | [`concepts/RANGE.md`](concepts/RANGE.md) |
 | **Classification** | Language (D-03) — literal `a..b`; the `Range` type is StdLib |
-| **Summary** | Range is a first-class value type, inclusive-inclusive `1..N` — the only range semantic; `..=` eliminated. `range(a, b)` named form ≡ `a..b`. `Range` implements `IntoIterator[Int]`; combinators apply directly. `.step(n)` returns a strided Range value (step(0) is a compile error; negative step descends). Empty range `end < start` is a value. `0..<N` is FFI-boundary-only. `enumerate(items) ≡ zip(1..len(items), items)`. |
+| **Summary** | Range is a first-class value type, inclusive-inclusive `1..N` — the only range semantic; `..=` eliminated. `range(a, b)` named form ≡ `a..b`. `Range` implements `IntoIterator<Int>`; combinators apply directly. `.step(n)` returns a strided Range value (step(0) is a compile error; negative step descends). Empty range `end < start` is a value. `0..<N` is FFI-boundary-only. `enumerate(items) ≡ zip(1..len(items), items)`. |
 | **Primitive Decomposition** | Range literal `a..b` → Level 2 pattern over a `pack` composite (`start`, `end`) + `IntoIterator`; `range(a, b)` → StdLib constructor (`function` + `call`); `.step(n)` → method on `Range` returning a strided descriptor. No new primitives. |
 
 ### SLICE

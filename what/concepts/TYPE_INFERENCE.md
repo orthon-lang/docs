@@ -53,7 +53,7 @@ let x = 42
 let y: Float = 42    # 42 is inferred as Float, not Int
 
 // Bidirectional: generic type argument inferred from both sides
-fun identity[T](value: T) -> T
+fun identity<T>(value: T) -> T
     return value
 
 let z = identity(42)          # T inferred as Int from argument
@@ -68,7 +68,7 @@ Within a function body, every local expression, variable, and intermediate type 
 fun compute(a: Int, b: Int) -> Int
     let sum = a + b             # sum is Int
     let doubled = sum * 2       # doubled is Int
-    let strings = ["a", "b"]    # strings is List[String]
+    let strings = ["a", "b"]    # strings is List<String>
     return doubled
 ```
 
@@ -91,7 +91,7 @@ let result: Option<Float> = first(data)  # T inferred from expected return type
 When inference is ambiguous, turbofish `::<T>` disambiguates:
 
 ```orthon
-fun parse[T](input: String) -> Result<T, ParseError>
+fun parse<T>(input: String) -> Result<T, ParseError>
 
 let num = parse::<Int>("42")        # explicit type argument
 let text = parse::<String>("hello") # explicit type argument

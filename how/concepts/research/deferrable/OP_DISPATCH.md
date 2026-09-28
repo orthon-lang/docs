@@ -22,13 +22,13 @@ Consider a proxy that forwards all method calls to an inner object:
 type Proxy
     inner: Service
 
-    fun do_work(self, x: Int) -> Result[String, Error]
+    fun do_work(self, x: Int) -> Result<String, Error>
         return self.inner.do_work(x)
 
     fun get_status(self) -> Status
         return self.inner.get_status()
 
-    fun reset(self) -> Result[None, Error]
+    fun reset(self) -> Result<None, Error>
         return self.inner.reset()
 
     // ... 50 more forwarding methods — pure boilerplate

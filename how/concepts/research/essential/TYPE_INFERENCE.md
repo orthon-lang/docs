@@ -70,7 +70,7 @@ let x = 42
 let y: Float = 42    // 42 is inferred as Float, not Int
 
 // Bidirectional: generic type argument inferred from usage
-fun identity[T](value: T) -> T
+fun identity<T>(value: T) -> T
     return value
 
 let z = identity(42)  // T is inferred as Int from the argument
@@ -86,7 +86,7 @@ fun add(a: Int, b: Int) -> Int
     return result
 
 // Generic parameters may be inferred from usage at call sites
-fun first[T](list: List[T]) -> Option<T>
+fun first<T>(list: List<T>) -> Option<T>
     if list.is_empty()
         return None
     return list[0]

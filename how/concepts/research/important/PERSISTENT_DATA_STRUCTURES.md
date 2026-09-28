@@ -12,7 +12,7 @@
 
 Orthon's current collection model has two built-in ordered types:
 
-- **`List[T]`** — mutable, growable, reference semantics (DYNAMIC_COLLECTIONS.md)
+- **`List<T>`** — mutable, growable, reference semantics (DYNAMIC_COLLECTIONS.md)
 - **`Tuple`** — conditionally immutable (immutable if nested elements are immutable)
 
 This covers the common cases but leaves a gap: **what if a programmer wants
@@ -33,7 +33,7 @@ Scenarios where this matters:
 4. **Undo history / versioning** — Keeping snapshots of state over time is
    expensive with mutable collections (deep copy each snapshot). Persistent
    data structures share structure across versions, making snapshots cheap.
-5. **API contracts** — A function that accepts a `List[T]` cannot statically
+5. **API contracts** — A function that accepts a `List<T>` cannot statically
    guarantee it won't mutate the argument. An immutable collection type
    provides this guarantee at the type level.
 
@@ -48,8 +48,8 @@ how deep the guarantees need to be.
 
 | Level | What it means | Trade-off |
 |-------|---------------|-----------|
-| **Core** — special syntax, built-in type | `ImmutableList[T]` as a first-class representation like `Tuple` | Heavier language surface; every new collection type requires language changes |
-| **Stdlib with core hooks** — library type with compiler optimisations | `PersistentList[T]` defined in the standard library, but the compiler knows about it for optimisation (like Rust's `Vec` vs. slice types) | Balances expressiveness with language minimality |
+| **Core** — special syntax, built-in type | `ImmutableList<T>` as a first-class representation like `Tuple` | Heavier language surface; every new collection type requires language changes |
+| **Stdlib with core hooks** — library type with compiler optimisations | `PersistentList<T>` defined in the standard library, but the compiler knows about it for optimisation (like Rust's `Vec` vs. slice types) | Balances expressiveness with language minimality |
 | **Pure stdlib** — library type, no special compiler treatment | Any immutable collection is a user-defined type; no syntactic sugar or compiler optimisation | Smallest language core, but no optimisations (structural sharing unlikely to be efficient without compiler support) |
 
 **Initial hypothesis: stdlib with core hooks.** The core defines an
@@ -69,7 +69,7 @@ provides persistent collection types built on this trait:
 trait Immutable
 
 // Persistent list — structural sharing on "modification"
-type PersistentList[T] is Immutable
+type PersistentList<T> is Immutable
 
 // "Modification" returns a new collection, shares structure with old
 mut new_list = list.append(42)
@@ -81,7 +81,7 @@ Key properties:
 - **Structural sharing** — "Modifying" a persistent collection creates a new
   collection that shares internal nodes with the original. Time: O(log n) or
   O(1) amortised. Space: O(1) additional per operation.
-- **Value semantics** — A `PersistentList[T]` is compared structurally, not
+- **Value semantics** — A `PersistentList<T>` is compared structurally, not
   by identity. Two lists with the same elements are equal.
 - **Thread-safe by construction** — Because no mutation is possible, sharing
   across threads is always safe. No locks, no ownership tracking.
@@ -97,9 +97,9 @@ Key properties:
 
 | Type | Mutation | Copy semantics | Sharing across versions |
 |------|----------|---------------|------------------------|
-| `List[T]` | Mutable (`push`, `set`, etc.) | Reference (CoW on shared mutation) | No — mutation is in-place |
+| `List<T>` | Mutable (`push`, `set`, etc.) | Reference (CoW on shared mutation) | No — mutation is in-place |
 | `Tuple` | Conditionally immutable | Value (deep copy on assignment) | No — each tuple is independent |
-| `PersistentList[T]` (proposed) | Immutable (returns new version) | Value (structural sharing) | Yes — versions share internal nodes |
+| `PersistentList<T>` (proposed) | Immutable (returns new version) | Value (structural sharing) | Yes — versions share internal nodes |
 
 ### Comparison with COW (COPY_ON_WRITE.md)
 
@@ -136,8 +136,8 @@ different problems:
 ## Related Concepts
 
 - **`MUTABILITY.md`** (essential) — Immutability-by-default principle. Persistent collections are a natural extension: if bindings are immutable by default, should collections also be?
-- **`COPY_ON_WRITE.md`** (important) — Related but distinct mechanism (see comparison table above). COW is the current strategy for managing shared mutable access to `List[T]`.
-- **`DYNAMIC_COLLECTIONS.md`** (deferrable) — Defines `List[T]` and `Array[T, N]`. A persistent collection would be a third ordered collection type.
+- **`COPY_ON_WRITE.md`** (important) — Related but distinct mechanism (see comparison table above). COW is the current strategy for managing shared mutable access to `List<T>`.
+- **`DYNAMIC_COLLECTIONS.md`** (deferrable) — Defines `List<T>` and `Array<T, N>`. A persistent collection would be a third ordered collection type.
 - **`DATA_MODEL.md`** (essential) — Defines `Tuple` as a representation. A persistent list is structurally different from a tuple (variable-size, structural sharing).
 - **`VALUE_SEMANTICS.md`** (essential) — Persistent collections have value semantics with structural sharing, which is a new point in the design space (not pure copy, not reference).
 - **`EQUALITY.md`** (essential) — Structural equality for persistent collections should work the same as for other value types.
@@ -147,7 +147,7 @@ different problems:
 
 | Alternative | Description | When to use |
 |-------------|-------------|-------------|
-| **No persistent collections** | Rely on `Tuple` for fixed-size immutable data and `List[T]` + CoW for dynamic data. Hash keys use `Tuple`. Concurrent safety uses `shared` + synchronisation. | Minimal language; most cases already covered |
+| **No persistent collections** | Rely on `Tuple` for fixed-size immutable data and `List<T>` + CoW for dynamic data. Hash keys use `Tuple`. Concurrent safety uses `shared` + synchronisation. | Minimal language; most cases already covered |
 | **Persistent only** | All collections are persistent by default. Mutable collections are an explicit opt-in (Clojure model). | Maximum safety; functional-first style |
 | **Freeze operation** | A `list.freeze()` method returns an immutable view that cannot be mutated. The underlying list can still be mutated through other references. | Simple API; but frozen view can be invalidated by mutation through another reference — weak guarantee |
 | **Copy-on-write everywhere** | All collections use COW, including after explicit `freeze()`. This is the current approach in COPY_ON_WRITE.md. | Balances mutability and sharing; but doesn't give hash-key safety or thread safety |
@@ -164,7 +164,7 @@ different problems:
    need to know about the data structure internals?
 4. **Trait marker vs. type family** — Should `Immutable` be a trait that any
    type can implement, or should persistent collections be a separate type
-   family (like `PersistentList[T]`, `PersistentMap[K, V]`)?
+   family (like `PersistentList<T>`, `PersistentMap<K, V>`)?
 5. **Interaction with Sequence** — The Data Model defines `Sequence` as a
    representation (lazy/eager variable-size ordered data). Is a persistent
    list a kind of `Sequence`, or a separate concept?

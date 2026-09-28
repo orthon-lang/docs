@@ -30,15 +30,15 @@ Kotlin solves both with the `by` keyword. The core question: should Orthon have 
 A type implements a trait by composing with a contained instance. The standard library provides a `delegate` helper that generates forwarding at the composition site:
 
 ```orthon
-trait List[T]:
+trait List<T>:
     fun size(self) -> Int
     fun get(self, index: Int) -> T
     fun append(mut self, item: T)
 
-struct LoggingList[T]:
-    inner: List[T]
+struct LoggingList<T>:
+    inner: List<T>
 
-    @delegate(List[T]) to inner
+    @delegate(List<T>) to inner
     # Compiler generates forwarding for size(), get(), append()
     # Selective override:
     fun append(mut self, item: T):
@@ -60,10 +60,10 @@ counter: Int by observable(0) { old, new -> log("$old -> $new") }
 Any type implementing a standard `Get` (and optionally `Set`) protocol can be a property delegate:
 
 ```orthon
-trait Get[T]:
+trait Get<T>:
     fun get(this_ref: Any, prop: PropertyMetadata) -> T
 
-trait Set[T]:
+trait Set<T>:
     fun set(this_ref: Any, prop: PropertyMetadata, value: T)
 ```
 

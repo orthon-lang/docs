@@ -36,7 +36,7 @@ Adopt **trait-bounded parametric polymorphism** as Orthon's generics system with
 1. **Trait bounds on type parameters:** Generic functions and types declare constraints via `where T: TraitA + TraitB` syntax. Multiple bounds compose via `+`.
 2. **Static dispatch by default (monomorphisation):** Each generic instantiation produces separate compiled code. Dynamic dispatch via `dyn Trait` is the opt-in alternative.
 3. **Variance:**
-   - Generic type parameters are **invariant by default** — `List[T]` has no subtype relationship to `List[U]` even if `T` is a subtype of `U`.
+   - Generic type parameters are **invariant by default** — `List<T>` has no subtype relationship to `List<U>` even if `T` is a subtype of `U`.
    - **Covariant** parameters are declared in the trait via `type Output` (return-position associated types).
    - **Contravariant** parameters are declared in the trait via `fn accept(self, item: T)` (argument-position parameters).
    - Explicit variance annotations on type parameter declarations are deferred as an opt-in extension (v0.2+).

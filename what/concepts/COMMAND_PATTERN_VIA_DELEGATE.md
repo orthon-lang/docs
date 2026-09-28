@@ -27,7 +27,7 @@ The Command pattern is obsoleted by the delegate model (EDR-036). Every use case
 button.on_click = fn() -> print("clicked")
 
 # Task queue — list of delegates, not Command objects
-tasks: List[() -> void] = []
+tasks: List<() -> void> = []
 tasks.push(fn() -> log("start"))
 tasks.push(fn() -> process(data))
 

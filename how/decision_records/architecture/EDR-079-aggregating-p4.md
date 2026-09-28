@@ -52,7 +52,7 @@ The following concepts are accepted as part of Orthon v0.1:
 | 3 | TRAITS | EDR-019 | Nominal trait system; static dispatch by default; `dyn` for dynamic |
 | 4 | ERROR_HANDLING | EDR-020 | `Result<T,E>` monadic type; `?` propagation; no exceptions |
 | 5 | LAZY_SEQUENCE_GENERATORS | EDR-021 | `emit` keyword; lazy by default (D-06); state machine compilation |
-| 6 | ITERATOR_PROTOCOL | EDR-022 | `Iterator[T]` trait; `for` loop desugaring; combinators as StdLib |
+| 6 | ITERATOR_PROTOCOL | EDR-022 | `Iterator<T>` trait; `for` loop desugaring; combinators as StdLib |
 | 7 | ERROR_UNION | EDR-023 | `!T` tag-only error union; inferred error sets; structural widening |
 | 8 | GENERICS | EDR-024 | Trait-bounded parametric polymorphism; monomorphisation; cross-ref comptime |
 | 9 | PATTERN_MATCHING | EDR-025 | Exhaustive, expression-oriented; destructuring; guards; or patterns |
@@ -68,7 +68,7 @@ The following concepts are accepted as part of Orthon v0.1:
 
 | # | Concept | EDR | Key Decision |
 |---|---------|-----|--------------|
-| 17 | COMPOSABLE_COLLECTION_OPS | EDR-032 | map/filter/reduce on `Iterator[T]`; lazy; StdLib classification |
+| 17 | COMPOSABLE_COLLECTION_OPS | EDR-032 | map/filter/reduce on `Iterator<T>`; lazy; StdLib classification |
 
 #### Essential Tier — Policy (3 concepts)
 

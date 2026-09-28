@@ -24,7 +24,7 @@ EDR-082 (INDEXING) established the norm: inclusive-inclusive `1..N` is the *only
 1. **First-class value** — `Range` is a value type (a compact descriptor), not an iterator and not a collection.
 2. **Single semantic** — inclusive-inclusive `1..N` is the only range semantic; `..=` is eliminated.
 3. **Named before symbolic** — `range(a, b)` is the named canonical form of `a..b`.
-4. **Iterable value** — `Range` implements `IntoIterator[Int]`; combinator chains apply directly and stay lazy.
+4. **Iterable value** — `Range` implements `IntoIterator<Int>`; combinator chains apply directly and stay lazy.
 5. **Zero-cost** — ranges compile to a simple counter loop; no heap allocation.
 6. **FFI isolation** — `0..<N` exists only at the FFI boundary, never in application code.
 
@@ -34,7 +34,7 @@ EDR-082 (INDEXING) established the norm: inclusive-inclusive `1..N` is the *only
 |-------------|------|
 | Range Semantics Policy | `InclusiveInclusive` — `1..N` is the only semantic; `..=` eliminated |
 | Collection Indexing Policy | `OneBased` (EDR-082) — ranges align with the 1-based index base |
-| Iterator Protocol Policy | `Range` implements `IntoIterator[Int]` (EDR-022) |
+| Iterator Protocol Policy | `Range` implements `IntoIterator<Int>` (EDR-022) |
 | Combinator Policy | Combinators apply directly to range values (EDR-032) |
 | FFI Boundary Policy | `0..<N` interop utility only (deferred to FFI, Milestone 8) |
 
@@ -77,7 +77,7 @@ for i in 1..5:              # 1, 2, 3, 4, 5
 (1..100).filter(|x| x % 2 == 0).take(3)        # 2, 4, 6 — lazy chain
 ```
 
-`Range` implements `IntoIterator[Int]`, so `for` loops and combinator chains accept it directly, without an explicit `.iter()` step. Chains stay lazy (Laziness Policy).
+`Range` implements `IntoIterator<Int>`, so `for` loops and combinator chains accept it directly, without an explicit `.iter()` step. Chains stay lazy (Laziness Policy).
 
 ### Step
 
@@ -132,7 +132,7 @@ The `..=` spelling used in EDR-082/INDEXING is superseded: the composition is `z
 
 ## Open Questions
 
-1. **Range of non-integer types** — should `Range` generalize to `Range[T]` over any ordered `pack` (e.g., `a..b` over `Char`, `Date`)? v0.1 commits to `Range[Int]`; generalization is a StdLib extension question.
+1. **Range of non-integer types** — should `Range` generalize to `Range<T>` over any ordered `pack` (e.g., `a..b` over `Char`, `Date`)? v0.1 commits to `Range<Int>`; generalization is a StdLib extension question.
 2. **Open-ended bounds** — can `a..` (open end) and `..b` (open start) exist, or is a range always fully bounded? Deferred — not required by the v0.1 use cases (indexing, slices, integer loops).
 
 ## Decision History

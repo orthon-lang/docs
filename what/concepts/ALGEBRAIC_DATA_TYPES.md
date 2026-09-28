@@ -138,7 +138,7 @@ impl Area for Rectangle
 ```
 
 Polymorphism over Path B types is trait-based: statically via generics
-(`fun total<Area as T>(List[T] shapes)`, monomorphised — the default), or
+(`fun total<Area as T>(List<T> shapes)`, monomorphised — the default), or
 dynamically via `dyn Area` (opt-in vtable).
 
 In both paths the `impl` block is **external** to the `type` declaration. The

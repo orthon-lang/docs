@@ -45,7 +45,7 @@ type Pair<Hash as K, V>
 
 # Class and method — uniform at every level
 class UserService<Eq as T> require Database db
-    fun find<Hash as K>(key: K) -> Option[User]
+    fun find<Hash as K>(key: K) -> Option<User>
 
 # Blanket impl — extracted to its own hypothesis
 # see TRAIT_BLANKET_IMPLEMENTATION.md

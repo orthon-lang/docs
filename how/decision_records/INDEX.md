@@ -241,3 +241,4 @@
 *Editorial notes (no decision change):*
 
 - 2026-09-28 — editorial: fn->fun typo fix applied repo-wide incl. decision records; no decision change.
+- 2026-09-28 — editorial: `[T]` -> `<T>` generics-notation migration (EDR-086) applied repo-wide incl. decision records; no decision change.

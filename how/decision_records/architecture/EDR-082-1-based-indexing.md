@@ -71,7 +71,7 @@ EDR-022, SPAN EDR-064) — handled as a documented cross-concept amendment
    application code.
 
 4. **`enumerate` defaults to 1**, matching the collection base. It is a
-   plain Standard Library method on `Iterator[T]` (EDR-022/EDR-032), *not a
+   plain Standard Library method on `Iterator<T>` (EDR-022/EDR-032), *not a
    keyword*: `enumerate(items) ≡ zip(1..len(items), items)` (spelling superseded by EDR-083). No start
    parameter — an offset is expressed by an explicit preliminary range
    (`zip(offset..len(items), items)`).
@@ -121,7 +121,7 @@ EDR-022, SPAN EDR-064) — handled as a documented cross-concept amendment
 - `@get` contract: first element at `@get(1)`, last at `@get(len(a))`.
 - Every range literal is inclusive-inclusive `1..N`; no half-open form in
   application code; `0..<N` only at the FFI boundary.
-- `enumerate` base = 1; `enumerate`/`zip` are StdLib methods on `Iterator[T]`.
+- `enumerate` base = 1; `enumerate`/`zip` are StdLib methods on `Iterator<T>`.
 - `Span` uses the single base (1); raw C buffers translate at the FFI
   boundary.
 - Collection Indexing Policy = `OneBased` (IMPLEMENTATION_POLICIES.md).

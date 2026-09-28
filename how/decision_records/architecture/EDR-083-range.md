@@ -26,7 +26,7 @@ The problem: **how are ranges defined as first-class values, how do they relate 
 2. **Literal `a..b` is inclusive-inclusive** — `1..N` produces N elements (1, 2, …, N). This is the *only* range semantic (per EDR-082). The `..=` spelling is **eliminated** — a single spelling, no redundant alias.
 3. **Named canonical form** `range(a, b)` (Named Before Symbolic): `range(a, b)` ≡ `a..b`. The literal is **Language** (compiler-recognized; participates in `@get` indexing and `for` desugaring); the `Range` type and `range()` constructor are **Standard Library** (LIBRARY_BOUNDARY, per EDR-082 layer classification).
 4. **`0..<N` is an FFI-boundary interop utility only** — never in application code. Visibility is determined by the FFI index-translation policy (Milestone 8; INDEXING Open Q4).
-5. **`Range` implements `IntoIterator[Int]`** — usable in `for` loops and combinator chains directly, without an explicit `.iter()`. Combinators (`map`, `filter`, …) apply directly to the range value (SEQUENCE_METHODS). Chains stay lazy.
+5. **`Range` implements `IntoIterator<Int>`** — usable in `for` loops and combinator chains directly, without an explicit `.iter()`. Combinators (`map`, `filter`, …) apply directly to the range value (SEQUENCE_METHODS). Chains stay lazy.
 6. **`.step(n)` is a method on `Range`** returning a *strided* `Range` value (still a data value, still `IntoIterator`). `step(0)` is a compile-time error. A negative step iterates in descending direction.
 7. **Empty range is a value** — `end < start` (e.g., `1..0`) yields zero elements, not a syntax error.
 8. **`enumerate` composition reconciled** — the spelling from EDR-082/INDEXING is corrected to `enumerate(items) ≡ zip(1..len(items), items)` (the `..=` form is superseded by this decision).
@@ -53,7 +53,7 @@ The problem: **how are ranges defined as first-class values, how do they relate 
 
 1. `1..N` is the only range semantic in application code; no half-open form; `..=` does not exist.
 2. `range(a, b)` ≡ `a..b`; the named form is StdLib, the literal is Language.
-3. `Range` implements `IntoIterator[Int]`; combinator chains apply directly and stay lazy.
+3. `Range` implements `IntoIterator<Int>`; combinator chains apply directly and stay lazy.
 4. `.step(n)` returns a strided `Range` value; `step(0)` is a compile-time error.
 5. Empty range `end < start` is a value with zero elements.
 6. `0..<N` appears only at the FFI boundary.

@@ -44,7 +44,7 @@ values to consumers that react asynchronously.
 4. **Lifecycle control** — Streams expose `emit`, `complete`, and `error`
    control from the producer side.
 5. **Composable with the sequence model** — Pull-to-push bridging (consuming an
-   `Iterator[T]` and pushing to subscribers) is a supported construction.
+   `Iterator<T>` and pushing to subscribers) is a supported construction.
 
 ## Policy Footprint
 
@@ -74,7 +74,7 @@ stream.complete()
 
 Streams can be created from:
 - Delegate-based producers (delegate pushes values via `send`)
-- Generator conversions (pull → push bridge: consuming an `Iterator[T]` and
+- Generator conversions (pull → push bridge: consuming an `Iterator<T>` and
   pushing values to subscribers)
 - Event sources (timers, I/O, GUI events)
 - Manual `emit` + `complete` + `error` control
