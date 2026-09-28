@@ -285,7 +285,7 @@ TDD features get dedicated plans with `type: tdd`.
 → Yes: Create a TDD plan
 → No: Standard task in standard plan
 
-See `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/tdd.md` for TDD plan structure.
+See `.claude/gsd-core/references/tdd.md` for TDD plan structure.
 
 ---
 
@@ -547,7 +547,7 @@ user_setup:
 
 **Result:** Execute-plan generates `{phase}-USER-SETUP.md` with checklist for the user.
 
-See `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/user-setup.md` for full schema and examples
+See `.claude/gsd-core/templates/user-setup.md` for full schema and examples
 
 ---
 

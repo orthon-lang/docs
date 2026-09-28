@@ -343,7 +343,7 @@ The H1 carries the PROJECT name only — never a version and never a milestone n
 Milestone identity (version + name) lives in milestone headings (`## vX.Y — [Name]`) or
 `## Milestones` bullets (`🚧 **vX.Y [Name]**`), never in the H1. A trailing version in the
 H1 (`# Roadmap: [Project] — [Name] (vX.Y)`) corrupts milestone-name extraction (#4134).
-`/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/roadmap.md` is the canonical shape.
+`.claude/gsd-core/templates/roadmap.md` is the canonical shape.
 
 ### 1. Summary Checklist (under `## Phases`)
 
@@ -447,11 +447,11 @@ This annotation is consumed by downstream workflows (`new-project`, `progress`) 
 | 2. Name | 0/2 | Not started | - |
 ```
 
-Reference full template: `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/roadmap.md`
+Reference full template: `.claude/gsd-core/templates/roadmap.md`
 
 ## STATE.md Structure
 
-Use template from `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/state.md`.
+Use template from `.claude/gsd-core/templates/state.md`.
 
 Key sections:
 - Project Reference (core value, current focus)

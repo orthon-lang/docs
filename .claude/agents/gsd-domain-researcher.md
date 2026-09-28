@@ -24,7 +24,7 @@ Research the business domain — not the technical framework. Write Section 1b o
 </documentation_lookup>
 
 <required_reading>
-Read `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-evals.md` — specifically the rubric design and domain expert sections.
+Read `.claude/gsd-core/references/ai-evals.md` — specifically the rubric design and domain expert sections.
 </required_reading>
 
 <input>

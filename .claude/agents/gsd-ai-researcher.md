@@ -24,7 +24,7 @@ Write Sections 3–4b of AI-SPEC.md: framework quick reference, implementation g
 </documentation_lookup>
 
 <required_reading>
-Read `/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-frameworks.md` for framework profiles and known pitfalls before fetching docs.
+Read `.claude/gsd-core/references/ai-frameworks.md` for framework profiles and known pitfalls before fetching docs.
 </required_reading>
 
 <input>
