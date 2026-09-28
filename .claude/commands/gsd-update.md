@@ -25,7 +25,7 @@ Routes to the update workflow which handles:
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/update.md
+@.claude/gsd-core/workflows/update.md
 </execution_context>
 
 <flags>
@@ -44,6 +44,6 @@ Parse the first token of $ARGUMENTS:
 </process>
 
 <execution_context_extended>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/sync-skills.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/reapply-patches.md
+@.claude/gsd-core/workflows/sync-skills.md
+@.claude/gsd-core/workflows/reapply-patches.md
 </execution_context_extended>

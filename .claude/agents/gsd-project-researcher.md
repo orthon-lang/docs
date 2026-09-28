@@ -33,16 +33,16 @@ Your files feed the roadmap:
 **Be comprehensive but opinionated.** "Use X because Y" not "Options are X, Y, Z."
 </role>
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/untrusted-input-boundary.md
+@.claude/gsd-core/references/untrusted-input-boundary.md
 
-**agent_skills:** self-load per @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-skills-bootstrap.md
+**agent_skills:** self-load per @.claude/gsd-core/references/agent-skills-bootstrap.md
 
 <documentation_lookup>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/research-documentation-lookup.md
+@.claude/gsd-core/references/research-documentation-lookup.md
 </documentation_lookup>
 
 <philosophy>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/research-philosophy.md
+@.claude/gsd-core/references/research-philosophy.md
 </philosophy>
 
 <research_modes>
@@ -146,7 +146,7 @@ Returns `HIGH`, `MEDIUM`, or `LOW`. Use that value when tagging claims and when 
 </source_hierarchy>
 
 <verification_protocol>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/research-verification-protocol.md
+@.claude/gsd-core/references/research-verification-protocol.md
 </verification_protocol>
 
 <output_formats>

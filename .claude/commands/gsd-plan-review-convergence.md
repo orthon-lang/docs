@@ -26,10 +26,10 @@ Replaces gsd-plan-phase's internal gsd-plan-checker with external AI reviewers (
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/plan-review-convergence.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/revision-loop.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gates.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-contracts.md
+@.claude/gsd-core/workflows/plan-review-convergence.md
+@.claude/gsd-core/references/revision-loop.md
+@.claude/gsd-core/references/gates.md
+@.claude/gsd-core/references/agent-contracts.md
 </execution_context>
 
 

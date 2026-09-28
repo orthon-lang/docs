@@ -18,7 +18,7 @@ Verify milestone achieved its definition of done. Check requirements coverage, c
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/audit-milestone.md
+@.claude/gsd-core/workflows/audit-milestone.md
 </execution_context>
 
 <context>

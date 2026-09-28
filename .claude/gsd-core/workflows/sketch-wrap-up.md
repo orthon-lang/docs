@@ -1,4 +1,4 @@
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/response-language-directive.md
+@.claude/gsd-core/references/response-language-directive.md
 
 <purpose>
 Curate sketch design findings and package them into a persistent project skill for future

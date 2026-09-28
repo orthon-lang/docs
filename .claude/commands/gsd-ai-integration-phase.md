@@ -22,9 +22,9 @@ Flow: Select Framework → Research Docs → Research Domain → Design Eval Str
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/ai-integration-phase.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-frameworks.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-evals.md
+@.claude/gsd-core/workflows/ai-integration-phase.md
+@.claude/gsd-core/references/ai-frameworks.md
+@.claude/gsd-core/references/ai-evals.md
 </execution_context>
 
 <context>

@@ -1,4 +1,4 @@
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/response-language-directive.md
+@.claude/gsd-core/references/response-language-directive.md
 
 <purpose>
 Cross-AI peer review — invoke external AI CLIs to independently review phase plans.

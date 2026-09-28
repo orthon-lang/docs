@@ -1,4 +1,4 @@
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/response-language-directive.md
+@.claude/gsd-core/references/response-language-directive.md
 
 <purpose>
 Socratic ideation workflow. Guides the developer through exploring an idea via probing questions,
@@ -8,8 +8,8 @@ offers mid-conversation research when useful, then routes crystallized outputs t
 <required_reading>
 Read all files referenced by the invoking prompt's execution_context before starting.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/questioning.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/domain-probes.md
+@.claude/gsd-core/references/questioning.md
+@.claude/gsd-core/references/domain-probes.md
 </required_reading>
 
 <available_agent_types>

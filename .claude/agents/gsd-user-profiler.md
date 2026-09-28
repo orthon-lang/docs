@@ -42,7 +42,7 @@ Key characteristics of the input:
 </input>
 
 <reference>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/user-profiling.md
+@.claude/gsd-core/references/user-profiling.md
 
 This is the detection heuristics rubric. Read it in full before analyzing any messages. It defines:
 - The 8 dimensions and their rating spectrums

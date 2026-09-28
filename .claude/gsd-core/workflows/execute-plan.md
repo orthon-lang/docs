@@ -6,7 +6,7 @@ Execute a phase prompt (PLAN.md) and create the outcome summary (SUMMARY.md).
 Read STATE.md before any operation to load project context.
 Read config.json for planning behavior settings.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/git-integration.md
+@.claude/gsd-core/references/git-integration.md
 </required_reading>
 
 <atomic_close_out_invariant>
@@ -42,7 +42,7 @@ Valid GSD subagent types (use exact names — do not fall back to 'general-purpo
 <step name="init_context" priority="first">
 Load execution context (paths only to minimize orchestrator context):
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gsd-run-resolver.md
+@.claude/gsd-core/references/gsd-run-resolver.md
 
 ```bash
 INIT=$(gsd_run query init.execute-phase "${PHASE}")

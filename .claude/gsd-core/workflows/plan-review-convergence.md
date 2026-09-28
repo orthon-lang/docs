@@ -9,9 +9,9 @@ Orchestrator only does: init, loop control, parse CYCLE_SUMMARY for HIGH and act
 <required_reading>
 Read all files referenced by the invoking prompt's execution_context before starting.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/revision-loop.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gates.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-contracts.md
+@.claude/gsd-core/references/revision-loop.md
+@.claude/gsd-core/references/gates.md
+@.claude/gsd-core/references/agent-contracts.md
 </required_reading>
 
 <process>

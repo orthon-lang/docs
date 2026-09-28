@@ -17,7 +17,7 @@ doesn't belong to any specific phase.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/thread.md
+@.claude/gsd-core/workflows/thread.md
 </execution_context>
 
 <process>

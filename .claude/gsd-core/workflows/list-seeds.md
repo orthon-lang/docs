@@ -1,4 +1,4 @@
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/response-language-directive.md
+@.claude/gsd-core/references/response-language-directive.md
 
 <purpose>
 List captured seeds for browsing and audit, with an optional status filter. Read-only — never mutates seeds.

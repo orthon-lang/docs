@@ -3,7 +3,7 @@ Audit Nyquist validation gaps for a completed phase. Generate missing tests. Upd
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/ui-brand.md
 </required_reading>
 
 <available_agent_types>

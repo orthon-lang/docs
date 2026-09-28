@@ -23,7 +23,7 @@ Output: updated VALIDATION.md + generated test files.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/validate-phase.md
+@.claude/gsd-core/workflows/validate-phase.md
 </execution_context>
 
 <context>

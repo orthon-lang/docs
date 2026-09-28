@@ -12,11 +12,11 @@ Create executable phase prompts (PLAN.md files) for a roadmap phase with integra
 <required_reading>
 Read all files referenced by the invoking prompt's execution_context before starting.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/revision-loop.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gate-prompts.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-contracts.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gates.md
+@.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/revision-loop.md
+@.claude/gsd-core/references/gate-prompts.md
+@.claude/gsd-core/references/agent-contracts.md
+@.claude/gsd-core/references/gates.md
 </required_reading>
 
 <available_agent_types>

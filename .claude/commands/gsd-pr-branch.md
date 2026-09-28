@@ -19,7 +19,7 @@ changes that are irrelevant to code review.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/pr-branch.md
+@.claude/gsd-core/workflows/pr-branch.md
 </execution_context>
 
 <process>

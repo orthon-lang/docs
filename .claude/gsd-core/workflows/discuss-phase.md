@@ -12,9 +12,9 @@ You are a thinking partner, not an interviewer. The user is the visionary — yo
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/domain-probes.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gate-prompts.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/universal-anti-patterns.md
+@.claude/gsd-core/references/domain-probes.md
+@.claude/gsd-core/references/gate-prompts.md
+@.claude/gsd-core/references/universal-anti-patterns.md
 </required_reading>
 
 <progressive_disclosure>
@@ -286,7 +286,7 @@ Parse JSON for: `todo_count`, `matches[]` (each with `file`, `title`, `area`, `s
 <step name="scout_codebase">
 Lightweight scan of existing code to inform gray area identification (~10% context).
 
-Read `@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/scout-codebase.md` — it contains the phase-type→map selection table, single-read rule, no-maps fallback, and `<codebase_context>` output schema. Then execute:
+Read `@.claude/gsd-core/references/scout-codebase.md` — it contains the phase-type→map selection table, single-read rule, no-maps fallback, and `<codebase_context>` output schema. Then execute:
 1. `ls .planning/codebase/*.md` to find existing maps
 2. Select 2–3 maps via the reference's table; or grep fallback if none exist
 3. Build internal `<codebase_context>` per the reference's output schema
@@ -296,7 +296,7 @@ Read `@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/scout-cod
 ```bash
 DISCUSS_PRE_HOOKS_JSON=$(gsd_run loop render-hooks discuss:pre --raw)
 ```
-Apply each entry in `activeHooks` per @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/loop-hook-dispatch.md. Empty list → continue to `analyze_phase`.
+Apply each entry in `activeHooks` per @.claude/gsd-core/references/loop-hook-dispatch.md. Empty list → continue to `analyze_phase`.
 </step>
 
 <step name="analyze_phase">
@@ -415,7 +415,7 @@ Write the file.
 ```bash
 DISCUSS_POST_HOOKS_JSON=$(gsd_run loop render-hooks discuss:post --raw)
 ```
-Apply each entry in `activeHooks` per @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/loop-hook-dispatch.md. Empty list → continue to `confirm_creation`.
+Apply each entry in `activeHooks` per @.claude/gsd-core/references/loop-hook-dispatch.md. Empty list → continue to `confirm_creation`.
 </step>
 
 <step name="confirm_creation">

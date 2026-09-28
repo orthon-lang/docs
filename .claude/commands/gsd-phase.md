@@ -32,10 +32,10 @@ Mode routing:
 </routing>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/add-phase.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/insert-phase.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/remove-phase.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/edit-phase.md
+@.claude/gsd-core/workflows/add-phase.md
+@.claude/gsd-core/workflows/insert-phase.md
+@.claude/gsd-core/workflows/remove-phase.md
+@.claude/gsd-core/workflows/edit-phase.md
 </execution_context>
 
 <context>

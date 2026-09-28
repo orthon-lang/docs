@@ -3,7 +3,7 @@ Retroactive 6-pillar visual audit of implemented frontend code. Standalone comma
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/ui-brand.md
 </required_reading>
 
 <available_agent_types>

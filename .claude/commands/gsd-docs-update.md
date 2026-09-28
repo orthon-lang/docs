@@ -26,7 +26,7 @@ Flag handling rule:
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/docs-update.md
+@.claude/gsd-core/workflows/docs-update.md
 </execution_context>
 
 <context>

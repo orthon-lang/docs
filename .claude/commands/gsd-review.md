@@ -20,7 +20,7 @@ planning via /gsd-plan-phase --reviews.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/review.md
+@.claude/gsd-core/workflows/review.md
 </execution_context>
 
 <context>

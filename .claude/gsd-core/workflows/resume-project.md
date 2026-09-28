@@ -1,4 +1,4 @@
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/response-language-directive.md
+@.claude/gsd-core/references/response-language-directive.md
 
 <trigger>
 Use this workflow when:
@@ -13,7 +13,7 @@ Instantly restore full project context so "Where were we?" has an immediate, com
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/continuation-format.md
+@.claude/gsd-core/references/continuation-format.md
 </required_reading>
 
 <process>

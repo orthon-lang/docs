@@ -23,7 +23,7 @@ Routes to the resume-project workflow which handles:
   </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/resume-project.md
+@.claude/gsd-core/workflows/resume-project.md
 </execution_context>
 
 <process>

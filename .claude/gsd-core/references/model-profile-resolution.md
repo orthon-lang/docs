@@ -26,7 +26,7 @@ string** when nothing resolved.
 
 ## Lookup Table
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/model-profiles.md
+@.claude/gsd-core/references/model-profiles.md
 
 ## Passing the model to a spawn
 

@@ -5,7 +5,7 @@ Use after /gsd-execute-phase to verify that the evaluation strategy from AI-SPEC
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-evals.md
+@.claude/gsd-core/references/ai-evals.md
 </required_reading>
 
 <process>

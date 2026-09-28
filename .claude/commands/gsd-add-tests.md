@@ -26,7 +26,7 @@ Output: Test files committed with message `test(phase-{N}): add unit and E2E tes
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/add-tests.md
+@.claude/gsd-core/workflows/add-tests.md
 </execution_context>
 
 <context>

@@ -30,9 +30,9 @@ Does not require prior new-project setup — auto-creates `.planning/spikes/` if
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/spike.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/spike-wrap-up.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/workflows/spike.md
+@.claude/gsd-core/workflows/spike-wrap-up.md
+@.claude/gsd-core/references/ui-brand.md
 </execution_context>
 
 

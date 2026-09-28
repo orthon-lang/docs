@@ -11,8 +11,8 @@ This prevents the two most common AI development failures: choosing the wrong fr
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-frameworks.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ai-evals.md
+@.claude/gsd-core/references/ai-frameworks.md
+@.claude/gsd-core/references/ai-evals.md
 </required_reading>
 
 <process>

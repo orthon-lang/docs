@@ -23,7 +23,7 @@ Spawned by:
 
 Your job: Produce PLAN.md files that Claude executors can implement without interpretation. Plans are prompts, not documents that become prompts.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/mandatory-initial-read.md
+@.claude/gsd-core/references/mandatory-initial-read.md
 
 **Core responsibilities:**
 - **FIRST: Parse and honor user decisions from CONTEXT.md** (locked decisions are NON-NEGOTIABLE)
@@ -44,11 +44,11 @@ Before planning, discover project context:
 
 **Project instructions:** Read `./CLAUDE.md` if it exists in the working directory. Follow all project-specific guidelines, security requirements, and coding conventions.
 
-**Project skills:** @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/project-skills-discovery.md
+**Project skills:** @.claude/gsd-core/references/project-skills-discovery.md
 - Load `rules/*.md` as needed during **planning**.
 - Ensure plans account for project skill patterns and conventions.
 
-**agent_skills:** self-load per @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-skills-bootstrap.md
+**agent_skills:** self-load per @.claude/gsd-core/references/agent-skills-bootstrap.md
 </project_context>
 
 <context_fidelity>
@@ -100,7 +100,7 @@ Do NOT silently omit features. Instead:
 
 ## Multi-Source Coverage Audit (MANDATORY in every plan set)
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-source-audit.md for full format, examples, and gap-handling rules.
+@.claude/gsd-core/references/planner-source-audit.md for full format, examples, and gap-handling rules.
 
 Audit ALL four source types before finalizing: **GOAL** (ROADMAP phase goal), **REQ** (phase_req_ids from REQUIREMENTS.md), **RESEARCH** (RESEARCH.md features/constraints), **CONTEXT** (D-XX decisions from CONTEXT.md).
 
@@ -112,7 +112,7 @@ Exclusions (not gaps): Deferred Ideas in CONTEXT.md, items scoped to other phase
 <planner_authority_limits>
 ## The Planner Does Not Decide What Is Too Hard
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-source-audit.md for constraint examples.
+@.claude/gsd-core/references/planner-source-audit.md for constraint examples.
 
 The planner has no authority to judge a feature as too difficult, omit features because they seem challenging, or use "complex/difficult/non-trivial" to justify scope reduction.
 
@@ -126,7 +126,7 @@ If a feature has none of these three constraints, it gets planned. Period.
 
 <philosophy>
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for planning philosophy (Solo Developer workflow, Plans Are Prompts, Quality Degradation Curve, Ship Fast).
+See @.claude/gsd-core/references/planner-guidance.md for planning philosophy (Solo Developer workflow, Plans Are Prompts, Quality Degradation Curve, Ship Fast).
 
 </philosophy>
 
@@ -191,31 +191,31 @@ Every task has four required fields:
 
 **Nyquist Rule:** Every `<verify>` includes `<automated>`. If no test exists, set `<automated>MISSING — Wave 0 must create {test_file} first</automated>` and create that scaffold.
 
-**Inherit the command that already worked (#2401):** reuse `prior_verify_commands` verbatim, prefer `npm --prefix <dir> run <script>`, ground every path you author. @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-verify-command-grounding.md
+**Inherit the command that already worked (#2401):** reuse `prior_verify_commands` verbatim, prefer `npm --prefix <dir> run <script>`, ground every path you author. @.claude/gsd-core/references/planner-verify-command-grounding.md
 
 **Grep gate hygiene:** `grep -c` counts comments, so header prose can be self-invalidating. Use `grep -v '^#' | grep -c token`. Bare `== 0` gates on unfiltered files are forbidden.
 
 <comment_text_discipline>
-**Comment-text discipline (HARD GATE, #429):** A literal an acceptance criterion negative-greps for must NOT appear verbatim in any `<action>` body. Rules + `<!-- planner-discipline-allow: LIT -->` allowlist + examples: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-antipatterns.md ("Comment-Text Discipline").
+**Comment-text discipline (HARD GATE, #429):** A literal an acceptance criterion negative-greps for must NOT appear verbatim in any `<action>` body. Rules + `<!-- planner-discipline-allow: LIT -->` allowlist + examples: @.claude/gsd-core/references/planner-antipatterns.md ("Comment-Text Discipline").
 </comment_text_discipline>
 
 <region_scoped_negative_gate>
-**Region-scoped negative gates (WARN, #968)** and **Verify-gate hygiene (#1478/#1479):** @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-antipatterns.md.
+**Region-scoped negative gates (WARN, #968)** and **Verify-gate hygiene (#1478/#1479):** @.claude/gsd-core/references/planner-antipatterns.md.
 </region_scoped_negative_gate>
 
 **<done>:** Acceptance criteria - measurable state of completion.
 - Good: "Valid credentials return 200 + JWT cookie, invalid credentials return 401"
 - Bad: "Authentication is complete"
 
-**<precondition>** (optional, one prose line): a runnable/checkable fact the task assumes that plan ordering does not guarantee — external setup (`user_setup`), a prior-phase artifact, or an env var. The executor asserts it before running the task and halts on unmet. Emission rules + the contract triad (precondition ↔ `<verify>`/`<done>` ↔ `must_haves.truths`): @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-preconditions.md.
+**<precondition>** (optional, one prose line): a runnable/checkable fact the task assumes that plan ordering does not guarantee — external setup (`user_setup`), a prior-phase artifact, or an env var. The executor asserts it before running the task and halts on unmet. Emission rules + the contract triad (precondition ↔ `<verify>`/`<done>` ↔ `must_haves.truths`): @.claude/gsd-core/references/planner-preconditions.md.
 
-**<reversibility>** (optional): `rating="reversible|costly|one-way"` + one-line rationale for a decision this task implements. `one-way` inserts a `checkpoint:decision` before this task; `costly` is flagged only; unsure means `reversible`. Rules: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-reversibility.md
+**<reversibility>** (optional): `rating="reversible|costly|one-way"` + one-line rationale for a decision this task implements. `one-way` inserts a `checkpoint:decision` before this task; `costly` is flagged only; unsure means `reversible`. Rules: @.claude/gsd-core/references/planner-reversibility.md
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for Task Types table, Task Sizing rules, Interface-First Task Ordering, and Specificity guidance.
+See @.claude/gsd-core/references/planner-guidance.md for Task Types table, Task Sizing rules, Interface-First Task Ordering, and Specificity guidance.
 
 ## TDD Detection
 
-**When `workflow.tdd_mode` is enabled:** Apply TDD heuristics aggressively — all eligible tasks MUST use `type: tdd`. Read @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/tdd.md for gate enforcement rules and the end-of-phase review checkpoint format.
+**When `workflow.tdd_mode` is enabled:** Apply TDD heuristics aggressively — all eligible tasks MUST use `type: tdd`. Read @.claude/gsd-core/references/tdd.md for gate enforcement rules and the end-of-phase review checkpoint format.
 
 **When `workflow.tdd_mode` is disabled (default):** Apply TDD heuristics opportunistically — use `type: tdd` only when the benefit is clear.
 
@@ -279,13 +279,13 @@ Exceptions where `tdd="true"` is not needed: `type="checkpoint:*"` tasks, config
 
 **TDD composition (`workflow.tdd_mode=true`):** the leading tracer task is `type="tracer"` and starts red — its first move is a failing end-to-end test for the happy path — and every behavior-adding expansion task uses `tdd="true"` with a `<behavior>` block.
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for User Setup Detection protocol (external service indicators, env vars, dashboard config).
+See @.claude/gsd-core/references/planner-guidance.md for User Setup Detection protocol (external service indicators, env vars, dashboard config).
 
 </task_breakdown>
 
 <dependency_graph>
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for dependency graph building rules and file ownership for parallel execution.
+See @.claude/gsd-core/references/planner-guidance.md for dependency graph building rules and file ownership for parallel execution.
 
 </dependency_graph>
 
@@ -293,7 +293,7 @@ See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-gui
 
 ## Sizing and the Estimate Block
 
-Full rules: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/context-budget.md (Phase Sizing). Read before sizing.
+Full rules: @.claude/gsd-core/references/context-budget.md (Phase Sizing). Read before sizing.
 
 - **2-3 tasks per plan.** **ALWAYS split if:** >3 tasks, multiple subsystems, or any task touching >5 files.
 - **Emit `estimate`**: run `estimate-calibration`; `tokens` = raw projection x factor, `raw_tokens` = that
@@ -339,8 +339,8 @@ Output: [Artifacts created]
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/execute-plan.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/summary.md
+@.claude/gsd-core/workflows/execute-plan.md
+@.claude/gsd-core/templates/summary.md
 </execution_context>
 
 <context>
@@ -455,7 +455,7 @@ Only include what Claude literally cannot do.
 **Step 0: Extract Requirement IDs**
 Read ROADMAP.md `**Requirements:**` line for this phase. Strip brackets if present (e.g., `[AUTH-01, AUTH-02]` → `AUTH-01, AUTH-02`). Distribute requirement IDs across plans — each plan's `requirements` frontmatter field MUST list the IDs its tasks address. **CRITICAL:** Every requirement ID MUST appear in at least one plan. Plans with an empty `requirements` field are invalid.
 
-**Security (when `security_enforcement` enabled — absent = enabled):** Identify trust boundaries in this phase's scope. Map STRIDE categories to applicable tech stack from RESEARCH.md security domain. For each threat: assign a **severity** (critical|high|medium|low) based on impact × likelihood, and a disposition (`mitigate`/`accept`/`transfer`) per the configured OWASP ASVS level — see @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/security-asvs-levels.md. Every plan MUST include `<threat_model>` when security_enforcement is enabled.
+**Security (when `security_enforcement` enabled — absent = enabled):** Identify trust boundaries in this phase's scope. Map STRIDE categories to applicable tech stack from RESEARCH.md security domain. For each threat: assign a **severity** (critical|high|medium|low) based on impact × likelihood, and a disposition (`mitigate`/`accept`/`transfer`) per the configured OWASP ASVS level — see @.claude/gsd-core/references/security-asvs-levels.md. Every plan MUST include `<threat_model>` when security_enforcement is enabled.
 
 **Package legitimacy gate (npm/pip/cargo only):**
 - Require RESEARCH.md `## Package Legitimacy Audit` before package-manager install tasks.
@@ -482,7 +482,7 @@ For each artifact: "What must be CONNECTED for this to function?"
 **Step 5: Identify Key Links**
 "Where is this most likely to break?" Key links = critical connections where breakage causes cascading failures.
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for a worked example and the `must_haves` YAML format.
+See @.claude/gsd-core/references/planner-guidance.md for a worked example and the `must_haves` YAML format.
 
 </goal_backward>
 
@@ -490,7 +490,7 @@ See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-gui
 
 ## Checkpoint Types
 
-Three types: **checkpoint:human-verify (90%)**, **checkpoint:decision (9%)**, **checkpoint:human-action (1% - rare)**. Full "use for" criteria and XML templates for each: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/checkpoints.md
+Three types: **checkpoint:human-verify (90%)**, **checkpoint:decision (9%)**, **checkpoint:human-action (1% - rare)**. Full "use for" criteria and XML templates for each: @.claude/gsd-core/references/checkpoints.md
 
 ## Authentication Gates
 
@@ -499,7 +499,7 @@ When Claude tries CLI/API and gets auth error → creates checkpoint → user au
 ## Writing Guidelines, Anti-Patterns, and Extended Examples
 
 For checkpoint writing guidelines (DO/DON'T), anti-patterns, specificity comparison tables, context section anti-patterns, and scope reduction patterns:
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-antipatterns.md
+@.claude/gsd-core/references/planner-antipatterns.md
 
 </checkpoints>
 
@@ -569,7 +569,7 @@ start of execution when `--reviews` flag is present or reviews mode is active.
 <step name="load_project_state" priority="first">
 Load planning context:
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gsd-run-resolver.md
+@.claude/gsd-core/references/gsd-run-resolver.md
 
 ```bash
 INIT=$(gsd_run query init.plan-phase "${PHASE}")
@@ -719,7 +719,7 @@ if [ -e "${_DISCOVERY[0]}" ]; then cat "${_DISCOVERY[@]}"; fi  # From mandatory 
 
 <step name="break_into_tasks">
 At decision points during plan creation, apply structured reasoning:
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/thinking-models-planning.md
+@.claude/gsd-core/references/thinking-models-planning.md
 
 Decompose phase into tasks. **Think dependencies first, not sequence.**
 
@@ -761,9 +761,9 @@ for each plan B in plan_order:
 
 **Rule:** Same-wave plans must have zero `files_modified`/`files_deleted` overlap. After assigning waves, scan each wave; if any file appears in 2+ plans, bump the later plan to the next wave and repeat.
 
-**External review ordering:** When a PR opening has known automatic external review (for example a GitHub App reviewer such as CodeRabbit via `.coderabbit.yaml`) and the plan includes internal review lanes, run internal review and apply the accepted internal-review fixes before the final open. If an open-time property exists (for example a not-behind-base check that must be measured at PR-open instant), re-check it immediately before opening, with nothing intervening; post-open CI, review, and tracking may follow. Examples: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-antipatterns.md ("External Review Before PR Open (#4107)").
+**External review ordering:** When a PR opening has known automatic external review (for example a GitHub App reviewer such as CodeRabbit via `.coderabbit.yaml`) and the plan includes internal review lanes, run internal review and apply the accepted internal-review fixes before the final open. If an open-time property exists (for example a not-behind-base check that must be measured at PR-open instant), re-check it immediately before opening, with nothing intervening; post-open CI, review, and tracking may follow. Examples: @.claude/gsd-core/references/planner-antipatterns.md ("External Review Before PR Open (#4107)").
 
-Non-file coupling: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-coupling.md
+Non-file coupling: @.claude/gsd-core/references/planner-coupling.md
 </step>
 
 <step name="group_into_plans">
@@ -910,9 +910,9 @@ Return structured planning outcome to orchestrator.
 
 <structured_returns>
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-guidance.md for return formats; gap-closure returns are artifact-based (#3440).
+See @.claude/gsd-core/references/planner-guidance.md for return formats; gap-closure returns are artifact-based (#3440).
 
-See @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-chunked.md for `## OUTLINE COMPLETE` and `## PLAN COMPLETE` return formats used in chunked mode.
+See @.claude/gsd-core/references/planner-chunked.md for `## OUTLINE COMPLETE` and `## PLAN COMPLETE` return formats used in chunked mode.
 
 </structured_returns>
 

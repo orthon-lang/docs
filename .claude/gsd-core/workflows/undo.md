@@ -3,8 +3,8 @@ Safe git revert workflow. Rolls back GSD phase or plan commits selected within t
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gate-prompts.md
+@.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/gate-prompts.md
 </required_reading>
 
 <process>

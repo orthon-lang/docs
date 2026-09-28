@@ -33,9 +33,9 @@ Mode routing:
 </routing>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/settings.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/settings-advanced.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/settings-integrations.md
+@.claude/gsd-core/workflows/settings.md
+@.claude/gsd-core/workflows/settings-advanced.md
+@.claude/gsd-core/workflows/settings-integrations.md
 </execution_context>
 
 <context>

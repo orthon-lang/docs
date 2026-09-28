@@ -32,10 +32,10 @@ Three modes:
 </flags>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/progress.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/next.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/do.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/workflows/progress.md
+@.claude/gsd-core/workflows/next.md
+@.claude/gsd-core/workflows/do.md
+@.claude/gsd-core/references/ui-brand.md
 </execution_context>
 
 <process>

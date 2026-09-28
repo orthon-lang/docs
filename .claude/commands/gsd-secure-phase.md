@@ -23,7 +23,7 @@ Output: updated SECURITY.md.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/secure-phase.md
+@.claude/gsd-core/workflows/secure-phase.md
 </execution_context>
 
 <context>

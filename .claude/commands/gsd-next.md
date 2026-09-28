@@ -17,8 +17,8 @@ This is a launcher/router only. It never does the work itself. It reads project 
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/smart-entry.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/workflows/smart-entry.md
+@.claude/gsd-core/references/ui-brand.md
 </execution_context>
 
 <context>

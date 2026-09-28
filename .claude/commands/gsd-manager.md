@@ -26,8 +26,8 @@ Designed for power users who want to parallelize work across phases from one ter
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/manager.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/workflows/manager.md
+@.claude/gsd-core/references/ui-brand.md
 </execution_context>
 
 <context>

@@ -45,10 +45,10 @@ Output: [What artifacts will be created]
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/execute-plan.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/summary.md
+@.claude/gsd-core/workflows/execute-plan.md
+@.claude/gsd-core/templates/summary.md
 [If plan contains checkpoint tasks (type="checkpoint:*"), add:]
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/checkpoints.md
+@.claude/gsd-core/references/checkpoints.md
 </execution_context>
 
 <context>
@@ -92,7 +92,7 @@ Output: [What artifacts will be created]
   <done>[Acceptance criteria]</done>
 </task>
 
-<!-- For checkpoint task examples and patterns, see @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/checkpoints.md -->
+<!-- For checkpoint task examples and patterns, see @.claude/gsd-core/references/checkpoints.md -->
 
 <task type="checkpoint:decision" gate="blocking">
   <decision>[What needs deciding]</decision>
@@ -389,9 +389,9 @@ Output: Working dashboard component.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/execute-plan.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/summary.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/checkpoints.md
+@.claude/gsd-core/workflows/execute-plan.md
+@.claude/gsd-core/templates/summary.md
+@.claude/gsd-core/references/checkpoints.md
 </execution_context>
 
 <context>

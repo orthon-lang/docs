@@ -21,8 +21,8 @@ Output: Milestone archived (roadmap + requirements), PROJECT.md evolved, git tag
 <execution_context>
 **Load these files NOW (before proceeding):**
 
-- @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/complete-milestone.md (main workflow)
-- @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/milestone-archive.md (archive template)
+- @.claude/gsd-core/workflows/complete-milestone.md (main workflow)
+- @.claude/gsd-core/templates/milestone-archive.md (archive template)
   </execution_context>
 
 <context>

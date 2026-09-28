@@ -30,10 +30,10 @@ Mode routing:
 </routing>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/new-workspace.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/list-workspaces.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/remove-workspace.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/workflows/new-workspace.md
+@.claude/gsd-core/workflows/list-workspaces.md
+@.claude/gsd-core/workflows/remove-workspace.md
+@.claude/gsd-core/references/ui-brand.md
 </execution_context>
 
 <context>

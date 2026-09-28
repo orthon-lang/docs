@@ -21,10 +21,10 @@ Import external plan files into the GSD planning system with conflict detection 
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/import.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gate-prompts.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/doc-conflict-engine.md
+@.claude/gsd-core/workflows/import.md
+@.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/gate-prompts.md
+@.claude/gsd-core/references/doc-conflict-engine.md
 </execution_context>
 
 <context>

@@ -26,7 +26,7 @@ Flags:
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/audit-fix.md
+@.claude/gsd-core/workflows/audit-fix.md
 </execution_context>
 
 <process>

@@ -8,9 +8,9 @@ This workflow wires Phase 1 (session pipeline) and Phase 2 (profiling engine) in
 Read all files referenced by the invoking prompt's execution_context before starting.
 
 Key references:
-- @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md (display patterns)
-- @/Users/mniedre/git/orthon-lang/docs/.claude/agents/gsd-user-profiler.md (profiler agent definition)
-- @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/user-profiling.md (profiling reference doc)
+- @.claude/gsd-core/references/ui-brand.md (display patterns)
+- @.claude/agents/gsd-user-profiler.md (profiler agent definition)
+- @.claude/gsd-core/references/user-profiling.md (profiling reference doc)
 </required_reading>
 
 <process>
@@ -180,7 +180,7 @@ The agent prompt should follow this structure:
 ```
 Read the profiling reference document and the sampled session messages, then analyze the developer's behavioral patterns across all 8 dimensions.
 
-Reference: @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/user-profiling.md
+Reference: @.claude/gsd-core/references/user-profiling.md
 Session data: @{temp_dir}/profile-sample.jsonl
 
 Analyze these messages and return your analysis in the <analysis> JSON format specified in the reference document.

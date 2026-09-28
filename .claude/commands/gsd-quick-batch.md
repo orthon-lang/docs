@@ -44,7 +44,7 @@ instead, or file the tasks individually.
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/quick-batch.md
+@.claude/gsd-core/workflows/quick-batch.md
 </execution_context>
 
 <context>

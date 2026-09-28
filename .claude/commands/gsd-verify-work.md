@@ -21,8 +21,8 @@ Output: {phase_num}-UAT.md tracking all test results. If issues found: diagnosed
 </objective>
 
 <execution_context>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/verify-work.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/UAT.md
+@.claude/gsd-core/workflows/verify-work.md
+@.claude/gsd-core/templates/UAT.md
 </execution_context>
 
 <context>

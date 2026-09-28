@@ -28,7 +28,7 @@ No Pass/Fail buttons. No severity questions. Just: "Here's what should happen. D
 </philosophy>
 
 <template>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/templates/UAT.md
+@.claude/gsd-core/templates/UAT.md
 </template>
 
 <process>

@@ -11,10 +11,10 @@ Supports two modes:
 <required_reading>
 Read all files referenced by the invoking prompt's execution_context before starting.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/sketch-theme-system.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/sketch-variant-patterns.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/sketch-interactivity.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/sketch-tooling.md
+@.claude/gsd-core/references/sketch-theme-system.md
+@.claude/gsd-core/references/sketch-variant-patterns.md
+@.claude/gsd-core/references/sketch-interactivity.md
+@.claude/gsd-core/references/sketch-tooling.md
 </required_reading>
 
 <process>

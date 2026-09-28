@@ -42,9 +42,9 @@ via filesystem and git state.
 
 <required_reading>
 Read STATE.md before any operation to load project context.
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-contracts.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/context-budget.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gates.md
+@.claude/gsd-core/references/agent-contracts.md
+@.claude/gsd-core/references/context-budget.md
+@.claude/gsd-core/references/gates.md
 </required_reading>
 
 <available_agent_types>
@@ -84,7 +84,7 @@ If `--wave` is absent, preserve the current behavior of executing all incomplete
 <step name="initialize" priority="first">
 Load all context in one call:
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/gsd-run-resolver.md
+@.claude/gsd-core/references/gsd-run-resolver.md
 
 ```bash
 WAVE_PARAM=""; if [[ "$ARGUMENTS" =~ (^|[[:space:]])--wave[[:space:]]+([^[:space:]-][^[:space:]]*) ]]; then WAVE_PARAM="--wave ${BASH_REMATCH[2]}"; fi
@@ -101,7 +101,7 @@ Parse JSON for: `executor_model`, `verifier_model`, `commit_docs`, `parallelizat
 
 **Model resolution:** If `executor_model` is `"inherit"`, omit the `model=` parameter from all `Agent()` calls — do NOT pass `model="inherit"` to Agent. Omitting the `model=` parameter causes Claude Code to inherit the orchestrator model automatically. Only set `model=` when `executor_model` is an explicit model name (e.g., `"claude-sonnet-5"`, `"claude-opus-4-8"`).
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-response-language.md
+@.claude/gsd-core/references/execute-phase-response-language.md
 
 Read runtime/worktree config and fail closed before any executor dispatch:
 
@@ -150,8 +150,8 @@ When `CONTEXT_WINDOW >= 500000` (1M-class models), subagent prompts include rich
 - This enables cross-phase awareness and history-aware verification
 
 When `CONTEXT_WINDOW < 200000` (sub-200K models), subagent prompts are thinned to reduce static overhead:
-- Executor agents omit extended deviation rule examples and checkpoint examples from inline prompt — load on-demand via @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/executor-examples.md
-- Planner agents omit extended anti-pattern lists and specificity examples from inline prompt — load on-demand via @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/planner-antipatterns.md
+- Executor agents omit extended deviation rule examples and checkpoint examples from inline prompt — load on-demand via @.claude/gsd-core/references/executor-examples.md
+- Planner agents omit extended anti-pattern lists and specificity examples from inline prompt — load on-demand via @.claude/gsd-core/references/planner-antipatterns.md
 - Core rules and decision logic remain inline; only verbose examples and edge-case lists are extracted
 - This reduces executor static overhead by ~40% while preserving behavioral correctness
 
@@ -519,9 +519,9 @@ increases monotonically across waves. `{status}` is `complete` (success),
 
 **For each wave:**
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-wave-guard.md
+@.claude/gsd-core/references/execute-phase-wave-guard.md
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-context-guard.md
+@.claude/gsd-core/references/execute-phase-context-guard.md
 
 1. **Intra-wave files_modified overlap check (BEFORE spawning):**
 
@@ -1043,9 +1043,9 @@ increases monotonically across waves. `{status}` is `complete` (success),
    **Step 7.3 — `class == "unknown-failure"`:**
    Report failed plan and ask Continue/Stop; continuing may cascade into dependent plan failures.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-quota-recovery.md
+@.claude/gsd-core/references/execute-phase-quota-recovery.md
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-between-wave-reset.md
+@.claude/gsd-core/references/execute-phase-between-wave-reset.md
 
 8. **Execute checkpoint plans between waves** — see `<checkpoint_handling>`.
 9. **Proceed to next wave.**
@@ -1313,7 +1313,7 @@ Verify-work will walk you through each item and mark the phase complete when all
 **If user reports issues now:** Proceed to gap closure.
 
 **If gaps_found:**
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/execute-phase-requirement-revert.md
+@.claude/gsd-core/references/execute-phase-requirement-revert.md
 ```
 ## ⚠ Phase {X}: {Name} — Gaps Found
 
@@ -1437,7 +1437,7 @@ transition in **post-completion mode**: SKIP its `verify_completion` and
 `update_roadmap_and_state` (re-running `phase.complete` would double-write state) and
 BEGIN at `evolve_project`, running the full set through `offer_next_phase`.
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/workflows/transition.md
+@.claude/gsd-core/workflows/transition.md
 </step>
 
 </process>

@@ -5,7 +5,7 @@ UI-SPEC.md locks spacing, typography, color, copywriting, and design system deci
 </purpose>
 
 <required_reading>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-brand.md
+@.claude/gsd-core/references/ui-brand.md
 </required_reading>
 
 <available_agent_types>
@@ -307,7 +307,7 @@ Run AFTER the checker approves the UI-SPEC (VERIFIED, or force-approved at step 
 during authoring, so a revision-loop researcher rewrite (step 9) cannot clobber the section and the
 `## UI Considerations` block is committed with the FINAL UI-SPEC. This is the visual analog of
 spec-phase Step 5.5's edge probe, retargeted to the UI element/state axis. Reference:
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-consideration-probe.md.
+@.claude/gsd-core/references/ui-consideration-probe.md.
 
 **Skip conditions:** if `--auto` and the UI-SPEC already carries a resolved `## UI Considerations`
 section (re-run), the write-back is idempotent (it REPLACES that section, never appends). If the

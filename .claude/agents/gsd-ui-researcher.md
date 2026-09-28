@@ -28,11 +28,11 @@ If the prompt contains a `<required_reading>` block, you MUST use the `Read` too
 - Return structured result to orchestrator
 </role>
 
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/untrusted-input-boundary.md
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/ui-consideration-probe.md
+@.claude/gsd-core/references/untrusted-input-boundary.md
+@.claude/gsd-core/references/ui-consideration-probe.md
 
 <documentation_lookup>
-@/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/research-documentation-lookup.md
+@.claude/gsd-core/references/research-documentation-lookup.md
 </documentation_lookup>
 
 <project_context>
@@ -42,7 +42,7 @@ Before researching, discover project context:
 
 **Project skills:** Check `.claude/skills/` or `.agents/skills/` directory if either exists:
 
-**agent_skills:** self-load per @/Users/mniedre/git/orthon-lang/docs/.claude/gsd-core/references/agent-skills-bootstrap.md
+**agent_skills:** self-load per @.claude/gsd-core/references/agent-skills-bootstrap.md
 1. List available skills (subdirectories)
 2. Read `SKILL.md` for each skill (lightweight index ~130 lines)
 3. Load specific `rules/*.md` files as needed during research
