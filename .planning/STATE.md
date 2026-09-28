@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-09-28T11:18:29.672Z"
+last_updated: "2026-09-28T17:07:13.451Z"
 last_activity: 2026-08-04
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: 81a5f6dd03cb0ba891f6d4b115b39993225bceff
+state_head: 70c6941ddff65e89da138a81b408e59a5d0b3a2a
 progress:
   total_phases: 10
   completed_phases: 4
@@ -113,6 +113,7 @@ None yet.
 | 14 | Add Phase 04.2 (Classical PLT Problem Mapping) to roadmap before Phase 5 — bind every accepted concept in what/concepts/ to the classical PLT problem it solves, establish scientific grounding, and register problems in what/LANGUAGE_PROBLEMS.md | 2026-08-24 | b97f2ca | — |
 | 260928-9ah | Adopt gen(...) generator-expression production (EDR-092); rewrite GENERATORS.md (Variant-B delegation); resolve LAZY_SEQUENCE OQ2; repoint CORE_CONCEPTS; repo-wide fn->fun and [T]-><T> migrations | 2026-09-28 | 78697ed | [260928-9ah-implement-locked-generators-gen-decision](./quick/260928-9ah-implement-locked-generators-gen-decision/) |
 | 260928-fcr | Complete Syntax Pipeline for gen(...) (EDR-087): reasoning trail (how/syntax), accepted record (what/syntax) + hub/queue provenance, PARSER grammar, EDR-092 validation-trail cite | 2026-09-28 | 81a5f6d | [260928-fcr-complete-syntax-pipeline-for-gen-generat](./quick/260928-fcr-complete-syntax-pipeline-for-gen-generat/) |
+| 260928-mkv | EDR-093: narrow generator expressions to single-clause (multi-clause deferred to v1.x); add .flatten() iterator combinator; route flatten/cartesian to .flatten()/.flat_map() | 2026-09-28 | 70c6941 | [260928-mkv-amend-generator-expression-to-single-cla](./quick/260928-mkv-amend-generator-expression-to-single-cla/) |
 
 ### Roadmap Evolution
 
