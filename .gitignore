@@ -23,8 +23,17 @@ __pycache__/
 *.py[cod]
 *.pyo
 
-# Planning / AI artifacts (local working state, not part of the design)
-.claude/
+# Claude Code / GSD — tooling is versioned; only local & ephemeral state is ignored
+.claude/*
+!.claude/CLAUDE.md
+!.claude/commands/
+!.claude/skills/
+!.claude/agents/
+!.claude/gsd-core/
+!.claude/commands/
+!.claude/hooks/
+!.claude/scripts/
+!.claude/settings.json
 
 # .planning/
 # notes/
