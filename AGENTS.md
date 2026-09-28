@@ -539,6 +539,16 @@ questions, assumptions, metrics, options), then narrow (criteria, plan), then ve
 against real data, people, or the system. Generating options is cheap; removing
 uncertainty is not. A plausible answer to the wrong problem is the default failure mode.
 
+### 11.4 Close the Branch: Merge and Cleanup
+
+When work on a task branch has been reviewed and the author confirms the change is
+correct, do not leave the branch open-ended. Remind the author of the two closing
+steps and perform each only on explicit confirmation: first offer to merge the task
+branch into `main` and push it, and then, once the merge has landed on `main`, offer
+to delete the task branch both locally and on `origin`. The reminder is the agent's
+responsibility, but merging into `main` and deleting a branch remain the author's
+decisions — never do either without an explicit go-ahead.
+
 ---
 
 ## 12. Workstation & Research Notes
