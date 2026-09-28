@@ -12,6 +12,8 @@
 
 **Partially supersedes:** [EDR-050](./EDR-050-generators.md) (the parenthesised generator-expression syntax lock) and [EDR-091](./EDR-091-withdraw-bidirectional-yield.md) (decision item 3 — the prior rejection of the `gen(...)` call form).
 
+**Amended by:** [EDR-093](./EDR-093-generator-expression-single-clause.md) (decision item 4 — the nested / multi-clause scope is withdrawn from v0.1; generator expressions are single-clause only).
+
 ---
 
 ### Context

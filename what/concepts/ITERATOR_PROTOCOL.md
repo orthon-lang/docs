@@ -119,6 +119,7 @@ Combinators are methods on `Iterator<T>` with default implementations. They are 
 | `.take(n)` | `Iterator<T>` | Yield first `n` elements, then stop |
 | `.skip(n)` | `Iterator<T>` | Skip first `n` elements |
 | `.flat_map(fn)` | `Iterator<U>` where `fn: T -> Iterator<U>` | Map to iterator, then flatten |
+| `.flatten()` | `Iterator<T>` where `self: Iterator<Iterator<T>>` | Flatten one level of nesting — an iterator of iterables becomes an iterator of their elements, in order, lazily (EDR-093) |
 | `.zip(other)` | `Iterator<(T, U)>` where `other: Iterator<U>` | Pair elements from two iterators |
 | `.enumerate()` | `Iterator<(Int, T)>` | Pair each element with its 1-based index; `enumerate(items) ≡ zip(1..len(items), items)` (EDR-082/EDR-083) |
 | `.collect()` | `Collection<T>` | Materialise into a concrete collection |
@@ -155,7 +156,12 @@ filter(collection, pred)     # free function form
 
 collection.map(fn)           # method form
 map(collection, fn)          # free function form
+
+collection.flatten()         # method form
+flatten(collection)          # free function form
 ```
+
+The `.flatten()` combinator was introduced by [EDR-093](../../how/decision_records/architecture/EDR-093-generator-expression-single-clause.md); it flattens one level of nesting (`Iterator<Iterator<T>> -> Iterator<T>`). `.flat_map(fn)` remains the map-then-flatten form and is unchanged — `.flatten()` is equivalent to `.flat_map(|x| x)`.
 
 ### `IntoIterator<T>` for Collections
 
