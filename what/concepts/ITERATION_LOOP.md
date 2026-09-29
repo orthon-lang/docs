@@ -237,5 +237,5 @@ All iteration is lazy and single-pass. `for` desugaring is a syntactic transform
 - [x] `what/concepts/ITERATOR_PROTOCOL.md` (referenced)
 - [x] `what/concepts/RANGE.md` (referenced)
 - [x] `what/concepts/ITERATION_LOOP.md` (this document — EDR-094: `for`-expression, ownership matrix, OQ2/OQ3/OQ4 resolved)
-- [ ] `what/SYNTAX.md` — **DEFERRED to Phase 5 (Syntax Design)**: a `what/syntax/` record for `for`/`while`/`loop` (currently absent) will carry the concrete surface syntax, referencing EDR-094. Not created in this task.
-- [ ] `what/EXECUTION_MODEL.md` — **DEFERRED to Phase 7 (Execution & Optimization Model)**: lazy/single-pass and no-hidden-allocation guarantees, and iteration × Execution Contexts. Not created in this task.
+- [x] `what/SYNTAX.md` — hub row added pointing to [`what/syntax/ITERATION_SYNTAX.md`](../syntax/ITERATION_SYNTAX.md) (accepted-syntax record for `for`/`while`/`loop`, the `for`-expression, and the ownership markers), citing EDR-053 / EDR-094.
+- [x] `what/EXECUTION_MODEL.md` — `## Iteration Semantics` section added: lazy/single-pass and no-hidden-allocation guarantees, borrow-by-default, and iteration × Execution Contexts.
