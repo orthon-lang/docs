@@ -33,3 +33,4 @@ syntax definitions live here, one file per accepted construct.
 - [RANGE_SYNTAX.md](RANGE_SYNTAX.md) — range literal `1..N`, `range(a,b)`, `.step(n)` (EDR-083).
 - [GENERICS_SYNTAX.md](GENERICS_SYNTAX.md) — `<>` parameters, `as` bounds, `+` conjunction (EDR-086).
 - [GENERATOR_EXPRESSION_SYNTAX.md](GENERATOR_EXPRESSION_SYNTAX.md) — generator expression `gen(...)` (EDR-092).
+- [ITERATION_SYNTAX.md](ITERATION_SYNTAX.md) — iteration `for`/`while`/`loop`, the `for`-expression → `Optional<T>`, and iteration ownership markers (EDR-053 / EDR-094).
