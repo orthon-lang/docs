@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-09-29T05:16:23.559Z"
-last_activity: 2026-08-04
+last_updated: "2026-09-29T05:43:59.270Z"
+last_activity: 2026-09-29
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: 794510fc32f47f54f1548c008fdc22529584f965
+state_head: 0479e9ea6cb98047ff8f989cdd69d6ccefa92ad2
 progress:
   total_phases: 10
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-09-29 - Completed quick task 260929-b2n: Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers)
+Last activity: 2026-09-29 - Completed quick task 260929-bw8: Fill what/SYNTAX.md with a for/while/loop syntax record (Phase 5) and what/EXECUTION_MODEL.md with an iteration semantics section (Phase 7), citing EDR-053/EDR-094
 
 Progress: [█████████░] 94%
 
@@ -115,6 +115,7 @@ None yet.
 | 260928-fcr | Complete Syntax Pipeline for gen(...) (EDR-087): reasoning trail (how/syntax), accepted record (what/syntax) + hub/queue provenance, PARSER grammar, EDR-092 validation-trail cite | 2026-09-28 | 81a5f6d | [260928-fcr-complete-syntax-pipeline-for-gen-generat](./quick/260928-fcr-complete-syntax-pipeline-for-gen-generat/) |
 | 260928-mkv | EDR-093: narrow generator expressions to single-clause (multi-clause deferred to v1.x); add .flatten() iterator combinator; route flatten/cartesian to .flatten()/.flat_map() | 2026-09-28 | 70c6941 | [260928-mkv-amend-generator-expression-to-single-cla](./quick/260928-mkv-amend-generator-expression-to-single-cla/) |
 | 260929-b2n | Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers) | 2026-09-29 | 794510f | [260929-b2n-add-architecture-edr-amending-edr-053-fo](./quick/260929-b2n-add-architecture-edr-amending-edr-053-fo/) |
+| 260929-bw8 | Fill what/SYNTAX.md with a for/while/loop syntax record (Phase 5) and what/EXECUTION_MODEL.md with an iteration semantics section (Phase 7), citing EDR-053/EDR-094 | 2026-09-29 | 0479e9e | [260929-bw8-fill-what-syntax-md-with-a-for-while-loo](./quick/260929-bw8-fill-what-syntax-md-with-a-for-while-loo/) |
 
 ### Roadmap Evolution
 
