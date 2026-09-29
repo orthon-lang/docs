@@ -8,6 +8,8 @@
 
 **Scope:** Subsystem
 
+**Amended by:** [EDR-094](./EDR-094-for-expression-and-iteration-ownership.md) (resolves Open Questions 2-4).
+
 ---
 
 ### Context
@@ -141,6 +143,13 @@ Gates required per `DECISION_VALIDATION.md` § Gate Selection (new language cons
 ---
 
 ### Amendments
+
+**2026-09-29 — Open Questions 2-4 resolved by [EDR-094](./EDR-094-for-expression-and-iteration-ownership.md).**
+`for` becomes an expression yielding `Optional<T>` in value position (`break v` / `return v`
+→ `Some(v)`; run-off-end → `None`) — partially superseding decision item 7's statement-only
+reading; `for`-`else` is confirmed rejected (covered by Optional + `match`); and iteration is
+borrow-by-default with source-side ownership markers (`coll` shared `&T`; `&mut coll`
+write-borrow `&mut T`; `$coll` move `T`).
 
 **2026-08-05 — Range syntax delegated to [EDR-083](./EDR-083-range.md).**
 Decision items 1–2 are amended: range literals follow the inclusive-inclusive `1..N`
