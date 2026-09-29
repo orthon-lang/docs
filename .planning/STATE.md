@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-09-28T17:07:13.451Z"
+last_updated: "2026-09-29T05:16:23.559Z"
 last_activity: 2026-08-04
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: 70c6941ddff65e89da138a81b408e59a5d0b3a2a
+state_head: 794510fc32f47f54f1548c008fdc22529584f965
 progress:
   total_phases: 10
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-08-04 — Phase 04.1 execution resumed (wave continue)
+Last activity: 2026-09-29 - Completed quick task 260929-b2n: Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers)
 
 Progress: [█████████░] 94%
 
@@ -114,6 +114,7 @@ None yet.
 | 260928-9ah | Adopt gen(...) generator-expression production (EDR-092); rewrite GENERATORS.md (Variant-B delegation); resolve LAZY_SEQUENCE OQ2; repoint CORE_CONCEPTS; repo-wide fn->fun and [T]-><T> migrations | 2026-09-28 | 78697ed | [260928-9ah-implement-locked-generators-gen-decision](./quick/260928-9ah-implement-locked-generators-gen-decision/) |
 | 260928-fcr | Complete Syntax Pipeline for gen(...) (EDR-087): reasoning trail (how/syntax), accepted record (what/syntax) + hub/queue provenance, PARSER grammar, EDR-092 validation-trail cite | 2026-09-28 | 81a5f6d | [260928-fcr-complete-syntax-pipeline-for-gen-generat](./quick/260928-fcr-complete-syntax-pipeline-for-gen-generat/) |
 | 260928-mkv | EDR-093: narrow generator expressions to single-clause (multi-clause deferred to v1.x); add .flatten() iterator combinator; route flatten/cartesian to .flatten()/.flat_map() | 2026-09-28 | 70c6941 | [260928-mkv-amend-generator-expression-to-single-cla](./quick/260928-mkv-amend-generator-expression-to-single-cla/) |
+| 260929-b2n | Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers) | 2026-09-29 | 794510f | [260929-b2n-add-architecture-edr-amending-edr-053-fo](./quick/260929-b2n-add-architecture-edr-amending-edr-053-fo/) |
 
 ### Roadmap Evolution
 
