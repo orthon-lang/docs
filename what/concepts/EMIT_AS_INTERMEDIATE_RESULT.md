@@ -91,6 +91,73 @@ fun parse(file) -> Iterator<ParsedLine>
     emit statistics           # final value as last emit
 ```
 
+### Nested `emit` Function — Splitting Stream from Terminal Result
+
+> **Disputed — open, not a settled recommendation.** The dual-channel
+> pattern shown above (`emit` plus a differently-typed `return` in the same
+> function, retrieved via `.final()`) was flagged in a concept-review
+> discussion: readers expect `let x = f()` to bind `f`'s `return` value, not
+> an `Iterator<T>`, and `.final()` hides a second result channel behind an
+> accessor that does not read as returning *the* result. The review
+> converged on the pattern below — splitting the stream and the terminal
+> result across two functions — as the preferred shape where the choice is
+> available. The dual-channel form above remains the ACCEPTED EDR-052
+> specification; this subsection documents an additional model alongside
+> it, not a replacement. See Open Questions below.
+
+```orthon
+type Progress(step: Int, current: Int)
+
+fun show_progress(info: Progress)
+    log("Step {info.step}: current result = {info.current}")
+
+fun process_data(batches: Array<Array<Int>>) -> Int
+    let mut result = 0
+    let mut step = 0
+    let mut spikes = 0
+
+    fun track_batch(batch: Array<Int>) -> Iterator<Progress>
+        for value in batch:
+            result += value
+            step += 1
+            if value > 25:
+                spikes += 1
+            emit Progress(step: step, current: result)
+
+    for batch in batches:
+        for info in track_batch(batch):
+            show_progress(info)
+
+    log("spikes: {spikes}")
+    return result
+
+result = process_data([[10, 20], [30], [40, 5, 60]])
+print("Total:", result)
+```
+
+`track_batch` is nested inside `process_data` specifically because each call must update three
+closed-over mutable locals of the outer function at once — `result`, `step`, and `spikes`. A
+free-standing top-level function doing the same per-batch work would have to return a composite
+value and have every call site in the `for batch in batches:` loop manually unpack that composite
+and fold it back into three separate accumulators on every iteration; nesting lets it write
+directly into the outer bindings through closure capture (per `PRIMITIVE_BLOCKS.md`'s
+mutable-capture rule — `mut` on the captured binding, here `result`/`step`/`spikes`, is what makes
+this legal), eliminating that manual fold-back entirely.
+
+`track_batch` uses `emit` rather than `return` because one call can genuinely produce a variable
+number of `Progress` values — one per element of `batch`, so 0..N depending on the batch's
+length. The general rule: use `emit` only when a single invocation can produce a variable count
+of items (including zero); if a function always emits exactly once per call, plain `return` is
+correct instead — wrapping one guaranteed value in an `Iterator<T>` only to unwrap it immediately
+is unjustified overhead.
+
+This example deliberately does not use `.final()` or combine `emit` with a differently-typed
+`return` in the same function. The terminal result (`result`) is owned entirely by the outer
+`fun process_data`, returned with an ordinary `return`; the intermediate stream is owned entirely
+by the nested `fun track_batch`, which returns `Iterator<Progress>`. The two result channels are
+two different functions, not one function multiplexing two kinds of output through one return
+path.
+
 ### Behavioural Specification
 
 1. If a function uses `emit`, it returns `Iterator<T>`. The type parameter `T` is inferred from `emit` expressions.
@@ -118,6 +185,11 @@ The compiler generates a state machine that:
 1. Should `.final()` be callable only after the iterator is fully consumed, or at any time?
 2. How does intermediate-result `emit` interact with a coroutine-on-yield, if that hypothesis ([COROUTINE_ON_YIELD](../../how/concepts/research/deferrable/COROUTINE_ON_YIELD.md)) is ever accepted?
 3. Should there be a way to yield intermediate results without building the full iterator state machine?
+4. Is combining `emit` with a differently-typed `return` in the same function (the `.final()`
+   pattern, see Model above) sound, or should it be replaced by the split pattern — an outer
+   terminal-owning `fun` plus a nested stream-owning `emit` `fun` (see 'Nested `emit` Function —
+   Splitting Stream from Terminal Result' above)? Raised but not resolved by the concept-review
+   discussion that surfaced it.
 
 ## Decision History
 
