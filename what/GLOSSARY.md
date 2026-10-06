@@ -1030,24 +1030,37 @@ The programmer describes *what* should happen; the compiler decides *how* to imp
 
 ### Intermediate Result
 
-A value produced by a function via `emit` during the course of a
-long-running computation, distinct from the final `return` value. A
-function with both `emit` and `return` produces an `Iterator<T>` of
-intermediate values; the final return value is accessible via
-`.final()`.
+A value produced via `emit` by a function that genuinely produces a
+variable count of items (0, 1, or many). Such a function returns
+`Iterator<T>` and nothing else — there is no second, differently-typed
+result channel. A computation needing both a variable-count stream and a
+one-shot terminal result splits the two across two functions: an outer
+plain `fun` owns the terminal result via ordinary `return`; a nested `fun`
+(closing over the outer function's `mut` locals) owns the `emit` stream and
+returns `Iterator<T>`. There is no `.final()` accessor.
 
 ```orthon
-fun process_dataset(data: Dataset) -> Iterator<BatchResult>
-    for batch in data.batches():
-        emit analyse(batch)
-    return compute_summary(data)
+fun process_data(batches: Array<Array<Int>>) -> Int
+    let mut result = 0
+
+    fun track_batch(batch: Array<Int>) -> Iterator<Progress>
+        for value in batch:
+            result += value
+            emit Progress(current: result)
+
+    for batch in batches:
+        for info in track_batch(batch):
+            show_progress(info)
+
+    return result               # terminal result, owned by the outer fun
 ```
 
-The intermediate-result model is a specification refinement of
-LAZY_SEQUENCE_GENERATORS (EDR-021): the `emit` keyword already supports
-this pattern technically; this concept documents the dual use explicitly.
+The split model is accepted via EDR-095, which supersedes EDR-052's
+dual-channel `emit`+`return`/`.final()` specification for the same reason
+`let x = f()` is universally expected to bind `f`'s `return` value, not an
+`Iterator<T>` hiding a second result behind an accessor.
 
-- **Source:** `../what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md` (EDR-052)
+- **Source:** `../what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md` (EDR-052, superseded by EDR-095)
 - **See also:** [Generator](#generator), [Lazy Sequence](#lazy-sequence), [Iterator Protocol](#iterator-protocol)
 
 ### IntoIterator
