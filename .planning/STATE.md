@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-06T06:16:52.899Z"
-last_activity: 2026-09-29
+last_updated: "2026-10-06T06:59:01.032Z"
+last_activity: 2026-10-06
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: f8caf0aca1010be26e00a0b9f2497b2f6cc60703
+state_head: 883faf35525a65c621ff43ef7a6f5b23c8219b99
 progress:
   total_phases: 10
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-10-06 - Completed quick task 261006-chn: Document the resolved nested-emit-function pattern (batches/Progress/track_batch example) in what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md, flag the .final() dual-channel pattern as disputed/open, from a concept-review discussion
+Last activity: 2026-10-06 - Completed quick task 261006-d5x: Created EDR-095 (superseding EDR-052) rejecting the emit+return dual-channel pattern and .final() accessor, adopting the split outer-fun/nested-emit-fun model, adding an emit-applicability criterion and compiler-diagnostic recommendation, and retracting the push-model framing. Propagated into EMIT_AS_INTERMEDIATE_RESULT.md, INDEX.md, and GLOSSARY.md — verified (7/7 must-haves)
 
 Progress: [█████████░] 94%
 
@@ -117,6 +117,7 @@ None yet.
 | 260929-b2n | Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers) | 2026-09-29 | 794510f | [260929-b2n-add-architecture-edr-amending-edr-053-fo](./quick/260929-b2n-add-architecture-edr-amending-edr-053-fo/) |
 | 260929-bw8 | Fill what/SYNTAX.md with a for/while/loop syntax record (Phase 5) and what/EXECUTION_MODEL.md with an iteration semantics section (Phase 7), citing EDR-053/EDR-094 | 2026-09-29 | 0479e9e | [260929-bw8-fill-what-syntax-md-with-a-for-while-loo](./quick/260929-bw8-fill-what-syntax-md-with-a-for-while-loo/) |
 | 261006-chn | Document the resolved nested-emit-function pattern (batches/Progress/track_batch example) in what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md, flag the .final() dual-channel pattern as disputed/open, from a concept-review discussion | 2026-10-06 | f8caf0a | [261006-chn-document-the-resolved-nested-emit-functi](./quick/261006-chn-document-the-resolved-nested-emit-functi/) |
+| 261006-d5x | Create a new superseding EDR (EDR-095, Architecture) that supersedes EDR-052: reject the emit+return dual-channel form and .final() accessor, adopt the split outer-fun/nested-emit-fun pattern, add emit-applicability criterion and compiler-diagnostic recommendation, retract EDR-052's push-model framing. Propagated into EMIT_AS_INTERMEDIATE_RESULT.md, INDEX.md, GLOSSARY.md. | 2026-10-06 | 883faf3 | [261006-d5x-create-a-new-superseding-edr-next-availa](./quick/261006-d5x-create-a-new-superseding-edr-next-availa/) |
 
 ### Roadmap Evolution
 
