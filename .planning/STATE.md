@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-09-29T05:43:59.270Z"
+last_updated: "2026-10-06T06:16:52.899Z"
 last_activity: 2026-09-29
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: 0479e9ea6cb98047ff8f989cdd69d6ccefa92ad2
+state_head: f8caf0aca1010be26e00a0b9f2497b2f6cc60703
 progress:
   total_phases: 10
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-09-29 - Completed quick task 260929-bw8: Fill what/SYNTAX.md with a for/while/loop syntax record (Phase 5) and what/EXECUTION_MODEL.md with an iteration semantics section (Phase 7), citing EDR-053/EDR-094
+Last activity: 2026-10-06 - Completed quick task 261006-chn: Document the resolved nested-emit-function pattern (batches/Progress/track_batch example) in what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md, flag the .final() dual-channel pattern as disputed/open, from a concept-review discussion
 
 Progress: [█████████░] 94%
 
@@ -116,6 +116,7 @@ None yet.
 | 260928-mkv | EDR-093: narrow generator expressions to single-clause (multi-clause deferred to v1.x); add .flatten() iterator combinator; route flatten/cartesian to .flatten()/.flat_map() | 2026-09-28 | 70c6941 | [260928-mkv-amend-generator-expression-to-single-cla](./quick/260928-mkv-amend-generator-expression-to-single-cla/) |
 | 260929-b2n | Add Architecture EDR amending EDR-053: for-expression returning Optional, reject for-else, iteration ownership model (matrix + source-side markers) | 2026-09-29 | 794510f | [260929-b2n-add-architecture-edr-amending-edr-053-fo](./quick/260929-b2n-add-architecture-edr-amending-edr-053-fo/) |
 | 260929-bw8 | Fill what/SYNTAX.md with a for/while/loop syntax record (Phase 5) and what/EXECUTION_MODEL.md with an iteration semantics section (Phase 7), citing EDR-053/EDR-094 | 2026-09-29 | 0479e9e | [260929-bw8-fill-what-syntax-md-with-a-for-while-loo](./quick/260929-bw8-fill-what-syntax-md-with-a-for-while-loo/) |
+| 261006-chn | Document the resolved nested-emit-function pattern (batches/Progress/track_batch example) in what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md, flag the .final() dual-channel pattern as disputed/open, from a concept-review discussion | 2026-10-06 | f8caf0a | [261006-chn-document-the-resolved-nested-emit-functi](./quick/261006-chn-document-the-resolved-nested-emit-functi/) |
 
 ### Roadmap Evolution
 
