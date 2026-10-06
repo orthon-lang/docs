@@ -526,8 +526,26 @@ When reviewing a concept or design document with the author:
    clarification, a partial or full concept revision plus EDR, or an explicit
    "not a problem — skip".
 4. State the lock explicitly, then ask whether to move to the next question.
+   If no question remains, run the Decision Summary Check (step 7) before
+   closing the session.
 5. Compact the context between questions when the session grows long.
 6. Expect questions to be added mid-review ("add one more question ...").
+7. **Decision Summary Check.** When the last question of the session reaches
+   LOCK, give a concise, plain-language summary of every resolved question,
+   invite the author to correct anything that does not match their intent,
+   and ask whether any assumption behind the summary feels wrong — not just
+   factual slips. This is deliberately lighter than classic teach-back — the
+   author is not asked to formulate the conclusion first — to avoid excessive
+   cognitive load in solo review. It still closes the gap where a vague WHAT
+   passes through discussion as implicit agreement and only resurfaces at
+   execution time as unplanned intermediate phases or manual edits.
+
+   Treat a silent or approving reply as confirmation. A correction scoped to
+   one question reopens that question's LOCK. A correction that invalidates
+   an assumption shared by other LOCKed questions in the same session is
+   systemic: reopen every LOCK built on that assumption, not only the one the
+   author corrected, and hold any pending EDR from this session until the
+   affected questions are re-locked.
 
 Answering everything at once mixes concerns and produces decisions that do not hold.
 A review may not fit in one session; leftover questions are reviewed in a separate one.
