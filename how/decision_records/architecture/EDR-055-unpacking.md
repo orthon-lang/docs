@@ -1,12 +1,14 @@
 # EDR-055: Unpacking — Destructuring Assignment with Pattern Syntax
 
-**Status:** Accepted
+**Status:** Superseded by [EDR-096](./EDR-096-redesigned-unpacking-syntax.md)
 
 **Date:** 2026-07-27
 
 **Category:** Architecture
 
 **Scope:** Subsystem
+
+> **Superseded (2026-10-17).** The syntax decisions of this EDR (Decision items 1-7 and Compliance items 4 and 6) are replaced by [EDR-096](./EDR-096-redesigned-unpacking-syntax.md). What remains in force: the Language classification, the desugaring to `pack`/`unpack`, and the construct/destruct mirror-image principle. Compliance item 7 (ownership) is under the tracked move-versus-borrow discrepancy recorded in EDR-096 (open item DEF-b). The original text below is retained unchanged for history.
 
 ---
 

@@ -6062,3 +6062,81 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 
 - **Plan complete:** hypothesis (Steps 1–2) → Concept Design Review + EDR-089 (Step 3) →
   PANIC → PROGRAM_ERROR amendment (Step 4) → syntax verification (Step 5). All steps done.
+
+---
+
+## Entry: UNPACKING Syntax Redesign (EDR-096)
+
+**Date:** 2026-10-17
+**Artifact validated:** [`what/concepts/UNPACKING.md`](../../what/concepts/UNPACKING.md)
+**Decision recorded as:** [EDR-096](../decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md)
+**Supersedes:** the syntax decisions of [EDR-055](../decision_records/architecture/EDR-055-unpacking.md) (classification, desugaring to `pack`/`unpack` and the mirror-image principle remain in force).
+**Sign-off:** Human Sign-off per AGENTS.md §7.4 — `Reviewed-by: mniedre · Date: 2026-10-17 · Verdict: LOCKED`.
+
+### Gate Validation
+
+**Gates applied:** All 7 (per `DECISION_VALIDATION.md` § Gate Selection) — the decision changes and removes language rules.
+
+#### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**User story.** As an Orthon programmer, I want to take compound values apart with the same shape I used to build them, without meeting symbols that mean something else in the next line of code. **Press release.** *Destructuring reads like construction: `x, y = point` mirrors `point = (x, y)`, `first, *rest = xs` mirrors `(first, *rest)`, and a nominal type is taken apart with the constructor that built it.* The problem a programmer feels is unchanged from EDR-055; what changes is that no spelling collides with Range, null safety or type annotations.
+
+**Verdict: Pass.**
+
+---
+
+#### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Define all terms.** Each withdrawn spelling is traced to a collision: `..` is Range (EDR-083), `?` is null safety and propagation, `:` is reserved for type annotations, `let` contradicts declaration by assignment (EDR-074). **Counterexamples.** Does `3 as x as y` have a meaning? No — double aliases are an error. Does `x, y = (10, 20)` still bind by position? Yes, because no implicit labels exist. Does a tuple pattern on `Option<T>` silently lift? No — it is a type error (D-13). The one unresolved tension is the prefix star versus numeric multiplication, recorded as open (DEF-f).
+
+**Verdict: Pass (Flag: star versus multiplication is open).**
+
+---
+
+#### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Hypothesis.** The redesign reduces the number of constructs without losing expressive power. **Test.** Brace record patterns are replaced by constructor patterns, the dotted rest family by one prefix star, call-site `name: value` by `value as name`, and `let` in destructuring by nothing. The only addition is the explicit label `as`, which also replaces the colon call-site form.
+
+**Verdict: Pass.** The model shrinks.
+
+---
+
+#### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**Premises.** Every form still desugars to `pack`/`unpack`; the rest pattern, labels and constructor patterns are extractions over existing primitives. No new primitive, no layer crossing. The POLA amendment is scoped to mirror-image constructs and leaves the Semantic Purity table unchanged. The move-versus-borrow discrepancy between EDR-055 Compliance item 7 and COPY_ON_WRITE is not introduced by this decision; it is tracked as DEF-b.
+
+**Verdict: Pass (Flag: ownership discrepancy tracked, not resolved).**
+
+---
+
+#### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+**Contradiction.** A pattern must be rich enough to extract by position, rest and label, yet free of any allocation or execution assumption. **Resolution.** All rules are static (one star, label uniqueness, irrefutability) and desugar to extraction; none depends on allocation, evaluation or concurrency strategy.
+
+**Verdict: Pass.**
+
+---
+
+#### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+**One-sentence test.** The pattern on the left of `=` is the mirror image of the expression on the right. **Remove-one-thing test.** Per-element `var` was left out and can be added later without breaking code; the 1-tuple `tuple(a)` is included now so that the rest of a 2-tuple has a uniform type and no Solo-style retrofit is needed.
+
+**Verdict: Pass.**
+
+---
+
+#### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Evidence.** Star-rest patterns, constructor patterns and tuple destructuring are familiar from Python, Rust and Swift. The label form `value as label` at call sites is novel relative to keyword-argument spellings. **Self-correction.** Duplicate labels, double aliases, multiple stars, refutable patterns outside `match` and tuple patterns on `Option<T>` are all compile-time errors with a clear repair hint.
+
+**Verdict: Pass (Flag: `value as label` is novel at call sites).**
+
+---
+
+**Overall.** All seven gates pass, with three flags: the prefix star versus numeric multiplication (DEF-f), the tracked ownership discrepancy (DEF-b), and the novelty of `value as label` at call sites.
+
+**Gates not applied:** None.
+
+### Open items
+
+Recorded in EDR-096 as open, not decided: DEF-a (whether variadic functions, call-site spreading and a labeled remainder are in v0.1); DEF-b (move versus borrow on destructuring, decided jointly for all constructs); DEF-c (let-else and the irrefutable single-arm match); DEF-d (Set spreading); DEF-e (Map and brace-literal syntax); DEF-f (prefix star versus numeric multiplication). Two drafting questions are also recorded as questions: (g) whether redundant outer parentheses around a top-level pattern are rejected or tolerated, and (h) the representation of the collected remainder for a List or Array scrutinee.

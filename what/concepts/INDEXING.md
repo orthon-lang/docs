@@ -41,7 +41,7 @@ items[len(items)]      -- last element
 items[1..k]            -- first k elements (inclusive-inclusive)
 for i in 1..len(array):    -- index-based iteration
     process(array[i])
-for (i, v) in items.enumerate():   -- pairs (1, first), (2, second), …
+for i, v in items.enumerate():     -- pairs (1, first), (2, second), …
     process(i, v)
 ```
 

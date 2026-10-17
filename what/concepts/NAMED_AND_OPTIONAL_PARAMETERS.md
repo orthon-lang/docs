@@ -30,11 +30,14 @@ fun connect(host: String, port: Int = 80, use_ssl: Bool = false):
 connect("example.com", 443, true)
 
 # Named call — any order
-connect(host: "example.com", use_ssl: true)
+connect("example.com" as host, true as use_ssl)
+connect(true as use_ssl, "example.com" as host)
 
 # Mixed — positional then named
-connect("example.com", use_ssl: true)
+connect("example.com", true as use_ssl)
 ```
+
+> **Amendment (EDR-096, 2026-10-17).** Call-site named arguments are written `value as name` ([EDR-096](../../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md) D-06), replacing `name: value` at call sites. Declarations keep `name: Type`, because the colon stays reserved for type annotations. A label overrides position when binding arguments, and duplicate labels are errors. Defaults belong to the whole parameter, never to a position inside a destructuring pattern (D-12). See [UNPACKING.md](UNPACKING.md) § Labels.
 
 Optional parameters with defaults eliminate the need for overloaded variants:
 
@@ -64,11 +67,12 @@ Named and optional parameters are a **StdLib** convention — they desugar to po
 
 1. Should named arguments be allowed for all calls or only when explicit parameter names exist?
 2. How should default values be evaluated — at definition time or call time?
-3. How do named arguments interact with variadic parameters and destructuring patterns?
+3. How do named arguments interact with variadic parameters and destructuring patterns? (The form of the star is decided in EDR-096 D-03; whether variadic parameters and call-site spreading exist in v0.1 is the open item DEF-a in [EDR-096](../../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md).)
 
 ## Decision History
 
 - **EDR-065:** Named and Optional Parameters accepted as StdLib — function call ergonomics. Desugarable to positional parameters + default values. Named argument resolution is a compiler-level name binding operation, but the semantics are purely syntactic.
+- **2026-10-17 — EDR-096:** Call-site named arguments respelled `value as name` (replaces `name: value`); declarations keep `name: Type`.
 - **Classification per D-03:** StdLib. Named/optional parameters are syntactic sugar over positional parameters. The parameter binding and default value generation are desugaring operations, not new runtime semantics.
 
 ---

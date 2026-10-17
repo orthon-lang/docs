@@ -20,7 +20,7 @@ for i in 1..len(array):
     process(array[i])
 
 # Destructuring in loop variable
-for (index, value) in items.enumerate():
+for index, value in items.enumerate():
     print("Index {index}: {value}")
 
 # while — condition-based looping

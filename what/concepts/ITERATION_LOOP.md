@@ -63,11 +63,11 @@ for i in 1..len(array):
     process(array[i])
 
 # Destructuring in loop variable
-for (index, value) in items.enumerate():
+for index, value in items.enumerate():
     print("Index {index}: {value}")
 
-for {name, age} in people:
-    print("{name} is {age} years old")
+for Person(n as name, a as age) in people:
+    print("{n} is {a} years old")
 ```
 
 The `for` loop accepts any type that implements `IntoIterator<T>`:

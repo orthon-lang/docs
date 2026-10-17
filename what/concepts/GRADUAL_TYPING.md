@@ -35,8 +35,8 @@ name = "Alice"          # type String inferred
 age = 30                # type Int inferred
 items = []              # dynamic — resolved at use site
 
-# Immutable binding
-max_retries := 3        # := denotes immutable binding, type Int inferred
+# Declaration by assignment (EDR-074) — immutable by default
+max_retries = 3         # declaration by assignment, immutable by default, type Int inferred
 
 # Annotated boundary — compiler checks at this point
 fun greet(person: Person) -> String:
