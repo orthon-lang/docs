@@ -8,7 +8,7 @@
 
 **Scope:** Subsystem
 
-**Amended by:** [EDR-094](./EDR-094-for-expression-and-iteration-ownership.md) (resolves Open Questions 2-4).
+**Amended by:** [EDR-094](./EDR-094-for-expression-and-iteration-ownership.md) (resolves Open Questions 2-4); [EDR-096](./EDR-096-redesigned-unpacking-syntax.md) (loop-variable pattern syntax).
 
 ---
 
@@ -143,6 +143,9 @@ Gates required per `DECISION_VALIDATION.md` § Gate Selection (new language cons
 ---
 
 ### Amendments
+
+**2026-10-17 — Loop-variable pattern syntax amended by [EDR-096](./EDR-096-redesigned-unpacking-syntax.md).**
+Decision item 5 (destructuring in loop variables) is amended: loop-variable patterns are comma lists without parentheses (`for index, value in items.enumerate():`, D-05); record loop patterns are replaced by nominal constructor patterns (`for Person(n as name, a as age) in people:`, D-09); `var` after `for` makes all names in the pattern mutable (`for var k, v in rows`, D-10); and patterns in `for` must be irrefutable (D-13). The original text of item 5 and the Context are retained for history.
 
 **2026-09-29 — Open Questions 2-4 resolved by [EDR-094](./EDR-094-for-expression-and-iteration-ownership.md).**
 `for` becomes an expression yielding `Optional<T>` in value position (`break v` / `return v`

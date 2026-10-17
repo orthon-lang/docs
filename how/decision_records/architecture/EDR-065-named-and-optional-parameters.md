@@ -8,6 +8,8 @@
 
 **Scope:** Module
 
+**Amended by:** [EDR-096](./EDR-096-redesigned-unpacking-syntax.md) (call-site named-argument spelling).
+
 ---
 
 ### Context
@@ -68,3 +70,10 @@ Named and optional parameters are a **StdLib** convention:
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | Pass | Semantics independent of argument-passing implementation. |
 | `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | Pass | Proven from Python, C#, Kotlin, Swift — lowest-risk feature. |
 | `LLM_GENERABILITY_GATE` | Empirical Analysis | Pass | Named arguments are the most LLM-friendly call syntax — explicit mapping from name to value. |
+
+---
+
+### Amendments
+
+**2026-10-17 — Call-site spelling amended by [EDR-096](./EDR-096-redesigned-unpacking-syntax.md) (D-06, D-12).**
+Call-site named arguments are written `value as name` (for example `connect("example.com", true as use_ssl)`), replacing `name: value` at call sites. Parameter declarations keep `name: Type`, because the colon stays reserved for type annotations. A label overrides position when binding arguments, and duplicate labels are errors. Defaults are unchanged and belong to the whole parameter, not to a position inside a pattern. Whether variadic parameters and call-site spreading exist in v0.1 is the open item DEF-a in EDR-096 and Open Questions item 3 of `what/concepts/NAMED_AND_OPTIONAL_PARAMETERS.md`. Status stays Accepted; the original body above is retained for history.
