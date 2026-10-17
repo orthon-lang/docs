@@ -78,10 +78,10 @@ fn withdraw(balance: Int, amount: Int) -> Int
     # ENTRY — requires, evaluated before the body
     assert amount > 0
     assert amount <= balance
-    old := snapshot(balance)            # only if `old` is used
+    old = snapshot(balance)             # declaration by assignment; only if `old` is used
 
     # BODY — as written; each normal exit is rewritten:
-    result := <returned value>
+    result = <returned value>           # declaration by assignment (EDR-074)
     # EXIT — ensures, evaluated after the body produced a value
     assert result == balance - amount
     return result

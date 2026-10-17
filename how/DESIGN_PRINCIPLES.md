@@ -601,14 +601,24 @@ A language that violates DRY forces its users to violate it too.
 
 An operator always means the same thing.
 
-If `*` packs values into a sequence, it always packs — never unpacks.
-If a different operator unpacks, it always unpacks. The meaning of an
-operator must not depend on syntactic context or surrounding tokens.
+The meaning of an operator must not depend on syntactic context or
+surrounding tokens. Context-dependent role reversal — where the same
+symbol means opposite things depending on where it appears — violates the
+Principle of Least Astonishment. The programmer should never need to check
+context to determine what an operator does.
 
-Context-dependent role reversal — where the same symbol means opposite
-things depending on where it appears — violates the Principle of Least
-Astonishment. The programmer should never need to check context to
-determine what an operator does.
+One case is permitted: direction may be determined by position when the
+construct form and the destruct form are mirror images of each other
+(Representation Symmetry). Prefix `*x` collects when it appears in a
+receiving position (parameters, patterns) and spreads when it appears in a
+sending position (call arguments, literals), exactly as `(x, y)` builds a
+tuple on one side of `=` and takes it apart on the other. The two roles are
+one mirrored form, not two meanings. Role reversal between constructs that
+are not mirror images remains a POLA violation.
+
+The interplay between prefix `*` and numeric multiplication is an open
+question, because no arithmetic operators are formally specified yet; see
+[EDR-096](decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md).
 
 POLA follows from **Consistency** and **Uniformity**: once a user learns
 what `*` means, that meaning is preserved everywhere.

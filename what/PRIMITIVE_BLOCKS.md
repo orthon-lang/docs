@@ -124,6 +124,8 @@ let * = point                # unpack — decompose (destructuring)
 (x, y) = *point              # unpack — positional destructuring
 ```
 
+> **Note (EDR-096).** The star pack/unpack lines above are abstract Level-1 notation illustrating the symmetric pair, not surface syntax. The concrete surface syntax is prefix `*x` in both roles — it collects in receiving positions (parameters, patterns) and spreads in sending positions (call arguments, literals) — as specified in [`concepts/UNPACKING.md`](concepts/UNPACKING.md) and [EDR-096](../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md).
+
 ### 3.2 Data Operations Primitives
 
 #### 3.2.1 `assignment`

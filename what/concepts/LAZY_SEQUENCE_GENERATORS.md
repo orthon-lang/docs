@@ -73,10 +73,10 @@ All three forms are semantically equivalent. The `emit` form is the canonical an
 ```orthon
 # Generator that produces a finite sequence
 fun fib(limit: Int) -> Iterator<Int>
-    let (a, b) = (0, 1)
+    var a, b = (0, 1)
     while a <= limit:
         emit a
-        (a, b) = (b, a + b)
+        a, b = (b, a + b)
 
 # Consumer
 for n in fib(100):
@@ -126,10 +126,10 @@ let first_100 = counter().take(100).collect()
 
 # Infinite Fibonacci
 fun fib_infinite() -> Iterator<Int>
-    let (a, b) = (0, 1)
+    var a, b = (0, 1)
     loop:
         emit a
-        (a, b) = (b, a + b)
+        a, b = (b, a + b)
 ```
 
 ### Generator Completion
