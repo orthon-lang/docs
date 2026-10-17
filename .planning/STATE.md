@@ -5,12 +5,12 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-17T05:15:08.255Z"
-last_activity: 2026-10-06
+last_updated: "2026-10-17T05:36:29.026Z"
+last_activity: 2026-10-17
 last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: 4301e4474b7dfc540e85de7f320bcea29951f342
+state_head: a92fc3f8f6d03f42a3f8426c29ba2f18defe1098
 progress:
-  total_phases: 10
+  total_phases: 13
   completed_phases: 4
   total_plans: 35
   completed_plans: 33
@@ -124,6 +124,7 @@ None yet.
 
 - 2026-07-21: Full roadmap restructure — replaced old 5-phase structure with the 8-phase pipeline (+ inserted Phase 1.1) from `when/ROADMAP.md`, via `/gsd-phase` (phase.remove ×4, phase.insert ×1, phase.add ×7). Phase 1 preserved unchanged (already complete). See Decisions above for the full old→new phase mapping.
 - Phase 04.1 inserted after Phase 4: Concepts Human's Verification (URGENT)
+- Phase 04.3 inserted after Phase 04.2: Specification Integrity Infrastructure (spec-level complexity control: T1-T5, T7, T8; T6 moved to Phase 6 inputs, T9 after Phase 5)
 
 ## Deferred Items
 

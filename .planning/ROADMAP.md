@@ -40,6 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Derived Features & Decision Pipeline** - Design every outstanding concept through the Decision Pipeline and accept via EDR
 - [x] **Phase 04.1: Concepts Human's Verification** (INSERTED) - Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist and close governance gaps G1-G8, producing a clean, confirmed concept inventory for Phase 5
 - [ ] **Phase 04.2: Classical PLT Problem Mapping** (INSERTED) - Bind every accepted concept in `what/concepts/` to the classical programming-language theory (PLT) problem it solves, establish its scientific grounding, and register each problem in `what/LANGUAGE_PROBLEMS.md` before Phase 5
+- [ ] **Phase 04.3: Specification Integrity Infrastructure** (INSERTED) - Make the specification's own growth controllable before syntax work: executable integrity checks, one normative home per concept, controlled glossary, machine-readable dependency and traceability metadata
 - [ ] **Phase 5: Syntax Design** - Derive syntax from the semantic model for every accepted concept
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
 - [ ] **Phase 7: Execution & Optimization Model** - Define the boundary between language semantics and implementation
@@ -223,6 +224,29 @@ Plans:
   3. `what/LANGUAGE_PROBLEMS.md` follows its documented conventions (one problem per entry; Problem, Orthon's solution, Mechanisms, EDRs, Scientific grounding, Analogies in other languages, Status) and cross-references each mapped concept back to its `what/concepts/` document.
   4. The registry is complete before Phase 5 begins — the Decision Pipeline (Q1) and Concept Design Review (Step 1) pointers to `what/LANGUAGE_PROBLEMS.md` resolve to a populated registry, and any concept that introduces a new classical problem registers it.
 
+### Phase 04.3: Specification Integrity Infrastructure (INSERTED)
+
+**Goal**: The specification's own growth is controllable before Phase 5 multiplies the document set — cascading changes between decisions are measurable instead of discovered at the final review. This phase builds executable integrity checks, a single normative home per concept, a controlled glossary vocabulary, and machine-readable dependency and traceability metadata, turning the manually-applied Fitness Functions (`how/architecture/FITNESS_FUNCTIONS.md`) into repeatable measurements. Source analysis: `.planning/notes/2026-10-17-spec-level-complexity-management.md` (tasks T1-T5, T7, T8).
+**Depends on**: Phase 04.2 (the verified concept inventory and the populated `what/LANGUAGE_PROBLEMS.md` registry are inputs to dependency metadata and glossary lint), Phase 04.1
+**Requirements**: TBD (to be added to `.planning/REQUIREMENTS.md` when the phase is planned)
+**Plans**: TBD
+
+**Success Criteria** (what must be TRUE):
+
+  1. A Process EDR records where validation tooling lives (GSD tooling, a `tools/` directory, or the future implementation repository) and why it is consistent with the documentation-only, no-build-tools constraint; every executable check below runs from that location.
+  2. (T1) The cross-reference validity check from `how/architecture/FITNESS_FUNCTIONS.md` is executable and repeatable; every finding is triaged as fixed or recorded as a documented false positive, and zero real broken relative links remain.
+  3. (T2) Every accepted concept has exactly one normative home in `what/concepts/`; its research copy under `how/concepts/research/` carries a documented provenance marker, and no link outside Decision History points to a provenance copy.
+  4. (T3) `what/GLOSSARY.md` distinguishes the three meanings of "Tier" (EDR decision weight, invariant class, research priority) and the naming of "Level 3"; the glossary lint reports zero overloaded or undefined terms.
+  5. (T4) Every EDR and accepted concept carries machine-readable dependency metadata (`depends_on`, `supersedes`, `defines_terms`, `subsystem`); "what must change if EDR-X changes" is answered by a reproducible query, and coupling metrics (fan-in, fan-out, instability) are reported per concept, replacing the manual "Layered Isolation" and "Concept Stability" checks.
+  6. (T5) A traceability matrix (goal, principle, gate, EDR, concept, glossary term) is generated rather than hand-written, with an orphan report that is empty or whose every entry is justified.
+  7. (T7) Every accepted concept belongs to exactly one named specification subsystem; cross-subsystem dependency edges are counted and bounded.
+  8. (T8) A document schema lint passes on all EDRs and accepted concepts (Status values, required template sections, required EDR fields).
+
+**Out of scope** (placed elsewhere, see analysis note): T6 (composability matrix) is an input to Phase 6, which owns `what/CROSS_CUTTING.md`; T9 (end-to-end scenario programs) requires Phase 5 syntax and is scheduled after it.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 04.3 to break down)
+
 ### Phase 5: Syntax Design
 
 **Goal**: Design syntax as the external interface of the semantic model — derived from semantics, not designed independently — for every concept accepted in Phase 4.
@@ -249,6 +273,9 @@ Plans:
 
 **Goal**: Verify that all accepted concepts work together without conflicts — produce the full pairwise Interaction Matrix and resolve every concept-boundary conflict — finalizing the format investigation from `docs/notes/interaction-matrix-format.md`.
 **Depends on**: Phase 4 (all concepts designed), Phase 5 (syntax stable enough to check interactions)
+**Inputs carried in** (from `.planning/notes/2026-10-17-spec-level-complexity-management.md`):
+  - T6 — the composability matrix (concept x concept) that the "Orthogonality" Fitness Function refers to is produced here as part of the Interaction Matrix; Phase 04.3 dependency metadata (T4) supplies the list of interacting pairs by query instead of by manual enumeration.
+  - T9 — end-to-end scenario programs that cross several concepts, written in Phase 5 syntax, serve as cross-concept acceptance tests and seed a future conformance suite. Task starts after Phase 5.
 **Requirements**: XCUT-01, XCUT-02
 **Success Criteria** (what must be TRUE):
 
