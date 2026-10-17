@@ -393,10 +393,10 @@ The resolution process is defined in
 | Field | Value |
 |-------|-------|
 | **Status** | Accepted |
-| **EDR** | [EDR-055](../how/decision_records/architecture/EDR-055-unpacking.md) |
+| **EDR** | [EDR-096](../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md) (supersedes the syntax decisions of [EDR-055](../how/decision_records/architecture/EDR-055-unpacking.md)) |
 | **Specification** | [`concepts/UNPACKING.md`](concepts/UNPACKING.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Destructuring assignment matching pack/unpack symmetry (PRIMITIVE_BLOCKS). Tuple destructuring: `let (x, y) = point`. Record destructuring: `let {name, age} = person`. Rename syntax, rest patterns (`..rest`), ignore patterns (`_`), nested destructuring. Function parameter destructuring. `for` loop destructuring. All forms desugar to `pack`/`unpack` primitives — no new runtime semantics. |
+| **Summary** | Destructuring assignment matching pack/unpack symmetry (PRIMITIVE_BLOCKS). Keyword-free destructuring declaration (`x, y = point`); whole-pattern `var` for mutability. Rest pattern `*x` (and `*_`), with the same prefix star spreading in sending positions. Explicit `as` labels (`n as name`). Nominal types destructured by constructor patterns (`Person(n as name, a as age)`); the 1-tuple is spelled `tuple(a)`. Patterns in parameters and `for` loops. Only irrefutable patterns outside `match`. All forms desugar to `pack`/`unpack` primitives — no new runtime semantics. |
 | **Primitive Decomposition** | All destructuring forms → `pack`/`unpack` + `identifier` + `call`. Fully expressible via primitive composition — desugaring is a syntactic transformation, not new runtime behaviour. |
 
 ---

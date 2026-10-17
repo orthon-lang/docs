@@ -1132,6 +1132,24 @@ living in the Standard Library.
 
 ## L
 
+### Label
+
+A name attached to a tuple element or to a call argument, written
+`value as label`. The position of an element is its implicit 1-based label
+([EDR-082](../how/decision_records/architecture/EDR-082-1-based-indexing.md)).
+A label overrides position when binding call arguments. Duplicate labels and
+double aliases (`3 as x as y`) are errors. Labels do not take part in types
+or equality, and no label is ever inferred from a bare identifier.
+
+```orthon
+t = (1, 2, 3 as x)                          # tuple literal
+connect("example.com", true as use_ssl)     # call argument
+n as name, a as age = person                # pattern
+```
+
+- **Source:** `../what/concepts/UNPACKING.md` § Labels ([EDR-096](../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md))
+- **See also:** [Unpacking (Destructuring)](#unpacking-destructuring), [Tuple](#tuple), [Rest Pattern](#rest-pattern)
+
 ### Lambda
 
 An anonymous function expression — a function value defined inline without a
@@ -1650,6 +1668,23 @@ pack*    → Values
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Representation Symmetry
 - **See also:** [Explicit Semantics](#explicit-semantics), [Named Before Symbolic](#named-before-symbolic)
 
+### Rest Pattern
+
+The prefix-star pattern `*x` that collects the remaining elements of a
+tuple pattern into `x`; `*_` discards them. A pattern contains exactly one
+star, at any position, and only in positional patterns. The same prefix
+form spreads in sending positions (call arguments and literals) for tuples
+and finite collections — the mirror image of collecting.
+
+```orthon
+first, *rest = nums           # collects
+nums2 = (first, *rest)        # spreads
+first, *_ = nums              # remainder discarded
+```
+
+- **Source:** `../what/concepts/UNPACKING.md` § Rest Pattern ([EDR-096](../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md))
+- **See also:** [Unpacking (Destructuring)](#unpacking-destructuring), [Representation Symmetry](#representation-symmetry), [Tuple](#tuple)
+
 ### Result Type
 
 The canonical representation of fallible operations in Orthon. A sum
@@ -1951,6 +1986,23 @@ alternatives.
 
 - **Source:** `../what/concepts/ALGEBRAIC_DATA_TYPES.md` § Default Strategy, [EDR-039](../how/decision_records/architecture/EDR-039-algebraic-data-types.md)
 - **See also:** [Algebraic Data Type](#algebraic-data-type), [Sum Type](#sum-type), [Pattern Matching](#pattern-matching)
+
+### Tuple
+
+A fixed-size ordered collection of values, optionally with labeled
+elements. `(a, b)` is sugar for the constructor `tuple(a, b)`, the same
+literal-equals-constructor pattern as `[1, 2, 3]` and `List(1, 2, 3)`. The
+1-tuple exists and has exactly one spelling, `tuple(a)`; the form `(a,)` is
+forbidden and `(a)` is plain grouping. `tuple()` equals `()`.
+
+```orthon
+pair = (1, 2)                 # sugar for tuple(1, 2)
+one = tuple(7)                # the 1-tuple
+nothing = ()                  # same as tuple()
+```
+
+- **Source:** `../what/concepts/UNPACKING.md` § The 1-Tuple and the Empty Tuple ([EDR-096](../how/decision_records/architecture/EDR-096-redesigned-unpacking-syntax.md))
+- **See also:** [Unpacking (Destructuring)](#unpacking-destructuring), [Label](#label), [Rest Pattern](#rest-pattern), [Product Type](#product-type)
 
 ### Type Inference
 
@@ -2324,24 +2376,28 @@ The four guiding aphorisms of the language:
 
 ### Unpacking (Destructuring)
 
-The syntactic extraction of values from compound data structures (tuples,
-records) into individual bindings using pattern syntax. Follows the
-`pack`/`unpack` symmetry principle (PRIMITIVE_BLOCKS) — the same syntax
-used to construct a value is used to decompose it.
+The syntactic extraction of values from tuples, and from nominal types
+through constructor patterns, into individual bindings. Written without a
+keyword and without top-level parentheses (declaration by assignment).
+Follows the `pack`/`unpack` symmetry principle (PRIMITIVE_BLOCKS) — the
+same shape used to construct a value is used to decompose it. Outside
+`match`, only irrefutable patterns are allowed.
 
 ```orthon
-let (x, y) = point              # tuple destructuring
-let {name, age} = person        # record destructuring
-let {address: {city}} = user    # nested destructuring
+x, y = point                          # tuple destructuring
+var a, b = point                      # all names in the pattern are mutable
+first, *rest = xs                     # rest pattern
+n as name, a2 as age = person         # by label
+Person(n as name, a as age) = p       # nominal type: constructor pattern
 ```
 
 All destructuring forms desugar to `pack`/`unpack` primitives — no new
-runtime semantics. Supports rest patterns (`..rest`), ignore patterns
-(`_`), rename syntax, function parameter destructuring, and `for` loop
+runtime semantics. Supports the ignore pattern (`_`), the rest pattern
+(`*x`, `*_`), labels, function parameter destructuring, and `for` loop
 destructuring.
 
-- **Source:** `../what/concepts/UNPACKING.md` (EDR-055)
-- **See also:** [Primitive Block](#primitive-block), [Pattern Matching](#pattern-matching), [Representation Symmetry](#representation-symmetry)
+- **Source:** `../what/concepts/UNPACKING.md` (EDR-096; supersedes the syntax decisions of EDR-055)
+- **See also:** [Primitive Block](#primitive-block), [Pattern Matching](#pattern-matching), [Representation Symmetry](#representation-symmetry), [Rest Pattern](#rest-pattern), [Label](#label), [Tuple](#tuple)
 
 ---
 
