@@ -21,7 +21,7 @@ Goal: raise complexity gradually, strengthening the MVP with already-agreed conc
 
 ## Decisions
 
-1. **Variant B: the specification itself grows by grade.** v0.1 contains grade 1 only. It is not merely an implementation order for a complete v0.1 spec. Consequences: Core Value ("every concept accepted") and Phase 8 (freeze) must be rescoped to grade 1; Phases 5 and 6 shrink (pairwise interaction checking is quadratic in the number of concepts, so cutting the concept set cuts that work superlinearly).
+1. **Variant B: the specification itself grows by grade.** v0.1 contains grade 1 only. It is not merely an implementation order for a complete v0.1 spec. Consequences: Core Value ("every concept accepted") and Phase 8 (freeze) must be rescoped to grade 1; Phases 5 and 6 shrink (Phase 6 checks the pairs that Phase 4 identified as interacting, enumerated by a query on the Phase 04.3 dependency metadata, so the work scales with the number of edges among the concepts in scope, not with N squared; the number of such pairs is unknown because `what/CROSS_CUTTING.md` is still empty).
 2. **A grade is the cost of deferral, not importance.** The question asked of every concept: *what would have to be rewritten or would break if this concept arrived one grade later?* Unpacking: nothing (it desugars to lower-grade constructs), so grade 3. Generics, null safety, error handling, ownership, concurrency: they change the meaning of already-accepted constructs, so a late arrival is expensive regardless of how "optional" they feel.
 3. **Before grading, verify that the primitive set is closed, layer by layer.** The dynamic core (values, calls, control), static semantics (types) and staging (macros, comptime) each need their own closed set. "No new primitive will ever be needed" cannot be proven; it can only be made falsifiable and given an amendment procedure (precedent: EDR-085 added the 10th primitive and re-ran the minimality proof).
 4. **Naming.** The new concept must not reuse "tier" (already three meanings, see [[2026-10-17-spec-level-complexity-management]], task T3). "Grade" is the working name.
@@ -37,6 +37,12 @@ Goal: raise complexity gradually, strengthening the MVP with already-agreed conc
    - Staging concepts (AST_MACROS, COMPILE_TIME_EXECUTION, derive macros, user-visible contracts machinery) become natural candidates for a later grade, provided nothing in grade 1 stands on them.
    - **The one place the rule is violated today:** EDR-031 says comptime *is* the generic mechanism (`comptime T: type`, a type as a compile-time value), while EDR-086 moved generics to `<>`. The rule resolves the open question in favour of `<>`: a type is never a comptime value; `comptime` parameters are values only. `COMPILE_TIME_EXECUTION` OQ 4 and the stale conditional "if `comptime` is adopted" in `GENERICS.md` must be reconciled (EDR-031 amendment).
    - **A monotonicity hazard already visible:** NAMED_AND_OPTIONAL_PARAMETERS "desugar to positional calls via macro layer" on `@derive(init)` and AST macros. If named arguments are grade 1, either macros are grade 1 too or named arguments are implemented as a compiler built-in; otherwise they get a later grade.
+
+8. **Graded interaction matrix (decided 2026-10-18).** Phase 6 treats a pair of interacting concepts by the grades of its members:
+   - (1, 1): full pairwise analysis, conflicts recorded in `what/CONFLICT_REGISTRY.md`.
+   - (1, N>1): **boundary check only**, answering one question: does resolving this pair require changing grade 1 semantics or syntax? It catches (a) syntax collision with grade 1 (answered by syntax reservation in Phase 5), (b) an implicit grade 1 dependency on the deferred concept (monotonicity violation, so the concept is promoted), (c) a deferred concept that must change the meaning of an accepted grade 1 construct. A failed boundary check is a mis-grade signal, not a reason for a full conflict analysis.
+   - (N>1, N>1): not in Phase 6; checked at the pre-release gate of the earlier of the two versions.
+   - The matrix grows by version (matrix for v0.2 = pairs among grade <= 2); `CONFLICT_REGISTRY.md` gains a "grade pair" column.
 
 ## Findings about the current primitive set (preliminary)
 
@@ -74,7 +80,7 @@ Lesson: deferring is safe for things that desugar to lower grades or that can be
 1. ~~Accepted concepts of grade 2/3: frozen or returned to hypothesis?~~ **Resolved 2026-10-18**: frozen, with a pre-release gate (Decision 5).
 2. ~~Process EDR and Core Value?~~ **Resolved 2026-10-18**: Process EDR (Tier 3) at the start of Phase 04.5; Core Value rewritten at its end (Decision 6).
 3. ~~Layer dependencies?~~ **Resolved 2026-10-18**: strictly ordered, types never depend on staging (Decision 7).
-4. How does Phase 6 treat deferred concepts: only their boundary against grade 1 (reserved syntax, no grade 1 dependency), or a full pairwise check?
+4. ~~How does Phase 6 treat deferred concepts?~~ **Resolved 2026-10-18**: graded matrix with a boundary check for (1, N) pairs (Decision 8).
 5. *Proposed, not yet confirmed.* The grade scale applies to the 58 accepted concepts only. The roughly 50 concepts in `how/concepts/research/deferrable/` are not accepted; they stay hypotheses outside the scale and may enter it later through the Decision Pipeline. Confirm and state it in the Process EDR.
 
 ## Planned placement

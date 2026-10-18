@@ -316,6 +316,7 @@ Plans:
 **Inputs carried in** (from `.planning/notes/2026-10-17-spec-level-complexity-management.md`):
   - T6 — the composability matrix (concept x concept) that the "Orthogonality" Fitness Function refers to is produced here as part of the Interaction Matrix; Phase 04.3 dependency metadata (T4) supplies the list of interacting pairs by query instead of by manual enumeration.
   - T9 — end-to-end scenario programs that cross several concepts, written in Phase 5 syntax, serve as cross-concept acceptance tests and seed a future conformance suite. Task starts after Phase 5.
+  - Graded scope (from Phase 04.5, `.planning/notes/2026-10-18-graded-spec-growth.md` Decision 8): pairs of two grade-1 concepts get the full analysis; a pair with one grade-1 and one later-grade concept gets a boundary check (does resolving it require changing grade 1 semantics or syntax?); pairs of two later-grade concepts are checked at the pre-release gate of the earlier version. `what/CONFLICT_REGISTRY.md` records the grade pair.
 
 **Requirements**: XCUT-01, XCUT-02
 **Success Criteria** (what must be TRUE):
