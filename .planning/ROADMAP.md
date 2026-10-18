@@ -239,7 +239,7 @@ Plans:
   2. (T1) The cross-reference validity check from `how/architecture/FITNESS_FUNCTIONS.md` is executable and repeatable; every finding is triaged as fixed or recorded as a documented false positive, and zero real broken relative links remain.
   3. (T2) Every accepted concept has exactly one normative home in `what/concepts/`; its research copy under `how/concepts/research/` carries a documented provenance marker, and no link outside Decision History points to a provenance copy.
   4. (T3) `what/GLOSSARY.md` distinguishes the three meanings of "Tier" (EDR decision weight, invariant class, research priority) and the naming of "Level 3"; the glossary lint reports zero overloaded or undefined terms.
-  5. (T4) Every EDR and accepted concept carries machine-readable dependency metadata (`depends_on`, `supersedes`, `defines_terms`, `subsystem`); "what must change if EDR-X changes" is answered by a reproducible query, and coupling metrics (fan-in, fan-out, instability) are reported per concept, replacing the manual "Layered Isolation" and "Concept Stability" checks.
+  5. (T4) Every EDR and accepted concept carries machine-readable dependency metadata (`depends_on`, `supersedes`, `defines_terms`, `subsystem`, plus `kernel_deps`, `forms`, `residue`, `grade` for the semantic simplicity metrics; schema validated first by the spike in `.planning/notes/2026-10-18-graded-spec-growth.md` Decision 10); "what must change if EDR-X changes" is answered by a reproducible query, and coupling metrics (fan-in, fan-out, instability) are reported per concept, replacing the manual "Layered Isolation" and "Concept Stability" checks.
   6. (T5) A traceability matrix (goal, principle, gate, EDR, concept, glossary term) is generated rather than hand-written, with an orphan report that is empty or whose every entry is justified.
   7. (T7) Every accepted concept belongs to exactly one named specification subsystem; cross-subsystem dependency edges are counted and bounded.
   8. (T8) A document schema lint passes on all EDRs and accepted concepts (Status values, required template sections, required EDR fields).
@@ -252,7 +252,7 @@ Plans:
 ### Phase 04.4: Primitive Closure Audit (INSERTED)
 
 **Goal**: The claim "every accepted concept is built from a closed set of primitives" becomes falsifiable and verified, layer by layer, before concepts are graded. Each of three layers (dynamic core: values, calls, control; static semantics: types; staging: macros and comptime) gets a fixed kernel (a fully-expanded-program grammar), and every construct of every accepted concept is shown to derive from its layer's kernel or is recorded as a new-primitive candidate. Source analysis: `.planning/notes/2026-10-18-graded-spec-growth.md`; first concrete finding: `.planning/todos/pending/fix-control-flow-primitive-contradiction.md`.
-**Depends on**: Phase 04.1 (verified concept inventory), Phase 04.2 (concepts bound to the problems they solve)
+**Depends on**: Phase 04.1 (verified concept inventory), Phase 04.2 (concepts bound to the problems they solve), Phase 04.3 (the machine-readable metadata schema in which the derivation table and the form inventory are recorded, so that semantic metrics K, F, R, D, C can be computed deterministically)
 **Requirements**: TBD (to be added to `.planning/REQUIREMENTS.md` when the phase is planned)
 **Plans**: TBD
 
