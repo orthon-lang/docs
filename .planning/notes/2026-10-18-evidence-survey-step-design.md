@@ -85,10 +85,21 @@ Sources are graded by provenance, not by format: a language designer's talk abou
 
 Each Evidence entry also records its **kind**: formal result / empirical study / experience report. First-hand accounts by language authors are experience reports and carry the label "opinion" (authors tend to justify their own decisions). Grade and kind are stored separately: an experience report stays weaker than a measurement even inside the Evidence grade.
 
+## Registry structure (locked in exploration, 2026-10-18)
+
+- **Location:** `how/evidence/` (How layer: evidence justifies decisions and is not specification; depth complies with `AGENTS.md` §4.4 rule 6). Accepted concepts in `what/` may link to it.
+- **Name:** Evidence Registry (matches the Evidence Survey step). Per-mechanism files use the `_EVIDENCE` suffix (precedent: the `_SYNTAX` suffix in `how/syntax/`), which also avoids name clashes with same-named concept docs in `how/concepts/research/`.
+- **Contents:**
+  - `README.md` - conventions, source grading, statuses, pointer index. No second table of sources (the duplicated-index pitfall of `AGENTS.md` §10.12).
+  - `SOURCES.md` - bibliography: one entry per source with grade, kind, status (`DRAFT` / `VERIFIED`) and a verification note. A source is verified once, independent of any concept.
+  - `{MECHANISM}_EVIDENCE.md` - precedents per mechanism: language, mechanism, lineage, lesson, source references. No applicability verdicts: those are concept-specific and live in the concept's reference table.
+  - `how/templates/_evidence.md` - entry template (templates live in `how/templates/`, `AGENTS.md` §4.4 rule 3).
+- **Not placed elsewhere:** `what/` (justification, not specification); `how/concepts/research/` (110+ concept drafts by tier would swamp it); `notes/` (exploratory, not durable). `why/DESIGN_INFLUENCES.md` stays the vision-level overview of language influences and is linked from the registry; it was judged from its headings only, so check for overlap when the registry is created.
+- **Housekeeping:** the new document type must be registered in `AGENTS.md` §3 (Document Map) and §4.3 / §4.4 (rule 7).
+
 ## Open questions
 
 1. **Forward scope.** For new concepts, assumed Tier 1-2 only (matches the Human Sign-off gate); not yet confirmed.
-2. **Registry name and location.** A new document type requires a category directory, a template, and updates to `AGENTS.md` §3 and §4.4 (rule 7).
 
 ## Unresolved (could not stand behind)
 

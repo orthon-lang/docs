@@ -24,8 +24,10 @@ Files expected to change once the EDR is Accepted:
 - `AGENTS.md` - one pointer line in §5.2 (survey prior art first); a
   reliability rule in §11 (external claims carry a source or are marked
   unverified); new document type registered in §3 and §4.4.
-- New evidence registry: category directory, template, and entries
-  (name and location undecided).
+- New Evidence Registry (decided 2026-10-18): `how/evidence/` with
+  `README.md`, `SOURCES.md` and `{MECHANISM}_EVIDENCE.md` files, plus the
+  template `how/templates/_evidence.md`; register the new document type in
+  `AGENTS.md` §3 and §4.3 / §4.4.
 - Optional: one-line pointer in `how/process/DECISION_PIPELINE.md` Q1.
 
 ## Why
@@ -49,8 +51,8 @@ to accepted EDRs is out of scope here; it is the separate task
 2. Source grading: decided 2026-10-18 (Evidence / Lead / Not counted, by
    provenance; first-hand author accounts are Evidence of kind "experience
    report", labelled opinion) - see the design note, "Source grading".
-3. Registry name and location (new doc type: directory + template + AGENTS.md
-   §3 / §4.4 updates).
+3. Registry name and location: decided 2026-10-18 - see the design note,
+   "Registry structure".
 
 ## Suggested action
 
