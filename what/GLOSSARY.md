@@ -1153,8 +1153,9 @@ n as name, a as age = person                # pattern
 ### Lambda
 
 An anonymous function expression — a function value defined inline without a
-name. Lambdas are first-class values and share the same call syntax as named
-functions. Closure capture is explicit.
+name. In `fn`, the keyword stands for "mini-function": a lambda is a
+mini-function, a function value written inline. Lambdas are first-class values
+and share the same call syntax as named functions. Closure capture is explicit.
 
 ```
 let double = fn (x: Int) -> Int
