@@ -258,7 +258,7 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 
-  1. A kernel is fixed for each of the three layers, and the boundaries between layers (what each may depend on) are stated.
+  1. A kernel is fixed for the dynamic core and for static semantics; staging is specified as a translator whose output must lie in the lower layers and whose expansion terminates. The layer order is strict and one-way (dynamic core ← static semantics ← staging; lower layers never depend on staging), and the EDR-031 / EDR-086 conflict (`comptime T: type` against `<>` generics) is resolved so that no type is a comptime value (EDR-031 amendment; `GENERICS.md` and `COMPILE_TIME_EXECUTION` OQ 4 reconciled).
   2. A derivation table covers every construct of every accepted concept in `what/concepts/`: construct, expression over its layer's kernel, and residue class (pure composition, StdLib, type level, staging, static analysis, or new-primitive candidate). The "Primitive Decomposition" rows of `what/CORE_CONCEPTS.md` agree with the table.
   3. The control-flow contradiction between `what/PRIMITIVE_BLOCKS.md` § 10.3 and `ITERATION_LOOP` is resolved, either by amending the primitive set (new EDR in the style of EDR-085, minimality proof re-run) or by showing the derivation.
   4. Every new-primitive candidate is resolved (primitive added by EDR, derivation shown, or construct moved to another layer); none remains open.
