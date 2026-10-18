@@ -25,6 +25,9 @@ Goal: raise complexity gradually, strengthening the MVP with already-agreed conc
 2. **A grade is the cost of deferral, not importance.** The question asked of every concept: *what would have to be rewritten or would break if this concept arrived one grade later?* Unpacking: nothing (it desugars to lower-grade constructs), so grade 3. Generics, null safety, error handling, ownership, concurrency: they change the meaning of already-accepted constructs, so a late arrival is expensive regardless of how "optional" they feel.
 3. **Before grading, verify that the primitive set is closed, layer by layer.** The dynamic core (values, calls, control), static semantics (types) and staging (macros, comptime) each need their own closed set. "No new primitive will ever be needed" cannot be proven; it can only be made falsifiable and given an amendment procedure (precedent: EDR-085 added the 10th primitive and re-ran the minimality proof).
 4. **Naming.** The new concept must not reuse "tier" (already three meanings, see [[2026-10-17-spec-level-complexity-management]], task T3). "Grade" is the working name.
+5. **Already-accepted grade 2/3 concepts stay accepted (decided 2026-10-18).** They are not returned to hypothesis status and their EDRs are not superseded. Registry status takes the form `Accepted (grade N, target vX)`, extending the existing precedent `Accepted (deferred to v0.2)` of PERSISTENT_DATA_STRUCTURES. Rationale: re-opening would repeat design work on the same information; new information arrives only with Phase 5 scenarios and the implementation (Milestone 10). Two rules keep "frozen" from meaning "sealed":
+   - **Pre-release gate.** Before a concept ships in its own version it passes the Concept Design Review gates again against the specification as it then stands; any change goes through a normal EDR amendment.
+   - **Grade promotion.** If grade 1 would have to be designed around a deferred concept, the concept's grade is wrong and it is promoted, not reopened.
 
 ## Findings about the current primitive set (preliminary)
 
@@ -59,9 +62,10 @@ Lesson: deferring is safe for things that desugar to lower grades or that can be
 
 ## Open questions (not yet decided)
 
-1. Accepted concepts of grade 2/3: stay accepted-and-frozen (EDRs stand, normative later) or return to hypothesis status for redesign before v0.2? Mixed per-concept is possible.
+1. ~~Accepted concepts of grade 2/3: frozen or returned to hypothesis?~~ **Resolved 2026-10-18**: frozen, with a pre-release gate (Decision 5).
 2. Does introducing the grade concept need a Process EDR, and does it amend Core Value in `.planning/PROJECT.md`?
 3. Is the type system's layer allowed to depend on staging, or are the three layers strictly ordered?
+4. How does Phase 6 treat deferred concepts: only their boundary against grade 1 (reserved syntax, no grade 1 dependency), or a full pairwise check?
 
 ## Planned placement
 

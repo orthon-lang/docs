@@ -282,7 +282,7 @@ Plans:
   3. The grade assignment is monotone: no grade-1 concept depends on a grade-2 or grade-3 concept (checked against the dependency graph).
   4. Grade 1 is closed: a set of scenario programs written with grade 1 alone demonstrates that non-trivial programs are expressible.
   5. Syntax space needed by grade 2 and 3 concepts is reserved so that adding them later does not break grade 1 programs.
-  6. The status of accepted grade 2 and 3 concepts (frozen or returned to hypothesis) is decided and recorded; `.planning/PROJECT.md` Core Value and Phases 5-8 are rescoped to grade 1, with a Process EDR if the decision requires one.
+  6. Accepted grade 2 and 3 concepts keep their Accepted status, recorded in the registry as `Accepted (grade N, target vX)`, with a pre-release gate (the Concept Design Review gates are re-run against the then-current specification before a concept ships in its own version); a concept that grade 1 would have to be designed around is promoted, not reopened. `.planning/PROJECT.md` Core Value and Phases 5-8 are rescoped to grade 1, with a Process EDR if the decision requires one.
 
 Plans:
 - [ ] TBD (run /gsd-plan-phase 04.5 to break down)
