@@ -46,8 +46,9 @@ re-verification of accepted hypotheses is finished. Retroactive application
 to accepted EDRs is out of scope here; it is the separate task
 [[evidence-backfill-accepted-edrs]].
 
-1. Forward scope for new concepts: assumed Tier 1-2 only (matches the Human
-   Sign-off gate); confirm.
+1. Forward scope: decided 2026-10-18 - mandatory for all new concepts, not
+   only Tier 1-2. The sufficiency criterion (depth for small versus large
+   concepts) is set after the pilot.
 2. Source grading: decided 2026-10-18 (Evidence / Lead / Not counted, by
    provenance; first-hand author accounts are Evidence of kind "experience
    report", labelled opinion) - see the design note, "Source grading".

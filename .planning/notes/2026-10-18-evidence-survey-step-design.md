@@ -97,9 +97,13 @@ Each Evidence entry also records its **kind**: formal result / empirical study /
 - **Not placed elsewhere:** `what/` (justification, not specification); `how/concepts/research/` (110+ concept drafts by tier would swamp it); `notes/` (exploratory, not durable). `why/DESIGN_INFLUENCES.md` stays the vision-level overview of language influences and is linked from the registry; it was judged from its headings only, so check for overlap when the registry is created.
 - **Housekeeping:** the new document type must be registered in `AGENTS.md` §3 (Document Map) and §4.3 / §4.4 (rule 7).
 
+## Forward scope (locked in exploration, 2026-10-18)
+
+The Evidence Survey is mandatory for **all** new concepts, not only Tier 1-2. The earlier assumption that it would mirror the scope of the Human Sign-off gate was rejected by the author. The depth required for small versus large concepts is not decided; the sufficiency criterion is to be set after the pilot (see the backfill todo).
+
 ## Open questions
 
-1. **Forward scope.** For new concepts, assumed Tier 1-2 only (matches the Human Sign-off gate); not yet confirmed.
+None at the end of the exploration session. Remaining work is the Process EDR, which needs the author's Human Sign-off (see the todo).
 
 ## Unresolved (could not stand behind)
 
