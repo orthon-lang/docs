@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-18T10:14:57.650Z"
+last_updated: "2026-10-18T13:49:03.205Z"
 last_activity: 2026-10-18
 last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
-state_head: dd6005d866d176a2f04307b55c45db5433de543a
+state_head: ec8f95e1a46197281fe3b8697244b77ecab139b4
 progress:
   total_phases: 15
   completed_phases: 4
@@ -129,6 +129,7 @@ Recent decisions affecting current work:
 | 261006-d5x | Create a new superseding EDR (EDR-095, Architecture) that supersedes EDR-052: reject the emit+return dual-channel form and .final() accessor, adopt the split outer-fun/nested-emit-fun pattern, add emit-applicability criterion and compiler-diagnostic recommendation, retract EDR-052's push-model framing. Propagated into EMIT_AS_INTERMEDIATE_RESULT.md, INDEX.md, GLOSSARY.md. | 2026-10-06 | 883faf3 | [261006-d5x-create-a-new-superseding-edr-next-availa](./quick/261006-d5x-create-a-new-superseding-edr-next-availa/) |
 | 261017-at6 | Create EDR-096 superseding EDR-055: redesigned Unpacking syntax (rest star, as-labels, tuple(a), keyword-free declaration) and propagate to affected docs | 2026-10-17 | 4301e44 | [261017-at6-create-edr-096-superseding-edr-055-redes](./quick/261017-at6-create-edr-096-superseding-edr-055-redes/) |
 | 261018-i9n | Remove undefined ≈ from spec; sqrt example uses explicit abs tolerance + ensures result >= 0.0; rename future approx-equality operator ==~ to =~ in EQUALITY | 2026-10-18 | dd6005d | [261018-i9n-remove-undefined-from-spec-sqrt-example-](./quick/261018-i9n-remove-undefined-from-spec-sqrt-example-/) |
+| 24 | Define fn as mini-function in GLOSSARY Lambda entry | 2026-10-18 | ec8f95e | — |
 
 ### Roadmap Evolution
 
