@@ -44,6 +44,8 @@ Goal: raise complexity gradually, strengthening the MVP with already-agreed conc
    - (N>1, N>1): not in Phase 6; checked at the pre-release gate of the earlier of the two versions.
    - The matrix grows by version (matrix for v0.2 = pairs among grade <= 2); `CONFLICT_REGISTRY.md` gains a "grade pair" column.
 
+9. **Scope of the scale (decided 2026-10-18).** The grade scale applies only to the 58 accepted concepts. The roughly 50 concepts in `how/concepts/research/deferrable/` are not accepted; they remain hypotheses outside the scale and may enter it later through the Decision Pipeline. The Process EDR (Decision 6) states this in one line.
+
 ## Findings about the current primitive set (preliminary)
 
 - [`what/PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) § 10 declares the 10-primitive set complete ("no gaps"). The verification was done per category batch and, for deferrable concepts, "conceptually", and predates the current form of the 58 accepted concepts. "Decomposes onto the primitives" is not defined as a checkable artifact.
@@ -81,7 +83,7 @@ Lesson: deferring is safe for things that desugar to lower grades or that can be
 2. ~~Process EDR and Core Value?~~ **Resolved 2026-10-18**: Process EDR (Tier 3) at the start of Phase 04.5; Core Value rewritten at its end (Decision 6).
 3. ~~Layer dependencies?~~ **Resolved 2026-10-18**: strictly ordered, types never depend on staging (Decision 7).
 4. ~~How does Phase 6 treat deferred concepts?~~ **Resolved 2026-10-18**: graded matrix with a boundary check for (1, N) pairs (Decision 8).
-5. *Proposed, not yet confirmed.* The grade scale applies to the 58 accepted concepts only. The roughly 50 concepts in `how/concepts/research/deferrable/` are not accepted; they stay hypotheses outside the scale and may enter it later through the Decision Pipeline. Confirm and state it in the Process EDR.
+5. ~~Scope of the grade scale.~~ **Resolved 2026-10-18** (Decision 9).
 
 ## Planned placement
 
