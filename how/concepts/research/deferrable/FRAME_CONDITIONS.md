@@ -16,7 +16,7 @@ A function contract (`requires`/`ensures`/`invariant`) says *what* a
 function guarantees, but not *what it does not touch*. In Separation
 Logic, this is the **frame condition**: the set of locations a
 computation is allowed to modify. Without a frame condition, a
-postcondition like `ensures result * result ≈ x` says nothing about
+postcondition like `ensures abs(result * result - x) <= 0.000001 * x` says nothing about
 whether the function also mutated a global logger, a database, or a
 module-level cache. For modular reasoning — and for an LLM reasoning
 about whether a call is safe — the *absence* of mutation is as important
@@ -62,7 +62,8 @@ state. A free function has no `self`:
 fun logAndCompute(x: Float) -> Float
     # Does this touch the global logger? The database? Both?
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 Here the frame condition is genuinely unspecified. The question is how
@@ -75,7 +76,8 @@ to make it visible.
 ```orthon
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
     modifies nothing          # free function, pure
 ```
 
@@ -93,7 +95,8 @@ fun sqrt(x: Float) -> Float
 /// @modifies audit_log
 fun sqrt(x: Float, log: AuditLog) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 ```orthon
@@ -101,7 +104,8 @@ fun sqrt(x: Float, log: AuditLog) -> Float
 /// @modifies nothing
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 | Pros | Cons |

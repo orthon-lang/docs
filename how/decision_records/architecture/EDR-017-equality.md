@@ -49,7 +49,7 @@ Enforce the **Transitivity Invariant**: if `a == b` and `b == c` then `a == c` m
 
 **Negative:**
 - Three operators instead of one increases the learning surface for beginners (mitigated by consistent semantics — the same operator always means the same thing).
-- NaN deferral means floating-point equality is not expressible via a core-language operator (mitigated by Standard Library `Float.isNaN()` and future `==~` approximate equality).
+- NaN deferral means floating-point equality is not expressible via a core-language operator (mitigated by Standard Library `Float.isNaN()` and future `=~` approximate equality).
 - `is` is only meaningful for reference types; using it on value types always returns `false`, which may surprise programmers from languages where `is` is the default comparison.
 
 ---

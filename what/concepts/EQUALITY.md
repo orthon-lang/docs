@@ -86,7 +86,7 @@ Orthon enforces the **Transitivity Invariant**: for any types `T` where `==` or 
 
 ### NaN
 
-Floating-point NaN equality is **deferred** to the Standard Library. IEEE 754 specifies `NaN != NaN`, but this violates the Transitivity Invariant. Orthon requires an explicit comparison method (e.g., `Float.isNaN()`) rather than an operator. A future Standard Library addition may provide `==~` (approximately equal) for numeric computation.
+Floating-point NaN equality is **deferred** to the Standard Library. IEEE 754 specifies `NaN != NaN`, but this violates the Transitivity Invariant. Orthon requires an explicit comparison method (e.g., `Float.isNaN()`) rather than an operator. A future Standard Library addition may provide `=~` (approximately equal) for numeric computation.
 
 ### Interaction with Mutability
 

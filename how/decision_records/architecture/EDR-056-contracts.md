@@ -61,7 +61,7 @@ Contracts are a **Language** construct. The keywords `requires`, `ensures`, and 
 |---|---|
 | Library-based contracts | Requires syntactic integration — contracts need to be part of the function signature, not callable wrappers. |
 | Documentation-only | No verification — contracts drift from implementation with no detection mechanism. |
-| Type-level encoding (phantom types) | Cannot express relational properties between inputs and outputs (e.g., `result * result ≈ x`). |
+| Type-level encoding (phantom types) | Cannot express relational properties between inputs and outputs (e.g., `abs(result * result - x) <= 0.000001 * x`). |
 
 ### Gate Validation
 

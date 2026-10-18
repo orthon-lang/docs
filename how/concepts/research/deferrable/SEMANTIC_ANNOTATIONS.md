@@ -64,7 +64,8 @@ Annotations use `@` syntax and are attached to declarations:
 @example("sqrt(0.0) == 0.0")
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 ### Standard Annotation Namespaces
@@ -133,7 +134,7 @@ The Schema Provider exposes annotations alongside type information:
     ],
     "contract": {
         "requires": "x >= 0.0",
-        "ensures": "result * result ≈ x"
+        "ensures": "result >= 0.0 && abs(result * result - x) <= 0.000001 * x"
     }
 }
 ```

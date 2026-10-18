@@ -6,7 +6,7 @@ How does a language provide verifiable guarantees about a function's behaviour �
 
 Three specific gaps motivate contracts as a first-class Orthon feature:
 
-1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` and `ensures result * result ≈ x` tells the LLM the *intent*, not just the *shape*.
+1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` together with `ensures result >= 0.0` and `ensures abs(result * result - x) <= 0.000001 * x` tells the LLM the *intent*, not just the *shape*.
 2. **Compiler-verified intent** — Contracts checked at compile time (where possible) or runtime detect contract violations at the earliest possible moment.
 3. **Test synthesis** — Contracts are executable specifications. The compiler or toolchain can generate test cases from contracts.
 
@@ -36,13 +36,16 @@ A function declares its contract as part of its signature:
 ```orthon
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 - **`requires`** — precondition. Satisfied by the caller before every call.
 - **`ensures`** — postcondition. Guaranteed by the function after every successful return.
 - **`result`** — implicit variable binding the function's return value in the `ensures` clause.
 - **`old`** — implicit variable capturing a parameter's value at function entry (useful in `ensures` for mutable data).
+
+The `ensures result >= 0.0` clause pins the sign of the result: the relational clause alone would also admit the negated root `-sqrt(x)`.
 
 A function may declare several preconditions; the caller must satisfy every `requires` before the call:
 

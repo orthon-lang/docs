@@ -144,7 +144,8 @@ are verified assertions — the fence.
 ```orthon
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 **Bridge mechanism:** Constrained Types (EDR-080,

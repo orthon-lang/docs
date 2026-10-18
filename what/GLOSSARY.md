@@ -2225,7 +2225,8 @@ A verifiable assertion embedded in a function signature that specifies precondit
 ```orthon
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: subtypes may weaken preconditions and strengthen postconditions.

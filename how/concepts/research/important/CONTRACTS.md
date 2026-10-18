@@ -25,7 +25,7 @@ The core problem: **a function signature describes what types flow in and out, b
 
 Three specific gaps motivate contracts as a first-class Orthon feature:
 
-1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` and `ensures result * result ≈ x` tells the LLM the *intent*, not just the *shape*. This reduces hallucination of nonsensical calls.
+1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` together with `ensures result >= 0.0` and `ensures abs(result * result - x) <= 0.000001 * x` tells the LLM the *intent*, not just the *shape*. This reduces hallucination of nonsensical calls.
 
 2. **Compiler-verified intent** — Contracts checked at compile time (where possible) or runtime detect contract violations at the earliest possible moment, converting silent logic errors into diagnosed failures.
 
@@ -61,7 +61,8 @@ A function declares its contract as part of its signature:
 ```orthon
 fun sqrt(x: Float) -> Float
     requires x >= 0.0
-    ensures result * result ≈ x
+    ensures result >= 0.0
+    ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 - **`requires`** — precondition. Satisfied by the caller before every call.
@@ -91,7 +92,7 @@ Functions accepting functions can constrain their arguments:
 fun apply_twice(f: (Int) -> Int, x: Int) -> Int
     requires f.requires(x)              # caller ensures x satisfies f's precondition
     ensures result == f(f(x))
-    requires f.ensures(f(x)) ≈ ...      # composition constraint
+    requires f.ensures(f(x)) == ...      # composition constraint
 ```
 
 *Note: Full higher-order contract support depends on the Type System design and may be deferred.*

@@ -107,7 +107,7 @@ fun f(x: Float) -> Float
 let df = grad(f)      # first derivative: 3*x^2
 let d2f = grad(df)    # second derivative: 6*x
 
-assert d2f(2.0) ≈ 6.0
+assert abs(d2f(2.0) - 6.0) <= 0.000001
 ```
 
 ### Differentiable Control Flow
