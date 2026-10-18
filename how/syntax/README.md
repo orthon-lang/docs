@@ -120,6 +120,7 @@ agents/GSD flows must not self-certify it.
 |----------|---------------|--------|--------------|
 | Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) | Pending |
 | Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) | Pending |
+| Conformance keyword (`impl ... for` vs `obeys`), contract keyword (`contract` vs `trait`), name of multi-instance contracts, placement and multiple contracts | `../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md` (semantics hypothesis; syntax open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-18) | Pending |
 
 ### Resolved (accepted — record in `what/syntax/`)
 

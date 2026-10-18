@@ -71,6 +71,15 @@ proposals:
 > (Concept Design Review, 2026-08-23). The accepted concept lives at
 > [`what/concepts/SYSTEM_ERROR.md`](../../../what/concepts/SYSTEM_ERROR.md);
 > this research file is retained as provenance.
+>
+> **Note (2026-10-18):** `TRAIT_CONTRACT_UNIFICATION.md` added to `essential/` —
+> hypothesis that `trait` (type-level contract) and the function contract of
+> EDR-056 (method-level contract) are one construct applied to different
+> subjects: a function is sugar for a unique anonymous type with a callable
+> member, conformance is declared with one keyword (provisionally `obeys`), and
+> the kind of contract is decided by the application site. Coupled to
+> `FUNCTIONS.md` open question 4 and to the `how/syntax/` decision queue; a
+> contract-object EDR should not be filed before it is decided.
 
 ## Adding Research
 
