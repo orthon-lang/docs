@@ -85,7 +85,16 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- [2026-10-18] [general] Normalize lambda syntax: replace pipe-style examples with fn — [todo file](.planning/todos/pending/2026-10-18-normalize-lambda-syntax-replace-pipe-style-examples-with-fn.md)
+- [unknown] [general] Apply the comptime phase-marker decision (bake at call site) — [todo file](.planning/todos/pending/apply-comptime-bake-decision.md)
+- [unknown] [general] Draft Process EDR - Evidence Survey (Step 2a) in Concept Design Review — [todo file](.planning/todos/pending/draft-evidence-survey-process-edr.md)
+- [unknown] [general] Evidence backfill for accepted EDRs (separate phase) — [todo file](.planning/todos/pending/evidence-backfill-accepted-edrs.md)
+- [unknown] [general] Fix stale "if Orthon adopts a dictionary literal" reference in TYPE_ANNOTATION_SYNTAX.md — [todo file](.planning/todos/pending/fix-colon-overload-stale-reference.md)
+- [unknown] [general] Resolve the control-flow contradiction between PRIMITIVE_BLOCKS and ITERATION_LOOP — [todo file](.planning/todos/pending/fix-control-flow-primitive-contradiction.md)
+- [unknown] [general] Move Policy-level essential-tier concepts out of the Semantic Model / Primitive Blocks / Decision Pipeline track — [todo file](.planning/todos/pending/move-policy-level-essential-concepts-out-of-pipeline.md)
+- [unknown] [general] Restore correctness-by-construction glossary terms dropped by commit 8dcf201 — [todo file](.planning/todos/pending/restore-cbc-glossary-terms.md)
+- [unknown] [general] Draft Tier 1 EDR to amend Semantic Purity from "one meaning" to "one semantic role" — [todo file](.planning/todos/pending/semantic-purity-tier1-edr.md)
+- [unknown] [general] Translate the remaining non-English content in repository files — [todo file](.planning/todos/pending/translate-non-english-content.md)
 
 ### Blockers/Concerns
 
