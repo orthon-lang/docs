@@ -38,3 +38,28 @@ default genuinely removes the ownership-violation error class rather than
 moving it, and (b) whether QTT adds anything over the Separation Logic
 framing as a soundness argument — with a recommendation for
 `how/strategies/` vs `how/concepts/research/`.
+
+
+## Per-mechanism evidence base for core constructs (2026-10-18)
+
+**Q:** For each of Orthon's core mechanisms (algebraic data types, traits,
+error handling, ownership/mutability), which Programming Language Theory
+works and which documented language experience (specifications, RFCs, design
+documents, retrospectives) exist, and does any of it include empirical
+evidence rather than theory alone?
+
+**Why:** `notes/evidence-based-software-engineering.md` ("Where They Diverge")
+states that no external empirical studies of Orthon's constructs exist. That
+holds for Orthon as a whole, but whether it holds for the individual
+mechanisms is unconfirmed: the existence of such studies was asserted from
+model memory only (unresolved: unverifiable, not checked against a primary
+source). The answer determines how realistic the Evidence Survey step (see
+[[2026-10-18-evidence-survey-step-design]]) is and what its sufficiency
+criterion should be.
+
+**Acceptance:** A table per mechanism listing candidate sources, each tagged
+by class (theory / language experience), evidence kind (formal result /
+empirical / experience report) and verification status (admitted with source /
+unresolved with reason); plus an explicit "no evidence found" entry where
+nothing was located; plus a recommendation on whether to revise the "Where
+They Diverge" claim. Pilot on one concept first.
