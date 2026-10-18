@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-18T05:45:06.509Z"
-last_activity: 2026-10-17
-last_activity_desc: Phase 04.1 execution resumed (wave continue)
-state_head: e6f89e955f64046e0f76898f013fd7fa5b5a2963
+last_updated: "2026-10-18T10:14:57.650Z"
+last_activity: 2026-10-18
+last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
+state_head: dd6005d866d176a2f04307b55c45db5433de543a
 progress:
   total_phases: 15
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-10-17 - Completed quick task 261017-at6: Created EDR-096 (superseding the syntax decisions of EDR-055) recording the redesigned Unpacking syntax (prefix-star rest `*x`, explicit `value as label` labels, `tuple(a)` 1-tuple, keyword-free declaration, irrefutable-only patterns outside match). Propagated into UNPACKING.md, PATTERN_MATCHING.md, NAMED_AND_OPTIONAL_PARAMETERS.md, EDR-065, EDR-053, INDEX.md, DECISION_LOG.md, GLOSSARY.md, CORE_CONCEPTS.md, DESIGN_PRINCIPLES.md (POLA) and PRIMITIVE_BLOCKS.md
+Last activity: 2026-10-18 - Completed quick task 261018-i9n: remove undefined ≈ from spec
 
 Progress: [█████████░] 94%
 
@@ -119,6 +119,7 @@ None yet.
 | 261006-chn | Document the resolved nested-emit-function pattern (batches/Progress/track_batch example) in what/concepts/EMIT_AS_INTERMEDIATE_RESULT.md, flag the .final() dual-channel pattern as disputed/open, from a concept-review discussion | 2026-10-06 | f8caf0a | [261006-chn-document-the-resolved-nested-emit-functi](./quick/261006-chn-document-the-resolved-nested-emit-functi/) |
 | 261006-d5x | Create a new superseding EDR (EDR-095, Architecture) that supersedes EDR-052: reject the emit+return dual-channel form and .final() accessor, adopt the split outer-fun/nested-emit-fun pattern, add emit-applicability criterion and compiler-diagnostic recommendation, retract EDR-052's push-model framing. Propagated into EMIT_AS_INTERMEDIATE_RESULT.md, INDEX.md, GLOSSARY.md. | 2026-10-06 | 883faf3 | [261006-d5x-create-a-new-superseding-edr-next-availa](./quick/261006-d5x-create-a-new-superseding-edr-next-availa/) |
 | 261017-at6 | Create EDR-096 superseding EDR-055: redesigned Unpacking syntax (rest star, as-labels, tuple(a), keyword-free declaration) and propagate to affected docs | 2026-10-17 | 4301e44 | [261017-at6-create-edr-096-superseding-edr-055-redes](./quick/261017-at6-create-edr-096-superseding-edr-055-redes/) |
+| 261018-i9n | Remove undefined ≈ from spec; sqrt example uses explicit abs tolerance + ensures result >= 0.0; rename future approx-equality operator ==~ to =~ in EQUALITY | 2026-10-18 | dd6005d | [261018-i9n-remove-undefined-from-spec-sqrt-example-](./quick/261018-i9n-remove-undefined-from-spec-sqrt-example-/) |
 
 ### Roadmap Evolution
 
