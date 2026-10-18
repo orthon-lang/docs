@@ -39,7 +39,6 @@ moving it, and (b) whether QTT adds anything over the Separation Logic
 framing as a soundness argument — with a recommendation for
 `how/strategies/` vs `how/concepts/research/`.
 
-
 ## Per-mechanism evidence base for core constructs (2026-10-18)
 
 **Q:** For each of Orthon's core mechanisms (algebraic data types, traits,

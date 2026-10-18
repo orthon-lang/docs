@@ -57,9 +57,25 @@ Author's four goals for the step:
 
 The registry follows an existing repository pattern: detailed reasoning trail in `gates/DECISION_LOG.md`, terse record in the EDR (`DECISION_PROCESS.md` § Recording).
 
+## Scope decision (locked in exploration, 2026-10-18)
+
+**Sequencing.** Nothing starts - including the collection steps below - until the current re-verification of accepted hypotheses is finished, so the yardstick does not move mid-review. (Background: hypotheses were first accepted without the Human Sign-off gate; the gate was later enforced and re-verification began but is not complete.)
+
+**Retroactive application is a separate phase, not an automatic rollout.** Evidence can change a decision and trigger an EDR revision, which needs author review. The phase is split by who holds authority:
+
+1. **Theory base** - Programming Language Theory literature the accepted concepts already rely on. Added automatically. The agent verifies that each cited work exists and says what is claimed of it (citations in the repo were largely LLM-written, so a fabricated or distorted reference is the typical failure). Unverifiable items stay marked "unverified".
+2. **Analogies and language experience** - classified analysis (fit to Orthon, points of attention, new insights) of other languages' mechanisms and accumulated experience. Added without the author, but registry entries carry status `DRAFT` (the pattern from `what/THESES.md`) until the author marks them `VERIFIED`. The agent also emits a non-binding impact signal per EDR (possible impact / no impact); it routes author attention and decides nothing.
+3. **Decision impact** - what to change in the EDR. Author only. The agent pre-drafts a change pack per EDR (EDR claim, evidence, divergence, proposed edit) and applies nothing. The author reviews flagged EDRs and spot-checks unflagged ones to catch signal bias. Outcomes are those of `AGENTS.md` §11.2: clarify the document / revise the concept plus a new EDR / not a problem, skip.
+
+**Bias control.** The survey is built from the problem statement (Step 1) without reading the chosen solution; the comparison with the decision comes afterwards. A model handed a hypothesis tends to confirm it.
+
+**Volume (counted 2026-10-18).** 92 EDR files: Architecture 81 (76 Accepted, 4 Rejected, 1 Superseded), Process 10, Quality 1; 57 accepted concept docs; 11 EDRs carry a recorded `Reviewed-by`. Working queue is about 57-76 units (concepts and Architecture EDRs largely coincide). Process and Quality EDRs are excluded (their evidence is methodological, not language experience); the 4 rejected EDRs are deferred. Cost per unit is unknown - measure with a pilot on 2-3 concepts. Unreconciled: `2026-10-17-spec-level-complexity-management.md` reports 11 superseded EDRs, the Status field shows 1.
+
+Tracked in the todo "Evidence backfill for accepted EDRs".
+
 ## Open questions
 
-1. **Scope.** Which concepts must run the survey (Tier 1-2 only, or all) and is it applied retroactively to the existing accepted EDRs? This is a cost question for a solo author.
+1. **Forward scope.** For new concepts, assumed Tier 1-2 only (matches the Human Sign-off gate); not yet confirmed.
 2. **Secondary sources.** Are blogs, talks and second-hand retellings a lead only (never evidence), or excluded entirely? Only the two evidence classes above were agreed.
 3. **Registry name and location.** A new document type requires a category directory, a template, and updates to `AGENTS.md` §3 and §4.4 (rule 7).
 

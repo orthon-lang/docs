@@ -39,8 +39,13 @@ creation and EDR review.
 
 ## Blocked by open decisions (resolve first, one at a time)
 
-1. Scope: Tier 1-2 only or all concepts; retroactive for existing EDRs or
-   forward-only.
+**Sequencing (decided 2026-10-18):** do not start until the current
+re-verification of accepted hypotheses is finished. Retroactive application
+to accepted EDRs is out of scope here; it is the separate task
+[[evidence-backfill-accepted-edrs]].
+
+1. Forward scope for new concepts: assumed Tier 1-2 only (matches the Human
+   Sign-off gate); confirm.
 2. Status of secondary sources (blogs, talks): lead only, or excluded.
 3. Registry name and location (new doc type: directory + template + AGENTS.md
    §3 / §4.4 updates).
