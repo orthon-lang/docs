@@ -277,12 +277,12 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 
-  1. A term for the grading concept is defined in `what/GLOSSARY.md` and does not collide with the existing meanings of "Tier"; the assessment question (cost of deferral) is documented and applied identically to every concept.
+  1. A Process EDR (Tier 3, `how/decision_records/process/`, filed at the start of the phase) records the grade mechanism: definition, the cost-of-deferral assessment question, the status format, the pre-release gate, the promotion rule, and the relation to Decision Pipeline Q10. A term for the grading concept is defined in `what/GLOSSARY.md` and does not collide with the existing meanings of "Tier"; the assessment question is applied identically to every concept.
   2. Every accepted concept in `what/concepts/` carries a grade with a one-line cost-of-deferral rationale.
   3. The grade assignment is monotone: no grade-1 concept depends on a grade-2 or grade-3 concept (checked against the dependency graph).
   4. Grade 1 is closed: a set of scenario programs written with grade 1 alone demonstrates that non-trivial programs are expressible.
   5. Syntax space needed by grade 2 and 3 concepts is reserved so that adding them later does not break grade 1 programs.
-  6. Accepted grade 2 and 3 concepts keep their Accepted status, recorded in the registry as `Accepted (grade N, target vX)`, with a pre-release gate (the Concept Design Review gates are re-run against the then-current specification before a concept ships in its own version); a concept that grade 1 would have to be designed around is promoted, not reopened. `.planning/PROJECT.md` Core Value and Phases 5-8 are rescoped to grade 1, with a Process EDR if the decision requires one.
+  6. Accepted grade 2 and 3 concepts keep their Accepted status, recorded in the registry as `Accepted (grade N, target vX)`, with a pre-release gate (the Concept Design Review gates are re-run against the then-current specification before a concept ships in its own version); a concept that grade 1 would have to be designed around is promoted, not reopened. Only after criterion 4 holds (grade 1 closure demonstrated), `.planning/PROJECT.md` Core Value and its copies (the Key Decisions "Definition of Done", the `.planning/REQUIREMENTS.md` header, the M1 goal and Phase 8 in `when/ROADMAP.md`) and the scope of Phases 5-8 are rescoped to grade 1.
 
 Plans:
 - [ ] TBD (run /gsd-plan-phase 04.5 to break down)

@@ -29,6 +29,9 @@ Goal: raise complexity gradually, strengthening the MVP with already-agreed conc
    - **Pre-release gate.** Before a concept ships in its own version it passes the Concept Design Review gates again against the specification as it then stands; any change goes through a normal EDR amendment.
    - **Grade promotion.** If grade 1 would have to be designed around a deferred concept, the concept's grade is wrong and it is promoted, not reopened.
 
+6. **Process EDR now, Core Value later (decided 2026-10-18).** The grade mechanism is a Tier 3 decision (how design work is done, [`DECISION_PROCESS.md`](../../how/process/DECISION_PROCESS.md)): it needs an EDR in the Process category (template `_edr-process.md`), no human sign-off (that rule covers Tier 1-2). The EDR records: the definition of a grade, the cost-of-deferral question, the status format `Accepted (grade N, target vX)`, the pre-release gate, the promotion rule, and the relation to Decision Pipeline Q10 ("Worth adding?", which already yields informal "Yes, but deferred" verdicts). It is written at the start of Phase 04.5. Redefining v0.1 is a separate, later step: Core Value in `.planning/PROJECT.md` (and its copies: the "Definition of Done" Key Decision, the `.planning/REQUIREMENTS.md` header, the M1 goal and Phase 8 in `when/ROADMAP.md`) is rewritten only at the end of Phase 04.5, after grade 1 closure is demonstrated. Reason: the mechanism is harmless and reversible; moving the v0.1 boundary before closure is shown risks rolling it back, and a freeze is close to irreversible.
+   - The Core Value clause "every concept accepted (no DRAFT)" stays true under decision 5. What changes is that "complete" and "freeze" apply to grade 1.
+
 ## Findings about the current primitive set (preliminary)
 
 - [`what/PRIMITIVE_BLOCKS.md`](../../what/PRIMITIVE_BLOCKS.md) § 10 declares the 10-primitive set complete ("no gaps"). The verification was done per category batch and, for deferrable concepts, "conceptually", and predates the current form of the 58 accepted concepts. "Decomposes onto the primitives" is not defined as a checkable artifact.
@@ -63,9 +66,10 @@ Lesson: deferring is safe for things that desugar to lower grades or that can be
 ## Open questions (not yet decided)
 
 1. ~~Accepted concepts of grade 2/3: frozen or returned to hypothesis?~~ **Resolved 2026-10-18**: frozen, with a pre-release gate (Decision 5).
-2. Does introducing the grade concept need a Process EDR, and does it amend Core Value in `.planning/PROJECT.md`?
+2. ~~Process EDR and Core Value?~~ **Resolved 2026-10-18**: Process EDR (Tier 3) at the start of Phase 04.5; Core Value rewritten at its end (Decision 6).
 3. Is the type system's layer allowed to depend on staging, or are the three layers strictly ordered?
 4. How does Phase 6 treat deferred concepts: only their boundary against grade 1 (reserved syntax, no grade 1 dependency), or a full pairwise check?
+5. *Proposed, not yet confirmed.* The grade scale applies to the 58 accepted concepts only. The roughly 50 concepts in `how/concepts/research/deferrable/` are not accepted; they stay hypotheses outside the scale and may enter it later through the Decision Pipeline. Confirm and state it in the Process EDR.
 
 ## Planned placement
 
