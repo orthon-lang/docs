@@ -46,7 +46,9 @@ to accepted EDRs is out of scope here; it is the separate task
 
 1. Forward scope for new concepts: assumed Tier 1-2 only (matches the Human
    Sign-off gate); confirm.
-2. Status of secondary sources (blogs, talks): lead only, or excluded.
+2. Source grading: decided 2026-10-18 (Evidence / Lead / Not counted, by
+   provenance; first-hand author accounts are Evidence of kind "experience
+   report", labelled opinion) - see the design note, "Source grading".
 3. Registry name and location (new doc type: directory + template + AGENTS.md
    §3 / §4.4 updates).
 

@@ -73,11 +73,22 @@ The registry follows an existing repository pattern: detailed reasoning trail in
 
 Tracked in the todo "Evidence backfill for accepted EDRs".
 
+## Source grading (locked in exploration, 2026-10-18)
+
+Sources are graded by provenance, not by format: a language designer's talk about why a decision was made is first-hand material, while a peer-reviewed survey retelling someone else's work is second-hand.
+
+| Grade | What | May support a claim in a concept or EDR? |
+|-------|------|------------------------------------------|
+| Evidence | Peer-reviewed works; normative and design documents of a language (specifications, RFCs, design documents); first-hand accounts by the people who made the decision (talks, posts) | Yes |
+| Lead | Third-party blogs, talks, retellings, tutorials | No - a pointer to the primary source only; cite the primary once found |
+| Not counted | Forum threads, unsourced summaries, model memory | No |
+
+Each Evidence entry also records its **kind**: formal result / empirical study / experience report. First-hand accounts by language authors are experience reports and carry the label "opinion" (authors tend to justify their own decisions). Grade and kind are stored separately: an experience report stays weaker than a measurement even inside the Evidence grade.
+
 ## Open questions
 
 1. **Forward scope.** For new concepts, assumed Tier 1-2 only (matches the Human Sign-off gate); not yet confirmed.
-2. **Secondary sources.** Are blogs, talks and second-hand retellings a lead only (never evidence), or excluded entirely? Only the two evidence classes above were agreed.
-3. **Registry name and location.** A new document type requires a category directory, a template, and updates to `AGENTS.md` §3 and §4.4 (rule 7).
+2. **Registry name and location.** A new document type requires a category directory, a template, and updates to `AGENTS.md` §3 and §4.4 (rule 7).
 
 ## Unresolved (could not stand behind)
 
