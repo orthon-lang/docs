@@ -41,6 +41,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 04.1: Concepts Human's Verification** (INSERTED) - Verify every accepted concept in `what/concepts/` (49 files) against a 5-point checklist and close governance gaps G1-G8, producing a clean, confirmed concept inventory for Phase 5
 - [ ] **Phase 04.2: Classical PLT Problem Mapping** (INSERTED) - Bind every accepted concept in `what/concepts/` to the classical programming-language theory (PLT) problem it solves, establish its scientific grounding, and register each problem in `what/LANGUAGE_PROBLEMS.md` before Phase 5
 - [ ] **Phase 04.3: Specification Integrity Infrastructure** (INSERTED) - Make the specification's own growth controllable before syntax work: executable integrity checks, one normative home per concept, controlled glossary, machine-readable dependency and traceability metadata
+- [ ] **Phase 04.4: Primitive Closure Audit** (INSERTED) - Verify layer by layer (dynamic core, static semantics, staging) that each layer has a closed kernel set and every accepted concept is derivable from it, before concepts are graded
+- [ ] **Phase 04.5: Concept Grading and MVP Slice** (INSERTED) - Grade every accepted concept 1/2/3 by cost of deferral and rescope v0.1 (Core Value, Phases 5-8) to grade 1, so the specification grows MVP-first
 - [ ] **Phase 5: Syntax Design** - Derive syntax from the semantic model for every accepted concept
 - [ ] **Phase 6: Cross-Cutting Review** - Build the concept interaction matrix and resolve boundary conflicts
 - [ ] **Phase 7: Execution & Optimization Model** - Define the boundary between language semantics and implementation
@@ -247,6 +249,44 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd-plan-phase 04.3 to break down)
 
+### Phase 04.4: Primitive Closure Audit (INSERTED)
+
+**Goal**: The claim "every accepted concept is built from a closed set of primitives" becomes falsifiable and verified, layer by layer, before concepts are graded. Each of three layers (dynamic core: values, calls, control; static semantics: types; staging: macros and comptime) gets a fixed kernel (a fully-expanded-program grammar), and every construct of every accepted concept is shown to derive from its layer's kernel or is recorded as a new-primitive candidate. Source analysis: `.planning/notes/2026-10-18-graded-spec-growth.md`; first concrete finding: `.planning/todos/pending/fix-control-flow-primitive-contradiction.md`.
+**Depends on**: Phase 04.1 (verified concept inventory), Phase 04.2 (concepts bound to the problems they solve)
+**Requirements**: TBD (to be added to `.planning/REQUIREMENTS.md` when the phase is planned)
+**Plans**: TBD
+
+**Success Criteria** (what must be TRUE):
+
+  1. A kernel is fixed for each of the three layers, and the boundaries between layers (what each may depend on) are stated.
+  2. A derivation table covers every construct of every accepted concept in `what/concepts/`: construct, expression over its layer's kernel, and residue class (pure composition, StdLib, type level, staging, static analysis, or new-primitive candidate). The "Primitive Decomposition" rows of `what/CORE_CONCEPTS.md` agree with the table.
+  3. The control-flow contradiction between `what/PRIMITIVE_BLOCKS.md` § 10.3 and `ITERATION_LOOP` is resolved, either by amending the primitive set (new EDR in the style of EDR-085, minimality proof re-run) or by showing the derivation.
+  4. Every new-primitive candidate is resolved (primitive added by EDR, derivation shown, or construct moved to another layer); none remains open.
+  5. An adversarial set of constructs (coroutines, re-entrant exceptions, effect handlers, transactions, channel select) has been attempted against the kernels and the outcome is recorded.
+  6. An amendment procedure for a primitive gap found after the audit is written down.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 04.4 to break down)
+
+### Phase 04.5: Concept Grading and MVP Slice (INSERTED)
+
+**Goal**: The specification grows MVP-first. Every accepted concept receives a grade (1: maximally necessary, 2: important, 3: useful but not required) determined by the cost of deferring it (what would be rewritten if it arrived one grade later), and v0.1 is rescoped to grade 1, with grades 2 and 3 scheduled for later versions. Source analysis: `.planning/notes/2026-10-18-graded-spec-growth.md`.
+**Depends on**: Phase 04.3 (dependency metadata for the monotonicity check), Phase 04.4 (residue classes feed the cost-of-deferral assessment)
+**Requirements**: TBD (to be added to `.planning/REQUIREMENTS.md` when the phase is planned)
+**Plans**: TBD
+
+**Success Criteria** (what must be TRUE):
+
+  1. A term for the grading concept is defined in `what/GLOSSARY.md` and does not collide with the existing meanings of "Tier"; the assessment question (cost of deferral) is documented and applied identically to every concept.
+  2. Every accepted concept in `what/concepts/` carries a grade with a one-line cost-of-deferral rationale.
+  3. The grade assignment is monotone: no grade-1 concept depends on a grade-2 or grade-3 concept (checked against the dependency graph).
+  4. Grade 1 is closed: a set of scenario programs written with grade 1 alone demonstrates that non-trivial programs are expressible.
+  5. Syntax space needed by grade 2 and 3 concepts is reserved so that adding them later does not break grade 1 programs.
+  6. The status of accepted grade 2 and 3 concepts (frozen or returned to hypothesis) is decided and recorded; `.planning/PROJECT.md` Core Value and Phases 5-8 are rescoped to grade 1, with a Process EDR if the decision requires one.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 04.5 to break down)
+
 ### Phase 5: Syntax Design
 
 **Goal**: Design syntax as the external interface of the semantic model — derived from semantics, not designed independently — for every concept accepted in Phase 4.
@@ -276,6 +316,7 @@ Plans:
 **Inputs carried in** (from `.planning/notes/2026-10-17-spec-level-complexity-management.md`):
   - T6 — the composability matrix (concept x concept) that the "Orthogonality" Fitness Function refers to is produced here as part of the Interaction Matrix; Phase 04.3 dependency metadata (T4) supplies the list of interacting pairs by query instead of by manual enumeration.
   - T9 — end-to-end scenario programs that cross several concepts, written in Phase 5 syntax, serve as cross-concept acceptance tests and seed a future conformance suite. Task starts after Phase 5.
+
 **Requirements**: XCUT-01, XCUT-02
 **Success Criteria** (what must be TRUE):
 
