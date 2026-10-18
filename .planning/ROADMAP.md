@@ -235,7 +235,7 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 
-  1. A Process EDR records where validation tooling lives (GSD tooling, a `tools/` directory, or the future implementation repository) and why it is consistent with the documentation-only, no-build-tools constraint; every executable check below runs from that location.
+  1. A Process EDR records where validation tooling lives (GSD tooling, a `tools/` directory, or the future implementation repository) and why it is consistent with the documentation-only, no-build-tools constraint; every executable check below runs from that location. The EDR also records the storage rule for the specification graph: the front matter of the concept files is the single source of truth, a deterministic script builds the graph in memory, and any graph database is an optional read-only projection (see `.planning/notes/2026-10-18-graded-spec-growth.md` Decision 13).
   2. (T1) The cross-reference validity check from `how/architecture/FITNESS_FUNCTIONS.md` is executable and repeatable; every finding is triaged as fixed or recorded as a documented false positive, and zero real broken relative links remain.
   3. (T2) Every accepted concept has exactly one normative home in `what/concepts/`; its research copy under `how/concepts/research/` carries a documented provenance marker, and no link outside Decision History points to a provenance copy.
   4. (T3) `what/GLOSSARY.md` distinguishes the three meanings of "Tier" (EDR decision weight, invariant class, research priority) and the naming of "Level 3"; the glossary lint reports zero overloaded or undefined terms.
