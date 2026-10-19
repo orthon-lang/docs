@@ -301,6 +301,56 @@ If the business decides to charge a fee, the rule changes in one place, and ever
 - **Primitive decomposition.** Function contract = `struct` + `Callable` + conformance, the composition used by constrained types. The multi-member case is today's trait.
 - **Layer classification.** Candidate **Level 2 (Language Pattern)** for the function-level case, with the composition formula above. Whether "every function has a unique nominal type" is a Level 0 / Level 1 decision is part of the [`FUNCTIONS.md`](FUNCTIONS.md) review.
 
+## Decision Pipeline Run
+
+> **Pipeline run (2026-10-19).** Applied to the hypothesis as a whole, with the
+> sub-features that can end differently named explicitly. Per
+> [`DECISION_PIPELINE.md`](../../../process/DECISION_PIPELINE.md). This is
+> provenance for the Concept Design Review, not a binding verdict; the
+> per-concept record in [`DECISION_LOG.md`](../../../gates/DECISION_LOG.md) is
+> written only when an EDR is filed.
+
+Sub-features:
+
+- **F1** — one conformance construct for types and functions (the unification).
+- **F2** — premise: a function is a unique anonymous type with a callable member.
+- **F3** — named contract objects (accepted in review as a kind of object).
+- **F4** — multi-instance contracts (provisional name *law*).
+- **F5** — spellings (`contract`, `obeys`): a syntax question, not a pipeline subject.
+
+| Q# | Question | Answer |
+|----|----------|--------|
+| Q1 | What problem are we solving? | Two mechanisms (traits, function contracts) for one idea — a named specification that an element declares it satisfies — and a third arriving with contract objects. Missing homes: contracts on function arguments (higher-order contracts, deferred in EDR-056) and properties over several values (the Transitivity Invariant in EQUALITY). Reuse of one specification across implementations. |
+| Q2 | Language problem or library problem? | **Language.** Conformance checking, coherence and the Liskov rules are compiler services; EDR-019 and EDR-056 already classify both parts as Language. For F4 the declaration is Language and input generation is toolchain or Standard Library. |
+| Q3 | Can it be solved with existing primitives? | **Yes, conditionally.** With F2 a function contract is `struct` + `Callable` + trait conformance, the composition already used by constrained types (EDR-080). Without F2: no. **A separate new contract-object construct (alternative A0) exits here:** it decomposes into existing primitives, so it is not a new language feature. |
+| Q4 | Does it violate any Design Principle? | No violation found. Orthogonality, Uniformity, Explicitness, Minimal Core (Core Change Criterion, if Q3 holds), Parsimony, DRY, Schema Separate from Representation (DOP) and Named Before Symbolic read in favour. Semantic Purity: one word with one semantic role (the pending wording amendment from "one meaning" to "one semantic role" matters here). Caution — POLA: users of `trait` / `impl` meet a rename, and "a function has a type" is new. Neutral — Data Is Immutable by Default; invariants of mutable state sit outside DOP (Open Question 10). |
+| Q5 | Does it add new semantics (vs sugar)? | **Mixed.** New: F2 (functions have unique nominal types), function-level conformance, F4. Sugar: the short form `contract Name(params) -> r`, inline clauses as an anonymous contract, `obeys` on a function as shorthand for conformance of its anonymous type. |
+| Q6 | Can it be expressed through composition? | **Yes for F1, given F2:** `struct` + `Callable` + conformance. F4: partly — a contract with free inputs plus a generator in the toolchain. |
+| Q7 | Can it be syntactic sugar over existing primitives? | **Partly.** F3 and the short and inline forms are sugar over F1 + F2. F1 itself is a unification of existing constructs, not sugar. |
+| Q8 | Is this an optimisation, not semantics? | No. Eliding checks in release builds is a Contract Enforcement Policy matter and is unchanged. |
+| Q9 | Does it affect backward compatibility? | Pre-v1.0: no external users. Consistency with accepted decisions: EDR-019 (keyword and conformance syntax superseded in part), EDR-056 (amended; `old` already deferred), EDR-044, EDR-029, EDR-080; 52 files reference EDR-019 or `TRAITS.md`, 35 `impl ... for` lines in 17 files. Forward: reserves `obeys` and, under A1, `contract`. |
+| Q10 | Is it worth adding at all? | **Yes, as a unification** (A1 or A2): removes duplicated machinery and gives higher-order contracts and a home for multi-instance properties without a new primitive. **Conditional on F2.** F4: **DEFER** (v0.2 candidate). A separate construct (A0): not worth adding (Q3). |
+
+**Verdict:** Pipeline **PASS** for F1 and F3 in the unified form, **conditional on F2**; F4 **DEFER**; F5 goes to the syntax pipeline ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md)).
+
+Exit path per alternative:
+
+| Alternative | Result |
+|---|---|
+| A0 separate contract-object construct | exits at Q3 (decomposes into existing primitives): at most a Language Pattern, not a new construct |
+| A1 `contract` replaces `trait`, `obeys` replaces `impl` | passes; blocker F2 |
+| A2 keep `trait`, `obeys` for types and functions | passes; blocker F2 |
+| A3 pattern over trait and `Callable` with today's `impl` | passes; equivalent to A1 without new keywords; blocker F2 |
+| A4 inline clauses only (EDR-056 as accepted) | passes trivially; fails Q1 (leaves the listed problems open) |
+
+**Conditions before the next stage:**
+
+1. **F2.** Decide whether every function has its own nominal type and how it relates to the structural function type `Fn(A) -> B` (the `FUNCTIONS.md` review, `ANONYMOUS_FUNCTION.md`). This is Open Question 1.
+2. **Transparency — gate guard.** None of the four rejected proposals (EDR-075 prototype, EDR-076 significant whitespace, EDR-077 dynamic typing, EDR-078 class or structure as primary composition) is similar to this one. The alternatives rejected inside TRAITS (class inheritance, structural interfaces by default, unrestricted orphans) are not reopened: the hypothesis keeps explicit conformance, coherence and the orphan rule.
+3. **Transparency — architecture metric.** More than one substantive semantic change after initial gate approval triggers a mandatory architectural review. The accepted CONTRACTS concept already changed once (the deferral of `old`, 2026-10-19, an editorial amendment); this hypothesis would be a second change for CONTRACTS and the first for TRAITS. Whether the `old` deferral counts is the author's call; the recommended handling is to treat the Concept Design Review of this hypothesis as that architectural review.
+4. **Syntax.** F5 follows the semantic decision through the syntax pipeline.
+5. **Pipeline Stages 3 and 4.** The primitive decomposition check against `PRIMITIVE_BLOCKS.md` and the layer classification (candidate Level 2) are completed in the next step.
+
 ## Principle alignment (preview — gate verdicts are not recorded here)
 
 | Principle | Reading |
@@ -368,7 +418,7 @@ If the business decides to charge a fee, the rule changes in one place, and ever
 
 ## Next steps (route through the pipeline)
 
-1. Review this hypothesis in the Concept Design Review; the unique-type question (Open Question 1) must be settled together with the `FUNCTIONS.md` review.
+1. **Decision Pipeline run: done (2026-10-19).** PASS for the unified form, conditional on Open Question 1; F4 deferred; a separate construct (A0) exits at Q3. Remaining: settle Open Question 1 together with the `FUNCTIONS.md` review, confirm the architectural-review trigger, complete the primitive decomposition check and layer classification, then run the Concept Design Review (8 steps).
 2. Run the naming and conformance-keyword questions through [`SYNTAX_PIPELINE.md`](../../../SYNTAX_PIPELINE.md); the coupling is registered in the [`how/syntax/`](../../../syntax/README.md) decision queue.
 3. **Do not file a contract-object EDR before this hypothesis is decided.** If A1 or A2 wins, the contract-object EDR would be superseded immediately.
 4. If accepted: an EDR superseding the keyword and conformance syntax of EDR-019 and amending EDR-056; the cascade over about 52 files becomes a tracked task.
