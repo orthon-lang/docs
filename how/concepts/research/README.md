@@ -80,6 +80,14 @@ proposals:
 > the kind of contract is decided by the application site. Coupled to
 > `FUNCTIONS.md` open question 4 and to the `how/syntax/` decision queue; a
 > contract-object EDR should not be filed before it is decided.
+>
+> **Note (2026-10-19):** `CONTRACT_OLD_STATE.md` added to `deferrable/` —
+> deferred hypothesis: `old` (state at entry in postconditions) is not part of
+> v0.1 contracts. The analysis is kept there: `old` matters only for state a
+> callable mutates (`proc`, captures, globals), snapshot cost under
+> copy-on-write, and the operator-versus-entry-binding options. The accepted
+> `what/concepts/CONTRACTS.md` still describes `old` and is not amended by this
+> deferral.
 
 ## Adding Research
 
