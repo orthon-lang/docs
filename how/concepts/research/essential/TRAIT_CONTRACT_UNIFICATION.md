@@ -347,6 +347,7 @@ If the business decides to charge a fee, the rule changes in one place, and ever
 11. **A violation report names the rule** through the called predicate name: compiler diagnostics print the predicate that failed (for example `requires covered_by(balance, amount)`). No new feature is needed (decided 2026-10-19).
 12. **Description and source of a rule come from the predicate name or its comment.** The `as` label is **not** introduced for rules (decided 2026-10-19).
 13. **Deferred:** imposing a rule from outside on a foreign function (precedent: Racket `contract-in`) and a rule registry file. A comment may carry a reference to the rule; a separate module may use it to pull the description by reference; a registry file in the project may be added later. The form of the reference is not specified (decided 2026-10-19: mark and defer).
+14. **`obeys` is accepted as a candidate to replace `impl`** (decided 2026-10-19). It is a candidate only: the surface form is decided in the syntax pipeline, tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md), and is blocked on this hypothesis. It is justified only as a replacement for `impl`; adding it next to `impl` would give one concept two spellings (Syntax Principle 1).
 
 ## Open Questions
 
@@ -354,7 +355,7 @@ If the business decides to charge a fee, the rule changes in one place, and ever
 2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)?
 3. **Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
 4. **Multi-instance contracts in v0.1 or later?** Needed for `Eq` and `Serialize`, but not blocking.
-5. **Conformance keyword.** `obeys` replaces `impl` (the author dislikes `impl`). Placement (after the declaration, inside the type, or as a separate statement), multiple contracts, blanket and conditional conformance (`TRAIT_BLANKET_IMPLEMENTATION.md`), and associated types are all open. Handled through the syntax pipeline.
+5. **Conformance keyword.** `obeys` is the candidate to replace `impl` (Review decisions, item 14). Word, position, multiple contracts, lambdas, and blanket conformance are tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md); associated types remain open here.
 6. **`old` (state at entry).** Result naming is settled (Review decisions, item 9) and `old` is deferred (item 10). The analysis and reintroduction triggers live in [`../deferrable/CONTRACT_OLD_STATE.md`](../deferrable/CONTRACT_OLD_STATE.md); nothing about `old` blocks this hypothesis.
 7. **Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
 8. **`dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.

@@ -113,6 +113,7 @@ agents/GSD flows must not self-certify it.
 | Return-type placement: suffix `->` vs prefix | [FUNCTION_RETURN_SYNTAX.md](FUNCTION_RETURN_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_ARGUMENT, BOUNDS_IN_ANGLE_BRACKETS, lambda syntax | Open | Pending |
 | Function-type notation / `->` overload | [FUNCTION_RETURNING_FUNCTION.md](FUNCTION_RETURNING_FUNCTION.md) | FUNCTIONS review (2026-08-07) | FUNCTION_RETURN, FUNCTION_ARGUMENT, CLOSURE_CAPTURE, lambda syntax | Open | Pending |
 | Eliminate `where`: all bounds in `<>` | [BOUNDS_IN_ANGLE_BRACKETS.md](BOUNDS_IN_ANGLE_BRACKETS.md) | FUNCTIONS review (2026-08-07); revises EDR-086 | FUNCTION_RETURN, FUNCTION_ARGUMENT, FUNCTION_RETURNING_FUNCTION, CLOSURE_CAPTURE, TRAIT_BLANKET_IMPLEMENTATION | Open | Pending |
+| Conformance word and position: `impl ... for` vs `obeys` (candidate: `obeys`, replaces `impl`) | [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md) | CONTRACTS review (2026-10-19); TRAIT_CONTRACT_UNIFICATION | BOUNDS_IN_ANGLE_BRACKETS (signature tail), FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION (`->` overload, lambdas), TRAIT_BLANKET_IMPLEMENTATION | Open (candidate `obeys`; blocked on the semantic hypothesis, opened 2026-10-19) | Pending |
 
 ### Open — coupled by pointer (not relocated)
 
@@ -120,7 +121,7 @@ agents/GSD flows must not self-certify it.
 |----------|---------------|--------|--------------|
 | Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) | Pending |
 | Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) | Pending |
-| Conformance keyword (`impl ... for` vs `obeys`), contract keyword (`contract` vs `trait`), name of multi-instance contracts, placement and multiple contracts | `../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md` (semantics hypothesis; syntax open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-18) | Pending |
+| Contract keyword (`contract` vs `trait`) and name of multi-instance contracts (the conformance word moved to [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md)) | `../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md` (semantics hypothesis; syntax open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-18) | Pending |
 
 ### Resolved (accepted — record in `what/syntax/`)
 
