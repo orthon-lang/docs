@@ -43,7 +43,7 @@ fun sqrt(x: Float) -> Float
 - **`requires`** — precondition. Satisfied by the caller before every call.
 - **`ensures`** — postcondition. Guaranteed by the function after every successful return.
 - **`result`** — implicit variable binding the function's return value in the `ensures` clause.
-- **`old`** — implicit variable capturing a parameter's value at function entry (useful in `ensures` for mutable data).
+- **`old`** — **deferred out of v0.1** (author's decision, 2026-10-19). It would capture state at function entry for use in `ensures`, and matters only for state a callable mutates. Postconditions in v0.1 speak about the state after the call and about the result. Analysis and reintroduction triggers: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 
 The `ensures result >= 0.0` clause pins the sign of the result: the relational clause alone would also admit the negated root `-sqrt(x)`.
 
@@ -81,7 +81,6 @@ fn withdraw(balance: Int, amount: Int) -> Int
     # ENTRY — requires, evaluated before the body
     assert amount > 0
     assert amount <= balance
-    old = snapshot(balance)             # declaration by assignment; only if `old` is used
 
     # BODY — as written; each normal exit is rewritten:
     result = <returned value>           # declaration by assignment (EDR-074)
@@ -101,9 +100,9 @@ class Queue<T>
     invariant size >= 0
     invariant size <= capacity
 
-    fun enqueue(item: T)
+    proc enqueue(item: T)
         requires size < capacity
-        ensures size == old.size + 1
+        ensures self.back() == item
 ```
 
 Invariants attach to the aggregate — a type or a module — not to individual free functions: a free function states its guarantees with `requires`/`ensures`, while an `invariant` declares what must hold across every public operation of the aggregate. Invariants are checked on entry and exit of each public method, so methods do not restate them: `enqueue` above does not repeat `size >= 0` and `size <= capacity` — they already hold when the method runs and must hold again when it returns.
@@ -132,7 +131,7 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 ## Open Questions
 
 1. Should higher-order contracts (contracts on function arguments) be part of v0.1 or v0.2?
-2. How does `old` work with mutable reference parameters?
+2. *Deferred with `old` (2026-10-19):* how does `old` work with mutable state? See [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 3. Should contracts be inheritable across trait implementations?
 4. Performance model for runtime contract checking in hot paths.
 
@@ -141,6 +140,7 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 - **EDR-056:** Contracts accepted as Language feature — compiler-enforced pre/postconditions.
 - **Classification per D-03:** Language. Contract keywords (`requires`, `ensures`, `invariant`) require syntactic integration into function signatures and compiler-level enforcement. Not expressible via composition of primitives.
 - **Cross-reference:** TRAITS (EDR-019) — contracts compose with trait dispatch; trait methods can declare contracts that implementations must satisfy.
+- **2026-10-19 — `old` deferred out of v0.1.** Author's decision: `old` adds complexity now and gives little in return. Editorial amendment of this concept; no EDR status change (the EDR-056 text does not mention `old`). The `Queue` example now uses `proc` (mutating methods are `proc` per SEMANTIC_MODEL § Mutation) and an absolute postcondition. Analysis kept as a deferred hypothesis: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 
 ---
 
