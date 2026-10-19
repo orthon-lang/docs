@@ -297,6 +297,7 @@ Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they ar
 6. Contracts are allowed on **any** function or method; rules differ by position (names visible to callers in `requires` of public API, Liskov rules on trait methods).
 7. Separating the contract from the implementation is consistent with DOP principle 4 (EDR-090).
 8. A comparison of free function and type is recorded in the [review note](../../../../.planning/notes/2026-10-18-contracts-free-function-vs-type.md).
+9. **The result is named in the signature** (`-> result: Float`) and used as an ordinary name in `ensures` clauses (option B, decided 2026-10-19). The name is visible only in `ensures` clauses: not in `requires`, not in the body. The lambda binder in `ensures` (`ensures fn(r) -> ...`) is dropped, because it would shadow the signature name. Predicate-valued clauses (`ensures is_non_negative`) are not introduced in v0.1: an expression of function type in `ensures` is a compile error with a hint to call it on `result` (`is_non_negative(result)`).
 
 ## Open Questions
 
@@ -305,7 +306,7 @@ Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they ar
 3. **Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
 4. **Multi-instance contracts in v0.1 or later?** Needed for `Eq` and `Serialize`, but not blocking.
 5. **Conformance keyword.** `obeys` replaces `impl` (the author dislikes `impl`). Placement (after the declaration, inside the type, or as a separate statement), multiple contracts, blanket and conditional conformance (`TRAIT_BLANKET_IMPLEMENTATION.md`), and associated types are all open. Handled through the syntax pipeline.
-6. **Result naming and binders.** `-> result: T` in the signature (B), `ensures fn(r) -> ...` (C), or both, and the companion question of `old`. Undecided; the review ended before this was settled.
+6. **`old` (state at entry).** Result naming is settled (Review decisions, item 9). What remains open is how a postcondition refers to state at entry: the form of `old`, what is snapshotted, and which state may be named.
 7. **Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
 8. **`dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
 9. **`structural` contracts.** What implicit (structural) satisfaction means for a function.
