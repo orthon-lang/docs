@@ -202,6 +202,48 @@ User obeys Printable                         // ERROR if format is missing or it
 
 Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they are: their subject is a value and they are checked at construction. They are a different kind, not a member of this unification.
 
+## Business-rule use
+
+A named contract is a **business rule**: named, reusable, and independent of any implementation. This follows [`VISION.md`](../../../../why/VISION.md) ("the language defines contracts; implementations fulfill them") and DOP principle 4 (EDR-090): the specification is a separate named object applied at boundaries.
+
+| Rule property | Provided by the design |
+|---|---|
+| Has a name | named contract object |
+| Separate from implementation | contract object plus `obeys`; the binding is in the signature, so the shape is checked by the compiler |
+| One rule, many places | one contract obeyed by several functions; shared named predicates |
+| Rule over a value | constrained type (EDR-080) |
+| Rule over state | `invariant` |
+| Rule over several values | multi-instance contract (name still open, see Open Question 14) |
+| Readable in domain vocabulary | named pure predicates (`is_positive`, `covered_by`) |
+| Machine-readable export | Schema Provider; the structured export of the [`SEMANTIC_ANNOTATIONS.md`](../deferrable/SEMANTIC_ANNOTATIONS.md) draft |
+
+```orthon
+// module of rules: depends on domain types only, never on implementations
+fun is_positive(amount: Money) -> Bool
+    return amount > Money(0)
+
+fun covered_by(balance: Money, amount: Money) -> Bool
+    return amount <= balance
+
+contract Withdraw(balance: Money, amount: Money) -> new_balance: Money
+    requires is_positive(amount)               // "the amount is positive"
+    requires covered_by(balance, amount)       // "the balance covers the amount"
+    ensures new_balance == balance - amount    // "the balance decreases by the amount"
+
+// module of implementations
+fun withdraw(balance: Money, amount: Money) -> Money obeys Withdraw
+    return balance - amount
+
+fun withdraw_with_fee(balance: Money, amount: Money) -> Money obeys Withdraw
+    return balance - amount - FEE              // violates ensures: a contract-derived test shows it
+```
+
+If the business decides to charge a fee, the rule changes in one place, and every implementation that no longer fits is found by checking against it. The rule is not edited inside the code that enforces it.
+
+**Dependency direction.** The module of rules must not import implementation modules; otherwise the rules are tied to code again. This is a project rule (or a lint), not a language rule.
+
+**Honest limits.** "Self-describing" does not mean that non-programmers read the expressions: contract expressions are code. The realistic gain is domain-vocabulary names for rules and predicates, and documentation generated from them.
+
 ## Evidence
 
 ### In the repository
@@ -302,6 +344,9 @@ Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they ar
 8. A comparison of free function and type is recorded in the [review note](../../../../.planning/notes/2026-10-18-contracts-free-function-vs-type.md).
 9. **The result is named in the signature** (`-> result: Float`) and used as an ordinary name in `ensures` clauses (option B, decided 2026-10-19). The name is visible only in `ensures` clauses: not in `requires`, not in the body. The lambda binder in `ensures` (`ensures fn(r) -> ...`) is dropped, because it would shadow the signature name. Predicate-valued clauses (`ensures is_non_negative`) are not introduced in v0.1: an expression of function type in `ensures` is a compile error with a hint to call it on `result` (`is_non_negative(result)`).
 10. **`old` is deferred out of v0.1** (decided 2026-10-19): it adds complexity now and gives little in return. The analysis is kept as a deferred hypothesis in [`../deferrable/CONTRACT_OLD_STATE.md`](../deferrable/CONTRACT_OLD_STATE.md). Postconditions in v0.1 speak about the state after the call and about the result. The accepted [`CONTRACTS.md`](../../../../what/concepts/CONTRACTS.md) still describes `old`; amending it is a separate step.
+11. **A violation report names the rule** through the called predicate name: compiler diagnostics print the predicate that failed (for example `requires covered_by(balance, amount)`). No new feature is needed (decided 2026-10-19).
+12. **Description and source of a rule come from the predicate name or its comment.** The `as` label is **not** introduced for rules (decided 2026-10-19).
+13. **Deferred:** imposing a rule from outside on a foreign function (precedent: Racket `contract-in`) and a rule registry file. A comment may carry a reference to the rule; a separate module may use it to pull the description by reference; a registry file in the project may be added later. The form of the reference is not specified (decided 2026-10-19: mark and defer).
 
 ## Open Questions
 
@@ -317,6 +362,8 @@ Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they ar
 10. **Invariant for mutable types.** DOP treats data as immutable, so state invariants fall outside it. Keep `invariant` in v0.1 or reduce it to constrained types? Also the re-entrancy problem (see the review note).
 11. **Enforcement by position.** Strictness at module boundaries versus internally, and partial disabling of checks. Deferred to the enforcement discussion.
 12. **Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
+13. **Deferred: external imposition of rules.** Form of the reference in a comment, how a separate module pulls the description by reference, a rule registry file, and imposing a contract on a foreign function (Racket `contract-in`), which shifts blame because the function itself promises nothing.
+14. **Do not name the multi-instance kind "rule".** If every contract is a business rule, the word is too general for one kind among several. Note that `obeys` pairs naturally with *rule* and *law* as objects ("obeys the rule"); this is an input to the naming of the construct (Open Question 2) and of the multi-instance kind (Open Question 3), not a decision.
 
 ## Next steps (route through the pipeline)
 
