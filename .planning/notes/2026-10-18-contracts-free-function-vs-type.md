@@ -51,16 +51,17 @@ class Queue<T>
     invariant size >= 0
     invariant size <= capacity
 
-    // The constructor establishes the invariant; requires covers parameters only
-    fun new(capacity: Int) -> Queue<T>
+    // Construction (Queue(capacity)) establishes the invariant; requires covers parameters only
+    fun call(capacity: Int) -> Queue<T>
         requires capacity > 0
 
-    fun enqueue(self, item: T)
+    // Mutating methods are `proc`; `old` is deferred (see CONTRACT_OLD_STATE.md)
+    proc enqueue(item: T)
         requires size < capacity
-        ensures size == old.size + 1       // invariants are not restated
+        ensures self.back() == item        // invariants are not restated
 
 // Private helper: the invariant may be temporarily broken, not checked
-fun reindex(self)
+proc reindex()
     ...
 ```
 
