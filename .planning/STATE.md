@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-19T07:43:50.663Z"
+last_updated: "2026-10-19T12:10:21.883Z"
 last_activity: 2026-10-18
 last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
-state_head: e3d5447013c7930ebe30db1349e5633cc8fffd96
+state_head: e5c29dafa32b09de4d19b86b0df4b595ca50d8a3
 progress:
   total_phases: 15
   completed_phases: 4
@@ -133,6 +133,7 @@ Recent decisions affecting current work:
 | 25 | Add TRAIT_CONTRACT_UNIFICATION hypothesis; register in research README and syntax queue | 2026-10-18 | dc26765 | — |
 | 26 | Record result-naming decision (B) in TRAIT_CONTRACT_UNIFICATION | 2026-10-19 | e94be3a | — |
 | 27 | Defer contract old as a hypothesis; record decision; fix Stack and Queue examples to proc | 2026-10-19 | e3d5447 | — |
+| 28 | Mark old as deferred in accepted CONTRACTS.md | 2026-10-19 | e5c29da | — |
 
 ### Roadmap Evolution
 
