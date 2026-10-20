@@ -51,7 +51,7 @@ Supporting premise: **a function is syntactic sugar for a unique anonymous type 
 Consequences claimed by the hypothesis (to be tested, not assumed):
 
 1. One conformance mechanism, one set of Liskov and coherence rules, for types and functions.
-2. Contracts on function arguments are ordinary generic bounds (`<Sqrt as F>`), so higher-order contracts need no new feature.
+2. Contracts on function arguments are ordinary generic bounds (`<Sqrt as F>`), so higher-order contracts need no new feature. (A v0.2 consequence: deferred by Review decision 15, not part of v0.1.)
 3. The error "wrong kind of contract applied" disappears: the only error is structural mismatch (a required member is missing or has the wrong signature).
 4. The separate contract-object construct is a Language Pattern (Level 2) over existing primitives, not a new primitive.
 
@@ -167,14 +167,14 @@ contract Stack<T>
 // 4. Generic bound (unchanged form)
 fun print_all<Printable as T>([T] items)
 
-// 5. Dynamic dispatch on a function value
+// 5. [v0.2, deferred: Review decision 15] Dynamic dispatch on a function value
 fun apply_dyn(f: dyn Sqrt, x: Float) -> Float
     return f(x)
 
-// 6. Higher-order contract: a bound on a function-valued argument
+// 6. [v0.2, deferred: Review decision 15] Higher-order contract: a bound on a function-valued argument
 fun map_roots<Sqrt as F>(f: F, xs: [Float]) -> [Float]
 
-// 7. Lambda that declares conformance (spelling provisional)
+// 7. [v0.2, deferred: Review decision 15] Lambda that declares conformance (spelling provisional)
 let root = fn(x) -> newton(x) obeys Sqrt
 
 // 8. Inline anonymous contract (unchanged from EDR-056)
@@ -331,21 +331,21 @@ Sub-features:
 | Q9 | Does it affect backward compatibility? | Pre-v1.0: no external users. Consistency with accepted decisions: EDR-019 (keyword and conformance syntax superseded in part), EDR-056 (amended; `old` already deferred), EDR-044, EDR-029, EDR-080; 52 files reference EDR-019 or `TRAITS.md`, 35 `impl ... for` lines in 17 files. Forward: reserves `obeys` and, under A1, `contract`. |
 | Q10 | Is it worth adding at all? | **Yes, as a unification** (A1 or A2): removes duplicated machinery and gives higher-order contracts and a home for multi-instance properties without a new primitive. **Conditional on F2.** F4: **DEFER** (v0.2 candidate). A separate construct (A0): not worth adding (Q3). |
 
-**Verdict:** Pipeline **PASS** for F1 and F3 in the unified form, **conditional on F2**; F4 **DEFER**; F5 goes to the syntax pipeline ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md)).
+**Verdict:** Pipeline **PASS** for F1 and F3 in the unified form, **conditional on F2 as a definition by desugaring only** (narrowed 2026-10-19, Review decision 15); F4 **DEFER**; F5 goes to the syntax pipeline ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md)).
 
 Exit path per alternative:
 
 | Alternative | Result |
 |---|---|
 | A0 separate contract-object construct | exits at Q3 (decomposes into existing primitives): at most a Language Pattern, not a new construct |
-| A1 `contract` replaces `trait`, `obeys` replaces `impl` | passes; blocker F2 |
-| A2 keep `trait`, `obeys` for types and functions | passes; blocker F2 |
-| A3 pattern over trait and `Callable` with today's `impl` | passes; equivalent to A1 without new keywords; blocker F2 |
+| A1 `contract` replaces `trait`, `obeys` replaces `impl` | passes; F2 needed as a definition only |
+| A2 keep `trait`, `obeys` for types and functions | passes; F2 needed as a definition only |
+| A3 pattern over trait and `Callable` with today's `impl` | passes; equivalent to A1 without new keywords; F2 needed as a definition only |
 | A4 inline clauses only (EDR-056 as accepted) | passes trivially; fails Q1 (leaves the listed problems open) |
 
 **Conditions before the next stage:**
 
-1. **F2.** Decide whether every function has its own nominal type and how it relates to the structural function type `Fn(A) -> B` (the `FUNCTIONS.md` review, `ANONYMOUS_FUNCTION.md`). This is Open Question 1.
+1. **F2 (narrowed 2026-10-19).** F2 is needed only as the definition that explains `obeys` on a function. Its consequences — the relation to the structural function type, generics, `dyn`, lambdas — are deferred to v0.2 (Review decision 15; Open Question 1). It is no longer a blocker. The definition is to be pointed to from the `FUNCTIONS.md` review as the v0.1 answer to its open question 4: each function declaration is sugar for an anonymous type with one callable member; function-type notation stays undecided.
 2. **Transparency — gate guard.** None of the four rejected proposals (EDR-075 prototype, EDR-076 significant whitespace, EDR-077 dynamic typing, EDR-078 class or structure as primary composition) is similar to this one. The alternatives rejected inside TRAITS (class inheritance, structural interfaces by default, unrestricted orphans) are not reopened: the hypothesis keeps explicit conformance, coherence and the orphan rule.
 3. **Transparency — architecture metric.** More than one substantive semantic change after initial gate approval triggers a mandatory architectural review. The accepted CONTRACTS concept already changed once (the deferral of `old`, 2026-10-19, an editorial amendment); this hypothesis would be a second change for CONTRACTS and the first for TRAITS. Whether the `old` deferral counts is the author's call; the recommended handling is to treat the Concept Design Review of this hypothesis as that architectural review.
 4. **Syntax.** F5 follows the semantic decision through the syntax pipeline.
@@ -398,27 +398,28 @@ Exit path per alternative:
 12. **Description and source of a rule come from the predicate name or its comment.** The `as` label is **not** introduced for rules (decided 2026-10-19).
 13. **Deferred:** imposing a rule from outside on a foreign function (precedent: Racket `contract-in`) and a rule registry file. A comment may carry a reference to the rule; a separate module may use it to pull the description by reference; a registry file in the project may be added later. The form of the reference is not specified (decided 2026-10-19: mark and defer).
 14. **`obeys` is accepted as a candidate to replace `impl`** (decided 2026-10-19). It is a candidate only: the surface form is decided in the syntax pipeline, tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md), and is blocked on this hypothesis. It is justified only as a replacement for `impl`; adding it next to `impl` would give one concept two spellings (Syntax Principle 1).
+15. **Deferred to v0.2** (decided 2026-10-19): using contracts through generics and function values — a function contract as a generic bound, `dyn` on function values, collections of contract-bearing functions, and `obeys` on lambdas. These are the higher-order contracts that EDR-056 already deferred to v0.2. The notation for function types is undecided in any case (`->` is overloaded, see [`FUNCTION_RETURNING_FUNCTION.md`](../../../syntax/FUNCTION_RETURNING_FUNCTION.md)), so this document does not write function types in new examples. The premise "a function is sugar for a unique anonymous type with one callable member" stays **only as a definition**: it explains `obeys` on a function and decomposes it into existing primitives (Pipeline Q3). Its consequences for generics, dispatch, and function-type notation are deferred. **v0.1 scope:** types obey contracts (replacing `trait` / `impl`); functions obey named contracts at their declaration (shape check, contract-derived tests, documentation).
 
 ## Open Questions
 
-1. **Unique type per function.** Does every function have its own nominal type, and how does it relate to the structural function type `Fn(A) -> B` (coercion or erasure through a callable bound)? Coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. This is the main dependency.
+1. **Unique type per function — kept as a definition only (Review decision 15).** The premise stays as the definition that explains `obeys` on a function. How it relates to the structural function type (coercion or erasure through a callable bound), generics, and dispatch is **deferred to v0.2** with higher-order contracts; coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. No longer a blocker for v0.1.
 2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)?
 3. **Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
 4. **Multi-instance contracts in v0.1 or later?** Needed for `Eq` and `Serialize`, but not blocking.
 5. **Conformance keyword.** `obeys` is the candidate to replace `impl` (Review decisions, item 14). Word, position, multiple contracts, lambdas, and blanket conformance are tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md); associated types remain open here.
 6. **`old` (state at entry).** Result naming is settled (Review decisions, item 9) and `old` is deferred (item 10). The analysis and reintroduction triggers live in [`../deferrable/CONTRACT_OLD_STATE.md`](../deferrable/CONTRACT_OLD_STATE.md); nothing about `old` blocks this hypothesis.
-7. **Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
-8. **`dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
+7. **Deferred to v0.2 (Review decision 15). Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
+8. **Deferred to v0.2 (Review decision 15). `dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
 9. **`structural` contracts.** What implicit (structural) satisfaction means for a function.
 10. **Invariant for mutable types.** DOP treats data as immutable, so state invariants fall outside it. Keep `invariant` in v0.1 or reduce it to constrained types? Also the re-entrancy problem (see the review note).
 11. **Enforcement by position.** Strictness at module boundaries versus internally, and partial disabling of checks. Deferred to the enforcement discussion.
-12. **Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
+12. **Deferred to v0.2 (Review decision 15). Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
 13. **Deferred: external imposition of rules.** Form of the reference in a comment, how a separate module pulls the description by reference, a rule registry file, and imposing a contract on a foreign function (Racket `contract-in`), which shifts blame because the function itself promises nothing.
 14. **Do not name the multi-instance kind "rule".** If every contract is a business rule, the word is too general for one kind among several. Note that `obeys` pairs naturally with *rule* and *law* as objects ("obeys the rule"); this is an input to the naming of the construct (Open Question 2) and of the multi-instance kind (Open Question 3), not a decision.
 
 ## Next steps (route through the pipeline)
 
-1. **Decision Pipeline run: done (2026-10-19).** PASS for the unified form, conditional on Open Question 1; F4 deferred; a separate construct (A0) exits at Q3. Remaining: settle Open Question 1 together with the `FUNCTIONS.md` review, confirm the architectural-review trigger, complete the primitive decomposition check and layer classification, then run the Concept Design Review (8 steps).
+1. **Decision Pipeline run: done (2026-10-19).** PASS for the unified form, conditional on Open Question 1; F4 deferred; a separate construct (A0) exits at Q3. Remaining: state the F2 definition for the `FUNCTIONS.md` review (the rest of Open Question 1 is deferred to v0.2), confirm the architectural-review trigger, complete the primitive decomposition check and layer classification, then run the Concept Design Review (8 steps).
 2. Run the naming and conformance-keyword questions through [`SYNTAX_PIPELINE.md`](../../../SYNTAX_PIPELINE.md); the coupling is registered in the [`how/syntax/`](../../../syntax/README.md) decision queue.
 3. **Do not file a contract-object EDR before this hypothesis is decided.** If A1 or A2 wins, the contract-object EDR would be superseded immediately.
 4. If accepted: an EDR superseding the keyword and conformance syntax of EDR-019 and amending EDR-056; the cascade over about 52 files becomes a tracked task.
