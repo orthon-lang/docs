@@ -113,7 +113,7 @@ agents/GSD flows must not self-certify it.
 | Return-type placement: suffix `->` vs prefix | [FUNCTION_RETURN_SYNTAX.md](FUNCTION_RETURN_SYNTAX.md) | ITERATOR_PROTOCOL review (2026-08-05) | FUNCTION_ARGUMENT, BOUNDS_IN_ANGLE_BRACKETS, lambda syntax | Open | Pending |
 | Function-type notation / `->` overload | [FUNCTION_RETURNING_FUNCTION.md](FUNCTION_RETURNING_FUNCTION.md) | FUNCTIONS review (2026-08-07) | FUNCTION_RETURN, FUNCTION_ARGUMENT, CLOSURE_CAPTURE, lambda syntax | Open | Pending |
 | Eliminate `where`: all bounds in `<>` | [BOUNDS_IN_ANGLE_BRACKETS.md](BOUNDS_IN_ANGLE_BRACKETS.md) | FUNCTIONS review (2026-08-07); revises EDR-086 | FUNCTION_RETURN, FUNCTION_ARGUMENT, FUNCTION_RETURNING_FUNCTION, CLOSURE_CAPTURE, TRAIT_BLANKET_IMPLEMENTATION | Open | Pending |
-| Conformance word and position: `impl ... for` vs `obeys` (candidate: `obeys`, replaces `impl`) | [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md) | CONTRACTS review (2026-10-19); TRAIT_CONTRACT_UNIFICATION | BOUNDS_IN_ANGLE_BRACKETS (signature tail), FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION (`->` overload, lambdas), TRAIT_BLANKET_IMPLEMENTATION | Open (candidate `obeys`; blocked on the semantic hypothesis, opened 2026-10-19) | Pending |
+| Conformance word and position: `impl ... for` vs `obeys` (candidate: `obeys`, replaces `impl`) | [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md) | CONTRACTS review (2026-10-19); TRAIT_CONTRACT_UNIFICATION | BOUNDS_IN_ANGLE_BRACKETS (signature tail), FUNCTION_RETURN, FUNCTION_RETURNING_FUNCTION (`->` overload), TRAIT_BLANKET_IMPLEMENTATION | Open (candidate `obeys`; blocked on the semantic hypothesis, opened 2026-10-19) | Pending |
 
 ### Open — coupled by pointer (not relocated)
 
