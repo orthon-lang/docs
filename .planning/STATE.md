@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-20T17:19:27.621Z"
+last_updated: "2026-10-20T18:02:46.194Z"
 last_activity: 2026-10-18
 last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
-state_head: f68532af442aabbe62e911e91ebfb85e479d10e9
+state_head: 413b8550e882aa1bdcc75ca32c7c558e54f6e276
 progress:
   total_phases: 15
   completed_phases: 4
@@ -138,6 +138,7 @@ Recent decisions affecting current work:
 | 30 | Add CONFORMANCE_SYNTAX hypothesis; obeys as candidate to replace impl; register in syntax queue | 2026-10-19 | 11b1531 | — |
 | 31 | Decision Pipeline run for TRAIT_CONTRACT_UNIFICATION | 2026-10-19 | 343ae67 | — |
 | 32 | Defer contracts through generics and function values to v0.2; narrow F2 condition | 2026-10-20 | f68532a | — |
+| 33 | Mark lambdas and related questions in CONFORMANCE_SYNTAX as deferred to v0.2 | 2026-10-20 | 413b855 | — |
 
 ### Roadmap Evolution
 
