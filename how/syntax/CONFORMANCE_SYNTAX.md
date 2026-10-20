@@ -13,7 +13,13 @@
 > because a syntax decision cannot add or change semantics
 > ([`SYNTAX_PIPELINE.md`](../SYNTAX_PIPELINE.md)).
 >
-> **Last updated:** 2026-10-19
+> **Last updated:** 2026-10-20
+>
+> **Scope (Review decision 15 of the semantic hypothesis):** v0.1 covers
+> types that obey contracts and named functions that obey contracts at their
+> declaration. `obeys` on lambdas, conformance of function values used
+> through generics or `dyn`, and the coupling to the `->` overload are
+> **deferred to v0.2**.
 >
 > **See also:** [`../../what/SYNTAX.md`](../../what/SYNTAX.md) (Syntax Principles),
 > [`../../what/concepts/TRAITS.md`](../../what/concepts/TRAITS.md) (EDR-019),
@@ -95,10 +101,10 @@ ForeignType obeys LocalContract
 Problem cases:
 
 ```orthon
-// 8. Inline lambda: where does the tail go?
+// 8. [v0.2, deferred] Inline lambda: where does the tail go?
 fn(x) -> newton(x) obeys Sqrt          // does `obeys` belong to the lambda or to the body expression?
 
-// 9. Block lambda: unambiguous
+// 9. [v0.2, deferred] Block lambda: unambiguous
 fn (x: Float) -> Float obeys Sqrt
     newton(x)
 
@@ -114,7 +120,7 @@ let obeys = 3                          // ERROR if reserved; allowed if the word
 | Coupled question | Why |
 |---|---|
 | Signature tail order ([`BOUNDS_IN_ANGLE_BRACKETS.md`](BOUNDS_IN_ANGLE_BRACKETS.md), `FUNCTION_RETURN_SYNTAX.md`) | the tail already holds `require`, `where`, `-> Return` with no canonical order; `obeys` joins it |
-| `->` overload ([`FUNCTION_RETURNING_FUNCTION.md`](FUNCTION_RETURNING_FUNCTION.md)) | in the inline lambda `fn(x) -> expr` the arrow separates the body, so there is no slot for a tail clause before the body |
+| `->` overload ([`FUNCTION_RETURNING_FUNCTION.md`](FUNCTION_RETURNING_FUNCTION.md)) | **Deferred to v0.2 with lambdas.** In the inline lambda `fn(x) -> expr` the arrow separates the body, so there is no slot for a tail clause before the body |
 | Comma | `obeys A, B` uses the comma, which is already an overloaded symbol in the queue |
 | Blanket conformance ([`TRAIT_BLANKET_IMPLEMENTATION.md`](../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md)) | the conditional form depends on where bounds live |
 | Block openers and braces | older `impl` examples disagree (`:` versus `{ }`) |
@@ -143,13 +149,13 @@ let obeys = 3                          // ERROR if reserved; allowed if the word
 - A new reserved word; the full reserved-word inventory does not exist yet, so the cost cannot be counted.
 - No prior in mainstream languages (not verified): LLM generability must be measured against `impl`.
 - Cascade: 35 `impl ... for` lines in 17 files, plus `@derive` output and every accepted concept that shows `impl`.
-- The inline-lambda slot and the signature tail order are unsolved.
+- The signature tail order is unsolved; the inline-lambda slot is deferred to v0.2 together with lambdas.
 
 ## Open Questions
 
 1. Reserved word or contextual (soft) keyword that is reserved only in the tail and declaration positions?
 2. Position per construct: signature tail for functions, statement for types, or also inline in a type header (`type User obeys Printable`).
-3. Spelling for lambdas, given the `->` overload.
+3. **Deferred to v0.2 (Review decision 15).** Spelling for lambdas, given the `->` overload.
 4. Conditional (blanket) conformance and the placement of its bounds.
 5. Contracts with parameters (`obeys Callable(Int) -> Age`).
 6. Keep a `for`-style target for conformance declared outside the type (orphan-rule case), or is the statement form enough?
@@ -158,7 +164,7 @@ let obeys = 3                          // ERROR if reserved; allowed if the word
 ## Next Step
 
 1. Wait for (or decide together with) the semantic hypothesis [`TRAIT_CONTRACT_UNIFICATION.md`](../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md): the construct and the application sites must be fixed first.
-2. Run the Decision Pipeline pre-filter and the Coupling & Overload Check against the signature-tail and `->` hypotheses.
+2. Run the Decision Pipeline pre-filter and the Coupling & Overload Check against the signature-tail hypothesis (the `->` overload matters here only for lambdas, which are deferred to v0.2).
 3. Apply the five Syntax Principles and the required gates (LOGICAL_CONSISTENCY, CONCEPTUAL_SIMPLICITY, ARCHITECTURAL_INTEGRITY, LLM_GENERABILITY).
 4. Human sign-off, then an EDR (Architecture) and a record in `what/syntax/`.
 
