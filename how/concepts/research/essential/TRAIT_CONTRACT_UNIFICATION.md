@@ -8,7 +8,7 @@
 > tier). Its syntax questions are registered by pointer in the
 > `how/syntax/` decision queue (EDR-087).
 >
-> **Last updated:** 2026-10-18
+> **Last updated:** 2026-10-21
 >
 > **Related:** [`TRAITS.md`](../../../../what/concepts/TRAITS.md) (EDR-019),
 > [`CONTRACTS.md`](../../../../what/concepts/CONTRACTS.md) (EDR-056),
@@ -27,6 +27,22 @@
 
 ---
 
+## Concept Design Review — progress
+
+Review of this hypothesis against [`concept-design-review.md`](../../../concept-design-review.md). Steps 0–5 were prepared on 2026-10-21 by the drafting agent; the author confirms them at Step 7.
+
+| Step | Status | Where |
+|------|--------|-------|
+| 0 Primitive decomposition and layer classification (pipeline Stages 3–4) | done | [Step 0](#step-0--primitive-decomposition-and-layer-classification) |
+| 1 Idea / Problem | done | [Problem](#problem) |
+| 2 Alternatives | done, Selection recorded | [Step 2](#step-2--alternatives-comparison-and-selection) |
+| 3 Minimal Solution | done | [Step 3](#step-3--minimal-solution) |
+| 4 Principle Check | done, no violation found | [Step 4](#step-4--principle-check) |
+| 5 Examples | done | [Step 5](#step-5--examples-by-usage-context) |
+| 6 Tooling Implications | pending | — |
+| 7 Convergence Check (syntax review, Open Question 10, edge cases, sign-off) | pending | — |
+| 8 EDR (EDR-098) | pending, after Step 7 | — |
+
 ## Problem
 
 The specification already treats one idea in two places:
@@ -41,6 +57,10 @@ The 2026-10-18 review accepted that contracts should become **named objects** th
 - **Properties of a whole trait have no home.** The Transitivity Invariant in [`EQUALITY.md`](../../../../what/concepts/EQUALITY.md) quantifies over three values of one type. It cannot be a `requires` / `ensures` (one call) or an `invariant` (one state), so it lives in prose.
 
 The project's own discipline ([`CONCEPT_PIPELINE.md`](../../../CONCEPT_PIPELINE.md) Stage 3) also requires a new construct to decompose into existing primitives. A separate contract-object construct currently has no such decomposition.
+
+### Classical problem and scientific grounding (Step 1)
+
+The problem maps to a known programming-language theory problem: **behavioral subtyping and the separation of a specification from its implementations.** A signature fixes shapes but not behaviour, so an implementation can match a signature and still break the assumptions of its callers. The rule that makes substitution safe — an implementation may weaken preconditions and strengthen postconditions — was stated by Liskov and Wing (*A behavioral notion of subtyping*, ACM TOPLAS, 1994). Meyer's Design by Contract (*Applying Design by Contract*, IEEE Computer, 1992) attached such specifications to declarations. The Expression Problem, already registered in [`LANGUAGE_PROBLEMS.md`](../../../../what/LANGUAGE_PROBLEMS.md), is adjacent (traits) but is not the same problem. The registry had no entry for this one; it was added on 2026-10-21. The citations are from general knowledge and are listed under "Not verified".
 
 ## Hypothesis
 
@@ -121,11 +141,13 @@ The mechanism already exists in the specification: [`CONSTRAINED_TYPES.md`](../.
 | Method-level contract | a call | `requires` / `ensures` | `obeys` on a function, or inline | statically where provable, otherwise debug |
 | Value constraint | a value | predicate over `v` | constrained type (EDR-080) | at construction |
 | Invariant of mutable state | a mutable type or module | predicate over `self` | `invariant` in the type | at the boundary of public operations |
-| Multi-instance contract | several values or calls | property quantified over inputs | declared in a contract | property-based generation, debug |
+| Multi-instance contract (v0.2) | several values or calls | property quantified over inputs | declared in a contract | property-based generation, debug |
 
 Adjacent, not part of this hypothesis: module-level effects and dependencies ([`EFFECT_FOOTPRINT.md`](EFFECT_FOOTPRINT.md), hypothesis; [`../MODULE_HEADER_FILE.md`](../MODULE_HEADER_FILE.md), draft) and mutation scope ([`../deferrable/FRAME_CONDITIONS.md`](../deferrable/FRAME_CONDITIONS.md), draft).
 
-### Multi-instance contracts (provisional name: *law*)
+### Multi-instance contracts (provisional name: *law*) — deferred to v0.2
+
+> **Deferred to v0.2 (Review decision 17).** Not part of v0.1; kept here as the analysis for later.
 
 A condition that quantifies over several values or calls: transitivity of `Eq` over three values, the round trip `from_json(to_json(x)) == x` for `Serialize` / `Deserialize`. It is a contract with no subject function and with free inputs:
 
@@ -140,21 +162,38 @@ contract Eq
 
 It is not checked at a call boundary. It is checked by generating inputs (property-based testing) or by debug-mode assertions, as EQUALITY already allows ("the compiler may insert runtime checks in debug mode"). The name `law` is considered too heavy; candidates are listed in Open Question 3.
 
-## Examples by usage context
+## Step 5 — Examples by usage context
+
+Syntax is provisional (see the note under Model). The examples follow the categories of the Concept Design Review: minimal, typical, edge cases, incorrect usage; the equivalent canonical forms are shown together at the end.
+
+### Minimal
 
 ```orthon
-// 1. Type-level conformance (was: impl Printable for User)
+contract Sqrt(x: Float) -> result: Float
+    requires x >= 0.0
+    ensures result >= 0.0
+
+fun sqrt_newton(x: Float) -> Float obeys Sqrt
+    ...
+
+contract Printable
+    fun format(self) -> String
+
 User obeys Printable
     fun format(self) -> String
         return "User({self.name})"
+```
 
-// 2. Function-level conformance, many implementations of one specification
+### Typical
+
+```orthon
+// Many implementations of one specification (function level)
 fun sqrt_newton(x: Float) -> Float obeys Sqrt
     ...
 fun sqrt_table(x: Float) -> Float obeys Sqrt
     ...
 
-// 3. Methods of a contract carry conditions; implementations inherit them
+// Methods of a contract carry conditions; implementations inherit them
 //    (mutating methods are `proc`; relations to the state before the call
 //    need `old`, which is deferred: see CONTRACT_OLD_STATE.md)
 contract Stack<T>
@@ -164,40 +203,99 @@ contract Stack<T>
     proc pop() -> item: T
         requires not self.is_empty()
 
-// 4. Generic bound (unchanged form)
+// Generic bound on types (unchanged form)
 fun print_all<Printable as T>([T] items)
 
-// 5. [v0.2, deferred: Review decision 15] Dynamic dispatch on a function value
-fun apply_dyn(f: dyn Sqrt, x: Float) -> Float
-    return f(x)
-
-// 6. [v0.2, deferred: Review decision 15] Higher-order contract: a bound on a function-valued argument
-fun map_roots<Sqrt as F>(f: F, xs: [Float]) -> [Float]
-
-// 7. [v0.2, deferred: Review decision 15] Lambda that declares conformance (spelling provisional)
-let root = fn(x) -> newton(x) obeys Sqrt
-
-// 8. Inline anonymous contract (unchanged from EDR-056)
+// Inline anonymous contract (EDR-056 with the named result of EDR-097)
 fun withdraw(balance: Int, amount: Int) -> result: Int
     requires amount > 0
     requires amount <= balance
     ensures result == balance - amount
 
-// 9. Several contracts
+// Several contracts
 fun sqrt_safe(x: Float) -> Float obeys Sqrt, Logged
     ...
 ```
 
-**Error cases** (all reduce to structural mismatch or an inherited rule):
+### Edge cases
+
+```orthon
+// A different result name in the implementation is allowed;
+// inherited clauses use the name of the declaring signature
+contract Shape
+    fun area(self) -> result: Float
+        ensures result >= 0.0
+
+Circle obeys Shape
+    fun area(self) -> a: Float
+        return 3.14159 * self.r * self.r
+
+// Error-union result: the name binds the success value; ensures is checked on success only
+fun read_config(path: String) -> cfg: !Config
+    ensures cfg.version >= 1
+
+// An implementation may add a stronger ensures
+fun sqrt_bounded(x: Float) -> root: Float obeys Sqrt
+    ensures root <= x + 1.0
+
+// Conformance declared outside the type's own declaration
+// (orphan rule: the contract is local to the declaring module)
+ForeignType obeys LocalContract
+    ...
+```
+
+### Incorrect usage
+
+All of these reduce to structural mismatch or to an inherited rule:
 
 ```orthon
 Float obeys Sqrt                             // ERROR: Float has no callable member call(x: Float) -> Float
 fun f(x: Int) -> Int obeys Printable         // ERROR: function has no member format(self)
 fun g(x: Float) -> Float obeys Sqrt
     requires x > 10.0                        // ERROR: stronger requires than the contract
-fun h(x: Float) -> Float obeys Sqrt
-    ensures root >= 1.0                      // allowed: stronger ensures
 User obeys Printable                         // ERROR if format is missing or its signature differs
+```
+
+### Deferred to v0.2 (not part of v0.1)
+
+Review decisions 15 and 17.
+
+```orthon
+// Dynamic dispatch on a function value
+fun apply_dyn(f: dyn Sqrt, x: Float) -> Float
+    return f(x)
+
+// Higher-order contract: a bound on a function-valued argument
+fun map_roots<Sqrt as F>(f: F, xs: [Float]) -> [Float]
+
+// Lambda that declares conformance (spelling provisional)
+let root = fn(x) -> newton(x) obeys Sqrt
+```
+
+Multi-instance contracts: see the deferred subsection of Model.
+
+### All canonical forms
+
+These three spell the same thing; the first two are the common case:
+
+```orthon
+// 1. Inline clauses: the anonymous contract of this function
+fun withdraw(balance: Int, amount: Int) -> result: Int
+    requires amount > 0
+    ensures result == balance - amount
+
+// 2. Named contract (short form) plus conformance
+contract Withdraw(balance: Int, amount: Int) -> result: Int
+    requires amount > 0
+    ensures result == balance - amount
+fun withdraw(balance: Int, amount: Int) -> Int obeys Withdraw
+
+// 3. Named contract (long form): one callable member
+contract Withdraw
+    fun call(balance: Int, amount: Int) -> result: Int
+        requires amount > 0
+        ensures result == balance - amount
+fun withdraw(balance: Int, amount: Int) -> Int obeys Withdraw
 ```
 
 Value constraints (`type Age = Int requires v >= 0 && v <= 150`) stay as they are: their subject is a value and they are checked at construction. They are a different kind, not a member of this unification.
@@ -213,7 +311,7 @@ A named contract is a **business rule**: named, reusable, and independent of any
 | One rule, many places | one contract obeyed by several functions; shared named predicates |
 | Rule over a value | constrained type (EDR-080) |
 | Rule over state | `invariant` |
-| Rule over several values | multi-instance contract (name still open, see Open Question 14) |
+| Rule over several values | multi-instance contract (deferred to v0.2, Review decision 17) |
 | Readable in domain vocabulary | named pure predicates (`is_positive`, `covered_by`) |
 | Machine-readable export | Schema Provider; the structured export of the [`SEMANTIC_ANNOTATIONS.md`](../deferrable/SEMANTIC_ANNOTATIONS.md) draft |
 
@@ -273,33 +371,100 @@ If the business decides to charge a fee, the rule changes in one place, and ever
 - That Rust gives every function item a unique type implementing the `Fn` traits is from general knowledge.
 - That the keyword `contract` evokes Solidity (a class-like unit) for LLMs is an assumption; it is a generability risk to test, not a finding.
 - Primary papers were not read in full; findings above come from search summaries.
+- The classical-problem citations of Step 1 (Liskov and Wing, 1994; Meyer, 1992) and the Rust and Haskell rows of Step 2 are from general knowledge.
 
-## Alternatives
+## Step 2 — Alternatives (comparison and selection)
 
-| ID | Alternative | Notes |
-|---|---|---|
-| A0 | Status quo plus a separate contract-object construct: `trait` / `impl` stay, new `contract` / `obeys` for functions | two conformance mechanisms; no unification cost; the duplication this hypothesis targets |
-| A1 | **This hypothesis**: `contract` replaces `trait`, `obeys` replaces `impl` | one mechanism; largest cascade |
-| A2 | Keep the name `trait` as the single construct; `obeys` is the application keyword for types and functions | smaller cascade, no rename of EDR-019; `trait Sqrt(x: Float) -> Float` reads oddly for a function specification |
-| A3 | Pattern only: express function contracts as a trait with a `Callable` member using today's `impl` | no new keywords; needs "functions have unique types" anyway; verbose per implementation |
-| A4 | No contract objects: inline clauses only (EDR-056 as accepted) | loses reuse, higher-order contracts, and the specification-first workflow |
+Candidates in the canonical set of [`concept-design-review.md`](../../../concept-design-review.md): a language construct, syntactic sugar, a library or composition, do nothing, and at most one wild alternative. The IDs A0–A4 are kept from earlier sections; A5 is the wild alternative.
 
-| Criterion | A0 | A1 | A2 | A3 | A4 |
-|---|---|---|---|---|---|
-| New primitive constructs | 1 | 0 | 0 | 0 | 0 |
-| New keywords | 2 | 2 (and 2 removed) | 1 (and 1 removed) | 0 | 0 |
-| Reuse of one specification across implementations | yes | yes | yes | yes | no |
-| Higher-order contracts without a new feature | no | yes | yes | yes | no |
-| "Wrong kind" errors | yes | no | no | no | n/a |
-| Depends on "functions have unique types" | no | yes | yes | yes | no |
-| Cascade over accepted documents | small | large | medium | small | none |
-| LLM prior for the keywords | mixed | uncertain (`contract`, `obeys`) | mixed (`trait` kept, `obeys` new) | strong (`trait`, `impl`) | strong |
+| ID | Canonical class | Candidate | Notes |
+|----|-----------------|-----------|-------|
+| A0 | language construct | Separate contract-object construct beside `trait` / `impl`: new `contract` / `obeys` for functions | two conformance mechanisms; the duplication this hypothesis targets |
+| A1 | language construct (unified; pattern over conformance) | **This hypothesis:** `contract` replaces `trait`, `obeys` replaces `impl` | one mechanism; largest cascade |
+| A2 | language construct (unified; pattern over conformance) | Keep the name `trait` as the single construct; `obeys` is the application keyword for types and functions | same semantics as A1; smaller cascade; `trait Sqrt(x: Float) -> Float` reads oddly for a function specification |
+| A3 | library / composition | Pattern only: a function contract is a trait with a `Callable` member using today's `impl` | no new keywords; needs nameable unique function types; verbose per implementation |
+| A4 | do nothing | Inline clauses only (EDR-056 as amended by EDR-097) | loses reuse and the specification-first workflow |
+| A5 | wild | Contracts bound from outside by name, as a registry (Clojure spec `fdef`, OCL) | action at a distance; drift between the registry and the declaration |
 
-## Pre-filter notes (pipeline Stages 2–4)
+Naming (`contract` versus `trait`, A1 versus A2) is a syntax question; the semantic selection below does not depend on it.
 
-- **Decision pipeline.** Language-level, not library: conformance and checking are compiler services. Not pure sugar for the function-level case only, because it changes the type story (see Open Question 1).
-- **Primitive decomposition.** Function contract = `struct` + `Callable` + conformance, the composition used by constrained types. The multi-member case is today's trait.
-- **Layer classification.** Candidate **Level 2 (Language Pattern)** for the function-level case, with the composition formula above. Whether "every function has a unique nominal type" is a Level 0 / Level 1 decision is part of the [`FUNCTIONS.md`](FUNCTIONS.md) review.
+How other languages solve it, with the closest candidate:
+
+| Language | Mechanism | Closest candidate |
+|----------|-----------|-------------------|
+| Racket | first-class contracts attached at module boundaries | A1 / A5 |
+| Clojure | spec `fdef` in an external registry bound by name | A5 |
+| Dafny | abstract interface with `ensures`, adherence checked | A1 |
+| OCL (UML) | constraints bound to model elements from outside | A5 |
+| Eiffel, SPARK | conditions attached to the declaration | A4 |
+| Rust | traits for shape, no behavioural contract (general knowledge, not verified) | status quo traits |
+| Haskell | typeclasses, laws stated in documentation (general knowledge, not verified) | status quo traits |
+
+Scoring against fixed criteria (+ favourable, 0 neutral, − unfavourable):
+
+| Criterion | A0 | A1 | A2 | A3 | A4 | A5 |
+|-----------|----|----|----|----|----|----|
+| Orthogonality (one concept, one construct) | − | + | + | + | + | 0 |
+| Minimal Core (no new primitive) | − | + | + | + | + | 0 |
+| DRY (no duplicate mechanism) | − | + | + | + | + | 0 |
+| Explicitness | + | + | + | + | + | − |
+| New keywords (net) | − | 0 | 0 | + | + | 0 |
+| Reuse of one specification across implementations | + | + | + | 0 | − | + |
+| Home for higher-order contracts (v0.2) | − | + | + | 0 | − | 0 |
+| LLM Generability (prior for the keywords) | 0 | − | 0 | + | + | 0 |
+| Cascade over accepted documents | + | − | 0 | + | + | + |
+| Semantic risk | 0 | 0 | 0 | − | + | − |
+
+Notes. A3 scores 0 on reuse because every implementation needs a nameable wrapper type (a Strategy-like object); its semantic risk is the verbosity that makes function-level conformance impractical. The semantic risk of A5 is the drift and partial enforcement seen in Clojure spec, where `instrument` checks only `:args`.
+
+**Selection: A1 or A2 — the unified construct** (the choice between them is a naming decision for the syntax pipeline). Rationale: it is the only candidate that solves the problems of Step 1 — one conformance mechanism, a home for reuse and for the higher-order path — without a new primitive and without a duplicate mechanism. A3 is the fallback if the F2 definition is rejected. A4 is the reject baseline: it leaves the problems open. A0 exits at pipeline Q3. A5 is rejected on explicitness and drift.
+
+The tables are carried verbatim into the "Alternatives Considered" field of the EDR (Step 8).
+
+## Step 3 — Minimal Solution
+
+Selected alternative: the unified construct (A1 or A2; naming open). Minimal semantic addition for v0.1:
+
+1. **Conformance applies to a second kind of subject.** Today a type declares conformance to a trait. After the change a named function declares conformance to a named contract with one callable member, under the same rules (signature match, weaken `requires` and strengthen `ensures`, coherence, the orphan rule).
+2. **F2 as the definition.** A function declaration is sugar for an anonymous type with one callable member. This explains function-level conformance and decomposes it (Step 0). It adds no new surface for types.
+3. **Nothing else is added.** Trait semantics are unchanged. Inline clauses remain the anonymous contract of the function (EDR-056, EDR-097). The short form `contract Name(params) -> result` is sugar for a contract with one callable member.
+
+Not in the minimal solution, each decided or deferred elsewhere: `old` (EDR-097); contracts through generics, `dyn`, collections of functions and lambdas (v0.2, Review decision 15); multi-instance contracts (v0.2, Review decision 17); imposing a rule from outside (deferred, Review decision 13); the words `contract` and `obeys` (syntax pipeline); the rename cascade (a tracked task after acceptance).
+
+Orthogonality check: this is one addition (conformance for functions), because a named function contract is an inline clause set given a name, and F2 is its definition. If the review finds that naming contracts and unifying with traits are separable, the concept can be split; no such split is needed today.
+
+Merge outcome (Review decision 16): if accepted, TRAITS and CONTRACTS become one concept document.
+
+## Step 0 — Primitive decomposition and layer classification
+
+Pipeline Stages 3 and 4 ([`CONCEPT_PIPELINE.md`](../../../CONCEPT_PIPELINE.md)), completed on 2026-10-21 by the drafting agent; the author confirms them at Step 7.
+
+### Stage 3 — primitive decomposition
+
+Available primitives: `identifier`, `literal`, `assignment`, `function`, `call`, `attribute access`, `scope`, `reference`, `pack`, `unpack`, `operator definition` ([`PRIMITIVE_BLOCKS.md`](../../../../what/PRIMITIVE_BLOCKS.md)).
+
+| Part of the unified construct | Decomposition | Source of the pattern |
+|-------------------------------|---------------|-----------------------|
+| Contract declaration (members) | `function` signatures + `identifier` + `scope` | TRAITS registry entry (trait declaration) |
+| Conformance declaration (`obeys`) | `function` implementations + `scope` | TRAITS registry entry (`impl`) |
+| Function-level conformance | the function declaration as `pack` (captured values, possibly none) + `function` (the callable member); conformance as for a type | F2 as a definition; same shape as the constrained-type desugaring (EDR-080) |
+| Named result | `identifier` declared in the signature + `scope` (visible only in `ensures`) | EDR-097 |
+| Conditions (`requires`, `ensures`) | compiler-recognized signature modifiers plus pure-expression analysis | CONTRACTS registry entry; unchanged by this hypothesis |
+
+Result: **no new primitive.** What stays compiler-level, exactly as today: coherence and the orphan rule, bound resolution and dispatch (TRAITS), contract purity analysis and enforcement (CONTRACTS). The unification moves none of these.
+
+### Stage 4 — layer classification
+
+- The type-level part keeps today's classification of traits (Language, D-03); the unification changes its name and the subjects it applies to, not its level.
+- The function-level part is a **Level 2 Language Pattern**: a composition of Level 0–1 constructs with no new semantics. Composition formula:
+
+```text
+fun f(params) -> result: T obeys C   =   pack{captures} + function(call: params -> T) + conformance(C)
+```
+
+- F2 is used only as the definition behind this formula. It adds no Level 0 or Level 1 construct. Its relation to the structural function type, generics and dispatch is deferred to v0.2 (Review decision 15).
+
+These results agree with the pipeline verdict (Q3: yes, conditionally).
 
 ## Decision Pipeline Run
 
@@ -349,19 +514,43 @@ Exit path per alternative:
 2. **Transparency — gate guard.** None of the four rejected proposals (EDR-075 prototype, EDR-076 significant whitespace, EDR-077 dynamic typing, EDR-078 class or structure as primary composition) is similar to this one. The alternatives rejected inside TRAITS (class inheritance, structural interfaces by default, unrestricted orphans) are not reopened: the hypothesis keeps explicit conformance, coherence and the orphan rule.
 3. **Transparency — architecture metric.** More than one substantive semantic change after initial gate approval triggers a mandatory architectural review. The accepted CONTRACTS concept already changed once (the deferral of `old`, 2026-10-19, an editorial amendment); this hypothesis would be a second change for CONTRACTS and the first for TRAITS. Whether the `old` deferral counts is the author's call; the recommended handling is to treat the Concept Design Review of this hypothesis as that architectural review.
 4. **Syntax.** F5 follows the semantic decision through the syntax pipeline.
-5. **Pipeline Stages 3 and 4.** The primitive decomposition check against `PRIMITIVE_BLOCKS.md` and the layer classification (candidate Level 2) are completed in the next step.
+5. **Pipeline Stages 3 and 4.** The primitive decomposition check against `PRIMITIVE_BLOCKS.md` and the layer classification (Level 2 for the function-level part) were completed in Step 0 of the Concept Design Review (2026-10-21).
 
-## Principle alignment (preview — gate verdicts are not recorded here)
+## Step 4 — Principle Check
 
-| Principle | Reading |
-|---|---|
-| Orthogonality | one construct applied to different subjects instead of two constructs with overlapping rules |
-| Explicitness | conformance is declared (`obeys`); nothing is satisfied silently except under the existing `structural` opt-in |
-| Composition over addition | the function-level case decomposes into existing primitives |
-| One concept → one syntax | the specification-and-conformance concept gets one spelling |
-| Named before symbolic | `obeys` is a word; no new symbol is introduced |
-| DOP principle 4 | the specification is separate from the implementation and applied at boundaries |
-| LLM generability | risk: new keywords against strong `trait` / `impl` priors; to be measured in the LLM Generability Gate |
+Mapped to [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md) on 2026-10-21 by the drafting agent; the author confirms it at Step 7. `DESIGN_PRINCIPLES.md` is closed for modification ([`DECISION_PROCESS.md`](../../../process/DECISION_PROCESS.md)): the check asks whether this concept violates a principle, in which case a Tier 1 EDR would be needed and solo-author acceptance would not be possible.
+
+| Principle | Result | Reading |
+|-----------|--------|---------|
+| Data First | Pass | Neutral: contracts describe behaviour, not data |
+| Data Is Immutable by Default | Pass | Unchanged; invariants of mutable state are Open Question 10 |
+| Schema Separate from Representation | Pass | The specification is a separate named object applied at boundaries (EDR-090, principle 4) |
+| Intent Over Implementation | Pass | The contract states intent; implementations vary |
+| Orthogonality | Pass | One construct applied to different subjects instead of overlapping constructs |
+| Semantic Purity | Pass | One word with one semantic role for conformance of types and functions. The pending wording amendment from "one meaning" to "one semantic role" is a separate Tier 1 matter. The `->` overload does not enter v0.1 because lambdas are deferred |
+| Simplicity | Pass | Fewer mechanisms; the added concept (F2) is a definition, not a surface |
+| Explicitness | Pass | Conformance is declared; the result is named in the signature (EDR-097) |
+| Consistency | Pass | Similar concepts (type and function conformance) look similar |
+| Uniformity | Pass | Equivalent concepts are written in equivalent ways |
+| Explicit Semantics | Pass | No hidden conversion: the anonymous type of a function is not observable in v0.1 |
+| Declarative With Static Guarantees | Pass | Shape is checked at compile time; conditions are proved statically where possible (EDR-056) |
+| Named Before Symbolic | Pass | A word; no new symbol |
+| Minimal Core | Pass | Holds if the Step 0 decomposition holds: no new primitive (Core Change Criterion) |
+| Justified Solutions | Pass | The solution matches the stated problem (Step 1) |
+| Transparency | Caution | Gate guard: none of the four rejected proposals (EDR-075 to EDR-078) is similar. Architecture metric: this would be a second substantive change to CONTRACTS and the first to TRAITS, which triggers an architectural review; treating this Concept Design Review as that review is the recommended handling (the author's call) |
+| Principle of Parsimony | Pass | Fewer entities than A0 |
+| Idempotent Generation | Pass (unmeasured) | A named contract is a fixed specification to generate against; no measurement yet (LLM Generability Gate) |
+| Representation Symmetry | Not applicable | |
+| Deterministic Behavior | Pass | Unchanged from EDR-056: eliding checks in release builds is a Contract Enforcement Policy matter (an existing tension, not introduced here) |
+| Stable Mental Model | Pass | One model: conformance to a named specification |
+| Semantics Before Optimization | Pass | Semantics do not depend on optimization |
+| Explicit Optimization | Not applicable | |
+| Correctness Before Performance | Pass | Contracts serve correctness; enforcement cost is a Policy |
+| SOLID | Pass | Small contracts per responsibility; rules do not depend on implementations (dependency inversion) |
+| DRY | Pass | The main driver: one conformance mechanism |
+| POLA | Caution | Users of `trait` / `impl` meet a rename; "a function has a type" stays hidden in v0.1, which limits the surprise |
+
+Result: **no violation of a principle; two cautions** (Transparency, POLA). No Tier 1 EDR is required.
 
 ## Policy Footprint
 
@@ -399,30 +588,34 @@ Exit path per alternative:
 13. **Deferred:** imposing a rule from outside on a foreign function (precedent: Racket `contract-in`) and a rule registry file. A comment may carry a reference to the rule; a separate module may use it to pull the description by reference; a registry file in the project may be added later. The form of the reference is not specified (decided 2026-10-19: mark and defer).
 14. **`obeys` is accepted as a candidate to replace `impl`** (decided 2026-10-19). It is a candidate only: the surface form is decided in the syntax pipeline, tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md), and is blocked on this hypothesis. It is justified only as a replacement for `impl`; adding it next to `impl` would give one concept two spellings (Syntax Principle 1).
 15. **Deferred to v0.2** (decided 2026-10-19): using contracts through generics and function values — a function contract as a generic bound, `dyn` on function values, collections of contract-bearing functions, and `obeys` on lambdas. These are the higher-order contracts that EDR-056 already deferred to v0.2. The notation for function types is undecided in any case (`->` is overloaded, see [`FUNCTION_RETURNING_FUNCTION.md`](../../../syntax/FUNCTION_RETURNING_FUNCTION.md)), so this document does not write function types in new examples. The premise "a function is sugar for a unique anonymous type with one callable member" stays **only as a definition**: it explains `obeys` on a function and decomposes it into existing primitives (Pipeline Q3). Its consequences for generics, dispatch, and function-type notation are deferred. **v0.1 scope:** types obey contracts (replacing `trait` / `impl`); functions obey named contracts at their declaration (shape check, contract-derived tests, documentation).
+16. **Merge of TRAITS and CONTRACTS** (decided 2026-10-21): if the unification is accepted, the accepted concepts TRAITS (EDR-019) and CONTRACTS (EDR-056, as amended by EDR-097) are merged into one concept document. How the unifying EDR relates to EDR-019 and EDR-056 (supersedes or amends) is stated in the EDR itself (Step 8).
+17. **Multi-instance contracts are deferred to v0.2** (decided 2026-10-21). Open Question 4 is closed; the naming questions (Open Questions 3 and 14) are not needed for v0.1.
 
 ## Open Questions
 
 1. **Unique type per function — kept as a definition only (Review decision 15).** The premise stays as the definition that explains `obeys` on a function. How it relates to the structural function type (coercion or erasure through a callable bound), generics, and dispatch is **deferred to v0.2** with higher-order contracts; coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. No longer a blocker for v0.1.
 2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)?
-3. **Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
-4. **Multi-instance contracts in v0.1 or later?** Needed for `Eq` and `Serialize`, but not blocking.
+3. **Deferred to v0.2 (Review decision 17). Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
+4. **Closed (Review decision 17): multi-instance contracts are deferred to v0.2.** Needed for `Eq` and `Serialize`, but not blocking.
 5. **Conformance keyword.** `obeys` is the candidate to replace `impl` (Review decisions, item 14). Word, position, multiple contracts, lambdas, and blanket conformance are tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md); associated types remain open here.
 6. **`old` (state at entry).** Result naming is settled (Review decisions, item 9) and `old` is deferred (item 10). The analysis and reintroduction triggers live in [`../deferrable/CONTRACT_OLD_STATE.md`](../deferrable/CONTRACT_OLD_STATE.md); nothing about `old` blocks this hypothesis.
 7. **Deferred to v0.2 (Review decision 15). Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
 8. **Deferred to v0.2 (Review decision 15). `dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
 9. **`structural` contracts.** What implicit (structural) satisfaction means for a function.
-10. **Invariant for mutable types.** DOP treats data as immutable, so state invariants fall outside it. Keep `invariant` in v0.1 or reduce it to constrained types? Also the re-entrancy problem (see the review note).
+10. **Invariant for mutable types — blocks Step 7; the author asked for an introduction and examples before deciding.** DOP treats data as immutable, so state invariants fall outside it. Keep `invariant` in v0.1 or reduce it to constrained types? Also the re-entrancy problem (see the review note).
 11. **Enforcement by position.** Strictness at module boundaries versus internally, and partial disabling of checks. Deferred to the enforcement discussion.
 12. **Deferred to v0.2 (Review decision 15). Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
 13. **Deferred: external imposition of rules.** Form of the reference in a comment, how a separate module pulls the description by reference, a rule registry file, and imposing a contract on a foreign function (Racket `contract-in`), which shifts blame because the function itself promises nothing.
-14. **Do not name the multi-instance kind "rule".** If every contract is a business rule, the word is too general for one kind among several. Note that `obeys` pairs naturally with *rule* and *law* as objects ("obeys the rule"); this is an input to the naming of the construct (Open Question 2) and of the multi-instance kind (Open Question 3), not a decision.
+14. **Deferred to v0.2 with Open Question 3. Do not name the multi-instance kind "rule".** If every contract is a business rule, the word is too general for one kind among several. Note that `obeys` pairs naturally with *rule* and *law* as objects ("obeys the rule"); this is an input to the naming of the construct (Open Question 2) and of the multi-instance kind (Open Question 3), not a decision.
 
 ## Next steps (route through the pipeline)
 
-1. **Decision Pipeline run: done (2026-10-19).** PASS for the unified form, conditional on Open Question 1; F4 deferred; a separate construct (A0) exits at Q3. Remaining: state the F2 definition for the `FUNCTIONS.md` review (the rest of Open Question 1 is deferred to v0.2), confirm the architectural-review trigger, complete the primitive decomposition check and layer classification, then run the Concept Design Review (8 steps).
-2. Run the naming and conformance-keyword questions through [`SYNTAX_PIPELINE.md`](../../../SYNTAX_PIPELINE.md); the coupling is registered in the [`how/syntax/`](../../../syntax/README.md) decision queue.
-3. **Do not file a contract-object EDR before this hypothesis is decided.** If A1 or A2 wins, the contract-object EDR would be superseded immediately.
-4. If accepted: an EDR superseding the keyword and conformance syntax of EDR-019 and amending EDR-056; the cascade over about 52 files becomes a tracked task.
+1. **Done:** Decision Pipeline run (2026-10-19); Concept Design Review Steps 0–5 (2026-10-21), see the progress table.
+2. **Step 6, Tooling Implications:** decide whether Tooling Requirements are needed. Candidates: a hover that expands the contract at `obeys` ([`LANGUAGE_SERVER.md`](../../../tooling/LANGUAGE_SERVER.md)), export of contracts through the Schema Provider, test generation from a contract, generated rule documentation, a check that the module of rules imports no implementations, and the proof backend ([`ORTHON-PROVE.md`](../../../tooling/ORTHON-PROVE.md)).
+3. **Step 7, Convergence Check:** syntax review ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md) and the word `contract`), Open Question 10 (`invariant` for mutable types), probing of edge cases (mutation, boundary values, error paths), and the author's sign-off.
+4. **Step 8, EDR-098** (Architecture): carries the Step 2 tables verbatim and states its relation to EDR-019 and EDR-056. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
+5. **Validation:** all seven gates with entries in `DECISION_LOG.md`; a measurement protocol for the LLM Generability Gate.
+6. **If accepted:** the merged concept document in `what/concepts/` (8-section `_concept.md` template), registration in `CORE_CONCEPTS.md` and `INDEX.md`, the rename cascade over about 52 files as a tracked task, and the syntax pipeline for the words.
 
 ## Human Sign-off
 
@@ -439,6 +632,8 @@ Exit path per alternative:
 - [ ] `what/concepts/EQUALITY.md` (EDR-017)
 - [ ] `what/concepts/STRUCTURAL_TYPING.md` (EDR-044)
 - [ ] `what/GLOSSARY.md` (Contract umbrella term, Trait, Lambda)
+- [x] `what/LANGUAGE_PROBLEMS.md` (entry added 2026-10-21: behavioral subtyping and separation of specification from implementation)
+- [ ] the merged concept document replacing `what/concepts/TRAITS.md` and `what/concepts/CONTRACTS.md` (Review decision 16)
 - [ ] `how/concepts/research/essential/FUNCTIONS.md`
 - [ ] `how/DESIGN_PRINCIPLES.md`
 - [ ] `how/decision_records/INDEX.md`
