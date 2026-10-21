@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-21T09:46:20.687Z"
+last_updated: "2026-10-21T10:24:30.607Z"
 last_activity: 2026-10-18
 last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
-state_head: 1cd604137bf76e348a56d48d70d1e4fffacdbdd6
+state_head: d4ceff0fbe243eb4f8f029ec5423cbe006ac75bc
 progress:
   total_phases: 15
   completed_phases: 4
@@ -142,6 +142,7 @@ Recent decisions affecting current work:
 | 34 | Drop lambdas from the conformance row of the syntax queue | 2026-10-20 | 04c02cb | — |
 | 35 | Draft EDR-097 (Proposed): contracts result named in signature, old deferred | 2026-10-21 | 2b4078c | — |
 | 36 | Run three gates for EDR-097 draft and record verdicts (Flag, Pass, Flag) | 2026-10-21 | 1cd6041 | — |
+| 37 | Apply R1-R6 to EDR-097 draft; defer R7; sign-off untouched | 2026-10-21 | d4ceff0 | — |
 
 ### Roadmap Evolution
 
