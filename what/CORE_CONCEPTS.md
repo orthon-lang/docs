@@ -408,11 +408,13 @@ The resolution process is defined in
 | Field | Value |
 |-------|-------|
 | **Status** | Accepted |
-| **EDR** | [EDR-056](../how/decision_records/architecture/EDR-056-contracts.md) |
+| **EDR** | [EDR-056](../how/decision_records/architecture/EDR-056-contracts.md), amended by [EDR-097](../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md) |
 | **Specification** | [`concepts/CONTRACTS.md`](concepts/CONTRACTS.md) |
 | **Classification** | Language (D-03) |
-| **Summary** | Design by Contract via `requires`, `ensures`, and `invariant` clauses as part of the function signature. Preconditions checked at compile time where possible; runtime assertions otherwise. `result` and `old` implicit variables in postconditions. Pure contract expressions enforced by compiler. Liskov substitution inheritance (weaken pre, strengthen post). Release-build elision by default. |
+| **Summary** | Design by Contract via `requires`, `ensures`, and `invariant` clauses as part of the function signature. Preconditions checked at compile time where possible; runtime assertions otherwise. The return value is named in the signature by the function's author (`-> result: Float`; the name is visible only in `ensures`), and `old` is deferred out of v0.1 (EDR-097). Pure contract expressions enforced by compiler. Liskov substitution inheritance (weaken pre, strengthen post). Release-build elision by default. |
 | **Primitive Decomposition** | `requires`/`ensures`/`invariant` keywords → compiler-recognized signature modifiers beyond primitive composition. Contract enforcement (compile-time verification, runtime assertion) adds compiler-level semantics. Pure-expression analysis is a compiler verification pass. |
+| **Open Questions** | • Higher-order contracts (deferred to v0.2) — `what/concepts/CONTRACTS.md` § Open Questions (OQ1) • Performance model for runtime contract checking in hot paths (OQ4) |
+| **Resolved Questions** | • Inheritance across trait implementations → `what/concepts/CONTRACTS.md` § Where Contracts Apply (Tier 4 inline) |
 
 ### DELEGATION
 

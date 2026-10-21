@@ -1352,6 +1352,15 @@ Example: `&x` and `ref(x)` are equivalent.
 - **Source:** `../how/DESIGN_PRINCIPLES.md` § Named Before Symbolic
 - **See also:** [Canonical Form](#canonical-form), [Operator Equivalence](#operator-equivalence)
 
+### Named Result
+
+The identifier introduced in a function signature after `->` for the return value (`-> result: Float`), so that `ensures` clauses can refer to it. The name is chosen by the function's author; `result` is a convention, not a reserved word. It is visible only inside `ensures` clauses, not in `requires`, `invariant` or the body. On a successful exit it denotes the returned value; for an error-union result it denotes the success value.
+
+Example: `fun half(x: Int) -> result: Int` with `ensures result * 2 <= x`.
+
+- **Source:** `../what/concepts/CONTRACTS.md` § Where Contracts Are Evaluated, [EDR-097](../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)
+- **See also:** [Contract (Design by Contract)](#contract-design-by-contract)
+
 ### None
 
 A value of its own distinct type `None`, representing absence in Orthon.
@@ -2224,16 +2233,16 @@ LLM-generable and eliminates hidden conversions.
 A verifiable assertion embedded in a function signature that specifies preconditions (`requires`), postconditions (`ensures`), and type/module invariants (`invariant`). Contracts are part of Orthon's function declaration syntax — they are not comments or library annotations.
 
 ```orthon
-fun sqrt(x: Float) -> Float
+fun sqrt(x: Float) -> result: Float
     requires x >= 0.0
     ensures result >= 0.0
     ensures abs(result * result - x) <= 0.000001 * x
 ```
 
-Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: subtypes may weaken preconditions and strengthen postconditions.
+The return value is named in the signature (see [Named Result](#named-result)). Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: subtypes may weaken preconditions and strengthen postconditions.
 
-- **Source:** `../what/concepts/CONTRACTS.md` (EDR-056)
-- **See also:** [Function Contract](#function-contract), [Verification Layer](#verification-layer)
+- **Source:** `../what/concepts/CONTRACTS.md`, [EDR-056](../how/decision_records/architecture/EDR-056-contracts.md), [EDR-097](../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)
+- **See also:** [Function Contract](#function-contract), [Named Result](#named-result), [Verification Layer](#verification-layer)
 
 ---
 

@@ -6,7 +6,9 @@
 > by [`DECLARATION_BY_ASSIGNMENT.md`](../../what/concepts/DECLARATION_BY_ASSIGNMENT.md)
 > (EDR-074). It is a factual language comparison; no binding verdict is made here.
 >
-> **Last updated:** 2026-08-15
+> **Last updated:** 2026-10-21
+
+> **Coupling (EDR-097, provisional).** [EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md) introduces an optional name in the result slot of a signature (`-> name: Type`), which uses the `:` of type annotations. Its notation follows the decision of this hypothesis and is provisional (EDR-097, R5); the notation for several results stays open.
 
 ## Issue (Why)
 

@@ -1,6 +1,6 @@
 # Name Resolution
 
-> **Last updated:** 2026-07-20
+> **Last updated:** 2026-10-21
 
 ## Overview
 
@@ -21,6 +21,7 @@ The Name Resolver sits between the parser and the type checker:
 3. **Explicit shadowing with warning** — Shadowing is permitted but must be explicit (e.g., a `let` or `fn` keyword in the inner scope). The compiler issues a warning when shadowing occurs, as it is a common source of confusion.
 4. **No implicit globals** — All identifiers must be declared before use (or be in scope). There are no implicit global variables or automatic hoisting.
 5. **Determinism** — The same program always produces the same resolution. No non-determinism from import order or compilation unit ordering.
+6. **No duplicate declarations in one scope** — Two declarations of one name in the same scope are an error, not a shadowing warning. This includes a function's parameters together with the name introduced for its result. The precedent is the duplicate type parameter error in [GENERICS.md](../../what/concepts/GENERICS.md) (principle 6 and its example), which covers type parameters only; this invariant states the general rule ([EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md), R4).
 
 ## Interface Contracts
 
@@ -38,6 +39,7 @@ The Name Resolver sits between the parser and the type checker:
 3. **No implicit globals** — Top-level declarations are accessible within their module, but are not automatically visible in child scopes or other modules without explicit import. The language does not have a global namespace that accumulates declarations.
 4. **Module system design deferred to Phase 3** — The full module system (import semantics, visibility modifiers, cyclic dependency handling) is deferred to Phase 3 concept design. This specification covers the scoping and resolution rules that apply within a single module.
 5. **Shadowing is explicit** — A declaration in an inner scope shadows an outer declaration only when introduced with an explicit keyword (`let`, `fn`, etc.). Silent shadowing (e.g., a parameter name matching a global) produces a warning.
+6. **The named result is scoped to postconditions** — A result name introduced in the signature (`-> name: Type`) is visible only inside the function's `ensures` clauses, not in `requires`, `invariant` or the body. A name equal to a parameter name is a duplicate error under Invariant 6. A body declaration with the same name does not conflict (a different scope) but is reported as a warning. See [CONTRACTS.md](../../what/concepts/CONTRACTS.md) and [EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md).
 
 ## Relationships
 
@@ -48,6 +50,8 @@ The Name Resolver sits between the parser and the type checker:
 | [IR.md](IR.md) | IR nodes reference resolved symbols |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Name resolution sits between Syntax and Core Language layers |
 | [IMPLEMENTATION_POLICIES.md](../IMPLEMENTATION_POLICIES.md) | Scope and visibility rules may be affected by module Policy choices |
+| [CONTRACTS.md](../../what/concepts/CONTRACTS.md) | The named result is a name scoped to `ensures` clauses (Key Design Decision 6) |
+| [EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md) | Records the named result and the general same-scope duplicate-declaration rule (Invariant 6) |
 
 ## Open Questions
 

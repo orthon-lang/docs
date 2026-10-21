@@ -10,6 +10,8 @@
 > `../../what/concepts/REQUIRE_USING_DEPENDENCY_SLOTS.md` (EDR-081),
 > `../../notes/code-block-semantics.md`.
 
+> **Coupling (EDR-097, provisional).** [EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md) introduces an optional name in the result slot of a signature (`-> name: Type`). The notation follows the decision of this hypothesis (the return-type position) and is provisional (EDR-097, R5); the notation for several results stays open.
+
 ## Problem
 
 The current form places the return type after the whole signature:
