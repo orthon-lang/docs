@@ -91,3 +91,4 @@ Without it, the strongest guarantees live in the type system, and the
   is what powers Gobra). Relevant only if Orthon later makes
   concurrency a proof target — currently deferred to the Execution
   Program / policies level.
+- Named contracts (contract unification review, 2026-10-21): a named contract is a unit that is proved once, with each implementation checked for adherence to it. Invariants of mutable types are checked after creation and after each `proc` (Review decision 18 of the hypothesis), which reduces the proof obligations compared with checking every public method. The scope of this tool does not change.

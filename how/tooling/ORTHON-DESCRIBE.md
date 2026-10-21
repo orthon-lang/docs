@@ -69,3 +69,4 @@ it returns all relevant information in one call, with no round-trips.
   a graph query rather than a custom tool.
 - Could be extended later to support "what changed between versions"
   queries.
+- Contracts (contract unification review, 2026-10-21): the response for a symbol may include its contracts (the named contracts it obeys and its inline conditions), the rule names (predicate names) and, for a contract, the functions and types that obey it. A rule catalog is an output mode of the same query. The description of a rule comes from the predicate name or its comment; whether comments are retained in the AST is open (see Open Question 16 of [`TRAIT_CONTRACT_UNIFICATION.md`](../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md)). The IR must keep contracts and conformance as named, queryable entities; [`ORTHON-TEST.md`](ORTHON-TEST.md) depends on it too.

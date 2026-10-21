@@ -95,3 +95,4 @@ error).
 - [`ORTHON-DESCRIBE.md`](ORTHON-DESCRIBE.md) notes it is a "potential
   precursor to a full LSP implementation" — both tooling requirements
   share the same queryable-symbol foundation.
+- Contract navigation (contract unification review, 2026-10-21): hover at `obeys` shows the contract, and "find implementations" of a contract lists every function and type that declares conformance to it. This needs the conformance relation to be resolvable by name resolution and indexed in the IR; [`ORTHON-TEST.md`](ORTHON-TEST.md) needs the same index.
