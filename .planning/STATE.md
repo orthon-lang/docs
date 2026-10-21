@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-21T13:53:00.611Z"
+last_updated: "2026-10-21T17:14:39.079Z"
 last_activity: 2026-10-21
 last_activity_desc: "Completed quick task 261021-ir3: accept EDR-097, apply Stage A"
-state_head: 9496e157392b05f8bdea5c2051668b740686e599
+state_head: 9105b7adb737f2ca1430d625fc82785747e7b393
 progress:
   total_phases: 15
   completed_phases: 4
@@ -150,6 +150,7 @@ Recent decisions affecting current work:
 | 40 | Record decision 18 on invariants and close Open Question 10 | 2026-10-21 | 965b30d | — |
 | 41 | Step 6 part A: ORTHON-TEST tooling requirement, README row, Step 6 in the hypothesis | 2026-10-21 | e83df7a | — |
 | 42 | Step 6 part B: contract notes in LANGUAGE_SERVER, ORTHON-DESCRIBE, ORTHON-PROVE | 2026-10-21 | 9496e15 | — |
+| 43 | Add ERROR_REPRESENTATION_UNIFICATION hypothesis; register in research README and syntax queue | 2026-10-21 | 9105b7a | — |
 
 ### Roadmap Evolution
 
