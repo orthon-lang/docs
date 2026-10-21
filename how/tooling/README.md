@@ -63,6 +63,7 @@ Insight arises → create tooling-requirement.md →
 | [`ORTHON-EVAL.md`](ORTHON-EVAL.md) | Open | P3 | BAML gap analysis § Tier 2 (#12) |
 | [`ORTHON-SCOPE-MOCK.md`](ORTHON-SCOPE-MOCK.md) | Open | P3 | BAML gap analysis § Tier 2 (#13) |
 | [`ORTHON-PROVE.md`](ORTHON-PROVE.md) | Open | P3 | [Orthon vs. Viper analysis](../../notes/orthon-vs-viper.md) |
+| [`ORTHON-TEST.md`](ORTHON-TEST.md) | Open | P2 | [CONTRACTS](../../what/concepts/CONTRACTS.md) gap 3; [contract unification](../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) Step 6 |
 
 ---
 

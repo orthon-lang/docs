@@ -39,7 +39,7 @@ Review of this hypothesis against [`concept-design-review.md`](../../../concept-
 | 3 Minimal Solution | done | [Step 3](#step-3--minimal-solution) |
 | 4 Principle Check | done, no violation found | [Step 4](#step-4--principle-check) |
 | 5 Examples | done | [Step 5](#step-5--examples-by-usage-context) |
-| 6 Tooling Implications | pending | — |
+| 6 Tooling Implications | done | [Step 6](#step-6--tooling-implications) |
 | 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | pending | — |
 | 8 EDR (EDR-098) | pending, after Step 7 | — |
 
@@ -552,6 +552,29 @@ Mapped to [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md) on 2026-10-21 
 
 Result: **no violation of a principle; two cautions** (Transparency, POLA). No Tier 1 EDR is required.
 
+## Step 6 — Tooling Implications
+
+Checked on 2026-10-21 against the questions of the Concept Design Review: does the concept enable a new tool, require tooling to be usable, or constrain the implementation repository? The author confirms the result at Step 7.
+
+| Candidate | Decision | Where | Reason |
+|-----------|----------|-------|--------|
+| Hover and go to the contract at `obeys`, "find implementations" | note, no new file | [`LANGUAGE_SERVER.md`](../../../tooling/LANGUAGE_SERVER.md) | hover, go-to-definition and references exist; a contract is one more navigation target |
+| Contracts in the symbol query (Schema Provider) | extend an existing document | [`ORTHON-DESCRIBE.md`](../../../tooling/ORTHON-DESCRIBE.md) | the tool already needs a queryable IR; a contract is one more entity |
+| Contract-derived tests | **new Tooling Requirement** | [`ORTHON-TEST.md`](../../../tooling/ORTHON-TEST.md) (P2, M3) | no such tool exists; real impact on the specification (below) |
+| Rule catalog (business-rule documentation) | no new file | `ORTHON-DESCRIBE.md`, an output mode | the same query as the previous row |
+| Check that the module of rules imports no implementation | not a Tooling Requirement | candidate fitness function, [`FITNESS_FUNCTIONS.md`](../../../architecture/FITNESS_FUNCTIONS.md) | a project rule, not a language rule |
+| Proof backend | note, no new file | [`ORTHON-PROVE.md`](../../../tooling/ORTHON-PROVE.md) | a named contract is a unit proved once; invariants checked after creation and `proc` reduce the obligations |
+| Diagnostics (failed predicate, the `old` message, the unnamed-result hint) | not a Tooling Requirement | Static Analyser requirements; EDR-097 | compiler obligations already stated in the specification |
+| LLM generability measurement harness | none now | the deferred measurement protocol | a step of the review process, not a product tool |
+
+Result: one new Tooling Requirement and three notes in existing documents.
+
+**Dependencies on the specification found by this step:**
+
+1. **The IR keeps contracts and conformance as named, queryable entities**, so that the implementations of a contract can be enumerated ([`IR.md`](../../../architecture/IR.md)). Contract-derived tests, "find implementations" and the symbol query all need it.
+2. **The source of a rule's description** is the predicate name or its comment (Review decision 12). No accepted concept defines doc comments; there are only deferrable drafts ([`LITERATE_PROGRAMMING.md`](../deferrable/LITERATE_PROGRAMMING.md), [`METADATA_ANNOTATIONS.md`](../deferrable/METADATA_ANNOTATIONS.md), [`SEMANTIC_ANNOTATIONS.md`](../deferrable/SEMANTIC_ANNOTATIONS.md)). Whether comments are retained in the AST is open (Open Question 16); a rule catalog works from names alone until it is decided.
+3. **Contract-derived tests need values of parameter types to be generated.** Where that capability is defined — a trait, a compiler service, constrained types — is open (Open Question 15). It is recorded as a dependency in `ORTHON-TEST.md`.
+
 ## Policy Footprint
 
 | Policy Type | Role |
@@ -608,11 +631,13 @@ Result: **no violation of a principle; two cautions** (Transparency, POLA). No T
 12. **Deferred to v0.2 (Review decision 15). Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
 13. **Deferred: external imposition of rules.** Form of the reference in a comment, how a separate module pulls the description by reference, a rule registry file, and imposing a contract on a foreign function (Racket `contract-in`), which shifts blame because the function itself promises nothing.
 14. **Deferred to v0.2 with Open Question 3. Do not name the multi-instance kind "rule".** If every contract is a business rule, the word is too general for one kind among several. Note that `obeys` pairs naturally with *rule* and *law* as objects ("obeys the rule"); this is an input to the naming of the construct (Open Question 2) and of the multi-instance kind (Open Question 3), not a decision.
+15. **Generation of values of a type** for contract-derived tests ([`ORTHON-TEST.md`](../../../tooling/ORTHON-TEST.md)): where the capability lives (a trait, a compiler service, constrained types). Not blocking v0.1; a question for the merged concept document.
+16. **Retention of doc comments in the AST** for rule descriptions (Review decision 12): open until a doc-comment concept exists. A rule catalog works from predicate names alone in the meantime.
 
 ## Next steps (route through the pipeline)
 
 1. **Done:** Decision Pipeline run (2026-10-19); Concept Design Review Steps 0–5 (2026-10-21), see the progress table.
-2. **Step 6, Tooling Implications:** decide whether Tooling Requirements are needed. Candidates: a hover that expands the contract at `obeys` ([`LANGUAGE_SERVER.md`](../../../tooling/LANGUAGE_SERVER.md)), export of contracts through the Schema Provider, test generation from a contract, generated rule documentation, a check that the module of rules imports no implementations, and the proof backend ([`ORTHON-PROVE.md`](../../../tooling/ORTHON-PROVE.md)).
+2. **Done:** Step 6, Tooling Implications (2026-10-21): one new Tooling Requirement, `ORTHON-TEST.md`, and notes in `LANGUAGE_SERVER.md`, `ORTHON-DESCRIBE.md` and `ORTHON-PROVE.md`; see Step 6.
 3. **Step 7, Convergence Check:** syntax review ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md) and the word `contract`), probing of edge cases (including the invariant rules of Review decision 18) (mutation, boundary values, error paths), and the author's sign-off.
 4. **Step 8, EDR-098** (Architecture): carries the Step 2 tables verbatim and states its relation to EDR-019 and EDR-056. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
 5. **Validation:** all seven gates with entries in `DECISION_LOG.md`; a measurement protocol for the LLM Generability Gate.
