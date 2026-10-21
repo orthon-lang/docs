@@ -6,7 +6,7 @@ How does a language provide verifiable guarantees about a function's behaviour �
 
 Three specific gaps motivate contracts as a first-class Orthon feature:
 
-1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` together with `ensures result >= 0.0` and `ensures abs(result * result - x) <= 0.000001 * x` tells the LLM the *intent*, not just the *shape*.
+1. **LLM generation accuracy** — An LLM given `fn sqrt(x: Float) -> Float` may produce `sqrt(-1.0)`. A contract `requires x >= 0.0` together with `ensures result >= 0.0` and `ensures abs(result * result - x) <= 0.000001 * x` tells the LLM the *intent*, not just the *shape*. The contracted signature names the result (`-> result: Float`), so the clauses can refer to it.
 2. **Compiler-verified intent** — Contracts checked at compile time (where possible) or runtime detect contract violations at the earliest possible moment.
 3. **Test synthesis** — Contracts are executable specifications. The compiler or toolchain can generate test cases from contracts.
 
@@ -34,33 +34,33 @@ Three specific gaps motivate contracts as a first-class Orthon feature:
 A function declares its contract as part of its signature:
 
 ```orthon
-fun sqrt(x: Float) -> Float
+fun sqrt(x: Float) -> result: Float
     requires x >= 0.0
     ensures result >= 0.0
     ensures abs(result * result - x) <= 0.000001 * x
 ```
 
 - **`requires`** — precondition. Satisfied by the caller before every call.
-- **`ensures`** — postcondition. Guaranteed by the function after every successful return.
-- **`result`** — implicit variable binding the function's return value in the `ensures` clause.
-- **`old`** — **deferred out of v0.1** (author's decision, 2026-10-19). It would capture state at function entry for use in `ensures`, and matters only for state a callable mutates. Postconditions in v0.1 speak about the state after the call and about the result. Analysis and reintroduction triggers: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
+- **`ensures`** — postcondition. Guaranteed by the function after every successful exit.
+- **Named result** — the return value is named in the signature (`-> result: Float`). The name is chosen by the function's author; `result` is a convention, not a reserved word. It is visible only in `ensures` clauses ([EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)).
+- **`old`** — **deferred out of v0.1** (author's decision, 2026-10-19). It would capture state at function entry for use in `ensures`, and matters only for state a callable mutates. Postconditions in v0.1 speak about the state after the call and about the result. Writing `old` in a postcondition is a compile error with a dedicated message stating that `old` is deferred out of v0.1; the message offers two workarounds: an absolute condition, or a `new` method that returns the changed value ([EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)). Analysis and reintroduction triggers: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 
 The `ensures result >= 0.0` clause pins the sign of the result: the relational clause alone would also admit the negated root `-sqrt(x)`.
 
 A function may declare several preconditions; the caller must satisfy every `requires` before the call:
 
 ```orthon
-fun withdraw(balance: Int, amount: Int) -> Int
+fun withdraw(balance: Int, amount: Int) -> result: Int
     requires amount > 0
     requires amount <= balance
     ensures result == balance - amount
     return balance - amount
 ```
 
-Postconditions are **relational** — they tie the output to the inputs, which a typed signature alone cannot express. A function that returned `balance + amount` would be just as well-typed as one returning `balance - amount`; the `ensures` clause is what states which relation is intended. Postconditions may also bound the output without naming it:
+Postconditions are **relational** — they tie the output to the inputs, which a typed signature alone cannot express. A function that returned `balance + amount` would be just as well-typed as one returning `balance - amount`; the `ensures` clause is what states which relation is intended. Postconditions may also bound the output without stating its exact value:
 
 ```orthon
-fun clamp(x: Int, lo: Int, hi: Int) -> Int
+fun clamp(x: Int, lo: Int, hi: Int) -> result: Int
     requires lo <= hi
     ensures result >= lo
     ensures result <= hi
@@ -72,24 +72,63 @@ Contract expressions are pure and may call other pure functions, so shared domai
 
 Syntactic position is not execution position. Contract clauses appear between the header and the body only because that is where a signature lives — visible to the caller and to the compiler — but they are not statements that run in the sequence of the body. Execution is hoisted to the function boundary: `requires` is evaluated on entry, before the body runs, and `ensures` on every normal exit, after the body has already produced its value.
 
-This is why `result` is a **ghost binding**, not a variable of the body's scope. It exists only inside `ensures` expressions: it cannot be assigned, it does not leak into ordinary code, and it is unavailable in `requires` and `invariant` clauses. The compiler binds `result` to the value the function is about to return at the moment the postcondition is evaluated — and because that moment comes *after* the value exists, the reference is valid even though the clause is written above the body.
+This is why the named result is a **ghost binding**, not a variable of the body's scope. The mistakes the compiler rejects:
+
+```orthon
+fun half(x: Int) -> Int
+    ensures result == x / 2          // ERROR: the result is not named; write `-> result: Int`
+fun f(result: Int) -> result: Int    // ERROR: duplicate declaration of `result`
+fun g(x: Int) -> r: Int
+    ensures is_positive              // ERROR: function value; write is_positive(r)
+```
+
+The name declared in the signature is bound to the returned value when the postcondition is evaluated — and because that moment comes *after* the value exists, the reference is valid even though the clause is written above the body ([EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)). The rules:
+
+- **Scope.** The name exists only inside `ensures` expressions: it is not visible in `requires`, in `invariant` or in the body, and it cannot be assigned.
+- **Duplicates.** A name equal to a parameter name is a same-scope duplicate-declaration error (the rule is stated in [`NAME_RESOLUTION.md`](../../how/architecture/NAME_RESOLUTION.md)). A declaration in the body with the same name as the named result is a **warning**, not an error: the two live in different scopes, but a reader can mistake one for the other.
+- **Unnamed result.** An `ensures` that mentions the result of a function with an unnamed result is a compile error with a hint to name it in the signature. A function with no return value, or whose conditions do not mention the result, needs no name.
+- **Successful exit.** A successful exit is a normal return with a non-error value. For a function whose declared result is an error union, it is the success case, and the name binds the success value. Termination through a system error is not an exit, and `ensures` is not evaluated.
+- **Function values.** An `ensures` expression that is a function value is a compile error with a hint to call it on the result (for example `is_non_negative(result)`).
 
 The compiler instruments the boundary, not the body: the callee's source is untouched, and checks are placed around it. Desugaring (illustrative — the exact rewrite depends on the final return/body syntax):
 
 ```text
-fn withdraw(balance: Int, amount: Int) -> Int
+fn withdraw(balance: Int, amount: Int) -> result: Int
     # ENTRY — requires, evaluated before the body
     assert amount > 0
     assert amount <= balance
 
     # BODY — as written; each normal exit is rewritten:
-    result = <returned value>           # declaration by assignment (EDR-074)
+    result = <returned value>           # the name declared in the signature is bound to the returned value (declaration by assignment, EDR-074)
     # EXIT — ensures, evaluated after the body produced a value
     assert result == balance - amount
     return result
 ```
 
-Because the check is attached to the boundary rather than written as a trailing statement, `ensures` covers every normal exit — branches, early returns, and tail expressions — and applies only to successful exits, matching the definition above ("after every successful return"). Where the compiler can prove a contract statically, no runtime check is emitted. The remaining checks behave as assertions in debug and test builds and are elided in release builds unless `--enforce-contracts` is passed.
+Because the check is attached to the boundary rather than written as a trailing statement, `ensures` covers every normal exit — branches, early returns, and tail expressions — and applies only to successful exits, matching the definition above ("after every successful exit"). Where the compiler can prove a contract statically, no runtime check is emitted. The remaining checks behave as assertions in debug and test builds and are elided in release builds unless `--enforce-contracts` is passed.
+
+#### Where Contracts Apply
+
+*Tier 4 clarification, made together with [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md); it adds no keyword.*
+
+```orthon
+trait Shape
+    fun area(self) -> a: Float
+        ensures a >= 0.0
+
+impl Shape for Square
+    fun area(self) -> result: Float          // a different result name than the trait
+        ensures result == self.side * self.side    // stronger than the inherited `a >= 0.0`
+        return self.side * self.side         // a method: `self` exists
+
+fun square(x: Int) -> result: Int            // a free function: no `self`
+    ensures result >= 0
+    return x * x
+```
+
+- Contracts may be declared on any function or method. `self` exists only in methods; a free function has none.
+- Contracts of trait methods are inherited by their implementations (Principle 5, Liskov substitution): an implementation may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error.
+- Result names need not match between a trait method and its implementation. An inherited clause uses the name of the declaring signature, so the inherited `ensures a >= 0.0` above still reads `a`.
 
 ### Object/Module Invariants
 
@@ -114,6 +153,25 @@ Contract expressions are **pure** — they must not produce side effects. The co
 - No I/O operations.
 - No non-deterministic functions.
 - Contracts may only call other pure functions.
+- Violation reports name the failed predicate: diagnostics print the called predicate with its arguments, for example `requires covered_by(balance, amount)`.
+
+**Contracts as business rules.** Named pure predicates carry the rules of a domain and read like the rules themselves:
+
+```orthon
+fun is_positive(n: Int) -> Bool
+    return n > 0
+
+fun covered_by(balance: Int, amount: Int) -> Bool
+    return amount <= balance
+
+fun withdraw(balance: Int, amount: Int) -> result: Int
+    requires is_positive(amount)
+    requires covered_by(balance, amount)
+    ensures result == balance - amount
+    return balance - amount
+```
+
+Named pure predicates are reused across clauses and signatures. A module of rules should not import implementation modules; that is a project rule or a lint, not a language rule.
 
 ## Default Strategy
 
@@ -130,17 +188,24 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 
 ## Open Questions
 
-1. Should higher-order contracts (contracts on function arguments) be part of v0.1 or v0.2?
+1. Higher-order contracts (contracts on function arguments): *deferred to v0.2.* See [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md).
 2. *Deferred with `old` (2026-10-19):* how does `old` work with mutable state? See [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 3. Should contracts be inheritable across trait implementations?
+
+   > **Decision:** Yes. Trait-method contracts are inherited; an implementation may weaken `requires` and strengthen `ensures` (see [Where Contracts Apply](#where-contracts-apply)).
+
 4. Performance model for runtime contract checking in hot paths.
+5. *Deferred:* external imposition of rules on foreign functions, and a rule registry file. A comment may carry a reference to a rule; the form is unspecified.
 
 ## Decision History
 
 - **EDR-056:** Contracts accepted as Language feature — compiler-enforced pre/postconditions.
 - **Classification per D-03:** Language. Contract keywords (`requires`, `ensures`, `invariant`) require syntactic integration into function signatures and compiler-level enforcement. Not expressible via composition of primitives.
 - **Cross-reference:** TRAITS (EDR-019) — contracts compose with trait dispatch; trait methods can declare contracts that implementations must satisfy.
-- **2026-10-19 — `old` deferred out of v0.1.** Author's decision: `old` adds complexity now and gives little in return. Editorial amendment of this concept; no EDR status change (the EDR-056 text does not mention `old`). The `Queue` example now uses `proc` (mutating methods are `proc` per SEMANTIC_MODEL § Mutation) and an absolute postcondition. Analysis kept as a deferred hypothesis: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
+- **2026-10-19 — `old` deferred out of v0.1.** Author's decision: `old` adds complexity now and gives little in return. The deferral was applied inline at the author's instruction and is recorded by [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md). The `Queue` example now uses `proc` (mutating methods are `proc` per SEMANTIC_MODEL § Mutation) and an absolute postcondition. Analysis kept as a deferred hypothesis: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
+- **2026-10-21 — EDR-097 (amends EDR-056).** The result is named in the signature (`-> result: Float`) and visible only in `ensures`; `old` is deferred out of v0.1 with a dedicated diagnostic. Signed off by the author. See [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md).
+- **Under review (hypothesis, not accepted):** named contract objects, a conformance keyword and multi-instance contracts are examined in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md).
+- **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---
 
