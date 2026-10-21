@@ -69,18 +69,29 @@ counts toward the threshold is the author's call.
 1. **The result is named in the signature.** A function that has a postcondition
    about its result declares the name in the signature, for example
    `-> result: Float`. The name is chosen by the author of the function;
-   `result` is a convention, not a reserved word.
+   `result` is a convention, not a reserved word. Result names need not match
+   between a trait method and its implementation; inherited clauses use the name
+   of the declaring signature (R3). The notation `-> name: Type` is provisional
+   and follows the decisions of
+   [`TYPE_ANNOTATION_SYNTAX.md`](../../syntax/TYPE_ANNOTATION_SYNTAX.md) and
+   [`FUNCTION_RETURN_SYNTAX.md`](../../syntax/FUNCTION_RETURN_SYNTAX.md) (R5).
 2. **Scope.** The name is visible only inside `ensures` clauses. It is not
    visible in `requires`, in `invariant`, or in the body. A name that duplicates
-   a parameter name is a duplicate-declaration error.
+   a parameter name is a duplicate-declaration error, by the general rule that
+   two declarations of one name in the same scope are an error (stated in
+   [`NAME_RESOLUTION.md`](../../architecture/NAME_RESOLUTION.md); precedent: the
+   duplicate type parameter in `GENERICS.md`) (R4). A declaration in the body
+   with the same name as the named result is a **warning** (R2).
 3. **Unnamed result.** An `ensures` clause that mentions the result of a
    function with an unnamed result is a compile error with a hint to name it in
    the signature. A function with no return value, or whose conditions do not
    mention the result, needs no name.
 4. **Successful exits only.** The name denotes the value the function returns on
-   a successful exit, as `ensures` applies only to successful exits. For a
-   function whose declared result is an error union, the name binds the success
-   value. Naming of several results follows the return-type notation decision
+   a successful exit, as `ensures` applies only to successful exits. A
+   successful exit is a normal return with a non-error value; for a function
+   whose declared result is an error union, it is the success case, and the name
+   binds the success value. Termination through a system error is not an exit
+   (R1). Naming of several results follows the return-type notation decision
    ([`FUNCTION_RETURN_SYNTAX.md`](../../syntax/FUNCTION_RETURN_SYNTAX.md)) and is
    not decided here.
 5. **No second way to bind the result.** A lambda binder in `ensures`
@@ -92,8 +103,11 @@ counts toward the threshold is the author's call.
    `old`. Postconditions in v0.1 speak about the state after the call and about
    the result. Relations to the state before a mutating (`proc`) call are not
    expressible in v0.1; relations for `fun` and `new` methods are expressible
-   because `self` is unchanged. The analysis and the conditions for
-   reintroduction are kept in
+   because `self` is unchanged. Writing `old` in a postcondition is a compile
+   error with a dedicated message: `old` is deferred out of v0.1, with two
+   workarounds — an absolute condition, or a `new` method that returns the
+   changed value (R6). The analysis and the conditions for reintroduction are
+   kept in
    [`CONTRACT_OLD_STATE.md`](../../concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 7. **Out of scope.** Named contract objects, the conformance keyword, contracts
    through generics and function values, multi-instance contracts, the wording of
@@ -151,7 +165,11 @@ fun g(x: Int) -> r: Int
    `result` bullet, the examples, the evaluation section and the desugaring use
    the named result; `old` is described as deferred with a link to
    `CONTRACT_OLD_STATE.md`; Decision History records this EDR and replaces the
-   wording "no EDR status change" of the 2026-10-19 entry.
+   wording "no EDR status change" of the 2026-10-19 entry. The evaluation
+   section defines "successful exit" (R1), states that a body declaration with
+   the name of the named result is a warning (R2), and states that result names
+   need not match between a trait method and its implementation (R3). The
+   `old` bullet carries the dedicated diagnostic and the two workarounds (R6).
 2. [`what/CORE_CONCEPTS.md`](../../../what/CORE_CONCEPTS.md): the CONTRACTS entry
    no longer says "`result` and `old` implicit variables"; it records the named
    result and the deferral of `old`, and carries the Open Questions and Resolved
@@ -164,6 +182,19 @@ fun g(x: Int) -> r: Int
 5. Check: no accepted document describes an implicit `result` or an available
    `old` (a search of `what/` for "implicit variable" and for `old(` finds only
    the deferral pointers).
+6. [`how/architecture/NAME_RESOLUTION.md`](../../architecture/NAME_RESOLUTION.md)
+   states the general rule that two declarations of one name in the same scope
+   are an error (precedent: `GENERICS.md`, duplicate type parameter), and the
+   scope rule of the named result (visible only in `ensures`) (R4).
+7. [`TYPE_ANNOTATION_SYNTAX.md`](../../syntax/TYPE_ANNOTATION_SYNTAX.md) and
+   [`FUNCTION_RETURN_SYNTAX.md`](../../syntax/FUNCTION_RETURN_SYNTAX.md) each
+   carry a pointer that the notation `-> name: Type` follows their decisions and
+   is provisional (R5).
+8. **Deferred until after sign-off (R7).** The measurement protocol for LLM
+   generation over the named-result form (a fixed task set, the gate's own 90
+   percent threshold, recording failures from a habitual implicit `result` or
+   `old`) is not part of this amendment; it is run after sign-off and recorded
+   before the final gate record.
 
 Inline (Tier 4) clarifications made together with this amendment, not decided
 by it: contracts apply to any function or method and `self` exists only in
@@ -290,8 +321,9 @@ added to the name-resolution schema (R4).
 proceed; the root causes are recorded and are to be resolved before the final
 gate record (`EMPIRICAL_ANALYSIS_METHOD.md` § 4, Gate Flow).
 
-**Resolutions proposed** (the author decides at sign-off; none is applied to the
-Decision above):
+**Resolutions** (the author decided on 2026-10-21: R1–R6 are accepted and applied
+in the Decision and Compliance above, R2 as a warning; R7 is deferred until after
+sign-off, see Compliance item 8):
 
 | # | Resolution | Closes |
 |---|------------|--------|
