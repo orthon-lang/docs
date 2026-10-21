@@ -189,14 +189,15 @@ Prose and a short table, per the Post-Acceptance Gaps (Type B) rule that only
 the affected gates are re-run
 ([`CONCEPT_PIPELINE.md`](../../CONCEPT_PIPELINE.md) § 10). The Decision Pipeline
 is not re-run for an accepted concept. The set below is proposed; the author
-confirms it at sign-off. Verdicts are **Pending**: no gate has been run for this
-draft.
+confirms it at sign-off. The verdicts come from the run of 2026-10-21 made by
+the drafting agent (analysis only, no LLM sampling); the author confirms or
+overrides them at sign-off.
 
-| Gate | Method | Verdict | What the run has to show |
-|------|--------|---------|--------------------------|
-| `LOGICAL_CONSISTENCY_GATE` | Socratic Method | Pending | Terms defined (named result, scope); counterexamples: parameter named `result`, `ensures` without a named result, error-union result, function value in `ensures`, use in `requires` or in the body |
-| `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | Pending | The named result needs no special name-resolution rule; removing `old` removes a construct and its cost model |
-| `LLM_GENERABILITY_GATE` | Empirical Analysis | Pending | An LLM places the result name in the signature and uses it in `ensures` at least as reliably as with an implicit `result`; the extra token in the signature is acceptable |
+| Gate | Method | Verdict | Summary |
+|------|--------|---------|---------|
+| `LOGICAL_CONSISTENCY_GATE` | Socratic Method | **Flag** | The core rules hold; four resolvable gaps (R1–R4): "successful exit" is undefined for error results, a body name equal to the result name, result names across a trait and its implementation, no general same-scope duplicate rule |
+| `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | **Pass** | No keyword added; an implicit name and a construct (`old`) are removed; one optional name slot in the return position (notation provisional, R5) |
+| `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Structurally clean and diagnosable; the share of correct generations is not measured, and a habitual implicit `result` or `old` from other languages is an anticipated systematic error (R6, R7) |
 
 Gates not proposed: `USER_VALUE_GATE` (no new capability is introduced; one is
 withdrawn and deferred), `ARCHITECTURAL_INTEGRITY_GATE` and
@@ -204,6 +205,103 @@ withdrawn and deferred), `ARCHITECTURAL_INTEGRITY_GATE` and
 signature and uses the existing name-resolution rules), and
 `LONG_TERM_MAINTAINABILITY_GATE` (covered by the traceable deferral record).
 Confirm or change this selection at sign-off.
+
+#### Run of 2026-10-21
+
+**1. `LOGICAL_CONSISTENCY_GATE` — Socratic Method — Flag**
+
+*Terms.* Named result: the identifier introduced after `->` in a signature.
+Scope: `ensures` clauses only. Successful exit: **not defined** by the concept
+(`CONTRACTS.md` says "every successful return" without defining it).
+`old`: deferred, no longer a term of v0.1.
+
+| Criterion | Score | Reasoning |
+|-----------|-------|-----------|
+| All terms precisely defined | Flag | "Successful exit" is ambiguous for an error-union result: is returning an error value a successful return? Decision 4 settles what the name binds, but the term itself needs a definition (R1) |
+| No self-referential paradoxes | Pass | The rule does not invalidate itself; the result name is declared by the same mechanism that declares parameters |
+| Behaviour deterministic across contexts | Flag | With `-> result: Int` and `let mut result = 0` in the body, the same identifier means the returned value in `ensures` and an unrelated local in the body. The scope rule makes this deterministic, but it can astonish a reader (R2) |
+| Composition with existing concepts defined | Flag | Trait methods: names across a trait and its implementation are unspecified (R3). `NAME_RESOLUTION.md` states a shadowing rule but no same-scope duplicate rule, so Decision 2 rests only on the precedent of duplicate type parameters in `GENERICS.md` (R4). Several results are deferred to the return-notation decision |
+
+*Counterexamples tried.* A parameter named `result` (error by Decision 2,
+subject to R4); `ensures` on an unnamed result (error with a hint, Decision 3);
+an error-union result (binds the success value); a function value in `ensures`
+(error with a hint, Decision 5); use in `requires` or in the body (name not in
+scope); `old` written in a postcondition (undefined name in v0.1, diagnostic
+is R6). *Devil's advocate:* the signature now carries a name that exists only
+for contracts, so two functions with the same behaviour differ in signature
+text. That is a real cost, recorded in Consequences (Negative), not a
+contradiction.
+
+**2. `CONCEPTUAL_SIMPLICITY_GATE` — Scientific Method — Pass**
+
+*Hypothesis.* Naming the result in the signature is the simplest way to give
+postconditions access to the returned value, and removing `old` is the simplest
+v0.1 model. *Known.* Parameters are declared in the signature and referenced by
+name; name resolution exists. *Unknown.* The final notation; how often
+contracts need the result. *Experiment.* The canonical examples (`sqrt`,
+`withdraw`, `clamp`) rewritten with named results: each signature gains one
+name, and the four special rules for an implicit name and the cost model of
+`old` disappear. The experiment is shorter than the proposal. *Simpler
+alternatives checked.* An implicit `result` is shorter to write but needs a
+reserved or implicit name and four rules; predicate-valued clauses are shorter
+in one case and cover only conditions on the result alone.
+
+| Criterion | Score | Reasoning |
+|-----------|-------|-----------|
+| Expressible through composition | Pass | No existing construct lets `ensures` refer to the returned value |
+| Single responsibility | Pass | One responsibility (access to the returned value); the second (state at entry) is withdrawn |
+| No keyword or syntax bloat | Pass | No keyword added; an implicit name and a construct removed; one optional name slot in the return position |
+| Minimal learning surface | Pass | Learnable in isolation: "name the result like a parameter" |
+
+The notation `-> name: Type` is provisional (R5).
+
+**3. `LLM_GENERABILITY_GATE` — Empirical Analysis — Flag**
+
+*Structural scan.*
+
+| Sub-construct | Result |
+|---------------|--------|
+| Named result slot `-> name: Type` | Clean: the colon after the identifier separates it from `-> Type`; relies on the colon of annotations, whose form is still open (`TYPE_ANNOTATION_SYNTAX.md`) |
+| Scope rule (`ensures` only) | Clean; violations are compile errors with a hint |
+| Error-union result binds the success value | One edge: a model may expect the whole error union |
+| `old` deferred | Risk: models trained on Eiffel, JML, Dafny or OCL may write `old(...)`; a dedicated diagnostic is needed (R6) |
+| Several results | Not generable until the notation is decided |
+
+*Schema round-trip (grammar fragment).*
+
+```text
+FunctionDecl   := 'fun' Name Params '->' ResultSlot ContractClause* Body
+ResultSlot     := [ Name ':' ] Type
+ContractClause := 'requires' Expr | 'ensures' Expr      ; Name is bound in the Expr of 'ensures' only
+```
+
+The syntax round-trips fully. The scope rule and the duplicate rule must be
+added to the name-resolution schema (R4).
+
+| Criterion | Score | Reasoning |
+|-----------|-------|-----------|
+| Schema-serializable | Pass | The grammar fragment above plus one scope rule |
+| Predictable generation | Flag | **Not measured** (no sampling was run). One anticipated systematic error: a habitual implicit `result` or `old` from other languages (R7) |
+| No hallucination surface | Pass | Each form has one meaning; the colon separates the named slot from the plain type |
+| Strategy-aware default | Pass | Contract semantics and naming do not depend on the Implementation Strategy; enforcement stays a Contract Enforcement Policy matter |
+| Self-correctable | Flag | Diagnostics are specified for an unnamed result, a scope violation, a duplicate, and a function value in `ensures`; none is specified yet for `old` (R6) |
+
+**Overall.** No Fail: two gates Flag, one Pass. A Flag without a Fail may
+proceed; the root causes are recorded and are to be resolved before the final
+gate record (`EMPIRICAL_ANALYSIS_METHOD.md` § 4, Gate Flow).
+
+**Resolutions proposed** (the author decides at sign-off; none is applied to the
+Decision above):
+
+| # | Resolution | Closes |
+|---|------------|--------|
+| R1 | Define "successful exit" as a normal return with a non-error value; for an error-union result, the success case; termination through a system error is not an exit | Logical Consistency: terms |
+| R2 | A body declaration with the same name as the named result is a warning (the author may choose error or allow) | Logical Consistency: determinism |
+| R3 | Result names need not match between a trait method and its implementation; inherited clauses use the name of the declaring signature | Logical Consistency: composition |
+| R4 | State the general same-scope duplicate-declaration rule in `NAME_RESOLUTION.md`, citing the `GENERICS.md` precedent, and add the scope rule of the named result there | Logical Consistency: composition; schema |
+| R5 | Mark the notation `-> name: Type` provisional, following `TYPE_ANNOTATION_SYNTAX.md` and `FUNCTION_RETURN_SYNTAX.md`; the notation for several results stays open | Simplicity note; LLM structural scan |
+| R6 | Specify a dedicated diagnostic for `old` ("deferred out of v0.1"), with the two workarounds: an absolute condition, or a `new` method returning the changed value | LLM: self-correctable |
+| R7 | Before the final gate record, run a measurement: a fixed set of generation tasks over the named-result form, success threshold 90 percent (the gate's own threshold), recording the failures that come from a habitual implicit `result` or `old` | LLM: predictable generation |
 
 ---
 
