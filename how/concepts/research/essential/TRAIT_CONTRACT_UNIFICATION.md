@@ -40,7 +40,7 @@ Review of this hypothesis against [`concept-design-review.md`](../../../concept-
 | 4 Principle Check | done, no violation found | [Step 4](#step-4--principle-check) |
 | 5 Examples | done | [Step 5](#step-5--examples-by-usage-context) |
 | 6 Tooling Implications | pending | — |
-| 7 Convergence Check (syntax review, Open Question 10, edge cases, sign-off) | pending | — |
+| 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | pending | — |
 | 8 EDR (EDR-098) | pending, after Step 7 | — |
 
 ## Problem
@@ -488,7 +488,7 @@ Sub-features:
 | Q1 | What problem are we solving? | Two mechanisms (traits, function contracts) for one idea — a named specification that an element declares it satisfies — and a third arriving with contract objects. Missing homes: contracts on function arguments (higher-order contracts, deferred in EDR-056) and properties over several values (the Transitivity Invariant in EQUALITY). Reuse of one specification across implementations. |
 | Q2 | Language problem or library problem? | **Language.** Conformance checking, coherence and the Liskov rules are compiler services; EDR-019 and EDR-056 already classify both parts as Language. For F4 the declaration is Language and input generation is toolchain or Standard Library. |
 | Q3 | Can it be solved with existing primitives? | **Yes, conditionally.** With F2 a function contract is `struct` + `Callable` + trait conformance, the composition already used by constrained types (EDR-080). Without F2: no. **A separate new contract-object construct (alternative A0) exits here:** it decomposes into existing primitives, so it is not a new language feature. |
-| Q4 | Does it violate any Design Principle? | No violation found. Orthogonality, Uniformity, Explicitness, Minimal Core (Core Change Criterion, if Q3 holds), Parsimony, DRY, Schema Separate from Representation (DOP) and Named Before Symbolic read in favour. Semantic Purity: one word with one semantic role (the pending wording amendment from "one meaning" to "one semantic role" matters here). Caution — POLA: users of `trait` / `impl` meet a rename, and "a function has a type" is new. Neutral — Data Is Immutable by Default; invariants of mutable state sit outside DOP (Open Question 10). |
+| Q4 | Does it violate any Design Principle? | No violation found. Orthogonality, Uniformity, Explicitness, Minimal Core (Core Change Criterion, if Q3 holds), Parsimony, DRY, Schema Separate from Representation (DOP) and Named Before Symbolic read in favour. Semantic Purity: one word with one semantic role (the pending wording amendment from "one meaning" to "one semantic role" matters here). Caution — POLA: users of `trait` / `impl` meet a rename, and "a function has a type" is new. Neutral — Data Is Immutable by Default; invariants of mutable state sit outside DOP (Open Question 10, closed by Review decision 18). |
 | Q5 | Does it add new semantics (vs sugar)? | **Mixed.** New: F2 (functions have unique nominal types), function-level conformance, F4. Sugar: the short form `contract Name(params) -> r`, inline clauses as an anonymous contract, `obeys` on a function as shorthand for conformance of its anonymous type. |
 | Q6 | Can it be expressed through composition? | **Yes for F1, given F2:** `struct` + `Callable` + conformance. F4: partly — a contract with free inputs plus a generator in the toolchain. |
 | Q7 | Can it be syntactic sugar over existing primitives? | **Partly.** F3 and the short and inline forms are sugar over F1 + F2. F1 itself is a unification of existing constructs, not sugar. |
@@ -523,7 +523,7 @@ Mapped to [`DESIGN_PRINCIPLES.md`](../../../DESIGN_PRINCIPLES.md) on 2026-10-21 
 | Principle | Result | Reading |
 |-----------|--------|---------|
 | Data First | Pass | Neutral: contracts describe behaviour, not data |
-| Data Is Immutable by Default | Pass | Unchanged; invariants of mutable state are Open Question 10 |
+| Data Is Immutable by Default | Pass | Unchanged; invariants of mutable state are kept with a narrower check (Review decision 18) |
 | Schema Separate from Representation | Pass | The specification is a separate named object applied at boundaries (EDR-090, principle 4) |
 | Intent Over Implementation | Pass | The contract states intent; implementations vary |
 | Orthogonality | Pass | One construct applied to different subjects instead of overlapping constructs |
@@ -590,6 +590,7 @@ Result: **no violation of a principle; two cautions** (Transparency, POLA). No T
 15. **Deferred to v0.2** (decided 2026-10-19): using contracts through generics and function values — a function contract as a generic bound, `dyn` on function values, collections of contract-bearing functions, and `obeys` on lambdas. These are the higher-order contracts that EDR-056 already deferred to v0.2. The notation for function types is undecided in any case (`->` is overloaded, see [`FUNCTION_RETURNING_FUNCTION.md`](../../../syntax/FUNCTION_RETURNING_FUNCTION.md)), so this document does not write function types in new examples. The premise "a function is sugar for a unique anonymous type with one callable member" stays **only as a definition**: it explains `obeys` on a function and decomposes it into existing primitives (Pipeline Q3). Its consequences for generics, dispatch, and function-type notation are deferred. **v0.1 scope:** types obey contracts (replacing `trait` / `impl`); functions obey named contracts at their declaration (shape check, contract-derived tests, documentation).
 16. **Merge of TRAITS and CONTRACTS** (decided 2026-10-21): if the unification is accepted, the accepted concepts TRAITS (EDR-019) and CONTRACTS (EDR-056, as amended by EDR-097) are merged into one concept document. How the unifying EDR relates to EDR-019 and EDR-056 (supersedes or amends) is stated in the EDR itself (Step 8).
 17. **Multi-instance contracts are deferred to v0.2** (decided 2026-10-21). Open Question 4 is closed; the naming questions (Open Questions 3 and 14) are not needed for v0.1.
+18. **`invariant` stays in v0.1 with a narrower check** (decided 2026-10-21; closes Open Question 10). An invariant of a type or module is checked after the value is created and after each `proc` exits. It is not checked for `fun` or `new` methods, which never mutate `self` ([`SEMANTIC_MODEL.md`](../../../../what/SEMANTIC_MODEL.md) § Mutation) and so cannot break it. Re-entry: while a `proc` runs, nested calls on the same object do not check the invariant on entry; it is checked when the outer `proc` exits. For an immutable value the rule is a constrained type (EDR-080), checked once at creation. The accepted `CONTRACTS.md` still says that invariants are checked on entry and exit of each public method; it is amended together with the unification (EDR-098).
 
 ## Open Questions
 
@@ -602,7 +603,7 @@ Result: **no violation of a principle; two cautions** (Transparency, POLA). No T
 7. **Deferred to v0.2 (Review decision 15). Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
 8. **Deferred to v0.2 (Review decision 15). `dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
 9. **`structural` contracts.** What implicit (structural) satisfaction means for a function.
-10. **Invariant for mutable types — blocks Step 7; the author asked for an introduction and examples before deciding.** DOP treats data as immutable, so state invariants fall outside it. Keep `invariant` in v0.1 or reduce it to constrained types? Also the re-entrancy problem (see the review note).
+10. **Closed (Review decision 18): `invariant` stays in v0.1 with a narrower check.** DOP treats data as immutable, so state invariants fall outside it; they remain for mutable types, checked after creation and after each `proc`, with the re-entrancy rule of decision 18.
 11. **Enforcement by position.** Strictness at module boundaries versus internally, and partial disabling of checks. Deferred to the enforcement discussion.
 12. **Deferred to v0.2 (Review decision 15). Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
 13. **Deferred: external imposition of rules.** Form of the reference in a comment, how a separate module pulls the description by reference, a rule registry file, and imposing a contract on a foreign function (Racket `contract-in`), which shifts blame because the function itself promises nothing.
@@ -612,7 +613,7 @@ Result: **no violation of a principle; two cautions** (Transparency, POLA). No T
 
 1. **Done:** Decision Pipeline run (2026-10-19); Concept Design Review Steps 0–5 (2026-10-21), see the progress table.
 2. **Step 6, Tooling Implications:** decide whether Tooling Requirements are needed. Candidates: a hover that expands the contract at `obeys` ([`LANGUAGE_SERVER.md`](../../../tooling/LANGUAGE_SERVER.md)), export of contracts through the Schema Provider, test generation from a contract, generated rule documentation, a check that the module of rules imports no implementations, and the proof backend ([`ORTHON-PROVE.md`](../../../tooling/ORTHON-PROVE.md)).
-3. **Step 7, Convergence Check:** syntax review ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md) and the word `contract`), Open Question 10 (`invariant` for mutable types), probing of edge cases (mutation, boundary values, error paths), and the author's sign-off.
+3. **Step 7, Convergence Check:** syntax review ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md) and the word `contract`), probing of edge cases (including the invariant rules of Review decision 18) (mutation, boundary values, error paths), and the author's sign-off.
 4. **Step 8, EDR-098** (Architecture): carries the Step 2 tables verbatim and states its relation to EDR-019 and EDR-056. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
 5. **Validation:** all seven gates with entries in `DECISION_LOG.md`; a measurement protocol for the LLM Generability Gate.
 6. **If accepted:** the merged concept document in `what/concepts/` (8-section `_concept.md` template), registration in `CORE_CONCEPTS.md` and `INDEX.md`, the rename cascade over about 52 files as a tracked task, and the syntax pipeline for the words.
