@@ -6140,3 +6140,45 @@ One-sentence test: "A slice is a zero-copy sub-view of a contiguous run, selecte
 ### Open items
 
 Recorded in EDR-096 as open, not decided: DEF-a (whether variadic functions, call-site spreading and a labeled remainder are in v0.1); DEF-b (move versus borrow on destructuring, decided jointly for all constructs); DEF-c (let-else and the irrefutable single-arm match); DEF-d (Set spreading); DEF-e (Map and brace-literal syntax); DEF-f (prefix star versus numeric multiplication). Two drafting questions are also recorded as questions: (g) whether redundant outer parentheses around a top-level pattern are rejected or tolerated, and (h) the representation of the collected remainder for a List or Array scrutinee.
+
+---
+
+## Entry: CONTRACTS amendment (EDR-097)
+
+**Date:** 2026-10-21
+**Artifact validated:** [`what/concepts/CONTRACTS.md`](../../what/concepts/CONTRACTS.md)
+**Decision recorded as:** [EDR-097](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md), amending [EDR-056](../decision_records/architecture/EDR-056-contracts.md)
+**Pipeline applied:** Not re-run. Post-Acceptance Gaps (Type B), [`CONCEPT_PIPELINE.md`](../CONCEPT_PIPELINE.md) § 10; only the affected gates were re-run.
+**Sign-off:** Human Sign-off per AGENTS.md §7.4 — `Reviewed-by: mniedre · Date: 2026-10-21 · Verdict: LOCKED` (recorded from the author's explicit statement in chat).
+
+### Gate Validation
+
+**Gates applied:** 3 of 7 (per `DECISION_VALIDATION.md` § Gate Selection). The author confirmed the selection and the verdicts at sign-off.
+
+#### 1. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Reasoning.** The terms were defined (named result, scope, successful exit, `old` as deferred) and counterexamples were tried: a parameter named `result`, an `ensures` on an unnamed result, an error-union result, a function value in `ensures`, use in `requires` or in the body, and `old` written in a postcondition. The core rules hold. Four resolvable gaps were found: "successful exit" is undefined for error results, a body name equal to the result name is unspecified, result names across a trait and its implementation are unspecified, and there is no general same-scope duplicate rule. They are closed by EDR-097 R1-R4. Full criterion tables: [EDR-097, Gate Validation](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md#gate-validation).
+
+**Verdict: Flag.**
+
+---
+
+#### 2. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Reasoning.** No keyword is added. An undeclared name and a construct (`old`) are removed, and the four special name-resolution rules for an implicit name disappear. What remains is one optional name slot in the return position; its notation is provisional and follows the syntax hypotheses (R5). Full criterion tables: [EDR-097, Gate Validation](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md#gate-validation).
+
+**Verdict: Pass.**
+
+---
+
+#### 3. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Reasoning.** The form is structurally clean and diagnosable: the colon separates the named slot from the plain type, and each violation is a compile error with a hint. The share of correct generations is not measured. Habitual use of an implicit result or of `old` from other languages is the anticipated systematic error; the dedicated `old` diagnostic (R6) closes the self-correction gap. Full criterion tables: [EDR-097, Gate Validation](../decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md#gate-validation).
+
+**Verdict: Flag.**
+
+---
+
+**Overall.** No Fail. The flags are resolved by R1-R6. R7, the LLM-generation measurement, is deferred: it has not been run and is to be recorded before the final gate record.
+
+**Gates not applied:** `USER_VALUE_GATE` (no new capability is introduced; one is withdrawn and deferred), `ARCHITECTURAL_INTEGRITY_GATE` and `IMPLEMENTATION_INDEPENDENCE_GATE` (the change stays inside the contract signature and uses the existing name-resolution rules), `LONG_TERM_MAINTAINABILITY_GATE` (covered by the traceable deferral record).
