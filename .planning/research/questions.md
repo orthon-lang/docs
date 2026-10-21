@@ -62,3 +62,23 @@ empirical / experience report) and verification status (admitted with source /
 unresolved with reason); plus an explicit "no evidence found" entry where
 nothing was located; plus a recommendation on whether to revise the "Where
 They Diverge" claim. Pilot on one concept first.
+
+## Choosing between a down-shift and a sideways shift when a concept is too complex (2026-10-21)
+
+**Q:** When the implementation complexity of a concept signals that it must
+be reconsidered, what criterion decides between moving down (extract a common
+kernel from which the constructs derive) and moving sideways (give the
+complexity to another carrier: compiler, library, another layer)?
+
+**Why:** The 2026-10-21 exploration (`notes/2026-10-21-complexity-as-redesign-signal.md`)
+settled that a complexity signal triggers redesign in another plane and that
+both kinds of shift are allowed, "by the situation". Without a criterion, two
+authors facing the same concept can reach different designs. Existing
+instances to learn from: the control-transfer gap (down), named arguments via
+macros versus a compiler built-in (sideways), `comptime T: type` versus `<>`
+(sideways, one mechanism kept).
+
+**Acceptance:** A short decision rule or checklist that classifies each
+existing instance above correctly, tested on at least three further cases from
+the 58 accepted concepts, plus an explicit statement of when the rule does not
+decide.
