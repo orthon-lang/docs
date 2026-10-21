@@ -1,6 +1,6 @@
 # EDR-097: Contracts Amendment — Result Named in the Signature, `old` Deferred
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-10-21
 
@@ -8,15 +8,15 @@
 
 **Scope:** Module
 
-**Human Sign-off:** Reviewed-by: — · Date: — · Verdict: pending
+**Human Sign-off:** Reviewed-by: mniedre · Date: 2026-10-21 · Verdict: LOCKED
 
 **Amends:** [EDR-056](./EDR-056-contracts.md) — the accepted concept specification [`what/concepts/CONTRACTS.md`](../../../what/concepts/CONTRACTS.md) (Model section: the `result` and `old` bullets, the evaluation section, the desugaring, and the examples).
 
-> **Draft.** Not accepted until the Human Sign-off above is populated by the
-> author. Agents and GSD flows must not self-certify that field
+> **Accepted 2026-10-21.** Signed off by the author (mniedre). The sign-off was
+> recorded from the author's explicit statement in chat on 2026-10-21 and was not
+> self-certified by an agent
 > ([`DECISION_PROCESS.md`](../../process/DECISION_PROCESS.md): no EDR without
-> human sign-off). Not yet registered in [`INDEX.md`](../INDEX.md); registration
-> happens after sign-off.
+> human sign-off). The record is registered in [`INDEX.md`](../INDEX.md).
 
 ---
 
@@ -176,8 +176,8 @@ fun g(x: Int) -> r: Int
    Questions fields per the Open Questions Tracking format.
 3. [`what/GLOSSARY.md`](../../../what/GLOSSARY.md): the Contract entry example
    uses the named result.
-4. [`INDEX.md`](../INDEX.md) registers EDR-097 with "Amends EDR-056" after
-   sign-off; [`DECISION_LOG.md`](../../gates/DECISION_LOG.md) receives an entry
+4. [`INDEX.md`](../INDEX.md) registers EDR-097 with "Amends EDR-056";
+   [`DECISION_LOG.md`](../../gates/DECISION_LOG.md) receives an entry
    with the reasoning of the affected gates.
 5. Check: no accepted document describes an implicit `result` or an available
    `old` (a search of `what/` for "implicit variable" and for `old(` finds only
@@ -219,10 +219,12 @@ external imposition of rules are recorded as deferred.
 Prose and a short table, per the Post-Acceptance Gaps (Type B) rule that only
 the affected gates are re-run
 ([`CONCEPT_PIPELINE.md`](../../CONCEPT_PIPELINE.md) § 10). The Decision Pipeline
-is not re-run for an accepted concept. The set below is proposed; the author
-confirms it at sign-off. The verdicts come from the run of 2026-10-21 made by
-the drafting agent (analysis only, no LLM sampling); the author confirms or
-overrides them at sign-off.
+is not re-run for an accepted concept. The set below was proposed; the author
+confirmed it at sign-off. The verdicts come from the run of 2026-10-21 made by
+the drafting agent (analysis only, no LLM sampling); the author confirmed or
+overrode them at sign-off. The author confirmed the gate selection and the
+verdicts at sign-off on 2026-10-21, and the gate flags remain recorded as they
+stand (R7, the measurement, is deferred).
 
 | Gate | Method | Verdict | Summary |
 |------|--------|---------|---------|
@@ -235,7 +237,6 @@ withdrawn and deferred), `ARCHITECTURAL_INTEGRITY_GATE` and
 `IMPLEMENTATION_INDEPENDENCE_GATE` (the change stays inside the contract
 signature and uses the existing name-resolution rules), and
 `LONG_TERM_MAINTAINABILITY_GATE` (covered by the traceable deferral record).
-Confirm or change this selection at sign-off.
 
 #### Run of 2026-10-21
 
@@ -337,6 +338,6 @@ sign-off, see Compliance item 8):
 
 ---
 
-> **Human Sign-off:** `Reviewed-by: — · Date: — · Verdict: pending`
-> Required before this EDR may be accepted and registered. Agents and GSD flows
-> must not self-certify this field.
+> **Human Sign-off:** `Reviewed-by: mniedre · Date: 2026-10-21 · Verdict: LOCKED`
+> Recorded from the author's explicit statement in chat on 2026-10-21; the field
+> was not self-certified by an agent or a GSD flow.
