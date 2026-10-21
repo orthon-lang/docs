@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-20T18:04:11.601Z"
+last_updated: "2026-10-21T08:41:14.174Z"
 last_activity: 2026-10-18
 last_activity_desc: "Completed quick task 261018-i9n: remove undefined ≈ from spec"
-state_head: 04c02cb3337e00cd208fda404990a68b475a83ea
+state_head: 2b4078cfe4ca69ae9d275ba32c3930002439f3d7
 progress:
   total_phases: 15
   completed_phases: 4
@@ -140,6 +140,7 @@ Recent decisions affecting current work:
 | 32 | Defer contracts through generics and function values to v0.2; narrow F2 condition | 2026-10-20 | f68532a | — |
 | 33 | Mark lambdas and related questions in CONFORMANCE_SYNTAX as deferred to v0.2 | 2026-10-20 | 413b855 | — |
 | 34 | Drop lambdas from the conformance row of the syntax queue | 2026-10-20 | 04c02cb | — |
+| 35 | Draft EDR-097 (Proposed): contracts result named in signature, old deferred | 2026-10-21 | 2b4078c | — |
 
 ### Roadmap Evolution
 
