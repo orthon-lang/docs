@@ -86,6 +86,8 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 - [2026-10-18] [general] Normalize lambda syntax: replace pipe-style examples with fn — [todo file](.planning/todos/pending/2026-10-18-normalize-lambda-syntax-replace-pipe-style-examples-with-fn.md)
+- [2026-10-21] [planning] Add complexity-signal escalation rule to the grading Process EDR — [todo file](.planning/todos/pending/2026-10-21-complexity-signal-rule-in-grading-process-edr.md)
+- [2026-10-21] [general] Resolve the naming of method declaration kinds: new vs trans and into — [todo file](.planning/todos/pending/2026-10-21-resolve-the-naming-of-method-declaration-kinds-new-vs-trans.md)
 - [unknown] [general] Apply the comptime phase-marker decision (bake at call site) — [todo file](.planning/todos/pending/apply-comptime-bake-decision.md)
 - [unknown] [general] Draft Process EDR - Evidence Survey (Step 2a) in Concept Design Review — [todo file](.planning/todos/pending/draft-evidence-survey-process-edr.md)
 - [unknown] [general] Evidence backfill for accepted EDRs (separate phase) — [todo file](.planning/todos/pending/evidence-backfill-accepted-edrs.md)
