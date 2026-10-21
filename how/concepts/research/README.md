@@ -88,6 +88,14 @@ proposals:
 > copy-on-write, and the operator-versus-entry-binding options. The accepted
 > `what/concepts/CONTRACTS.md` still describes `old` and is not amended by this
 > deferral.
+>
+> **Note (2026-10-21):** `ERROR_REPRESENTATION_UNIFICATION.md` added to
+> `essential/` — hypothesis that the error union `!T` is replaced by
+> `Result<T, E>` where `E` may be a union of types and may be inferred, which
+> also removes one of the several meanings of the symbol `!`. Builds on the
+> union error types that `ERROR_HANDLING.md` already admits; would amend
+> EDR-023 and EDR-020. Notation questions are coupled to the `how/syntax/`
+> decision queue.
 
 ## Adding Research
 

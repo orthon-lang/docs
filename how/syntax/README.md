@@ -122,6 +122,7 @@ agents/GSD flows must not self-certify it.
 | Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) | Pending |
 | Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) | Pending |
 | Contract keyword (`contract` vs `trait`) and name of multi-instance contracts (the conformance word moved to [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md)) | `../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md` (semantics hypothesis; syntax open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-18) | Pending |
+| Error type notation: `!T` vs `Result<T>` with an inferred `E`, tags as types, the top error type, and the other meanings of `!` (forced unwrap, negative bounds) | `../concepts/research/essential/ERROR_REPRESENTATION_UNIFICATION.md` (semantics hypothesis; notation open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-21) | Pending |
 
 ### Resolved (accepted — record in `what/syntax/`)
 
