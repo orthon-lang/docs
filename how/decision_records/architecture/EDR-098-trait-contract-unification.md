@@ -274,6 +274,35 @@ contract Root(x: Float) -> result: Float        // (24) short form: matched by c
 fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive describes a member `call(self) -> Bool`
 ```
 
+11. **Clarifications from the simplicity and architecture resolutions R5–R8
+    (2026-10-22; proposed text, awaiting sign-off).**
+    - **Level 2 pattern and why the sugar is kept (R5).** Function-level
+      conformance is a Level 2 Language Pattern: `pack{captures}` + `function(call)`
+      + conformance. In today's language the same result is a hand-written `struct`
+      with `impl Callable` and a conformance statement, the shape of EDR-080
+      (alternative A3, which stays the fallback if F2 is rejected). The sugar is
+      kept because A3 needs, for every implementation of a specification, a
+      nameable wrapper type, its own `impl` block and a construction of the value;
+      a specification with ten implementations costs ten wrappers. The sugar
+      removes the wrapper and leaves the semantics identical.
+    - **Separately reviewable rule (R6).** The `invariant` check rule of item 4
+      (after creation and after each `proc` exit; not for `fun` or `new`;
+      re-entry rule) amends CONTRACTS only and no other item of this record depends
+      on it. It is recorded as its own entry in the Decision History of the merged
+      concept so that it can be reviewed apart. This EDR does not split it; the
+      author may move it into a separate EDR at sign-off.
+    - **Deferrals and `structural` (R7).** The deferrals of item 7 are kept in a
+      register with the reason and the trigger for reopening each:
+      [`CONTRACT_DEFERRALS_V02.md`](../../concepts/research/deferrable/CONTRACT_DEFERRALS_V02.md).
+      The rule that `structural` contracts carry signatures only stays in item 5
+      (decision 21), with the EDR-044 clarification of item 6.
+    - **Interactions (R8).** The per-concept interactions of the unified construct
+      are drafted in
+      [`notes/trait-contract-unification-interactions.md`](../../../notes/trait-contract-unification-interactions.md)
+      as input to the Cross-Cutting Review (Stage 11, Phase 6). The formal
+      pair-wise matrix in `what/CROSS_CUTTING.md` is still to be made; rows marked
+      undefined there are examined before final acceptance.
+
 ### Consequences
 
 - **Positive:**
@@ -323,7 +352,8 @@ Checks and follow-up work, none of which is done by this record:
 4. **Gate validation** (see below): all seven gates were run on 2026-10-22 and
    recorded in [`DECISION_LOG.md`](../../gates/DECISION_LOG.md) (one Pass, six
    Flags, no Fail). The resolutions R1–R15 are proposed and await the author's
-   decision; the Flags are to be resolved before acceptance.
+   decision; R1–R8 are applied as proposed text; the Flags are to be resolved
+   before acceptance.
 5. **LLM Generability measurement protocol**: a fixed task set over the contract
    forms (the gate's own 90 percent threshold), recording failures from habitual
    `trait` / `impl`; deferred until after sign-off, as for EDR-097 (R7).
@@ -419,17 +449,17 @@ precondition is met in part (R8).
 |------|--------|---------|---------|
 | `USER_VALUE_GATE` | Working Backwards | **Pass** | The story is stated in user terms and maps to a classical problem; the payoff of the function-level part in v0.1 is narrower than the full vision (observation, not a flag) |
 | `LOGICAL_CONSISTENCY_GATE` | Socratic Method | **Flag** | The core rules hold; four resolvable gaps (R1–R4): the umbrella use of "contract" against the current glossary, F2 read literally is circular, the matching rule depends on the subject, associated types and overloads on `obeys` are unexamined. R1–R4 applied as proposed text on 2026-10-22 |
-| `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | **Flag** | Fewer mechanisms than the alternatives, but the function-level part is expressible by composition (it is a Level 2 pattern by design), and the record bundles a change to `invariant` checking (R5, R6) |
-| `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8) |
+| `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | **Flag** | Fewer mechanisms than the alternatives, but the function-level part is expressible by composition (it is a Level 2 pattern by design), and the record bundles a change to `invariant` checking (R5, R6). R5 and R6 applied as proposed text on 2026-10-22 |
+| `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8). R7 and R8 applied as a deferrals register and an interactions draft on 2026-10-22; the formal matrix is Phase 6 work |
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10) |
 | `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | **Flag** | Evolution path and reversibility are documented; minor conceptual debt (F2, two forms) and no verified precedent for the unification (R11, R12) |
 | `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15) |
 
 **Overall.** No Fail: one Pass, six Flags. Under the Gate Flow a Flag may
 proceed but must be resolved before the final gate record. The root causes and the
-proposed resolutions R1–R15 are below; R1–R4 were applied on 2026-10-22 as
-proposed text (Decision item 10 and the proposed glossary entry), R5–R15 are not
-applied.
+proposed resolutions R1–R15 are below; R1–R8 were applied on 2026-10-22 as
+proposed text (Decision items 10 and 11, the proposed glossary entry, the register
+of deferrals and the interactions draft), R9–R15 are not applied.
 
 #### Run of 2026-10-22
 
@@ -622,14 +652,14 @@ spelling and the kind names.
 
 | # | Proposed resolution | Closes |
 |---|---------------------|--------|
-| R1 | Define "contract" as the umbrella term in `GLOSSARY.md`, keeping Trait and Function Contract as kinds, and say so in the merged concept (Compliance item 3) | Logical Consistency: terms  (applied 2026-10-22, proposed) |
-| R2 | State the base case of F2: the callable member is the `function` primitive of a type, not a free-function declaration; the sugar applies only to free declarations | Logical Consistency: paradox  (applied 2026-10-22, proposed) |
-| R3 | State the matching rule by subject: for a type, members match by name and signature; for a function, the contract must have exactly one callable member and it matches by call signature. Decide whether a single member with another name than `call` is an error with a hint (recommended) | Logical Consistency: determinism  (applied 2026-10-22, proposed) |
-| R4 | State that `obeys` on a function binds that specific declaration (each overload separately) and that a callable member has no associated types in v0.1; Open Question 5 stays for types | Logical Consistency: composition  (applied 2026-10-22, proposed) |
-| R5 | Record in the merged concept that function-level conformance is a Level 2 pattern over `struct` + `Callable` + conformance (A3 as the fallback) and why the sugar is kept: no wrapper type per implementation | Simplicity: composition |
-| R6 | Keep the `invariant` check rule (decision 18) as a separate item in the Decision History of the merged concept so it can be reviewed apart; the author may split it into its own EDR | Simplicity: single responsibility |
-| R7 | Keep the v0.2 deferrals of item 7 in the roadmap backlog, and keep decision 21 with the EDR-044 clarification | Architectural: orthogonality, privilege |
-| R8 | Make the pair-wise interaction matrix for the merged concept in the Cross-Cutting Review (Stage 11) before final acceptance | Architectural: precondition |
+| R1 | Define "contract" as the umbrella term in `GLOSSARY.md`, keeping Trait and Function Contract as kinds, and say so in the merged concept (Compliance item 3) | Logical Consistency: terms (applied 2026-10-22, proposed) |
+| R2 | State the base case of F2: the callable member is the `function` primitive of a type, not a free-function declaration; the sugar applies only to free declarations | Logical Consistency: paradox (applied 2026-10-22, proposed) |
+| R3 | State the matching rule by subject: for a type, members match by name and signature; for a function, the contract must have exactly one callable member and it matches by call signature. Decide whether a single member with another name than `call` is an error with a hint (recommended) | Logical Consistency: determinism (applied 2026-10-22, proposed) |
+| R4 | State that `obeys` on a function binds that specific declaration (each overload separately) and that a callable member has no associated types in v0.1; Open Question 5 stays for types | Logical Consistency: composition (applied 2026-10-22, proposed) |
+| R5 | Record in the merged concept that function-level conformance is a Level 2 pattern over `struct` + `Callable` + conformance (A3 as the fallback) and why the sugar is kept: no wrapper type per implementation | Simplicity: composition (applied 2026-10-22, proposed) |
+| R6 | Keep the `invariant` check rule (decision 18) as a separate item in the Decision History of the merged concept so it can be reviewed apart; the author may split it into its own EDR | Simplicity: single responsibility (applied 2026-10-22, proposed) |
+| R7 | Keep the v0.2 deferrals of item 7 in the roadmap backlog, and keep decision 21 with the EDR-044 clarification | Architectural: orthogonality, privilege (applied 2026-10-22, proposed; the roadmap has no v0.2 backlog, so the register is `deferrable/CONTRACT_DEFERRALS_V02.md`) |
+| R8 | Make the pair-wise interaction matrix for the merged concept in the Cross-Cutting Review (Stage 11) before final acceptance | Architectural: precondition (applied 2026-10-22, proposed as a draft in `notes/`; the formal matrix is Phase 6 work) |
 | R9 | Qualify decision 22: termination on a violation is defined when the check is enabled by the Contract Enforcement Policy; under elision a violated contract is an undetected program error (as in EDR-056) | Implementation Independence: semantics |
 | R10 | Add to the strategy documents a note on contracts: which strategies enable checks by default and the minimal diagnostic payload for the embedded strategy (code and location) | Implementation Independence: strategy coverage |
 | R11 | Verify the cited precedents from primary sources (Eiffel, SPARK, Dafny) and record the surfacing plan for F2 in v0.2 | Maintainability: precedent, debt |

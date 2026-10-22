@@ -96,6 +96,14 @@ proposals:
 > union error types that `ERROR_HANDLING.md` already admits; would amend
 > EDR-023 and EDR-020. Notation questions are coupled to the `how/syntax/`
 > decision queue.
+>
+> **Note (2026-10-22):** `CONTRACT_DEFERRALS_V02.md` added to `deferrable/` —
+> register of the items that [EDR-098](../../decision_records/architecture/EDR-098-trait-contract-unification.md)
+> (Proposed) and `TRAIT_CONTRACT_UNIFICATION.md` defer out of v0.1: contracts
+> through generics and function values, `obeys` on lambdas, multi-instance
+> contracts, external imposition of rules, and a conditions-only contract. Each
+> item has its reason and the trigger for reopening it; `old` stays in
+> `CONTRACT_OLD_STATE.md`.
 
 ## Adding Research
 
