@@ -6182,3 +6182,77 @@ Recorded in EDR-096 as open, not decided: DEF-a (whether variadic functions, cal
 **Overall.** No Fail. The flags are resolved by R1-R6. R7, the LLM-generation measurement, is deferred: it has not been run and is to be recorded before the final gate record.
 
 **Gates not applied:** `USER_VALUE_GATE` (no new capability is introduced; one is withdrawn and deferred), `ARCHITECTURAL_INTEGRITY_GATE` and `IMPLEMENTATION_INDEPENDENCE_GATE` (the change stays inside the contract signature and uses the existing name-resolution rules), `LONG_TERM_MAINTAINABILITY_GATE` (covered by the traceable deferral record).
+
+---
+
+## Entry: Trait and function contract unification (EDR-098)
+
+**Date:** 2026-10-22
+**Artifact validated:** [`TRAIT_CONTRACT_UNIFICATION.md`](../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) (hypothesis; Concept Design Review Steps 0–7, Step 7 signed off by the author on 2026-10-22). The accepted concepts `TRAITS.md` and `CONTRACTS.md` are not changed yet.
+**Decision recorded as:** [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md) (Proposed), amending [EDR-019](../decision_records/architecture/EDR-019-traits.md) and [EDR-056](../decision_records/architecture/EDR-056-contracts.md)
+**Pipeline applied:** Decision Pipeline run 2026-10-19 on the hypothesis; not re-run. All seven gates were run on 2026-10-22 by the drafting agent: analysis only, no LLM sampling.
+**Sign-off:** none under the EDR. The verdicts are proposed; the author confirms or overrides them at sign-off of EDR-098. Agents and GSD flows must not self-certify it.
+
+### Gate Validation
+
+**Gates applied:** 7 of 7 (a decision that adds, changes and removes language rules requires the full catalogue, per `DECISION_VALIDATION.md` § Gate Selection). Criterion tables and the proposed resolutions R1–R15: [EDR-098, Gate Validation](../decision_records/architecture/EDR-098-trait-contract-unification.md#gate-validation).
+
+#### 1. `USER_VALUE_GATE` — [Working Backwards](methods/WORKING_BACKWARDS_METHOD.md)
+
+**Reasoning.** The user story is stated from the programmer's side: write a rule once as a named specification, let several implementations declare that they obey it, and have the compiler report the one that does not fit. It serves the Vision statement that the language defines contracts and implementations fulfill them, maps to the classical problem of behavioral subtyping (registered in `LANGUAGE_PROBLEMS.md` on 2026-10-21), and has a concrete example (`Withdraw` with two implementations, `Sort<T>`). It cannot be a library, because conformance and the Liskov rules for conditions are compiler services. Observation, not a flag: for named functions the v0.1 payoff is the shape check, reuse, contract-derived tests and documentation, narrower than the full vision, which waits for v0.2.
+
+**Verdict: Pass.**
+
+---
+
+#### 2. `LOGICAL_CONSISTENCY_GATE` — [Socratic Method](methods/SOCRATIC_METHOD.md)
+
+**Reasoning.** Terms were defined (contract as the umbrella term, conformance, F2) and counterexamples were tried: a function obeying a contract whose single member is not named `call`, a type obeying a short-form contract, a short and a long form applied to one function, a stronger `requires` (error by the inherited rule), a conditions-only header, a `structural` contract with a condition, a condition that cannot be evaluated, and the callable member of the anonymous type, which is itself a function. The core rules hold. Four resolvable gaps were found: the umbrella use of "contract" contradicts the current glossary and `CONTRACTS.md` wording (R1); F2 read literally is circular, and the regress ends only at the `function` primitive, which the definition does not say (R2); the matching rule depends on the subject, names for a type and call signature for a function, and the case of a single member with another name is not stated (R3); associated types and the binding of `obeys` to an overload are unexamined (R4).
+
+**Verdict: Flag.**
+
+---
+
+#### 3. `CONCEPTUAL_SIMPLICITY_GATE` — [Scientific Method](methods/SCIENTIFIC_METHOD.md)
+
+**Reasoning.** The hypothesis that one construct with conformance for two kinds of subject is simpler than two mechanisms was tested by rewriting `Printable` and `Withdraw` in the unified form: the signature match, Liskov, coherence and orphan rules are stated once, and the third mechanism never appears. No keyword is added if `obeys` replaces `impl` and `contract` replaces `trait`; the concept is learnable in isolation. Two flags remain: function-level conformance is expressible today by a hand-written struct with `impl Callable` (alternative A3), so it is a Level 2 pattern justified only by the wrapper type per implementation that A3 needs (R5); and the record bundles a change to `invariant` checking and the violation class, which are separable from the unification (R6).
+
+**Verdict: Flag.**
+
+---
+
+#### 4. `ARCHITECTURAL_INTEGRITY_GATE` — [Logical Analysis](methods/LOGICAL_ANALYSIS_METHOD.md)
+
+**Reasoning.** Premises: a Language Layer with Level 0 to Level 2, enforcement and dispatch as Policies. Deduction: type-level conformance keeps its level; function-level conformance is a Level 2 pattern (`pack` + `function` + conformance) with no new primitive, and no policy moves; no contradiction with `ARCHITECTURE.md`. Flags: `structural` contracts cannot carry conditions, one deliberate incompatibility (decision 21), and named functions are privileged over lambdas until v0.2 (R7); two accepted concepts, TRAITS and CONTRACTS, are modified, which is the purpose of an amending EDR and is recorded as the reason; and the pair-wise interaction matrix of the Cross-Cutting Review (Stage 11, Phase 6) has not been made, so the gate precondition is met in part (R8).
+
+**Verdict: Flag.**
+
+---
+
+#### 5. `IMPLEMENTATION_INDEPENDENCE_GATE` — [TRIZ](methods/TRIZ_METHOD.md)
+
+**Reasoning.** The contradiction is one construct for every subject against cheap, strategy-independent dispatch and checking. It is separated by condition (static dispatch by default, `dyn` opt-in and visible) and by policy (shape checked at compile time, condition checks chosen by the Contract Enforcement Policy). Conformance and conditions are strategy-agnostic and cost nothing at run time under static dispatch. Flags: decision 22 states that termination on a violation is defined, which holds only when the check is enabled and not under elision (R9); and no strategy document mentions contracts, while the diagnostic payload may need formatting or allocation an embedded strategy cannot afford by default (R10).
+
+**Verdict: Flag.**
+
+---
+
+#### 6. `LONG_TERM_MAINTAINABILITY_GATE` — [Einstein's Method](methods/EINSTEIN_METHOD.md)
+
+**Reasoning.** In one sentence: a contract is a named specification, and whatever obeys it keeps its promises. Removing one thing is possible: the F2 text, the short form, or the `invariant` change can be dropped without breaking the rest. The evolution path is documented (the v0.2 list in the Decision) and the decision is reversible before v1.0. Flags: minor conceptual debt with mitigation (F2 as a hidden definition, two forms of a contract, differing names of method kinds), see R11; the compatibility impact depends on the words decision, about 52 files if `contract` replaces `trait` and minimal if `trait` is kept (R12); and there is no verified production precedent for one construct covering type-level and function-level conformance, while contracts on interface members have precedent in Eiffel, SPARK and Dafny, not verified from primary sources (R11).
+
+**Verdict: Flag.**
+
+---
+
+#### 7. `LLM_GENERABILITY_GATE` — [Empirical Analysis](methods/EMPIRICAL_ANALYSIS_METHOD.md)
+
+**Reasoning.** The form is mostly clean and diagnosable, but the share of correct generations is not measured. Anticipated systematic errors: habitual `trait` and `impl ... for`, `require` against `requires` (one letter apart in the same position), the receiver spelling, and the conditions-only header written without parentheses. The grammar fragment round-trips except for the open position of the conformance statement (P1, P2, P3), the receiver spelling and the kind names (R14); the short and long forms of a contract are one meaning in two spellings, and a conformance under P2 could be written in two places; the diagnostic messages and hints for the conditions-only header, `self` in the short form and a member-name mismatch are not specified (R15). The measurement is not run (R13).
+
+**Verdict: Flag.**
+
+---
+
+**Overall.** No Fail: one Pass, six Flags. The flags have proposed resolutions R1–R15 in EDR-098; they await the author's decision and must be resolved before the final gate record. R13, the LLM-generation measurement, is not run.
+
+**Gates not applied:** none.
