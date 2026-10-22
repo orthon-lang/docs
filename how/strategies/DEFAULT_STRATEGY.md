@@ -46,6 +46,12 @@ It targets general-purpose workloads where no single constraint
   for parallel task execution, balancing throughput with predictable
   resource usage.
 
+## Contracts (proposed by EDR-098)
+
+> Proposed by [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md); not accepted. It adds no new default: the rule of [`CONTRACTS.md`](../../what/concepts/CONTRACTS.md) applies unchanged.
+
+Contracts are proved at compile time where possible; the rest are runtime assertions in debug builds; release builds elide contracts unless `--enforce-contracts` is passed. When a check runs, the diagnostic is the full structural report (contract, clause, values, guilty side).
+
 ## See Also
 
 - [`IMPLEMENTATION_STRATEGIES.md`](./IMPLEMENTATION_STRATEGIES.md)

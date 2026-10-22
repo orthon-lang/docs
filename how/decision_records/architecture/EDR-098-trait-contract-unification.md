@@ -128,11 +128,15 @@ the **Review decisions** of the source hypothesis.
    - **Structural (21).** `structural` applies only to types and carries member
      signatures only, without conditions; conditions are applied independently by
      a separate contract. Conformance of a function is always explicit.
-   - **Violation (22).** A violated condition is a `PROGRAM_ERROR` with a
-     structural diagnostic (contract, clause, values, guilty side: `requires` the
-     caller, `ensures` the implementation); termination is defined and there is no
-     recovery in code. A condition that cannot be evaluated is a `PROGRAM_ERROR`
-     with a separate code and the fault lies with the contract author. Conditions
+   - **Violation (22).** When a check is enabled by the Contract Enforcement
+     Policy, a violated condition is a `PROGRAM_ERROR` with a structural
+     diagnostic (contract, clause, values, guilty side: `requires` the caller,
+     `ensures` the implementation); termination is defined and there is no
+     recovery in code. Under elision (release builds without `--enforce-contracts`)
+     a violated contract is not detected and is an undetected program error, as in
+     EDR-056 (R9). A condition that cannot be evaluated, when its check runs, is a
+     `PROGRAM_ERROR` with a separate code and the fault lies with the contract
+     author. Conditions
      are evaluated in the order written and the first violated one is reported.
      Contract-derived tests count a violation as a failed case.
    - **Generics (23).** `obeys` (provisional) on a generic function is allowed
@@ -303,6 +307,27 @@ fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive descr
       pair-wise matrix in `what/CROSS_CUTTING.md` is still to be made; rows marked
       undefined there are examined before final acceptance.
 
+12. **Clarifications from the implementation-independence and maintainability
+    resolutions R9–R12 (2026-10-22; proposed text, awaiting sign-off).**
+    - **Violation under elision (R9).** Item 5, "Violation (22)", is qualified in
+      place: termination is defined when the check is enabled; under elision a
+      violated contract is an undetected program error.
+    - **Strategies (R10).** The strategy documents carry a note on contracts,
+      marked as proposed: no strategy gets a new default, the rule of `CONTRACTS.md`
+      applies to all, and the embedded strategy uses a minimal diagnostic payload
+      (diagnostic code and source location). See
+      [`IMPLEMENTATION_STRATEGIES.md`](../../strategies/IMPLEMENTATION_STRATEGIES.md)
+      § Contracts Across Strategies.
+    - **Precedents and F2 (R11).** The cited precedents were checked against
+      primary documentation; the result is in Gate Validation, "Verification of
+      precedents". The plan for surfacing F2 in v0.2 is in
+      [`CONTRACT_DEFERRALS_V02.md`](../../concepts/research/deferrable/CONTRACT_DEFERRALS_V02.md).
+    - **Words and rename cascade (R12).** The choice between `contract` and
+      `trait` and between `obeys` and `impl ... for` is routed through the syntax
+      queue ([`how/syntax/README.md`](../../syntax/README.md): the conformance row
+      and the contract-keyword row). The cascade is sized for both options in Gate
+      Validation, "Rename cascade sizing".
+
 ### Consequences
 
 - **Positive:**
@@ -317,9 +342,11 @@ fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive descr
   - Violations, failing conditions, member kinds, result types, generics and
     `structural` all have a stated rule.
 - **Negative:**
-  - A rename cascade over accepted documents: about 52 files reference EDR-019 or
-    `TRAITS.md` and 35 `impl ... for` lines in 17 files (counts as of 2026-10-18,
-    sized for the largest option); smaller if `trait` is kept.
+  - A rename cascade over documents: 56 files under `what/` and `how/` reference
+    EDR-019 or `TRAITS.md`, 41 `impl ... for` lines in 20 files and 48 `trait`
+    declaration lines in 24 files appear in code blocks (counts as of 2026-10-22,
+    including the unification's own documents); smaller if `trait` is kept. See
+    Gate Validation, "Rename cascade sizing".
   - Users of `trait` and `impl` meet a rename; "a function has a type" is new,
     although hidden in v0.1 (POLA caution).
   - The short and the long form of a contract are two spellings of one thing
@@ -451,15 +478,16 @@ precondition is met in part (R8).
 | `LOGICAL_CONSISTENCY_GATE` | Socratic Method | **Flag** | The core rules hold; four resolvable gaps (R1–R4): the umbrella use of "contract" against the current glossary, F2 read literally is circular, the matching rule depends on the subject, associated types and overloads on `obeys` are unexamined. R1–R4 applied as proposed text on 2026-10-22 |
 | `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | **Flag** | Fewer mechanisms than the alternatives, but the function-level part is expressible by composition (it is a Level 2 pattern by design), and the record bundles a change to `invariant` checking (R5, R6). R5 and R6 applied as proposed text on 2026-10-22 |
 | `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8). R7 and R8 applied as a deferrals register and an interactions draft on 2026-10-22; the formal matrix is Phase 6 work |
-| `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10) |
-| `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | **Flag** | Evolution path and reversibility are documented; minor conceptual debt (F2, two forms) and no verified precedent for the unification (R11, R12) |
+| `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10). R9 and R10 applied as proposed text on 2026-10-22 |
+| `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | **Flag** | Evolution path and reversibility are documented; minor conceptual debt (F2, two forms) and no verified precedent for the unification (R11, R12). R11 and R12 applied on 2026-10-22: precedents checked, cascade sized |
 | `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15) |
 
 **Overall.** No Fail: one Pass, six Flags. Under the Gate Flow a Flag may
 proceed but must be resolved before the final gate record. The root causes and the
-proposed resolutions R1–R15 are below; R1–R8 were applied on 2026-10-22 as
-proposed text (Decision items 10 and 11, the proposed glossary entry, the register
-of deferrals and the interactions draft), R9–R15 are not applied.
+proposed resolutions R1–R15 are below; R1–R12 were applied on 2026-10-22 as
+proposed text (Decision items 10 to 12, the proposed glossary entry, the register
+of deferrals, the interactions draft, the strategy notes and the precedent
+verification), R13–R15 are not applied.
 
 #### Run of 2026-10-22
 
@@ -583,7 +611,7 @@ verified); Dafny's abstract modules.
 | Criterion | Score | Reasoning |
 |-----------|-------|-----------|
 | Semantic definition is strategy-agnostic | Flag | Conformance and conditions are strategy-independent. Decision 22 says termination on a violation is defined, but this holds only when the check is enabled; under elision a violated contract goes undetected, as in EDR-056 (R9) |
-| All strategies can support it | Flag | No strategy document mentions contracts (a search of `DEFAULT`, `EMBEDDED`, `HIGH_PERFORMANCE` and `LLM` strategies finds no occurrence). The diagnostic payload (contract, clause, values, guilty side) may need formatting or allocation that an embedded strategy cannot afford by default; the payload per strategy is unspecified (R10) |
+| All strategies can support it | Flag | At the time of the run no strategy document mentioned contracts (a search of `DEFAULT`, `EMBEDDED`, `HIGH_PERFORMANCE` and `LLM` strategies finds no occurrence). The diagnostic payload (contract, clause, values, guilty side) may need formatting or allocation that an embedded strategy cannot afford by default; the payload per strategy is unspecified (R10) |
 | Performance is a strategy concern | Pass | The cost of checks is a Contract Enforcement Policy matter; the invariant check after each `proc` is part of the same policy; conformance has no run-time cost under static dispatch |
 | Consistent with `IMPLEMENTATION_STRATEGIES.md` | Pass | No policy is moved; the Policy Footprint section of the hypothesis lists Contract Enforcement and Dispatch |
 
@@ -607,7 +635,7 @@ of the statement are not, which is why they are left to the syntax pipeline.
 | Evolution path documented | Pass | Decision item 7 lists what returns in v0.2 (function bounds, `dyn`, lambdas, multi-instance contracts, a condition contract with its own spelling, external imposition); `old` has its own deferral record |
 | Conceptual debt assessed | Flag | Minor debt with documented mitigation: F2 is a hidden definition whose v0.1 role is decided after the syntax; the two forms of a contract are accepted as sugar; the kinds of methods are named differently in accepted and proposed documents (todo of 2026-10-21) (R11) |
 | Reversible decision | Pass | Pre-v1.0 there are no external users; the merge can be undone by splitting the concept documents; the words are not fixed |
-| Compatibility impact is bounded | Flag | The rename touches about 52 files and 35 `impl ... for` lines if A1 is chosen; minimal if A2 is chosen. Bounded by the words decision, which is open (R12) |
+| Compatibility impact is bounded | Flag | The rename touches about 52 files and 35 `impl ... for` lines if A1 is chosen (fresh counts of 2026-10-22: 56 files and 41 lines, see the sizing below); minimal if A2 is chosen. Bounded by the words decision, which is open (R12) |
 | Precedent in other languages | Flag | Contracts on interface members have production precedent (Eiffel, SPARK, Dafny; not verified from primary sources). One construct for type-level and function-level conformance has no verified precedent (R11) |
 
 *Fail conditions checked.* The F2 definition could constrain the future
@@ -660,16 +688,59 @@ spelling and the kind names.
 | R6 | Keep the `invariant` check rule (decision 18) as a separate item in the Decision History of the merged concept so it can be reviewed apart; the author may split it into its own EDR | Simplicity: single responsibility (applied 2026-10-22, proposed) |
 | R7 | Keep the v0.2 deferrals of item 7 in the roadmap backlog, and keep decision 21 with the EDR-044 clarification | Architectural: orthogonality, privilege (applied 2026-10-22, proposed; the roadmap has no v0.2 backlog, so the register is `deferrable/CONTRACT_DEFERRALS_V02.md`) |
 | R8 | Make the pair-wise interaction matrix for the merged concept in the Cross-Cutting Review (Stage 11) before final acceptance | Architectural: precondition (applied 2026-10-22, proposed as a draft in `notes/`; the formal matrix is Phase 6 work) |
-| R9 | Qualify decision 22: termination on a violation is defined when the check is enabled by the Contract Enforcement Policy; under elision a violated contract is an undetected program error (as in EDR-056) | Implementation Independence: semantics |
-| R10 | Add to the strategy documents a note on contracts: which strategies enable checks by default and the minimal diagnostic payload for the embedded strategy (code and location) | Implementation Independence: strategy coverage |
-| R11 | Verify the cited precedents from primary sources (Eiffel, SPARK, Dafny) and record the surfacing plan for F2 in v0.2 | Maintainability: precedent, debt |
-| R12 | Decide the words (A1 or A2) in the syntax pipeline; the rename cascade is sized for the chosen option | Maintainability: compatibility |
+| R9 | Qualify decision 22: termination on a violation is defined when the check is enabled by the Contract Enforcement Policy; under elision a violated contract is an undetected program error (as in EDR-056) | Implementation Independence: semantics  (applied 2026-10-22, proposed; Decision item 5 qualified) |
+| R10 | Add to the strategy documents a note on contracts: which strategies enable checks by default and the minimal diagnostic payload for the embedded strategy (code and location) | Implementation Independence: strategy coverage  (applied 2026-10-22, proposed; notes in the strategy documents) |
+| R11 | Verify the cited precedents from primary sources (Eiffel, SPARK, Dafny) and record the surfacing plan for F2 in v0.2 | Maintainability: precedent, debt  (applied 2026-10-22; verification below, partly verified; F2 plan in the deferrals register) |
+| R12 | Decide the words (A1 or A2) in the syntax pipeline; the rename cascade is sized for the chosen option | Maintainability: compatibility  (routing confirmed 2026-10-22; cascade sized below; the words stay with the syntax pipeline) |
 | R13 | Before the final gate record, run a measurement: a fixed set of generation tasks over the contract forms, success threshold 90 percent, recording failures from habitual `trait` / `impl`, `require` / `requires` and the receiver spelling (Compliance item 5) | LLM: predictable generation |
 | R14 | Fix the position of the conformance statement (P1, P2, P3) and the receiver spelling in the syntax pipeline before the grammar is final | LLM: schema, hallucination surface |
 | R15 | Specify the diagnostics with hints for the conditions-only header, `self` in the short form and a member-name mismatch | LLM: self-correctable |
 
 R13 is not run and is not part of this record. The Decision Journal table in
 `DECISION_VALIDATION.md` is not updated, as for EDR-097.
+
+#### Verification of precedents (R11, 2026-10-22)
+
+Checked against primary documentation where it could be reached. "Verified" means
+the statement was found in the cited primary source on the date above.
+
+| Claim | Source | Result |
+|-------|--------|--------|
+| Eiffel: a redeclared routine combines its precondition with the original by "or" (`require else`, can only weaken) and its postcondition by "and" (`ensure then`, can only strengthen); invariants accumulate through inheritance | Eiffel documentation, "ET: Inheritance", section "Inheritance and contracts" | Verified from the language's own documentation. The ECMA-367 standard text and Meyer's *Object-Oriented Software Construction* were not read |
+| That a precondition of a public routine may mention only names visible to callers (Eiffel) | Not found | Not verified |
+| SPARK: an overriding operation's class-wide precondition must be weaker and its class-wide postcondition stronger; GNATprove checks Liskov substitution on every overriding operation, including operations inherited from an interface | AdaCore SPARK User's Guide, section "Object Oriented Programming and Liskov Substitution Principle" | Verified |
+| Dafny: traits may declare methods with `requires` and `ensures`; only body-less methods may be redeclared in an extending class, and the class gives its own specification | Dafny Quick Reference; Ahmadi, "Automatic Verification of Dafny Programs with Traits" (Microsoft Research) | Partly verified. The reference manual could not be fetched and the direction of the override rule (weaker or stronger) was not confirmed |
+| Rust: every function item has its own zero-sized type, distinct for different functions and for the same function with different generics; function items implement `Copy`, `Clone`, `Send`, `Sync`, and `Fn`, `FnMut`, `FnOnce` except for `unsafe`, `target_feature` or a non-Rust ABI; there is a coercion from a function item to a function pointer | The Rust Reference, "Function item types" | Verified |
+| Liskov and Wing, "A behavioral notion of subtyping", ACM TOPLAS 16(6), 1994, pp. 1811–1841 (DOI 10.1145/197320.197383) | Bibliographic data from several indexes; a copy of the paper is hosted by Columbia University | Citation verified; the paper was not read in full |
+| Meyer, "Applying Design by Contract", IEEE Computer 25(10), 1992, pp. 40–51 | Bibliographic data from several lecture notes; full-text copies exist | Citation verified; the paper was not read in full |
+| One construct for type-level and function-level conformance has a production precedent | Searched; none found | **No verified precedent.** Contracts on interface members have precedent (Eiffel, SPARK, and Dafny partly); the unification across both subjects does not |
+
+The Racket, Clojure, OCL and Haskell rows of the hypothesis were not re-checked.
+The Flag of `LONG_TERM_MAINTAINABILITY_GATE` on precedent stays.
+
+#### Rename cascade sizing (R12, 2026-10-22)
+
+Counted in the `.md` files under `what/` and `how/` (code blocks only for the
+declaration and `impl` lines). The counts include the unification's own documents.
+The words are decided by the syntax pipeline; this sizing is an input.
+
+| Measure | All | Accepted spec (`what/`, `how/` outside research and records) | Research and syntax hypotheses | Decision records |
+|---------|-----|------|------|------|
+| Files referencing EDR-019 or `TRAITS.md` | 56 | 18 | 20 | 18 |
+| Files containing the word *trait* | 160 | 40 | 77 | 43 |
+| Occurrences of the word *trait* | 1836 | 723 | 683 | 430 |
+| `trait` declaration lines in code blocks | 48 in 24 files | 25 in 9 files | 21 in 14 files | 2 in 1 file |
+| `impl ... for` lines in code blocks | 41 in 20 files | 19 in 9 files | 21 in 10 files | 1 in 1 file |
+
+| Option | What changes | Size |
+|--------|--------------|------|
+| A1: `contract` replaces `trait`, `obeys` replaces `impl` | declaration lines, `impl` lines, the word in prose, the concept name | the whole table |
+| A2: `trait` is kept, `obeys` replaces `impl` | the `impl ... for` lines and the conformance wording | the `impl` row only; the word *trait* stays |
+
+Decision records are historical: a rename there is a note, not an edit. The
+routing is confirmed: the conformance word and position are the row "Conformance
+word and position" of the syntax queue, and the contract keyword is the row
+"Contract keyword (`contract` vs `trait`)" coupled by pointer.
 
 ---
 

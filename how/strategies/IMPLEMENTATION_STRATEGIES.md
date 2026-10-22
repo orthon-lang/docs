@@ -100,6 +100,19 @@ profile optimises for a different set of constraints.
 
 New profiles can be added as implementation needs arise.
 
+## Contracts Across Strategies (proposed by EDR-098)
+
+> Proposed by [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md); not accepted. No strategy gets a new default: the rule of [`CONTRACTS.md`](../../what/concepts/CONTRACTS.md) applies to all of them.
+
+Contract enforcement is a Policy matter (the Contract Enforcement Policy of `CONTRACTS.md`). The rule is the same for every strategy: proof at compile time where possible, runtime assertions in debug builds, elision in release builds unless `--enforce-contracts` is passed. What may differ by strategy is the diagnostic payload when a check runs.
+
+| Strategy | Checks by default | Diagnostic payload when a check runs |
+|----------|-------------------|--------------------------------------|
+| Default | the rule above | full structural report (contract, clause, values, guilty side) |
+| Embedded | the rule above | minimal: diagnostic code and source location |
+| High Performance | the rule above | full structural report |
+| LLM | the rule above | full structural report |
+
 ## See Also
 
 - [`ARCHITECTURE.md`](../architecture/ARCHITECTURE.md) § Implementation Strategy

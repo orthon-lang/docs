@@ -40,6 +40,12 @@ maximising resource utilisation is the primary goal.
   where idle threads steal tasks from busy threads' queues. Provides
   optimal load balancing for irregular parallel workloads.
 
+## Contracts (proposed by EDR-098)
+
+> Proposed by [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md); not accepted. It adds no new default: the rule of [`CONTRACTS.md`](../../what/concepts/CONTRACTS.md) applies unchanged.
+
+The strategy does not override the contract rule: proof at compile time where possible, runtime assertions in debug builds, elision in release builds unless `--enforce-contracts` is passed. When a check runs, the diagnostic is the full structural report (contract, clause, values, guilty side).
+
 ## See Also
 
 - [`IMPLEMENTATION_STRATEGIES.md`](./IMPLEMENTATION_STRATEGIES.md)

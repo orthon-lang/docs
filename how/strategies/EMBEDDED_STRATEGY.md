@@ -38,6 +38,12 @@ must be met, or runtime overhead must be minimised.
   thread pool, no work stealing, no concurrency primitives. Ideal
   for single-core embedded targets.
 
+## Contracts (proposed by EDR-098)
+
+> Proposed by [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md); not accepted. It adds no new default: the rule of [`CONTRACTS.md`](../../what/concepts/CONTRACTS.md) applies unchanged.
+
+The strategy does not change when contracts are checked: proof at compile time where possible, runtime assertions in debug builds, elision in release builds unless `--enforce-contracts` is passed. It changes the **diagnostic payload** when a check runs: the minimal payload is a diagnostic code (which identifies the kind of violation and the guilty side) and the source location. The clause text and the values of the names in it are not formatted or stored, because formatting and allocation are not affordable by default on this strategy.
+
 ## See Also
 
 - [`IMPLEMENTATION_STRATEGIES.md`](./IMPLEMENTATION_STRATEGIES.md)

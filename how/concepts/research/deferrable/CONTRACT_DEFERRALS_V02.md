@@ -35,6 +35,25 @@ not be decided ad hoc inside the v0.1 text.
 `old` (state at entry in postconditions) is deferred separately; see
 [`CONTRACT_OLD_STATE.md`](CONTRACT_OLD_STATE.md).
 
+## F2 surfacing plan (v0.2)
+
+In v0.1 the definition "a function declaration is sugar for a unique anonymous
+type with one callable member" (F2) stays hidden; how much of it remains in the
+v0.1 text is decided after the syntax is accepted. If D-1 or D-2 is reopened, F2
+has to be surfaced in this order:
+
+1. Decide the notation for function types (`FUNCTION_RETURNING_FUNCTION.md`).
+2. Decide the relation between the unique type of a function and the structural
+   function type: coercion, as Rust does from a function item to a function
+   pointer, or erasure through a callable bound.
+3. Decide generics: a generic function as a family of anonymous types, one per
+   instantiation, and each overload with its own type.
+4. Decide `dyn C` on function values and the cost of dispatch through a function
+   contract.
+5. Decide lambdas: the spelling of `obeys` on a lambda and the kind of the
+   callable member derived from captures (`EFFECT_FOOTPRINT.md`).
+6. Only then name the anonymous type in diagnostics and tooling.
+
 ## Triggers for reopening
 
 | Item | Reopen when |
@@ -56,3 +75,4 @@ not be decided ad hoc inside the v0.1 text.
 | Date | Event |
 |------|-------|
 | 2026-10-22 | Register created from EDR-098 (Proposed), as gate resolution R7 |
+| 2026-10-22 | F2 surfacing plan added, as gate resolution R11 |
