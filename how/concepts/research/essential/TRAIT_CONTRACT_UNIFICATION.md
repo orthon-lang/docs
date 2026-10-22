@@ -40,7 +40,7 @@ Review of this hypothesis against [`concept-design-review.md`](../../../concept-
 | 4 Principle Check | done, no violation found | [Step 4](#step-4--principle-check) |
 | 5 Examples | done | [Step 5](#step-5--examples-by-usage-context) |
 | 6 Tooling Implications | done | [Step 6](#step-6--tooling-implications) |
-| 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | pending | — |
+| 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | in progress: decisions 19–24 recorded (2026-10-22); the author's sign-off is pending | [Step 7](#step-7--convergence-check) |
 | 8 EDR (EDR-098) | pending, after Step 7 | — |
 
 ## Problem
@@ -575,6 +575,38 @@ Result: one new Tooling Requirement and three notes in existing documents.
 2. **The source of a rule's description** is the predicate name or its comment (Review decision 12). No accepted concept defines doc comments; there are only deferrable drafts ([`LITERATE_PROGRAMMING.md`](../deferrable/LITERATE_PROGRAMMING.md), [`METADATA_ANNOTATIONS.md`](../deferrable/METADATA_ANNOTATIONS.md), [`SEMANTIC_ANNOTATIONS.md`](../deferrable/SEMANTIC_ANNOTATIONS.md)). Whether comments are retained in the AST is open (Open Question 16); a rule catalog works from names alone until it is decided.
 3. **Contract-derived tests need values of parameter types to be generated.** Where that capability is defined — a trait, a compiler service, constrained types — is open (Open Question 15). It is recorded as a dependency in `ORTHON-TEST.md`.
 
+## Step 7 — Convergence Check
+
+Prepared 2026-10-22 by the drafting agent; the decisions below are the author's. The sign-off is **not** set here.
+
+| # | Check | Status | Basis |
+|---|-------|--------|-------|
+| 1 | Alternatives documented | Done | Step 2: six candidates and the Selection row |
+| 2 | Syntax reviewed | Done, with remarks | Remarks below; the words are decided by the syntax pipeline |
+| 3 | Edge cases probed | Done | Six gaps found and closed by decisions 19–24 |
+| 4 | Desugaring checked (Level 2) | Done | Step 0 formula; member kinds fixed by decision 19; the `call` expansion kept as a definition by decision 24 |
+| 5 | Author's sign-off | **Pending** | The field is empty; agents do not set it |
+| 6 | No ambiguities | Done for v0.1 semantics | Gaps D1–D6 closed; what remains is deferred explicitly (decisions 13, 15, 17) |
+
+### Remarks for the syntax pipeline
+
+1. `require` (dependencies, EDR-081) and `requires` (precondition) differ by one letter in the same tail position of a signature. Different meaning, same position: a risk for LLM generation. Recorded for [`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md).
+2. The short and the long form of a contract are two spellings of one thing (Syntax Principle 1). Accepted as explicit sugar by decision 24.
+3. The signature tail already carries `require`, bounds and `->`; `obeys` joins it unless the separate-statement position (candidate P1) is chosen.
+
+### Edge cases and the decision that closes each
+
+| Area | Case | Outcome |
+|------|------|---------|
+| Mutation | `proc` member in a contract, implementation declared `fun` | Rejected: kinds must match (decision 19) |
+| Errors | Contract promises `Float`, implementation returns an error union | Rejected: result must convert to the contract result (decision 20) |
+| Errors | Condition violated, or the condition itself fails | `PROGRAM_ERROR`, two codes, different guilty side (decision 22) |
+| Composition | `structural` satisfaction for a function | Not allowed; functions obey explicitly (decision 21) |
+| Generics | `obeys` on a generic function | Allowed with linked parameters and bounds not stronger (decision 23) |
+| Forms | Short or long form, contract without members | Both forms; markers allowed; conditions-only header is an error (decision 24) |
+| State | Invariant checking | Decision 18 |
+| `old` | `old` in a postcondition | Diagnostic of EDR-097 |
+
 ## Policy Footprint
 
 | Policy Type | Role |
@@ -615,6 +647,13 @@ Result: one new Tooling Requirement and three notes in existing documents.
 17. **Multi-instance contracts are deferred to v0.2** (decided 2026-10-21). Open Question 4 is closed; the naming questions (Open Questions 3 and 14) are not needed for v0.1.
 18. **`invariant` stays in v0.1 with a narrower check** (decided 2026-10-21; closes Open Question 10). An invariant of a type or module is checked after the value is created and after each `proc` exits. It is not checked for `fun` or `new` methods, which never mutate `self` ([`SEMANTIC_MODEL.md`](../../../../what/SEMANTIC_MODEL.md) § Mutation) and so cannot break it. Re-entry: while a `proc` runs, nested calls on the same object do not check the invariant on entry; it is checked when the outer `proc` exits. For an immutable value the rule is a constrained type (EDR-080), checked once at creation. The accepted `CONTRACTS.md` still says that invariants are checked on entry and exit of each public method; it is amended together with the unification (EDR-098).
 
+19. **Kind of a member (Step 7, D1; decided 2026-10-22).** The declaration kind of an implementing method must equal the kind of the contract member it implements. The callable member of the short form is always the reading kind (`fun`); a contract that must describe a mutating operation uses the member-list form with the kind written out. For a named function without captures the kind follows from the definition in decision 15. Effects declared with `@modifies` are not part of conformance in v0.1. The names of the kinds (`new` or `trans`, and `into`) stay open; see the todo `2026-10-21-resolve-the-naming-of-method-declaration-kinds-new-vs-trans`.
+20. **Result and parameter types (D2; decided 2026-10-22).** The result of an implementation must convert to the result of the contract member under the existing conversion rules: a narrower error set converts to a wider one, and an implementation that cannot fail is allowed. Parameters must match exactly in v0.1. An error-union result in a contract without an explicit set means any set. Variance of parameters and explicit error sets return with Open Question 1 of `ERROR_UNION.md` and with v0.2; the notation may change if [`ERROR_REPRESENTATION_UNIFICATION.md`](ERROR_REPRESENTATION_UNIFICATION.md) is accepted.
+21. **`structural` contracts (D3; decided 2026-10-22; closes Open Question 9).** A `structural` contract applies only to types and carries member signatures only, without conditions. Conditions are applied independently, as a separate contract named with `obeys`. Conformance of a function is always explicit. Consequence: the wording of EDR-044 on structural satisfaction needs a clarification that conditions are never matched structurally.
+22. **Violation and failing condition (D4; decided 2026-10-22).** (1) A violated condition is a `PROGRAM_ERROR` with a structural diagnostic: contract, clause, values of the names in it, and the guilty side (`requires`: the caller; `ensures`: the implementation). Termination is defined; there is no recovery in code. (2) A condition that cannot be evaluated (for example an out-of-range index inside `requires`) is a `PROGRAM_ERROR` with a separate code, and the fault lies with the contract author. (3) Conditions are evaluated in the order written and the first violated one is reported. (4) The class and the termination are fixed by the unifying EDR (Step 8). Tests derived from a contract count a violation as a failed case instead of terminating (`ORTHON-TEST.md`).
+23. **`obeys` on a generic function (D5; decided 2026-10-22).** Allowed when the type parameters of the contract and of the function are linked by name and the bounds of the function are not stronger than the bounds of the contract. Conformance is checked once on the generic declaration and so holds for every instantiation; tests derived from a contract choose their own instantiations. A non-generic function may obey a contract with concrete type arguments (`Sort<Int>`). Using generic functions as values (generic bounds, `dyn`, collections) stays deferred (decision 15); Open Question 7 narrows to that.
+24. **Short and long forms of a contract (D6; decided 2026-10-22).** A contract is written as a list of members (the general form). Members of a type contract are matched by name and signature. A contract with a single callable member also has a short form, `contract Name(params) -> result`, which is sugar: parentheses are mandatory, it has no receiver, its kind is always `fun`, and it is matched by call signature only, under any function name. A contract with no members (a marker such as `Send`) is allowed. A conditions-only header without parentheses (`contract Positive -> result: Int`) is an error in v0.1. A contract that attaches conditions to a position, whatever the member name, is deferred to v0.2 with its own distinct spelling; named predicates (`ensures is_positive(n)`) cover reuse in v0.1. The expansion of the short form into a single `call` member is kept as a definition that stays invisible to users; which parts of it remain in the v0.1 text is decided after the syntax is accepted (author, 2026-10-22).
+
 ## Open Questions
 
 1. **Unique type per function — kept as a definition only (Review decision 15).** The premise stays as the definition that explains `obeys` on a function. How it relates to the structural function type (coercion or erasure through a callable bound), generics, and dispatch is **deferred to v0.2** with higher-order contracts; coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. No longer a blocker for v0.1.
@@ -625,7 +664,7 @@ Result: one new Tooling Requirement and three notes in existing documents.
 6. **`old` (state at entry).** Result naming is settled (Review decisions, item 9) and `old` is deferred (item 10). The analysis and reintroduction triggers live in [`../deferrable/CONTRACT_OLD_STATE.md`](../deferrable/CONTRACT_OLD_STATE.md); nothing about `old` blocks this hypothesis.
 7. **Deferred to v0.2 (Review decision 15). Generics and overloads.** A generic function is a family of anonymous types (one per instantiation); each overload has its own type. Consequences for `obeys` on generic functions are unexamined.
 8. **Deferred to v0.2 (Review decision 15). `dyn C` on function values.** Cost and meaning of dynamic dispatch through a function contract.
-9. **`structural` contracts.** What implicit (structural) satisfaction means for a function.
+9. **Closed (Review decision 21): `structural` contracts apply only to types and carry signatures only.** Conformance of a function is always explicit; conditions are never matched structurally.
 10. **Closed (Review decision 18): `invariant` stays in v0.1 with a narrower check.** DOP treats data as immutable, so state invariants fall outside it; they remain for mutable types, checked after creation and after each `proc`, with the re-entrancy rule of decision 18.
 11. **Enforcement by position.** Strictness at module boundaries versus internally, and partial disabling of checks. Deferred to the enforcement discussion.
 12. **Deferred to v0.2 (Review decision 15). Lambda conformance.** Spelling of `obeys` on a lambda, and whether a lambda may be accepted into `dyn C` without declaring it.
@@ -638,7 +677,7 @@ Result: one new Tooling Requirement and three notes in existing documents.
 
 1. **Done:** Decision Pipeline run (2026-10-19); Concept Design Review Steps 0–5 (2026-10-21), see the progress table.
 2. **Done:** Step 6, Tooling Implications (2026-10-21): one new Tooling Requirement, `ORTHON-TEST.md`, and notes in `LANGUAGE_SERVER.md`, `ORTHON-DESCRIBE.md` and `ORTHON-PROVE.md`; see Step 6.
-3. **Step 7, Convergence Check:** syntax review ([`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md) and the word `contract`), probing of edge cases (including the invariant rules of Review decision 18) (mutation, boundary values, error paths), and the author's sign-off.
+3. **Step 7, Convergence Check:** the syntax review and the probing of edge cases are done and the resulting decisions 19–24 are recorded (2026-10-22), see [Step 7](#step-7--convergence-check). **Remaining:** the author's sign-off after reading Steps 0–7. The words (`contract`, `obeys`) and the position candidates stay in [`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md).
 4. **Step 8, EDR-098** (Architecture): carries the Step 2 tables verbatim and states its relation to EDR-019 and EDR-056. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
 5. **Validation:** all seven gates with entries in `DECISION_LOG.md`; a measurement protocol for the LLM Generability Gate.
 6. **If accepted:** the merged concept document in `what/concepts/` (8-section `_concept.md` template), registration in `CORE_CONCEPTS.md` and `INDEX.md`, the rename cascade over about 52 files as a tracked task, and the syntax pipeline for the words.
