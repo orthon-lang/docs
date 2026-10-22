@@ -693,7 +693,7 @@ Prepared 2026-10-22 by the drafting agent; the decisions below are the author's.
 
 ## Human Sign-off
 
-> **Reviewed-by:** — · **Date:** — · **Verdict:** pending
+> **Reviewed-by**: mniedre · **Date:** 22.10.2026 · **Verdict:** LOCKED
 > Required before any EDR may be filed (Concept Design Review Step 7). Agents and GSD flows must not self-certify this field.
 
 ---
