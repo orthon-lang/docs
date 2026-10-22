@@ -115,11 +115,55 @@ List<Printable as T> obeys Printable   // candidate; interacts with TRAIT_BLANKE
 let obeys = 3                          // ERROR if reserved; allowed if the word is contextual
 ```
 
+## Position candidates (author's candidate P1 added 2026-10-22)
+
+Where the statement of conformance is written. Candidate P1 is the author's proposal; none of the three is decided. The direction of the verb is the same in all of them: **the one that obeys is the subject**, so `Bag.len obeys Positive`, not `Positive obeys Bag.len`.
+
+| ID | Rule | Notes |
+|----|------|-------|
+| P1 | Conformance is **always a separate statement** `X obeys C`, for every subject: a type, a named function, a member such as `Bag.len`. There is no tail form | one form for all subjects (Uniformity, Syntax Principle 1); the signature tail no longer holds `obeys`; inline lambdas no longer need a slot in the tail; the promise is not visible at the declaration (tool support needed) |
+| P2 | Tail form on the declaration **and** a statement form | two spellings for one concept, against Syntax Principle 1 unless one is declared sugar |
+| P3 | Tail form for functions, statement form for types (the candidate used in the examples above) | two forms by subject kind; the tail stays crowded |
+
+Examples under P1 (spellings provisional):
+
+```orthon
+// A type conforms to a contract of shape (as `impl` is a separate statement today)
+Bag obeys Sized
+
+// A named function conforms to a full contract
+sqrt_newton obeys Sqrt
+
+// A member receives a conditions-only contract
+// (depends on the condition-contract candidate, deferred to v0.2)
+Bag.len obeys Positive
+
+// A member of a foreign type with a local contract: imposition from outside
+// (depends on Review decision 13, deferred to v0.2; blame moves to the author of the rule)
+ForeignList.count obeys Positive
+
+// Several contracts for one subject: the conditions combine
+Bag.len obeys Positive, Bounded
+```
+
+Incorrect usage under P1:
+
+```orthon
+Bag.size obeys Positive           // ERROR: Bag has no member size
+Bag.len obeys Positive            // ERROR if repeated: at most one statement per (subject, contract)
+Positive obeys Bag.len            // ERROR: the contract is not a subject; the direction is reversed
+sqrt_newton obeys Printable       // ERROR: structural mismatch, as before
+```
+
+Effects of P1 on the coupled questions: it removes `obeys` from the signature tail, so the crowded-tail question (`BOUNDS_IN_ANGLE_BRACKETS.md`) is no longer coupled to this hypothesis; it removes the missing tail slot of inline lambdas (deferred to v0.2 in any case); it needs a member path (`Type.member`, with a signature for overloaded members); and it asks tool support to show the promise at the declaration (hover, "find implementations", see `ORTHON-DESCRIBE.md` and `LANGUAGE_SERVER.md`).
+
+Two rules apply to a statement that attaches conditions to a member from outside the member's declaration, if the condition-contract candidate is adopted: only `ensures` may be attached (a `requires` would tighten the member for all existing callers), and the statement must satisfy the orphan rule (the contract or the member is local to the module).
+
 ## Coupling and overload check (Syntax Pipeline, Stage 3)
 
 | Coupled question | Why |
 |---|---|
-| Signature tail order ([`BOUNDS_IN_ANGLE_BRACKETS.md`](BOUNDS_IN_ANGLE_BRACKETS.md), `FUNCTION_RETURN_SYNTAX.md`) | the tail already holds `require`, `where`, `-> Return` with no canonical order; `obeys` joins it |
+| Signature tail order ([`BOUNDS_IN_ANGLE_BRACKETS.md`](BOUNDS_IN_ANGLE_BRACKETS.md), `FUNCTION_RETURN_SYNTAX.md`) | the tail already holds `require`, `where`, `-> Return` with no canonical order; `obeys` joins it Under P1 `obeys` is not in the tail, and this coupling disappears. |
 | `->` overload ([`FUNCTION_RETURNING_FUNCTION.md`](FUNCTION_RETURNING_FUNCTION.md)) | **Deferred to v0.2 with lambdas.** In the inline lambda `fn(x) -> expr` the arrow separates the body, so there is no slot for a tail clause before the body |
 | Comma | `obeys A, B` uses the comma, which is already an overloaded symbol in the queue |
 | Blanket conformance ([`TRAIT_BLANKET_IMPLEMENTATION.md`](../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md)) | the conditional form depends on where bounds live |
@@ -143,6 +187,7 @@ let obeys = 3                          // ERROR if reserved; allowed if the word
 - One declaration word for types and functions; the verb reads as a promise to a rule.
 - Removes `impl ... for`, whose `for` also names loops.
 - No symbol is added.
+- Under P1 one statement form serves every subject and the signature tail is relieved.
 
 ### Negative / Risks
 
@@ -154,7 +199,7 @@ let obeys = 3                          // ERROR if reserved; allowed if the word
 ## Open Questions
 
 1. Reserved word or contextual (soft) keyword that is reserved only in the tail and declaration positions?
-2. Position per construct: signature tail for functions, statement for types, or also inline in a type header (`type User obeys Printable`).
+2. Position per construct: signature tail for functions and statement for types (P3), a statement for every subject (P1, the author's candidate), or both forms (P2); see "Position candidates". Also inline in a type header (`type User obeys Printable`).
 3. **Deferred to v0.2 (Review decision 15).** Spelling for lambdas, given the `->` overload.
 4. Conditional (blanket) conformance and the placement of its bounds.
 5. Contracts with parameters (`obeys Callable(Int) -> Age`).
