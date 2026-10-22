@@ -40,4 +40,4 @@ Techniques already in use, by what they act on:
 
 - The criterion for choosing a down-shift versus a sideways shift.
 - Numeric thresholds for the budget vector.
-- Whether the escalation rule belongs in the Phase 04.5 Process EDR or in a separate one.
+- ~~Whether the escalation rule belongs in the Phase 04.5 Process EDR or in a separate one.~~ **Resolved 2026-10-22**: in the Phase 04.5 grading Process EDR, with the two open items above stated as open (Decision 14 of [[2026-10-18-graded-spec-growth]]).
