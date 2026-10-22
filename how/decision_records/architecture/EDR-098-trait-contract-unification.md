@@ -178,6 +178,53 @@ the **Review decisions** of the source hypothesis.
    (`trait`, `impl ... for`) are superseded **in part**, once the syntax pipeline
    fixes the words; `invariant` is checked as in item 4. If the author prefers a
    formal supersession, that is a change to this item, not to the rest.
+10. **Clarifications from the logical-consistency resolutions R1–R4
+    (2026-10-22; proposed text, awaiting sign-off).** They sharpen the
+    hypothesis without contradicting it; the hypothesis is signed and is not
+    edited, so where wording differs, this item governs.
+    - **Umbrella term (R1).** "Contract" is the umbrella term for a named
+      specification of any subject. The accepted entries Contract (Design by
+      Contract) and Trait stay as the two kinds until this EDR is accepted; the
+      proposed entry is in [`GLOSSARY.md`](../../../what/GLOSSARY.md) and is marked as
+      not accepted.
+    - **Base case of F2 (R2).** The callable member of the anonymous type is the
+      `function` primitive of a type (a method), not a free-function declaration.
+      The sugar of item 3 applies only to free-function declarations, so the
+      definition ends after one step and has no regress.
+    - **Matching rule by subject (R3).** For a **type**, each member of the
+      contract is matched by name and signature; a type obeys a short-form contract
+      by providing a callable member `call`. For a **function**, the contract must
+      have exactly one member, a callable member named `call` (the short form
+      produces it), matched by call signature (parameters and result); the name of
+      the function is irrelevant. A contract with another member name, or with more
+      than one member, cannot be obeyed by a function: this is an error with a hint
+      to use the short form or to name the member `call`.
+    - **Overloads and associated types (R4).** `obeys` on a function binds the
+      declaration it belongs to: each overload obeys separately, and an overload
+      set as a whole does not obey. A callable member has no associated types in
+      v0.1; type contracts keep them (Open Question 5 of the hypothesis stays
+      open for types).
+
+    ```orthon
+    // provisional spelling
+    contract Sqrt(x: Float) -> result: Float
+    fun root(x: Float) -> Float obeys Sqrt          // ok: the function name is irrelevant (R3)
+
+    contract Calc
+        fun calc(x: Float) -> result: Float
+    fun root(x: Float) -> Float obeys Calc          // ERROR (R3): the member is `calc`; use the short form or name it `call`
+
+    contract Pair
+        fun first(self) -> Int
+        fun second(self) -> Int
+    fun make() -> Int obeys Pair                    // ERROR (R3): a function obeys a contract with exactly one member
+
+    type Squarer(k: Float)
+    Squarer obeys Sqrt                              // ok if Squarer provides `fun call(x: Float) -> Float` (R3)
+
+    fun scale(x: Int) -> Int obeys Scaler           // (R4) binds this overload only
+    fun scale(x: Float) -> Float                    // does not obey Scaler
+    ```
 
 ```orthon
 // Provisional spelling throughout.
@@ -270,7 +317,9 @@ Checks and follow-up work, none of which is done by this record:
    invariant rule of item 4 and the clarification of EDR-044.
 3. [`what/CORE_CONCEPTS.md`](../../../what/CORE_CONCEPTS.md),
    [`what/GLOSSARY.md`](../../../what/GLOSSARY.md) (Contract umbrella term, Trait,
-   Lambda) and [`INDEX.md`](../INDEX.md) updated on acceptance.
+   Lambda) and [`INDEX.md`](../INDEX.md) updated on acceptance. The umbrella
+   entry is already in the glossary as **proposed** (R1); the accepted entries are
+   unchanged until acceptance.
 4. **Gate validation** (see below): all seven gates were run on 2026-10-22 and
    recorded in [`DECISION_LOG.md`](../../gates/DECISION_LOG.md) (one Pass, six
    Flags, no Fail). The resolutions R1–R15 are proposed and await the author's
@@ -369,7 +418,7 @@ precondition is met in part (R8).
 | Gate | Method | Verdict | Summary |
 |------|--------|---------|---------|
 | `USER_VALUE_GATE` | Working Backwards | **Pass** | The story is stated in user terms and maps to a classical problem; the payoff of the function-level part in v0.1 is narrower than the full vision (observation, not a flag) |
-| `LOGICAL_CONSISTENCY_GATE` | Socratic Method | **Flag** | The core rules hold; four resolvable gaps (R1–R4): the umbrella use of "contract" against the current glossary, F2 read literally is circular, the matching rule depends on the subject, associated types and overloads on `obeys` are unexamined |
+| `LOGICAL_CONSISTENCY_GATE` | Socratic Method | **Flag** | The core rules hold; four resolvable gaps (R1–R4): the umbrella use of "contract" against the current glossary, F2 read literally is circular, the matching rule depends on the subject, associated types and overloads on `obeys` are unexamined. R1–R4 applied as proposed text on 2026-10-22 |
 | `CONCEPTUAL_SIMPLICITY_GATE` | Scientific Method | **Flag** | Fewer mechanisms than the alternatives, but the function-level part is expressible by composition (it is a Level 2 pattern by design), and the record bundles a change to `invariant` checking (R5, R6) |
 | `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8) |
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10) |
@@ -378,7 +427,9 @@ precondition is met in part (R8).
 
 **Overall.** No Fail: one Pass, six Flags. Under the Gate Flow a Flag may
 proceed but must be resolved before the final gate record. The root causes and the
-proposed resolutions R1–R15 are below; none is applied yet.
+proposed resolutions R1–R15 are below; R1–R4 were applied on 2026-10-22 as
+proposed text (Decision item 10 and the proposed glossary entry), R5–R15 are not
+applied.
 
 #### Run of 2026-10-22
 
@@ -571,10 +622,10 @@ spelling and the kind names.
 
 | # | Proposed resolution | Closes |
 |---|---------------------|--------|
-| R1 | Define "contract" as the umbrella term in `GLOSSARY.md`, keeping Trait and Function Contract as kinds, and say so in the merged concept (Compliance item 3) | Logical Consistency: terms |
-| R2 | State the base case of F2: the callable member is the `function` primitive of a type, not a free-function declaration; the sugar applies only to free declarations | Logical Consistency: paradox |
-| R3 | State the matching rule by subject: for a type, members match by name and signature; for a function, the contract must have exactly one callable member and it matches by call signature. Decide whether a single member with another name than `call` is an error with a hint (recommended) | Logical Consistency: determinism |
-| R4 | State that `obeys` on a function binds that specific declaration (each overload separately) and that a callable member has no associated types in v0.1; Open Question 5 stays for types | Logical Consistency: composition |
+| R1 | Define "contract" as the umbrella term in `GLOSSARY.md`, keeping Trait and Function Contract as kinds, and say so in the merged concept (Compliance item 3) | Logical Consistency: terms  (applied 2026-10-22, proposed) |
+| R2 | State the base case of F2: the callable member is the `function` primitive of a type, not a free-function declaration; the sugar applies only to free declarations | Logical Consistency: paradox  (applied 2026-10-22, proposed) |
+| R3 | State the matching rule by subject: for a type, members match by name and signature; for a function, the contract must have exactly one callable member and it matches by call signature. Decide whether a single member with another name than `call` is an error with a hint (recommended) | Logical Consistency: determinism  (applied 2026-10-22, proposed) |
+| R4 | State that `obeys` on a function binds that specific declaration (each overload separately) and that a callable member has no associated types in v0.1; Open Question 5 stays for types | Logical Consistency: composition  (applied 2026-10-22, proposed) |
 | R5 | Record in the merged concept that function-level conformance is a Level 2 pattern over `struct` + `Callable` + conformance (A3 as the fallback) and why the sugar is kept: no wrapper type per implementation | Simplicity: composition |
 | R6 | Keep the `invariant` check rule (decision 18) as a separate item in the Decision History of the merged concept so it can be reviewed apart; the author may split it into its own EDR | Simplicity: single responsibility |
 | R7 | Keep the v0.2 deferrals of item 7 in the roadmap backlog, and keep decision 21 with the EDR-044 clarification | Architectural: orthogonality, privilege |

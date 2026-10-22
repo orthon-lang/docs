@@ -6255,4 +6255,6 @@ Recorded in EDR-096 as open, not decided: DEF-a (whether variadic functions, cal
 
 **Overall.** No Fail: one Pass, six Flags. The flags have proposed resolutions R1–R15 in EDR-098; they await the author's decision and must be resolved before the final gate record. R13, the LLM-generation measurement, is not run.
 
+**Resolutions applied (2026-10-22).** R1–R4 (Logical Consistency) were applied as proposed text, awaiting sign-off of EDR-098: the umbrella term Contract is a proposed entry in `GLOSSARY.md` (R1), and EDR-098 Decision item 10 states the base case of F2 (R2), the matching rule by subject (R3), and the binding of `obeys` to one overload with no associated types on a callable member (R4). The gate verdict stays Flag until the author confirms the resolutions at sign-off. R5–R15 are not applied.
+
 **Gates not applied:** none.

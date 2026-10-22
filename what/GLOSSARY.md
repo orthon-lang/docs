@@ -2228,6 +2228,36 @@ LLM-generable and eliminates hidden conversions.
 
 ## C (continued)
 
+### Contract (Umbrella Term)
+
+> **Proposed by [EDR-098](../how/decision_records/architecture/EDR-098-trait-contract-unification.md); not accepted.** Until EDR-098 is accepted the entries [Contract (Design by Contract)](#contract-design-by-contract) and [Trait](#trait) keep their accepted meaning, and this entry replaces neither. The spellings `contract` and `obeys` are provisional and belong to the syntax pipeline.
+
+A named specification that an element declares it obeys: a list of members (operations with signatures and optional `requires` / `ensures` conditions), or the short form with a single callable member. One construct covers the kinds below; the kind is decided by the subject that obeys it, not by the declaration.
+
+| Kind | Subject | Matched by |
+|------|---------|------------|
+| Type-level contract (what the accepted entry [Trait](#trait) describes) | a type | each member by name and signature |
+| Function contract (the conditions of [Contract (Design by Contract)](#contract-design-by-contract), given a name) | a named function | the single callable member `call`, by call signature |
+
+Inline `requires` / `ensures` clauses written in a function signature remain the anonymous contract of that one function. Value constraints ([Constrained Type](#constrained-type)) and invariants are different kinds and are not members of this construct.
+
+```orthon
+// provisional spelling
+contract Sqrt(x: Float) -> result: Float     // function contract (short form)
+    requires x >= 0.0
+
+contract Printable                           // type-level contract
+    fun format(self) -> String
+
+fun sqrt_newton(x: Float) -> Float obeys Sqrt
+User obeys Printable
+```
+
+- **Source:** [EDR-098](../how/decision_records/architecture/EDR-098-trait-contract-unification.md) (Proposed), [`TRAIT_CONTRACT_UNIFICATION.md`](../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md)
+- **See also:** [Contract (Design by Contract)](#contract-design-by-contract), [Trait](#trait), [Constrained Type](#constrained-type)
+
+---
+
 ### Contract (Design by Contract)
 
 A verifiable assertion embedded in a function signature that specifies preconditions (`requires`), postconditions (`ensures`), and type/module invariants (`invariant`). Contracts are part of Orthon's function declaration syntax — they are not comments or library annotations.
