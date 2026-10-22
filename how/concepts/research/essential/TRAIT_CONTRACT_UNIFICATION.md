@@ -283,6 +283,175 @@ let root = fn(x) -> newton(x) obeys Sqrt
 
 Multi-instance contracts: see the deferred subsection of Model.
 
+### Examples for Review decisions 19–24
+
+Added 2026-10-22 from the Step 7 discussion. Spellings are provisional. Members of type contracts are written with an explicit `self` here; the receiver spelling is a separate syntax question.
+
+#### Decision 19 — kind of a member
+
+```orthon
+contract Counter
+    fun value(self) -> Int
+    proc increment()                          // the mutating kind is written out
+
+Ticks obeys Counter
+    fun value(self) -> Int ...
+    proc increment() ...                      // ok: kinds match
+
+Frozen obeys Counter
+    fun value(self) -> Int ...
+    fun increment() ...                       // ERROR: the member is proc, the implementation is fun
+
+contract Now() -> result: Int                 // short form: always the reading kind (fun)
+fun clock() -> Int obeys Now                  // ok
+contract Push(item: Int)                      // short form is fun: it cannot describe a mutating operation;
+                                              // write a list of members with proc instead
+```
+
+#### Decision 20 — result and parameter types
+
+```orthon
+contract Config
+    fun load(path: String) -> Config
+
+FileConfig obeys Config
+    fun load(path: String) -> !Config         // ERROR: the contract does not allow failure
+
+contract Parser
+    fun parse(input: String) -> !Json         // no explicit set: any set
+
+JsonParser obeys Parser
+    fun parse(input: String) -> !Json         // ok
+StrictParser obeys Parser
+    fun parse(input: String) -> Json          // ok: an implementation that cannot fail
+
+contract Scaler
+    fun scale(x: Int) -> Int
+Impl obeys Scaler
+    fun scale(x: Number) -> Int               // ERROR in v0.1: parameters match exactly
+```
+
+#### Decision 21 — `structural` is for signatures only
+
+```orthon
+structural contract Sized
+    fun len(self) -> Int
+
+type Bag(items: [Int])
+    fun len(self) -> Int                      // satisfies Sized with no statement written
+        return self.items.count()
+
+structural contract Bounded
+    fun len(self) -> result: Int
+        ensures result >= 0                   // ERROR: a structural contract carries signatures only
+
+contract Counted                              // conditions are applied independently
+    fun len(self) -> result: Int
+        ensures result >= 0
+Bag obeys Counted                             // explicit
+
+fun sqrt_table(x: Float) -> Float             // the signature matches Sqrt, but a function
+    ...                                       // never satisfies a contract implicitly:
+                                              // it needs `obeys Sqrt`
+```
+
+#### Decision 22 — violation and failing condition
+
+```orthon
+fun withdraw(balance: Int, amount: Int) -> result: Int
+    requires amount > 0
+    requires amount <= balance
+    ensures result == balance - amount
+
+withdraw(100, -5)     // requires amount > 0 is false: PROGRAM_ERROR, the caller is at fault
+withdraw(100, 50)     // the body returned 51: ensures is false: PROGRAM_ERROR, the implementation is at fault
+
+fun pick(items: [Int], i: Int) -> result: Int
+    requires items[i] > 0                     // for an out-of-range i the condition itself fails:
+                                              // PROGRAM_ERROR with a separate code, the contract author is at fault;
+                                              // hint: requires i < items.len() and items[i] > 0
+```
+
+```text
+PROGRAM_ERROR  contract violation
+  contract : Withdraw   clause: requires covered_by(balance, amount)
+  values   : balance = 50, amount = 80
+  blame    : caller  checkout.pay (pay.orthon:42)
+```
+
+Other contexts: conditions are evaluated in the order written and the first violated one is reported; a release build elides checks as before; a contract-derived test counts a violation as a failed case and does not terminate; `ensures` is checked only on a successful exit.
+
+#### Decision 23 — `obeys` on a generic function
+
+```orthon
+contract Sort<Ordered as T>(items: [T]) -> result: [T]
+    ensures is_sorted(result)
+    ensures is_permutation(result, items)
+
+fun quicksort<Ordered as T>(items: [T]) -> [T] obeys Sort<T>      // ok: same parameter, same bound
+fun mergesort<Ordered as T>(items: [T]) -> [T] obeys Sort<T>      // a second implementation
+fun sort_ints(items: [Int]) -> [Int] obeys Sort<Int>              // ok: concrete arguments
+
+fun hashsort<Ordered + Hash as T>(items: [T]) -> [T] obeys Sort<T>  // ERROR: a stronger bound than the contract
+fun first_of<Ordered as T>(a: T, b: T) -> T obeys Sort<T>           // ERROR: the signature does not match
+fun sort_i(items: [Int]) -> [Int] obeys Sort<T>                     // ERROR: T is not bound by the function
+```
+
+#### Decision 24 — forms of a contract
+
+```orthon
+// A type contract is matched by member name and signature
+contract Sqrt
+    fun calc(self, x: Float) -> result: Float
+
+type Squarer(k: Float)
+    fun calc(self, x: Float) -> Float
+Squarer obeys Sqrt                            // ok: the member `calc` exists with this signature
+
+// Conditions attached to the member of a type contract
+contract Sqrt
+    fun calc(self, x: Float) -> result: Float
+        requires x >= 0.0
+        ensures result >= 0.0                 // every implementation of calc inherits them
+
+// A call contract: short form, matched by call signature under ANY function name
+contract Root(x: Float) -> result: Float
+    requires x >= 0.0
+    ensures result >= 0.0
+// the same thing, expanded (a definition, not something users write):
+//   contract Root
+//       fun call(x: Float) -> result: Float ...
+fun newton(x: Float) -> Float obeys Root      // ok
+fun table_lookup(x: Float) -> Float obeys Root
+
+// Why the member name matters: `Positive` below describes a member named `call`
+contract Positive
+    fun call(self) -> result: Bool
+        ensures result > 0.0                  // also mistyped: a Bool is compared with a number
+Squarer obeys Positive                        // ERROR: Squarer has no member `call(self) -> Bool`
+fun calc(self, x: Float) -> Float obeys Positive   // ERROR: other name, other parameters, other result type
+```
+
+Putting conditions on `Squarer.calc` in v0.1:
+
+```orthon
+// 1. in the type contract (above)
+// 2. inline in the implementation
+type Squarer(k: Float)
+    fun calc(self, x: Float) -> n: Float
+        ensures is_non_negative(n)            // 3. a named predicate, reusable across clauses
+```
+
+A contract that attaches conditions to a position of any member (`Squarer.calc obeys Root`, or `contract Positive -> result: Int`) is deferred to v0.2 with its own spelling.
+
+```orthon
+contract Positive -> result: Int              // ERROR in v0.1: a conditions-only header without parentheses
+contract Area(self) -> result: Float          // ERROR: a receiver belongs to a member of a list
+
+contract Send                                 // ok: a marker contract with no members
+Bag obeys Send
+```
+
 ### All canonical forms
 
 These three spell the same thing; the first two are the common case:

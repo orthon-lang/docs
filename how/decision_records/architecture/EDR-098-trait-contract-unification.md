@@ -202,6 +202,31 @@ fun g(x: Float) -> Float obeys Sqrt
     requires x > 10.0                           // ERROR: stronger requires than the contract
 ```
 
+Selected examples for decisions 19–24. The full catalog, with all contexts and
+error cases, is in the hypothesis:
+[Examples for Review decisions 19–24](../../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md#examples-for-review-decisions-1924).
+
+```orthon
+Frozen obeys Counter
+    fun increment() ...                         // ERROR (19): the member is proc, the implementation is fun
+
+FileConfig obeys Config
+    fun load(path: String) -> !Config           // ERROR (20): the contract does not allow failure
+
+structural contract Bounded
+    fun len(self) -> result: Int
+        ensures result >= 0                     // ERROR (21): structural contracts carry signatures only
+
+withdraw(100, -5)                               // (22) PROGRAM_ERROR, requires false, the caller is at fault
+
+fun hashsort<Ordered + Hash as T>(items: [T]) -> [T] obeys Sort<T>   // ERROR (23): stronger bound
+
+contract Sqrt
+    fun calc(self, x: Float) -> result: Float   // (24) matched by name `calc`
+contract Root(x: Float) -> result: Float        // (24) short form: matched by call signature, any function name
+fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive describes a member `call(self) -> Bool`
+```
+
 ### Consequences
 
 - **Positive:**
