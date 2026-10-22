@@ -205,6 +205,9 @@ Two rules apply to a statement that attaches conditions to a member from outside
 5. Contracts with parameters (`obeys Callable(Int) -> Age`).
 6. Keep a `for`-style target for conformance declared outside the type (orphan-rule case), or is the statement form enough?
 7. Measurement protocol for the LLM Generability Gate: `obeys` against `impl ... for` on type-level and function-level declarations.
+8. **Receiver spelling in the members of a type contract** (added 2026-10-22, gate resolution R14 of EDR-098): `fun size()` or `fun size(self)`. The documents are not consistent (the short form of a contract has no receiver by Review decision 24; the member examples differ). Coupled to [`FUNCTION_ARGUMENT_SYNTAX.md`](FUNCTION_ARGUMENT_SYNTAX.md). Not decided here.
+
+**Blocking items (R14).** Open questions 2 (position of the conformance statement: P1, P2, P3) and 8 (receiver spelling) must be decided in the syntax pipeline before the grammar fragment of [EDR-098](../decision_records/architecture/EDR-098-trait-contract-unification.md) is final and before the LLM measurement of open question 7 is run for a single variant. They do not block the semantic decisions of EDR-098. The measurement protocol is [`notes/trait-contract-unification-llm-measurement.md`](../../notes/trait-contract-unification-llm-measurement.md); until the items are decided it is run as a comparison of the open variants.
 
 ## Next Step
 

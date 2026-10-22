@@ -328,6 +328,36 @@ fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive descr
       and the contract-keyword row). The cascade is sized for both options in Gate
       Validation, "Rename cascade sizing".
 
+13. **Clarifications from the LLM-generability resolutions R13–R15
+    (2026-10-22; proposed text, awaiting sign-off).**
+    - **Measurement (R13).** The measurement protocol is written, in
+      [`notes/trait-contract-unification-llm-measurement.md`](../../../notes/trait-contract-unification-llm-measurement.md):
+      12 tasks, at least two models, 10 samples per task, a control run in the
+      current form, an error taxonomy and the 90 percent threshold. **It has not
+      been run**; no sampling was done.
+    - **Blocking items of the syntax pipeline (R14).** The position of the
+      conformance statement (P1, P2, P3) and the receiver spelling in members of a
+      type contract are registered as open questions 2 and 8 of
+      [`CONFORMANCE_SYNTAX.md`](../../syntax/CONFORMANCE_SYNTAX.md) and in its row of
+      the syntax queue. They block the final grammar and the measurement of a single
+      variant; they do not block the semantic decisions of this record. Nothing is
+      decided here.
+    - **Diagnostics (R15).** The following errors are compile errors with a
+      dedicated message and a hint. The wording is provisional; the structure
+      (message, then hint) is the requirement.
+
+      | Error | Message | Hint |
+      |-------|---------|------|
+      | Conditions-only header, `contract Positive -> result: Int` | a contract header needs a parameter list; a contract with conditions only is not part of v0.1 | write the parameter list (`contract Positive(n: Int) -> result: Int`), or put the condition in a named predicate and call it in `requires` / `ensures` |
+      | `self` in the short form, `contract Area(self) -> result: Float` | the short form of a contract has no receiver | describe a method with the member-list form: `contract Shape` with `fun area(self) -> result: Float` |
+      | A function obeys a contract whose single member is not named `call`, `fun root(...) obeys Calc` with the member `calc` | a function can obey only a contract whose single member is named `call`; `Calc` has a member named `calc` | use the short form (`contract Calc(x: Float) -> result: Float`) or name the member `call` |
+      | A function obeys a contract with several members, `fun make() obeys Pair` | a function can obey only a contract with exactly one member; `Pair` has 2 | split the contract, or make a type obey it |
+
+      The diagnostics for the other errors of items 5 and 10 (member kind, result
+      type, `structural` with conditions, stronger bound, violation report) are
+      specified in structure by the rules of those items; their wording is written
+      with the merged concept.
+
 ### Consequences
 
 - **Positive:**
@@ -381,9 +411,12 @@ Checks and follow-up work, none of which is done by this record:
    Flags, no Fail). The resolutions R1–R15 are proposed and await the author's
    decision; R1–R8 are applied as proposed text; the Flags are to be resolved
    before acceptance.
-5. **LLM Generability measurement protocol**: a fixed task set over the contract
-   forms (the gate's own 90 percent threshold), recording failures from habitual
-   `trait` / `impl`; deferred until after sign-off, as for EDR-097 (R7).
+5. **LLM Generability measurement**: the protocol is written (R13,
+   [`notes/trait-contract-unification-llm-measurement.md`](../../../notes/trait-contract-unification-llm-measurement.md)):
+   a fixed task set over the contract forms, the gate's own 90 percent threshold,
+   an error taxonomy. **The run is not done** and is deferred until the open
+   variants of the syntax pipeline are decided, or is run as a comparison of
+   them, and is recorded before the final gate record, as for EDR-097 (R7).
 6. **Syntax pipeline** for the words and positions of item 8, through
    [`CONFORMANCE_SYNTAX.md`](../../syntax/CONFORMANCE_SYNTAX.md) and the coupled
    entries in [`how/syntax/README.md`](../../syntax/README.md).
@@ -480,14 +513,15 @@ precondition is met in part (R8).
 | `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8). R7 and R8 applied as a deferrals register and an interactions draft on 2026-10-22; the formal matrix is Phase 6 work |
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10). R9 and R10 applied as proposed text on 2026-10-22 |
 | `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | **Flag** | Evolution path and reversibility are documented; minor conceptual debt (F2, two forms) and no verified precedent for the unification (R11, R12). R11 and R12 applied on 2026-10-22: precedents checked, cascade sized |
-| `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15) |
+| `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15). R14 and R15 applied as proposed text and R13 as a protocol on 2026-10-22; the measurement is not run |
 
 **Overall.** No Fail: one Pass, six Flags. Under the Gate Flow a Flag may
 proceed but must be resolved before the final gate record. The root causes and the
-proposed resolutions R1–R15 are below; R1–R12 were applied on 2026-10-22 as
-proposed text (Decision items 10 to 12, the proposed glossary entry, the register
-of deferrals, the interactions draft, the strategy notes and the precedent
-verification), R13–R15 are not applied.
+proposed resolutions R1–R15 are below; R1–R15 were applied on 2026-10-22 as
+proposed text (Decision items 10 to 13, the proposed glossary entry, the register
+of deferrals, the interactions draft, the strategy notes, the precedent
+verification and the measurement protocol). **R13 is applied as a protocol only:
+the measurement has not been run.**
 
 #### Run of 2026-10-22
 
@@ -692,11 +726,11 @@ spelling and the kind names.
 | R10 | Add to the strategy documents a note on contracts: which strategies enable checks by default and the minimal diagnostic payload for the embedded strategy (code and location) | Implementation Independence: strategy coverage  (applied 2026-10-22, proposed; notes in the strategy documents) |
 | R11 | Verify the cited precedents from primary sources (Eiffel, SPARK, Dafny) and record the surfacing plan for F2 in v0.2 | Maintainability: precedent, debt  (applied 2026-10-22; verification below, partly verified; F2 plan in the deferrals register) |
 | R12 | Decide the words (A1 or A2) in the syntax pipeline; the rename cascade is sized for the chosen option | Maintainability: compatibility  (routing confirmed 2026-10-22; cascade sized below; the words stay with the syntax pipeline) |
-| R13 | Before the final gate record, run a measurement: a fixed set of generation tasks over the contract forms, success threshold 90 percent, recording failures from habitual `trait` / `impl`, `require` / `requires` and the receiver spelling (Compliance item 5) | LLM: predictable generation |
-| R14 | Fix the position of the conformance statement (P1, P2, P3) and the receiver spelling in the syntax pipeline before the grammar is final | LLM: schema, hallucination surface |
-| R15 | Specify the diagnostics with hints for the conditions-only header, `self` in the short form and a member-name mismatch | LLM: self-correctable |
+| R13 | Before the final gate record, run a measurement: a fixed set of generation tasks over the contract forms, success threshold 90 percent, recording failures from habitual `trait` / `impl`, `require` / `requires` and the receiver spelling (Compliance item 5) | LLM: predictable generation (protocol written 2026-10-22; **measurement not run**) |
+| R14 | Fix the position of the conformance statement (P1, P2, P3) and the receiver spelling in the syntax pipeline before the grammar is final | LLM: schema, hallucination surface (registered 2026-10-22 as blocking items in the syntax pipeline; nothing decided) |
+| R15 | Specify the diagnostics with hints for the conditions-only header, `self` in the short form and a member-name mismatch | LLM: self-correctable (applied 2026-10-22, proposed; Decision item 13) |
 
-R13 is not run and is not part of this record. The Decision Journal table in
+R13: the protocol is written and the measurement is not run. The Decision Journal table in
 `DECISION_VALIDATION.md` is not updated, as for EDR-097.
 
 #### Verification of precedents (R11, 2026-10-22)
