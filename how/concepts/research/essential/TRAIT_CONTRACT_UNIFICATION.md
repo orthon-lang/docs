@@ -107,17 +107,26 @@ fun sqrt_newton(x: Float) -> Float obeys Sqrt
 // desugaring (illustrative)
 struct sqrt_newton_T                                  // anonymous; closures hold captured values as fields
 impl Callable(Float) -> Float for sqrt_newton_T
-    fun call(self, x: Float) -> Float ...
+    fun call(x: Float) -> Float ...
 conformance Sqrt for sqrt_newton_T                    // what `obeys` expands to
 let sqrt_newton = sqrt_newton_T{}
 ```
+
+The callable member has no receiver, as in the constrained-type desugaring (`fun call(v: Int)`): in v0.1 the anonymous type has no observable state of its own. This matches the short form of a contract (Review decision 24). How a receiver is spelled in members of type contracts (`fun size()` or `fun size(self)`) is a separate syntax question.
 
 The mechanism already exists in the specification: [`CONSTRAINED_TYPES.md`](../../../../what/concepts/CONSTRAINED_TYPES.md) desugars `type Age = Int requires ...` into a `struct` plus `impl Callable(Int) -> Age for Age`, and closures already capture explicitly. The anonymous type is not nameable by the programmer; `obeys` is the only surface that mentions it.
 
 ### Inline clauses and the short form
 
 - Clauses written directly in a function signature (`requires` / `ensures`) are an **anonymous contract** satisfied only by that function. They are the common case and stay valid unchanged.
-- `contract Name(params) -> result` is sugar for a contract with one callable member `call`.
+- `contract Name(params) -> result` is sugar for a contract with one callable member `call` (Review decision 24). Parentheses are mandatory. The short form has no receiver, its kind is always `fun`, and it is matched by call signature under any function name. A contract with several members, or with a mutating member, is written as a list of members; there members are matched by name and signature.
+- A header with conditions only and no parentheses is an error in v0.1. A contract that attaches conditions to a position, whatever the member name, is deferred to v0.2 with its own spelling; named predicates cover reuse until then.
+
+```orthon
+contract Sqrt(x: Float) -> result: Float     // ok: short form
+contract Positive -> result: Int             // ERROR in v0.1: no parentheses, conditions only
+contract Area(self) -> result: Float         // ERROR: a receiver belongs to a member of a list
+```
 - A named contract is the reuse form: one specification, many implementations, tests derived once.
 
 ### Conformance rules (inherited, not new)
@@ -657,7 +666,7 @@ Prepared 2026-10-22 by the drafting agent; the decisions below are the author's.
 ## Open Questions
 
 1. **Unique type per function — kept as a definition only (Review decision 15).** The premise stays as the definition that explains `obeys` on a function. How it relates to the structural function type (coercion or erasure through a callable bound), generics, and dispatch is **deferred to v0.2** with higher-order contracts; coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. No longer a blocker for v0.1.
-2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)?
+2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)? A1 and A2 are semantically equivalent; the choice is **deferred until the syntax is accepted** (author, 2026-10-22). Until then `contract` is a provisional spelling and no document is renamed; the rename cascade is sized for A1 and is smaller for A2.
 3. **Deferred to v0.2 (Review decision 17). Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
 4. **Closed (Review decision 17): multi-instance contracts are deferred to v0.2.** Needed for `Eq` and `Serialize`, but not blocking.
 5. **Conformance keyword.** `obeys` is the candidate to replace `impl` (Review decisions, item 14). Word, position, multiple contracts, lambdas, and blanket conformance are tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md); associated types remain open here.
