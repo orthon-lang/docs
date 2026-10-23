@@ -89,7 +89,11 @@ the **Review decisions** of the source hypothesis.
    structural mismatch. Contracts are allowed on any function or method; the
    specification is separate from the implementation, as in DOP principle 4
    (EDR-090). If the unification is accepted, `TRAITS.md` and `CONTRACTS.md`
-   become **one concept document**.
+   become **one concept document**. `STRUCTURAL_TYPING.md` (EDR-044) is **not**
+   merged: it stays a separate concept, and the merged concept refers to it only
+   by a pointer. Reasons: it is a mode of conformance, not a kind of
+   specification; it is deferred to v0.3 while the merged concept belongs to
+   v0.1; and it depends on contracts, not the reverse.
 2. **Conformance applies to a second kind of subject (decisions 14, 15).** A
    named function declares conformance to a named contract with one callable
    member, under the rules already used for types: the signature matches; an
