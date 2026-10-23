@@ -333,8 +333,13 @@ fun calc(self, x: Float) -> Float obeys Positive   // ERROR (24): Positive descr
     - **Measurement (R13).** The measurement protocol is written, in
       [`notes/trait-contract-unification-llm-measurement.md`](../../../notes/trait-contract-unification-llm-measurement.md):
       12 tasks, at least two models, 10 samples per task, a control run in the
-      current form, an error taxonomy and the 90 percent threshold. **It has not
-      been run**; no sampling was done.
+      current form, an error taxonomy and the 90 percent threshold. **The gate
+      measurement has not been run.** A small pilot of the protocol was made on
+      2026-10-22 (10 runs: contract variants 88/96, control 14/14, one root cause,
+      task T6, a gap in the schema; a pilot is not a gate measurement and changes no
+      verdict). It found nine defects of the protocol, which were fixed on
+      2026-10-23 (the task set stays at 12); see the pilot and the list of defects
+      in the notes file.
     - **Blocking items of the syntax pipeline (R14).** The position of the
       conformance statement (P1, P2, P3) and the receiver spelling in members of a
       type contract are registered as open questions 2 and 8 of
@@ -513,7 +518,7 @@ precondition is met in part (R8).
 | `ARCHITECTURAL_INTEGRITY_GATE` | Logical Analysis | **Flag** | No new primitive, no layer violation; two accepted concepts are modified, `structural` cannot carry conditions, named functions are privileged over lambdas until v0.2, and the Stage 11 matrix is not made (R7, R8). R7 and R8 applied as a deferrals register and an interactions draft on 2026-10-22; the formal matrix is Phase 6 work |
 | `IMPLEMENTATION_INDEPENDENCE_GATE` | TRIZ | **Flag** | Semantics are strategy-agnostic; "defined termination" on a violation holds only when the check is enabled, and no strategy document mentions contracts (R9, R10). R9 and R10 applied as proposed text on 2026-10-22 |
 | `LONG_TERM_MAINTAINABILITY_GATE` | Einstein's Method | **Flag** | Evolution path and reversibility are documented; minor conceptual debt (F2, two forms) and no verified precedent for the unification (R11, R12). R11 and R12 applied on 2026-10-22: precedents checked, cascade sized |
-| `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15). R14 and R15 applied as proposed text and R13 as a protocol on 2026-10-22; the measurement is not run |
+| `LLM_GENERABILITY_GATE` | Empirical Analysis | **Flag** | Not measured; the grammar position of the conformance statement and the receiver spelling are open, and the diagnostics for the new error forms are not specified (R13–R15). R14 and R15 applied as proposed text and R13 as a protocol on 2026-10-22; the gate measurement is not run (a pilot of the protocol was made, Decision item 13) |
 
 **Overall.** No Fail: one Pass, six Flags. Under the Gate Flow a Flag may
 proceed but must be resolved before the final gate record. The root causes and the
@@ -521,7 +526,8 @@ proposed resolutions R1–R15 are below; R1–R15 were applied on 2026-10-22 as
 proposed text (Decision items 10 to 13, the proposed glossary entry, the register
 of deferrals, the interactions draft, the strategy notes, the precedent
 verification and the measurement protocol). **R13 is applied as a protocol only:
-the measurement has not been run.**
+the gate measurement has not been run** (a pilot of the protocol was made on
+2026-10-22 and the protocol was revised on 2026-10-23; see Decision item 13).
 
 #### Run of 2026-10-22
 
@@ -705,7 +711,7 @@ spelling and the kind names.
 | Criterion | Score | Reasoning |
 |-----------|-------|-----------|
 | Schema-serializable | Flag | Fully representable apart from the open position of the conformance statement, the receiver spelling and the kind names (R14) |
-| Predictable generation | Flag | **Not measured** (no sampling was run). Anticipated systematic errors: habitual `trait` / `impl`, `require` for `requires`, the receiver spelling, the conditions-only header (R13) |
+| Predictable generation | Flag | **Not measured** (no gate measurement was run; the pilot of Decision item 13 is not one). Anticipated systematic errors: habitual `trait` / `impl`, `require` for `requires`, the receiver spelling, the conditions-only header (R13) |
 | No hallucination surface | Flag | The short and the long form have one meaning; under P2 a conformance could be written in two places. Each is resolved by choosing the position (R14) |
 | Strategy-aware default | Pass | Contract semantics and naming do not depend on the strategy; enforcement is a Policy |
 | Self-correctable | Flag | Rules and error cases are specified for kinds, error sets, `structural` conditions, bounds and violations; the diagnostic messages and hints for the conditions-only header, `self` in the short form and a member-name mismatch are not specified (R15) |
@@ -726,11 +732,11 @@ spelling and the kind names.
 | R10 | Add to the strategy documents a note on contracts: which strategies enable checks by default and the minimal diagnostic payload for the embedded strategy (code and location) | Implementation Independence: strategy coverage  (applied 2026-10-22, proposed; notes in the strategy documents) |
 | R11 | Verify the cited precedents from primary sources (Eiffel, SPARK, Dafny) and record the surfacing plan for F2 in v0.2 | Maintainability: precedent, debt  (applied 2026-10-22; verification below, partly verified; F2 plan in the deferrals register) |
 | R12 | Decide the words (A1 or A2) in the syntax pipeline; the rename cascade is sized for the chosen option | Maintainability: compatibility  (routing confirmed 2026-10-22; cascade sized below; the words stay with the syntax pipeline) |
-| R13 | Before the final gate record, run a measurement: a fixed set of generation tasks over the contract forms, success threshold 90 percent, recording failures from habitual `trait` / `impl`, `require` / `requires` and the receiver spelling (Compliance item 5) | LLM: predictable generation (protocol written 2026-10-22; **measurement not run**) |
+| R13 | Before the final gate record, run a measurement: a fixed set of generation tasks over the contract forms, success threshold 90 percent, recording failures from habitual `trait` / `impl`, `require` / `requires` and the receiver spelling (Compliance item 5) | LLM: predictable generation (protocol written 2026-10-22, pilot of the protocol 2026-10-22, protocol revised 2026-10-23; **gate measurement not run**) |
 | R14 | Fix the position of the conformance statement (P1, P2, P3) and the receiver spelling in the syntax pipeline before the grammar is final | LLM: schema, hallucination surface (registered 2026-10-22 as blocking items in the syntax pipeline; nothing decided) |
 | R15 | Specify the diagnostics with hints for the conditions-only header, `self` in the short form and a member-name mismatch | LLM: self-correctable (applied 2026-10-22, proposed; Decision item 13) |
 
-R13: the protocol is written and the measurement is not run. The Decision Journal table in
+R13: the protocol is written and was revised after a pilot; the gate measurement is not run. The Decision Journal table in
 `DECISION_VALIDATION.md` is not updated, as for EDR-097.
 
 #### Verification of precedents (R11, 2026-10-22)
