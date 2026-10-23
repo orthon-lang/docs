@@ -5,10 +5,10 @@ current_phase: "04.1"
 current_phase_name: concepts-human-s-verification
 status: verifying
 stopped_at: Phase 04.1 execution complete — 18/18 plans, all 16 VB batches verified, governance sign-off approved
-last_updated: "2026-10-23T09:11:29.197Z"
+last_updated: "2026-10-23T10:07:01.160Z"
 last_activity: 2026-10-22
 last_activity_desc: "Completed quick task 261021-ir3: accept EDR-097, apply Stage A"
-state_head: c04ebeac76c4ea97fc608aeb778e2c4ff440991c
+state_head: 082108342472dad797d59e0a42188f7faa27e160
 progress:
   total_phases: 15
   completed_phases: 4
@@ -169,6 +169,7 @@ Recent decisions affecting current work:
 | 59 | structural deferred to v0.3, survival criterion added | 2026-10-23 | 135a2dd | — |
 | 60 | EDR-098 item 1: STRUCTURAL_TYPING stays a separate concept | 2026-10-23 | 216fe88 | — |
 | 61 | Purity of contract expressions (Tier 4 inline) | 2026-10-23 | c04ebea | — |
+| 62 | Contracts for generators and async (Tier 4 inline) | 2026-10-23 | 0821083 | — |
 
 ### Roadmap Evolution
 
