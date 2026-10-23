@@ -123,7 +123,9 @@ the **Review decisions** of the source hypothesis.
    or module" in Review decision 18 of the hypothesis read as "type". What a
    condition may call (purity) is a Tier 4 rule in `CONTRACTS.md` (2026-10-23): a
    member of a contract may be called in its conditions if every implementation of
-   it passes the purity check.
+   it passes the purity check. Generators and async functions carry only
+   `requires` in v0.1, checked at the call (Tier 4 in `CONTRACTS.md`,
+   2026-10-23); this applies to short-form and named contracts alike.
 5. **Member kind, result types, violation, generics, forms (decisions 19–24).**
    - **Kind (19).** The declaration kind of an implementing method equals the kind
      of the contract member. The callable member of the short form is always the

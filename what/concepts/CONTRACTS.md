@@ -126,9 +126,60 @@ fun square(x: Int) -> result: Int            // a free function: no `self`
     return x * x
 ```
 
-- Contracts may be declared on any function or method. `self` exists only in methods; a free function has none.
+- Contracts may be declared on any function or method, except that generators and async functions carry only `requires` in v0.1 (see [Generators and Async Functions](#generators-and-async-functions)). `self` exists only in methods; a free function has none.
 - Contracts of trait methods are inherited by their implementations (Principle 5, Liskov substitution): an implementation may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error.
 - Result names need not match between a trait method and its implementation. An inherited clause uses the name of the declaring signature, so the inherited `ensures a >= 0.0` above still reads `a`.
+
+#### Generators and Async Functions
+
+> **Decision (Tier 4, inline; author, 2026-10-23).** In v0.1 a generator function and an async function may carry only `requires`. `ensures` and `invariant` are forbidden, with a hint. The reasons: the survival criterion (the language can live without them) and the fact that their meaning is not yet defined: what "exit" means for a lazy stream and for a function that suspends. They are staged for v0.2 and v0.3.
+
+The two kinds of function:
+
+- A **generator function** returns a lazy `Iterator<T>` and produces values with `emit`; its body runs when the iterator is consumed.
+- An **async function** is `async fun`, `async proc` or `async new`; it returns a `Future<T>` and may suspend at `await`.
+
+Rules for v0.1:
+
+1. **`requires` is checked at the call**, before the iterator or the future is created, in the caller's context. The caller is at fault. It is not checked at the first `next()` and not at the start of the body after a suspension.
+2. **`ensures` is an error** on a generator function and on an async function. Message: `ensures` is not available on generator and async functions in v0.1. Hint: state the condition on the consumer side, or wait for v0.2.
+3. **`invariant` is not combined with suspension.** A type that declares an `invariant` cannot declare an `async proc` or a generator `proc` in v0.1 (error with a hint: the invariant cannot be checked across a suspension, see v0.3). `async fun` and `async new` stay allowed, with `requires` only.
+4. **A `gen(...)` expression has no signature**, so it has no contract.
+5. **The named result** of an async function names the value of type `T`, not the `Future<T>`. It is not used in v0.1, because there is no `ensures`.
+
+```orthon
+fun evens(limit: Int) -> Iterator<Int>
+    requires limit >= 0                  // ok: checked at the call, before the iterator is created
+    for x in 1..limit
+        if x % 2 == 0
+            emit x
+
+fun positives(limit: Int) -> result: Iterator<Int>
+    ensures is_sorted(result)            // ERROR in v0.1: ensures on a generator; state it on the consumer side
+
+async fun fetch(url: Url) -> String
+    requires url.is_valid()              // ok: checked at the call, before the future is created
+    return await http.get(url).body
+
+async fun load(url: Url) -> body: String
+    ensures body.length() > 0            // ERROR in v0.1: ensures on an async function; planned for v0.2
+
+type Account(balance: Int)
+    invariant self.balance >= 0
+    async proc deposit(amount: Int)      // ERROR in v0.1: a type with an invariant cannot have an async proc
+        await ledger.record(amount)
+        self.balance += amount
+
+let squares = gen(x * x for x in 1..10) // no signature, no contract
+```
+
+Stages:
+
+| Version | Added |
+|---------|-------|
+| v0.1 | `requires` at the call |
+| v0.2 | `ensures` on the successful completion of `async fun` and `async new` (the named result binds the `T`); conditions on the elements of a generator, as a separate form and not through the result name |
+| v0.3 | `invariant` across suspension, together with the task and `exclusive` rules of [`ASYNC_AWAIT.md`](ASYNC_AWAIT.md) |
 
 ### Type Invariants
 
@@ -276,6 +327,10 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 
    > **Decision (Tier 4, inline; author, 2026-10-23):** Variant B. Named conditions stay; purity is checked against a closed list of effectful operations; members of the contract are allowed if their implementations pass the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. See [What a Condition May Call](#what-a-condition-may-call).
 
+8. What do contracts mean for generators and async functions?
+
+   > **Decision (Tier 4, inline; author, 2026-10-23):** Variant b. Only `requires` in v0.1, checked at the call; `ensures` and `invariant` are forbidden with a hint; `ensures` for async completion and generator elements in v0.2; invariants across suspension in v0.3. See [Generators and Async Functions](#generators-and-async-functions).
+
 ## Decision History
 
 - **EDR-056:** Contracts accepted as Language feature — compiler-enforced pre/postconditions.
@@ -287,6 +342,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 - **2026-10-23 — Contract Enforcement Policy values fixed (Tier 4, inline).** Author's decision: granularity of enforcement is staged (v0.1 one value per build, v0.2 by kind of condition, v0.3 by position at a module boundary); the values `All`, `None`, `Preconditions`, `Boundary` are fixed now, the last two reserved. No change to the behaviour of v0.1. Recorded in the policy catalogue ([`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)).
 - **2026-10-23 — Module invariants removed from v0.1 (Tier 4, inline).** Author's decision: only types declare invariants; the section "Object/Module Invariants" became "Type Invariants" and its example was rewritten from `class` to `type` with `self.` (Orthon has no classes). The rule for when an invariant is checked is not changed by this entry; it remains under review in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) (Review decision 18) and [EDR-098](../../how/decision_records/architecture/EDR-098-trait-contract-unification.md).
 - **2026-10-23 — Purity of condition expressions defined (Tier 4, inline).** Author's decision (variant B): named conditions stay; purity is checked against a closed list of effectful operations, transitively; members of the contract being declared are allowed if every implementation passes the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. The accepted bullets "no I/O, no non-deterministic functions, only pure functions" now have a mechanism.
+- **2026-10-23 — Contracts for generators and async functions (Tier 4, inline).** Author's decision (variant b): in v0.1 only `requires`, checked at the call before the iterator or future is created; `ensures` and `invariant` forbidden with a hint. Stages: v0.2 `ensures` on async completion and conditions on generator elements; v0.3 invariants across suspension. The first bullet of "Where Contracts Apply" now names the exception.
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---
