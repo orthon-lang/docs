@@ -129,7 +129,10 @@ the **Review decisions** of the source hypothesis.
      an explicit set means any set.
    - **Structural (21).** `structural` applies only to types and carries member
      signatures only, without conditions; conditions are applied independently by
-     a separate contract. Conformance of a function is always explicit.
+     a separate contract. Conformance of a function is always explicit. **The
+     `structural` mode itself is deferred out of v0.1 (author, 2026-10-23; Tier 4
+     in `STRUCTURAL_TYPING.md`) and returns in v0.3 with the module boundary;
+     this rule applies when it returns.**
    - **Violation (22).** When a check is enabled by the Contract Enforcement
      Policy, a violated condition is a `PROGRAM_ERROR` with a structural
      diagnostic (contract, clause, values, guilty side: `requires` the caller,
@@ -156,7 +159,8 @@ the **Review decisions** of the source hypothesis.
 6. **Clarification of EDR-044.** Structural satisfaction applies to types and to
    member signatures only; conditions are never matched structurally (item 5,
    decision 21). A wording clarification of EDR-044 is to be applied in the
-   merged concept document.
+   merged concept document; it takes effect when the structural mode returns in
+   v0.3.
 7. **Deferred to v0.2 (decisions 13, 15, 17).** Using contracts through generics
    and function values (a function contract as a generic bound, `dyn` on function
    values, collections of contract-bearing functions, `obeys` on lambdas);
@@ -268,7 +272,7 @@ FileConfig obeys Config
 
 structural contract Bounded
     fun len(self) -> result: Int
-        ensures result >= 0                     // ERROR (21): structural contracts carry signatures only
+        ensures result >= 0                     // ERROR (21), when structural returns in v0.3: signatures only
 
 withdraw(100, -5)                               // (22) PROGRAM_ERROR, requires false, the caller is at fault
 

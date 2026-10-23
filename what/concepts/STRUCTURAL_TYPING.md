@@ -4,6 +4,8 @@
 >
 > **Status:** Accepted 2026-07-27.
 >
+> **Deferred to v0.3 (author, 2026-10-23; Tier 4, inline).** The concept stays accepted and EDR-044 is not superseded, but the structural mode is **not part of v0.1**: it is an improvement, not core functionality, and the language can live without it (the survival criterion of the graded growth of the specification). It returns in v0.3 together with the module boundary and its rules. The keyword `structural` stays reserved in v0.1 so that adding it later breaks no program. When it returns, a structural contract carries member signatures only, never conditions (Review decision 21 of the hypothesis [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md), [EDR-098](../../how/decision_records/architecture/EDR-098-trait-contract-unification.md)).
+>
 > **See also:** [`TRAITS.md`](TRAITS.md), [`GLOSSARY.md`](../GLOSSARY.md) § Structural Typing,
 > [`PRIMITIVE_BLOCKS.md`](../PRIMITIVE_BLOCKS.md),
 > [`PATTERN_MATCHING.md`](PATTERN_MATCHING.md)
@@ -131,12 +133,13 @@ The compiler resolves trait satisfaction at each call site: first check explicit
 ## Open Questions
 
 1. Should structural matching support associated type inference? (If a structural trait has an associated type, can the compiler infer it from the type's methods?)
-2. Should structural matching work across module boundaries, and if so, what coherence rules apply?
+2. Should structural matching work across module boundaries, and if so, what coherence rules apply? *Decided together with the module boundary and its rules when the concept returns in v0.3 (2026-10-23).*
 3. Should there be a `structural` block syntax for marking multiple methods as a structural implicit group?
 
 ## Decision History
 
 - **EDR-044 (2026-07-27):** Structural typing accepted as Language feature. Opt-in via `structural` keyword on trait declaration. Nominal is default. Explicit `impl` overrides structural.
+- **2026-10-23 — Deferred to v0.3 (Tier 4, inline).** Author's decision: the structural mode is removed from v0.1 and returns in v0.3 together with the module boundary and its rules. Reason: an improvement, not core functionality; the language can live without it. The registry status is `Accepted (deferred to v0.3)`. The keyword stays reserved in v0.1.
 
 ---
 

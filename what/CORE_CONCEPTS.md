@@ -311,7 +311,7 @@ The resolution process is defined in
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted |
+| **Status** | Accepted (deferred to v0.3) |
 | **EDR** | [EDR-044](../how/decision_records/architecture/EDR-044-structural-typing.md) |
 | **Specification** | [`concepts/STRUCTURAL_TYPING.md`](concepts/STRUCTURAL_TYPING.md) |
 | **Classification** | Language (D-03) |

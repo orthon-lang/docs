@@ -22,7 +22,7 @@ The core problem: Orthon needs a mechanism for types to declare that they satisf
 ## Principles
 
 1. **Behaviour separate from data** — Traits define only behaviour (method signatures, associated types), never data fields. Data belongs to types (structs, enums).
-2. **Explicit satisfaction** — A type must explicitly declare that it implements a trait. No structural (implicit) satisfaction for nominal traits; structural satisfaction exists only as an explicit opt-in `structural` mode on the trait declaration ([`STRUCTURAL_TYPING.md`](STRUCTURAL_TYPING.md), EDR-044). Explicitness over convenience.
+2. **Explicit satisfaction** — A type must explicitly declare that it implements a trait. No structural (implicit) satisfaction for nominal traits; structural satisfaction exists only as an explicit opt-in `structural` mode on the trait declaration ([`STRUCTURAL_TYPING.md`](STRUCTURAL_TYPING.md), EDR-044). Explicitness over convenience. *The `structural` mode is deferred out of v0.1 and returns in v0.3 (2026-10-23, see [`STRUCTURAL_TYPING.md`](STRUCTURAL_TYPING.md)).*
 3. **Static dispatch by default** — Trait bounds on generic parameters use static dispatch (monomorphisation). Dynamic dispatch (`dyn Trait`) is opt-in, syntactically visible.
 4. **Coherence** — A trait implementation must be defined in the same module as either the trait or the type. At most one implementation of a trait for any type. No orphan implementations.
 5. **Associated types** — Traits can declare associated types, allowing a single trait to model type families (e.g., `Iterator` with `Item`).
