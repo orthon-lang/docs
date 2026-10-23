@@ -22,7 +22,7 @@ Three specific gaps motivate contracts as a first-class Orthon feature:
 
 | Policy Type | Role in the concept |
 |---|---|
-| Contract Enforcement Policy | Determines when contracts are checked (compile-time, runtime, release-build elision) |
+| Contract Enforcement Policy | Determines when contracts are checked (compile-time, runtime, release-build elision); values `All`, `None`, `Preconditions`, `Boundary` (see Default Strategy) |
 | Contract Inheritance Policy | Governs how subtype contracts relate to supertype contracts |
 | Contract Language Policy | Specifies the expression language for contracts (pure expressions only) |
 | Error Policy | Controls how contract violations are reported and whether recovery is possible |
@@ -177,6 +177,33 @@ Named pure predicates are reused across clauses and signatures. A module of rule
 
 Contracts are checked at compile time where the compiler can prove satisfaction statically. Remaining contracts degrade to runtime assertions in debug builds. Release builds elide all contracts unless `--enforce-contracts` is passed. Higher-order contract support is deferred to v0.2.
 
+### Contract Enforcement Policy
+
+> **Decision (Tier 4, inline; author, 2026-10-23).** The granularity of enforcement is staged: v0.1 uses one value for the whole build (variant a), v0.2 adds a choice by kind of condition (variant b), v0.3 adds a choice by position at a module boundary (variant c). The values of the Policy are fixed now, so that a reserved name cannot be reused for something else.
+
+| Value | What is checked at run time | Version | Status |
+|-------|-----------------------------|---------|--------|
+| `All` | every clause that is not proved at compile time: `requires`, `ensures`, `invariant` | v0.1 | Active. The default of a debug build; selected for a release build by `--enforce-contracts` |
+| `None` | nothing; a violated contract is not detected | v0.1 | Active. The default of a release build |
+| `Preconditions` | `requires` only; `ensures` and `invariant` are elided. A `requires` is the caller's obligation and is the cheaper check | v0.2 | Reserved. Granularity: by kind of condition |
+| `Boundary` | the clauses of the public functions of a module (the module boundary); calls inside the module are not checked | v0.3 | Reserved. Granularity: by position; it needs the definition of a module boundary and its rules |
+
+Rules:
+
+1. **v0.1 granularity is one value per build.** There is no per-module, per-function or per-clause selection in v0.1.
+2. **The meaning of a contract does not depend on the value.** A contract is the same specification under every value; the value changes only what is detected. Under `None` a violated contract is an undetected program error.
+3. **A reserved value cannot be selected in v0.1.** Selecting `Preconditions` or `Boundary` is a build error with a hint that names the version in which the value becomes available.
+4. **The choice is made by the build configuration, not in the text of the program.** The policy is not written in the source of a contract.
+
+Examples (the build configuration is outside the program text; spellings of flags other than `--enforce-contracts` are not fixed):
+
+```text
+debug build                       -> All
+release build                     -> None
+release build --enforce-contracts -> All
+release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0.3
+```
+
 ## Alternative Strategies
 
 | Strategy | Description |
@@ -194,8 +221,11 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 
    > **Decision:** Yes. Trait-method contracts are inherited; an implementation may weaken `requires` and strengthen `ensures` (see [Where Contracts Apply](#where-contracts-apply)).
 
-4. Performance model for runtime contract checking in hot paths.
+4. Performance model for runtime contract checking in hot paths. *Partly addressed (2026-10-23):* `Preconditions` (v0.2) and `Boundary` (v0.3) reduce the cost of enforcement; the cost model itself is still open.
 5. *Deferred:* external imposition of rules on foreign functions, and a rule registry file. A comment may carry a reference to a rule; the form is unspecified.
+6. How finely may enforcement be controlled?
+
+   > **Decision (Tier 4, inline; author, 2026-10-23):** Staged. v0.1: one value per build (`All` or `None`). v0.2: by kind of condition (`Preconditions`). v0.3: by position at a module boundary (`Boundary`), when the module boundary and its rules are defined. The values are fixed now; see [Contract Enforcement Policy](#contract-enforcement-policy).
 
 ## Decision History
 
@@ -205,6 +235,7 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 - **2026-10-19 — `old` deferred out of v0.1.** Author's decision: `old` adds complexity now and gives little in return. The deferral was applied inline at the author's instruction and is recorded by [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md). The `Queue` example now uses `proc` (mutating methods are `proc` per SEMANTIC_MODEL § Mutation) and an absolute postcondition. Analysis kept as a deferred hypothesis: [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 - **2026-10-21 — EDR-097 (amends EDR-056).** The result is named in the signature (`-> result: Float`) and visible only in `ensures`; `old` is deferred out of v0.1 with a dedicated diagnostic. Signed off by the author. See [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md).
 - **Under review (hypothesis, not accepted):** named contract objects, a conformance keyword and multi-instance contracts are examined in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md).
+- **2026-10-23 — Contract Enforcement Policy values fixed (Tier 4, inline).** Author's decision: granularity of enforcement is staged (v0.1 one value per build, v0.2 by kind of condition, v0.3 by position at a module boundary); the values `All`, `None`, `Preconditions`, `Boundary` are fixed now, the last two reserved. No change to the behaviour of v0.1. Recorded in the policy catalogue ([`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)).
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---
@@ -214,5 +245,5 @@ Contracts are checked at compile time where the compiler can prove satisfaction 
 - [x] `what/CORE_CONCEPTS.md`
 - [x] `what/GLOSSARY.md`
 - [ ] `how/DESIGN_PRINCIPLES.md`
-- [ ] `how/IMPLEMENTATION_POLICIES.md`
+- [x] `how/IMPLEMENTATION_POLICIES.md` (Contract Enforcement Policy added 2026-10-23)
 - [ ] `how/process/DECISION_PIPELINE.md`

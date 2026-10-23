@@ -130,6 +130,23 @@ Controls the semantics of range literals. Inclusive-inclusive `1..N` is the only
 
 *No other value is permitted in v0.1 — half-open or split exclusive/inclusive semantics contradict the EDR-082 norm.*
 
+### Contract Enforcement Policy
+
+**Status:** *Accepted inline (Tier 4, 2026-10-23)* by the CONTRACTS concept. No EDR; the decision does not change the behaviour of v0.1.
+
+**Related Concepts:** [`what/concepts/CONTRACTS.md`](../what/concepts/CONTRACTS.md) § Contract Enforcement Policy
+
+Controls which contract clauses are checked at run time. Classified as **Policy** per D-04: whether a check runs is a HOW decision; the meaning of a contract is the same under every value, and only what is detected changes. Granularity is staged: one value per build in v0.1, by kind of condition in v0.2, by position at a module boundary in v0.3.
+
+| Value | Description |
+|-------|-------------|
+| `All` | Every clause not proved at compile time is checked (`requires`, `ensures`, `invariant`). Active in v0.1; the default of a debug build, selected in a release build by `--enforce-contracts` |
+| `None` | Nothing is checked at run time; a violated contract is not detected. Active in v0.1; the default of a release build |
+| `Preconditions` | Only `requires` is checked. **Reserved for v0.2** |
+| `Boundary` | Only the clauses of the public functions of a module are checked. **Reserved for v0.3**; needs the definition of a module boundary and its rules |
+
+*A reserved value cannot be selected in v0.1; selecting it is a build error with a hint that names the version. The choice is made by the build configuration, not in the text of the program.*
+
 ### Lifetime Policy
 
 **Status:** *Pending concept design.*
