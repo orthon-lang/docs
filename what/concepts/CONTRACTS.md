@@ -157,6 +157,49 @@ Contract expressions are **pure** — they must not produce side effects. The co
 - Contracts may only call other pure functions.
 - Violation reports name the failed predicate: diagnostics print the called predicate with its arguments, for example `requires covered_by(balance, amount)`.
 
+#### What a Condition May Call
+
+> **Decision (Tier 4, inline; author, 2026-10-23).** Purity is checked against a **closed list of effectful operations**, not by an effect model. Named conditions stay. The effect model replaces the list in v0.2, once [`EFFECT_FOOTPRINT.md`](../../how/concepts/research/essential/EFFECT_FOOTPRINT.md) is accepted.
+
+Why purity is a rule and not a convention: the Contract Enforcement Policy may elide a check (value `None`), so a condition with a side effect would change the behaviour of the program between builds. The meaning of a contract must not depend on the policy.
+
+A condition may contain:
+
+1. Operators, literals, and reads of parameters, fields and the named result (in `ensures`).
+2. Calls to functions of the standard library that are not on the list below.
+3. Calls to functions and methods whose body is known (a concrete declaration) and **passes the check**.
+4. Calls to `fun` members of the contract that carries the condition (the contract being declared).
+
+The **check**: a function passes if it is of the non-mutating kind (`fun`, not `proc`), mutates no captured or global state, and, transitively through the functions it calls, calls nothing on the list and no function that fails the check.
+
+The **closed list of effectful operations (v0.1):** input and output (console, files, network), clocks and timers, random numbers, foreign function calls (FFI), reading or writing global mutable state, and any `proc`. The list is part of the standard library boundary ([`LIBRARY_BOUNDARY.md`](../LIBRARY_BOUNDARY.md)) and grows by the usual process. The check is conservative: it may reject a function that is in fact pure but that it cannot prove pure.
+
+**Members of a contract.** If any condition of a contract `C` calls a `fun` member `m` of `C`, then every implementation of `m` must pass the check. The check is made where the implementation is declared; a failing implementation is a compile error naming the contract and the condition that needs it.
+
+**Through a generic bound or `dyn`.** The body is not known, so a condition may call only the members of the contract that carries the condition. Calling a member of another contract through a bound is a compile error with a hint (call a function with a known body, or use a member of this contract). This is a limitation of v0.1; it is lifted by the effect model.
+
+```orthon
+fun is_positive(n: Int) -> Bool            // known body, passes the check
+    return n > 0
+
+fun log_and_check(n: Int) -> Bool          // calls print: on the list
+    print("checking")
+    return n > 0
+
+fun withdraw(balance: Int, amount: Int) -> result: Int
+    requires is_positive(amount)           // ok: a named condition with a known body
+    requires log_and_check(amount)         // ERROR: the condition calls print (input and output)
+    ensures abs(result) >= 0               // ok: a library function that is not on the list
+
+contract Stack<T>
+    fun is_empty(self) -> Bool
+    proc push(item: T)
+        ensures not self.is_empty()        // ok: a member of this contract; every implementation of is_empty must pass the check
+
+fun show<Printable as T>(item: T) -> result: String
+    ensures result == item.format()        // ERROR: format is a member of another contract, called through a bound
+```
+
 **Contracts as business rules.** Named pure predicates carry the rules of a domain and read like the rules themselves:
 
 ```orthon
@@ -229,6 +272,10 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 
    > **Decision (Tier 4, inline; author, 2026-10-23):** Staged. v0.1: one value per build (`All` or `None`). v0.2: by kind of condition (`Preconditions`). v0.3: by position at a module boundary (`Boundary`), when the module boundary and its rules are defined. The values are fixed now; see [Contract Enforcement Policy](#contract-enforcement-policy).
 
+7. What may a condition call (what counts as pure)?
+
+   > **Decision (Tier 4, inline; author, 2026-10-23):** Variant B. Named conditions stay; purity is checked against a closed list of effectful operations; members of the contract are allowed if their implementations pass the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. See [What a Condition May Call](#what-a-condition-may-call).
+
 ## Decision History
 
 - **EDR-056:** Contracts accepted as Language feature — compiler-enforced pre/postconditions.
@@ -239,6 +286,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 - **Under review (hypothesis, not accepted):** named contract objects, a conformance keyword and multi-instance contracts are examined in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md).
 - **2026-10-23 — Contract Enforcement Policy values fixed (Tier 4, inline).** Author's decision: granularity of enforcement is staged (v0.1 one value per build, v0.2 by kind of condition, v0.3 by position at a module boundary); the values `All`, `None`, `Preconditions`, `Boundary` are fixed now, the last two reserved. No change to the behaviour of v0.1. Recorded in the policy catalogue ([`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)).
 - **2026-10-23 — Module invariants removed from v0.1 (Tier 4, inline).** Author's decision: only types declare invariants; the section "Object/Module Invariants" became "Type Invariants" and its example was rewritten from `class` to `type` with `self.` (Orthon has no classes). The rule for when an invariant is checked is not changed by this entry; it remains under review in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) (Review decision 18) and [EDR-098](../../how/decision_records/architecture/EDR-098-trait-contract-unification.md).
+- **2026-10-23 — Purity of condition expressions defined (Tier 4, inline).** Author's decision (variant B): named conditions stay; purity is checked against a closed list of effectful operations, transitively; members of the contract being declared are allowed if every implementation passes the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. The accepted bullets "no I/O, no non-deterministic functions, only pure functions" now have a mechanism.
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---

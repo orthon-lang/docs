@@ -120,7 +120,10 @@ the **Review decisions** of the source hypothesis.
    "entry and exit of each public method", is amended together with the
    unification. Only types declare invariants in v0.1: module invariants were
    removed on 2026-10-23 (Tier 4, inline, in `CONTRACTS.md`), so the words "type
-   or module" in Review decision 18 of the hypothesis read as "type".
+   or module" in Review decision 18 of the hypothesis read as "type". What a
+   condition may call (purity) is a Tier 4 rule in `CONTRACTS.md` (2026-10-23): a
+   member of a contract may be called in its conditions if every implementation of
+   it passes the purity check.
 5. **Member kind, result types, violation, generics, forms (decisions 19–24).**
    - **Kind (19).** The declaration kind of an implementing method equals the kind
      of the contract member. The callable member of the short form is always the
