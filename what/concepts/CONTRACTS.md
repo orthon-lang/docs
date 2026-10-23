@@ -127,8 +127,34 @@ fun square(x: Int) -> result: Int            // a free function: no `self`
 ```
 
 - Contracts may be declared on any function or method, except that generators and async functions carry only `requires` in v0.1 (see [Generators and Async Functions](#generators-and-async-functions)). `self` exists only in methods; a free function has none.
-- Contracts of trait methods are inherited by their implementations (Principle 5, Liskov substitution): an implementation may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error.
+- Contracts of trait methods are inherited by their implementations (Principle 5, Liskov substitution). In v0.1 an implementation inherits `requires` unchanged and may add `ensures`; weakening `requires` is planned for v0.2 (see [Inheritance of Conditions](#inheritance-of-conditions)).
 - Result names need not match between a trait method and its implementation. An inherited clause uses the name of the declaring signature, so the inherited `ensures a >= 0.0` above still reads `a`.
+
+#### Inheritance of Conditions
+
+> **Decision (Tier 4, inline; author, 2026-10-23).** Variant a. In v0.1 an implementation inherits the `requires` of the contract **unchanged** and cannot write its own; it may **add** `ensures`. Weakening the precondition is planned for v0.2. The reason: "weaker" and "stronger" between two arbitrary conditions cannot be decided by the compiler, and a rule that holds only for simple conditions is unpredictable.
+
+Only the input condition cannot be redefined. A method or a function is implemented as usual; what is closed is its own `requires`.
+
+1. The rule applies to the implementation of a contract member (a method of a type that obeys a contract) and to a function that obeys a named contract.
+2. The implementation inherits the `requires` of the contract. Writing a `requires` in the implementation is a compile error with a hint: preconditions are inherited unchanged, weakening arrives in v0.2.
+3. The implementation may add `ensures`. The effective postcondition is the one of the contract and the one of the implementation, and both are checked. This strengthens by construction and needs no proof.
+4. A function that does not obey a contract has its own clauses: there is nothing to inherit (its inline clauses are its anonymous contract).
+5. `requires` and `ensures` are never compared with each other. Like conditions are related to like: input with input, output with output. The only place where an `ensures` meets a `requires` is a call site, where the result of one call becomes the argument of another.
+6. v0.2: weakening the precondition. The form is not decided: an explicit form in the spirit of Eiffel's `require else` (the effective precondition is the contract's or the implementation's), or a solver that proves the implication.
+
+```orthon
+contract Sqrt(x: Float) -> result: Float
+    requires x >= 0.0
+    ensures result >= 0.0
+
+fun newton(x: Float) -> root: Float obeys Sqrt
+    ensures root <= x + 1.0              // ok: an added ensures; both ensures are checked
+
+fun g(x: Float) -> Float obeys Sqrt
+    requires x > 10.0                    // ERROR in v0.1: an implementation does not write requires
+                                         // hint: preconditions are inherited unchanged; weakening is planned for v0.2
+```
 
 #### Generators and Async Functions
 
@@ -315,7 +341,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 2. *Deferred with `old` (2026-10-19):* how does `old` work with mutable state? See [`CONTRACT_OLD_STATE.md`](../../how/concepts/research/deferrable/CONTRACT_OLD_STATE.md).
 3. Should contracts be inheritable across trait implementations?
 
-   > **Decision:** Yes. Trait-method contracts are inherited; an implementation may weaken `requires` and strengthen `ensures` (see [Where Contracts Apply](#where-contracts-apply)).
+   > **Decision:** Yes. Trait-method contracts are inherited. In v0.1 an implementation inherits `requires` unchanged and may add `ensures`; weakening `requires` is planned for v0.2 (see [Inheritance of Conditions](#inheritance-of-conditions)).
 
 4. Performance model for runtime contract checking in hot paths. *Partly addressed (2026-10-23):* `Preconditions` (v0.2) and `Boundary` (v0.3) reduce the cost of enforcement; the cost model itself is still open.
 5. *Deferred:* external imposition of rules on foreign functions, and a rule registry file. A comment may carry a reference to a rule; the form is unspecified.
@@ -331,6 +357,10 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 
    > **Decision (Tier 4, inline; author, 2026-10-23):** Variant b. Only `requires` in v0.1, checked at the call; `ensures` and `invariant` are forbidden with a hint; `ensures` for async completion and generator elements in v0.2; invariants across suspension in v0.3. See [Generators and Async Functions](#generators-and-async-functions).
 
+9. Preconditions when one element obeys several contracts (`obeys A, B`).
+
+   Open. Inheriting both `requires` means that a caller who sees only `A` must also satisfy the precondition of `B`, which `A` did not promise. A sound rule is the disjunction (the implementation accepts what either contract accepts). Not decided.
+
 ## Decision History
 
 - **EDR-056:** Contracts accepted as Language feature — compiler-enforced pre/postconditions.
@@ -343,6 +373,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 - **2026-10-23 — Module invariants removed from v0.1 (Tier 4, inline).** Author's decision: only types declare invariants; the section "Object/Module Invariants" became "Type Invariants" and its example was rewritten from `class` to `type` with `self.` (Orthon has no classes). The rule for when an invariant is checked is not changed by this entry; it remains under review in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) (Review decision 18) and [EDR-098](../../how/decision_records/architecture/EDR-098-trait-contract-unification.md).
 - **2026-10-23 — Purity of condition expressions defined (Tier 4, inline).** Author's decision (variant B): named conditions stay; purity is checked against a closed list of effectful operations, transitively; members of the contract being declared are allowed if every implementation passes the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. The accepted bullets "no I/O, no non-deterministic functions, only pure functions" now have a mechanism.
 - **2026-10-23 — Contracts for generators and async functions (Tier 4, inline).** Author's decision (variant b): in v0.1 only `requires`, checked at the call before the iterator or future is created; `ensures` and `invariant` forbidden with a hint. Stages: v0.2 `ensures` on async completion and conditions on generator elements; v0.3 invariants across suspension. The first bullet of "Where Contracts Apply" now names the exception.
+- **2026-10-23 — Inheritance of conditions (Tier 4, inline).** Author's decision (variant a): in v0.1 an implementation inherits `requires` unchanged and may add `ensures`; weakening `requires` is planned for v0.2. This replaces the earlier wording "may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error", which the compiler could not check. Open: preconditions for `obeys A, B` (Open Question 9).
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---

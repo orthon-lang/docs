@@ -2269,7 +2269,7 @@ fun sqrt(x: Float) -> result: Float
     ensures abs(result * result - x) <= 0.000001 * x
 ```
 
-The return value is named in the signature (see [Named Result](#named-result)). Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: subtypes may weaken preconditions and strengthen postconditions.
+The return value is named in the signature (see [Named Result](#named-result)). Contract expressions are **pure** (no side effects, enforced by compiler). Contracts are checked at compile time where possible; otherwise at runtime in debug builds. Release builds elide contracts unless `--enforce-contracts` is passed. Contract inheritance follows Liskov substitution: in v0.1 an implementation inherits the preconditions unchanged and may add postconditions; weakening a precondition is planned for v0.2 (see `CONTRACTS.md` § Inheritance of Conditions).
 
 - **Source:** `../what/concepts/CONTRACTS.md`, [EDR-056](../how/decision_records/architecture/EDR-056-contracts.md), [EDR-097](../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md)
 - **See also:** [Function Contract](#function-contract), [Named Result](#named-result), [Verification Layer](#verification-layer)

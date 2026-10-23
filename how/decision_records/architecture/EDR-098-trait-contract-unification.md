@@ -97,7 +97,10 @@ the **Review decisions** of the source hypothesis.
 2. **Conformance applies to a second kind of subject (decisions 14, 15).** A
    named function declares conformance to a named contract with one callable
    member, under the rules already used for types: the signature matches; an
-   implementation may weaken `requires` and strengthen `ensures`; at most one
+   implementation inherits `requires` unchanged and may add `ensures` (v0.1;
+   Tier 4 in `CONTRACTS.md`, 2026-10-23; weakening `requires` is planned for
+   v0.2, and the hypothesis wording "may weaken `requires`" reads accordingly);
+   at most one
    declaration per (element, contract) pair; the orphan rule; several contracts
    may be named and the conditions of all apply; dispatch is static by default and
    `dyn` is opt-in.
@@ -265,7 +268,7 @@ contract Stack<T>                               // list of members: type-level
 contract Positive -> result: Int                // ERROR in v0.1: conditions-only header
 Float obeys Sqrt                                // ERROR: Float has no callable member call(x: Float) -> Float
 fun g(x: Float) -> Float obeys Sqrt
-    requires x > 10.0                           // ERROR: stronger requires than the contract
+    requires x > 10.0                           // ERROR in v0.1: an implementation does not write requires
 ```
 
 Selected examples for decisions 19–24. The full catalog, with all contexts and
