@@ -130,21 +130,23 @@ fun square(x: Int) -> result: Int            // a free function: no `self`
 - Contracts of trait methods are inherited by their implementations (Principle 5, Liskov substitution): an implementation may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error.
 - Result names need not match between a trait method and its implementation. An inherited clause uses the name of the declaring signature, so the inherited `ensures a >= 0.0` above still reads `a`.
 
-### Object/Module Invariants
+### Type Invariants
 
-Types and modules can declare invariants that must hold at every public boundary:
+> **Decision (Tier 4, inline; author, 2026-10-23).** Invariants of modules are removed from v0.1. A module has no state in the accepted documents, so a module invariant had no subject. Only types declare invariants. Module invariants may return with the definition of a module boundary and its rules (planned for v0.3, together with the `Boundary` value of the Contract Enforcement Policy).
+
+A type can declare invariants that must hold at every public boundary:
 
 ```orthon
-class Queue<T>
-    invariant size >= 0
-    invariant size <= capacity
+type Queue<T>
+    invariant self.size >= 0
+    invariant self.size <= self.capacity
 
     proc enqueue(item: T)
-        requires size < capacity
+        requires self.size < self.capacity
         ensures self.back() == item
 ```
 
-Invariants attach to the aggregate — a type or a module — not to individual free functions: a free function states its guarantees with `requires`/`ensures`, while an `invariant` declares what must hold across every public operation of the aggregate. Invariants are checked on entry and exit of each public method, so methods do not restate them: `enqueue` above does not repeat `size >= 0` and `size <= capacity` — they already hold when the method runs and must hold again when it returns.
+Invariants attach to the type, not to individual free functions: a free function states its guarantees with `requires`/`ensures`, while an `invariant` declares what must hold across every public operation of the type. Invariants are checked on entry and exit of each public method, so methods do not restate them: `enqueue` above does not repeat `self.size >= 0` and `self.size <= self.capacity`: they already hold when the method runs and must hold again when it returns.
 
 ### Contract Expressions
 
@@ -236,6 +238,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 - **2026-10-21 — EDR-097 (amends EDR-056).** The result is named in the signature (`-> result: Float`) and visible only in `ensures`; `old` is deferred out of v0.1 with a dedicated diagnostic. Signed off by the author. See [EDR-097](../../how/decision_records/architecture/EDR-097-contracts-result-named-old-deferred.md).
 - **Under review (hypothesis, not accepted):** named contract objects, a conformance keyword and multi-instance contracts are examined in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md).
 - **2026-10-23 — Contract Enforcement Policy values fixed (Tier 4, inline).** Author's decision: granularity of enforcement is staged (v0.1 one value per build, v0.2 by kind of condition, v0.3 by position at a module boundary); the values `All`, `None`, `Preconditions`, `Boundary` are fixed now, the last two reserved. No change to the behaviour of v0.1. Recorded in the policy catalogue ([`IMPLEMENTATION_POLICIES.md`](../../how/IMPLEMENTATION_POLICIES.md)).
+- **2026-10-23 — Module invariants removed from v0.1 (Tier 4, inline).** Author's decision: only types declare invariants; the section "Object/Module Invariants" became "Type Invariants" and its example was rewritten from `class` to `type` with `self.` (Orthon has no classes). The rule for when an invariant is checked is not changed by this entry; it remains under review in [`TRAIT_CONTRACT_UNIFICATION.md`](../../how/concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md) (Review decision 18) and [EDR-098](../../how/decision_records/architecture/EDR-098-trait-contract-unification.md).
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---

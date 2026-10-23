@@ -2260,7 +2260,7 @@ User obeys Printable
 
 ### Contract (Design by Contract)
 
-A verifiable assertion embedded in a function signature that specifies preconditions (`requires`), postconditions (`ensures`), and type/module invariants (`invariant`). Contracts are part of Orthon's function declaration syntax — they are not comments or library annotations.
+A verifiable assertion embedded in a function signature that specifies preconditions (`requires`), postconditions (`ensures`), and type invariants (`invariant`). Contracts are part of Orthon's function declaration syntax — they are not comments or library annotations.
 
 ```orthon
 fun sqrt(x: Float) -> result: Float
