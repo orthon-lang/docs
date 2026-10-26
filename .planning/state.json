@@ -1,0 +1,73 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": "v0.1",
+  "phases": [
+    {
+      "number": "1",
+      "name": "Concerns Remediation",
+      "status": "complete"
+    },
+    {
+      "number": "1.1",
+      "name": "Foundation Completion (INSERTED)",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Semantic Model",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Primitive Blocks",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Derived Features & Decision Pipeline",
+      "status": "pending"
+    },
+    {
+      "number": "4.1",
+      "name": "Concepts Human's Verification (INSERTED)",
+      "status": "complete"
+    },
+    {
+      "number": "4.2",
+      "name": "Classical PLT Problem Mapping (INSERTED)",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Syntax Design",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Cross-Cutting Review",
+      "status": "pending"
+    },
+    {
+      "number": "7",
+      "name": "Execution & Optimization Model",
+      "status": "pending"
+    },
+    {
+      "number": "8",
+      "name": "Evolution Model & Freeze",
+      "status": "pending"
+    },
+    {
+      "number": "9",
+      "name": "Onboarding Material",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (verify)",
+    "reason": "Phase 04.1 of 13 · ready to verify"
+  },
+  "updated_at": "2026-10-18T05:44:42.653Z"
+}
