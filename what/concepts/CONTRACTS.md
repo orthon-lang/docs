@@ -156,6 +156,27 @@ fun g(x: Float) -> Float obeys Sqrt
                                          // hint: preconditions are inherited unchanged; weakening is planned for v0.2
 ```
 
+**Several contracts.**
+
+> **Decision (Tier 4, inline; author, 2026-10-31).** Variant a. In v0.1 preconditions are never combined: a type may obey any number of contracts, but one member is constrained by only one of them; a function obeys at most one named contract.
+
+- A type may obey several contracts (`Printable`, `Eq`, `Hash`). If two of them declare the same member (the same name), it is a compile error with a hint: rename the member in one contract, or give the roles to different types.
+- A function obeys at most one named contract. `obeys A, B` on a function is a compile error with a hint: a function has one callable member, and two contracts would both constrain it.
+- Why not combine: the conjunction of the preconditions breaks the promise of each contract (a caller who sees only `A` could be blamed for the precondition of `B`); the sound rule is the disjunction (the implementation accepts what either contract accepts), but the check then depends on the contract through which the call is made. The rule arrives in v0.2 together with the weakening of the precondition; it is not decided.
+- A generic bound `T as A + B` is not affected: the members of `A` and of `B` are used separately.
+
+```orthon
+contract Sqrt(x: Float) -> result: Float
+    requires x >= 0.0
+contract Reciprocal(x: Float) -> result: Float
+    requires x != 0.0
+
+fun f(x: Float) -> Float obeys Sqrt, Reciprocal   // ERROR in v0.1: a function obeys at most one contract
+                                                  // hint: split the function, or wait for v0.2
+
+User obeys Printable, Logged                      // ok: a type, and the contracts have different members
+```
+
 #### Generators and Async Functions
 
 > **Decision (Tier 4, inline; author, 2026-10-23).** In v0.1 a generator function and an async function may carry only `requires`. `ensures` and `invariant` are forbidden, with a hint. The reasons: the survival criterion (the language can live without them) and the fact that their meaning is not yet defined: what "exit" means for a lazy stream and for a function that suspends. They are staged for v0.2 and v0.3.
@@ -359,7 +380,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 
 9. Preconditions when one element obeys several contracts (`obeys A, B`).
 
-   Open. Inheriting both `requires` means that a caller who sees only `A` must also satisfy the precondition of `B`, which `A` did not promise. A sound rule is the disjunction (the implementation accepts what either contract accepts). Not decided.
+   > **Decision (Tier 4, inline; author, 2026-10-31):** Variant a. A type may obey several contracts but one member is constrained by only one; a function obeys at most one contract; preconditions are never combined in v0.1; the disjunction rule arrives in v0.2 with the weakening of the precondition. See [Inheritance of Conditions](#inheritance-of-conditions), "Several contracts".
 
 ## Decision History
 
@@ -374,6 +395,7 @@ release build, policy Boundary    -> ERROR in v0.1: the value is reserved for v0
 - **2026-10-23 — Purity of condition expressions defined (Tier 4, inline).** Author's decision (variant B): named conditions stay; purity is checked against a closed list of effectful operations, transitively; members of the contract being declared are allowed if every implementation passes the check; through a generic bound or `dyn` only members of the same contract; the effect model replaces the list in v0.2. The accepted bullets "no I/O, no non-deterministic functions, only pure functions" now have a mechanism.
 - **2026-10-23 — Contracts for generators and async functions (Tier 4, inline).** Author's decision (variant b): in v0.1 only `requires`, checked at the call before the iterator or future is created; `ensures` and `invariant` forbidden with a hint. Stages: v0.2 `ensures` on async completion and conditions on generator elements; v0.3 invariants across suspension. The first bullet of "Where Contracts Apply" now names the exception.
 - **2026-10-23 — Inheritance of conditions (Tier 4, inline).** Author's decision (variant a): in v0.1 an implementation inherits `requires` unchanged and may add `ensures`; weakening `requires` is planned for v0.2. This replaces the earlier wording "may weaken `requires` and strengthen `ensures`; a stronger `requires` is an error", which the compiler could not check. Open: preconditions for `obeys A, B` (Open Question 9).
+- **2026-10-31 — Several contracts per element (Tier 4, inline).** Author's decision (variant a): a type may obey several contracts but one member is constrained by only one; a function obeys at most one contract; preconditions are never combined in v0.1; the rule for several contracts (the disjunction is the sound candidate) arrives in v0.2 with the weakening of the precondition. Closes Open Question 9.
 - **Cross-reference:** Data-Oriented Programming, [EDR-090](../../how/decision_records/architecture/EDR-090-data-oriented-programming.md), principle 4 (schema separate from representation, see [`DESIGN_PRINCIPLES.md`](../../how/DESIGN_PRINCIPLES.md#schema-separate-from-representation)): a contract is a specification kept as a separate object and applied at function boundaries.
 
 ---

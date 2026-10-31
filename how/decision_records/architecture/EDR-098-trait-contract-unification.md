@@ -101,9 +101,11 @@ the **Review decisions** of the source hypothesis.
    Tier 4 in `CONTRACTS.md`, 2026-10-23; weakening `requires` is planned for
    v0.2, and the hypothesis wording "may weaken `requires`" reads accordingly);
    at most one
-   declaration per (element, contract) pair; the orphan rule; several contracts
-   may be named and the conditions of all apply; dispatch is static by default and
-   `dyn` is opt-in.
+   declaration per (element, contract) pair; the orphan rule; a type may obey
+   several contracts, each member constrained by one contract only, and a
+   function obeys at most one contract in v0.1 (Tier 4 in `CONTRACTS.md`,
+   2026-10-31; the rule for combining preconditions is planned for v0.2);
+   dispatch is static by default and `dyn` is opt-in.
 3. **F2 is a definition only (decision 15).** A function declaration is sugar for
    a unique anonymous type with one callable member. It explains conformance of a
    function and decomposes it into existing primitives (`pack` + `function` +

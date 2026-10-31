@@ -85,8 +85,9 @@ fun sqrt_newton(x: Float) -> Float obeys Sqrt
 proc push(item: T) obeys Pushable
     ...
 
-// 4. Several contracts
-fun sqrt_safe(x: Float) -> Float obeys Sqrt, Logged
+// 4. Several contracts: a type may obey several; a function obeys at most one in v0.1
+User obeys Printable, Logged
+fun sqrt_safe(x: Float) -> Float obeys Sqrt, Logged   // ERROR in v0.1: a function obeys at most one contract
 
 // 5. Contract with parameters (replaces: impl Callable(Int) -> Age for Age)
 Age obeys Callable(Int) -> Age
@@ -142,7 +143,7 @@ Bag.len obeys Positive
 // (depends on Review decision 13, deferred to v0.2; blame moves to the author of the rule)
 ForeignList.count obeys Positive
 
-// Several contracts for one subject: the conditions combine
+// Several contracts for one subject (a function obeys at most one contract in v0.1): the conditions combine
 Bag.len obeys Positive, Bounded
 ```
 
