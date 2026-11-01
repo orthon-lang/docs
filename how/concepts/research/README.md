@@ -38,7 +38,7 @@ proposals:
 > `TYPE_ANNOTATION_SYNTAX.md`, `SHADOWING_SYNTAX.md`) and in `important/`
 > (`FUNCTION_ARGUMENT_SYNTAX.md`, `FUNCTION_RETURN_SYNTAX.md`,
 > `FUNCTION_RETURNING_FUNCTION.md`, `BOUNDS_IN_ANGLE_BRACKETS.md`) moved to
-> [`../syntax/`](../syntax/) — the syntax hypothesis inbox (EDR-087).
+> [`../../syntax/`](../../syntax/) — the syntax hypothesis inbox (EDR-087).
 
 > **Note (2026-08-17):** `EFFECT_FOOTPRINT.md` added to `essential/` — the
 > unified effect-footprint model (read/mutate/consume × {self, capture,
@@ -104,6 +104,14 @@ proposals:
 > contracts, external imposition of rules, and a conditions-only contract. Each
 > item has its reason and the trigger for reopening it; `old` stays in
 > `CONTRACT_OLD_STATE.md`.
+
+> **Note (2026-11-01):** Two `essential/` hypotheses follow up the open
+> questions in EDR-085:
+> [`EXECUTION_CONTEXT_ERROR_PROPAGATION.md`](essential/EXECUTION_CONTEXT_ERROR_PROPAGATION.md)
+> examines recoverable and terminal failures across context boundaries;
+> [`EXECUTION_CONTEXT_CANCELLATION.md`](essential/EXECUTION_CONTEXT_CANCELLATION.md)
+> examines `stop()`, running work, and cancellation in single-owner contexts.
+> Neither changes the accepted Invocation model.
 
 ## Adding Research
 
