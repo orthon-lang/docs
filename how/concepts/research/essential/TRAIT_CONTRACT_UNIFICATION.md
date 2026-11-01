@@ -40,7 +40,7 @@ Review of this hypothesis against [`concept-design-review.md`](../../../concept-
 | 4 Principle Check | done, no violation found | [Step 4](#step-4--principle-check) |
 | 5 Examples | done | [Step 5](#step-5--examples-by-usage-context) |
 | 6 Tooling Implications | done | [Step 6](#step-6--tooling-implications) |
-| 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | in progress: decisions 19–24 recorded (2026-10-22); the author's sign-off is pending | [Step 7](#step-7--convergence-check) |
+| 7 Convergence Check (syntax review, edge cases, sign-off; Open Question 10 closed by decision 18) | done: decisions 19–24 recorded and author sign-off LOCKED (2026-10-22) | [Step 7](#step-7--convergence-check) |
 | 8 EDR (EDR-098) | drafted 2026-10-22, Status Proposed; the author's acceptance is pending | [EDR-098](../../../decision_records/architecture/EDR-098-trait-contract-unification.md) |
 
 ## Problem
@@ -755,7 +755,7 @@ Result: one new Tooling Requirement and three notes in existing documents.
 
 ## Step 7 — Convergence Check
 
-Prepared 2026-10-22 by the drafting agent; the decisions below are the author's. The sign-off is **not** set here.
+Prepared 2026-10-22 by the drafting agent; the decisions below are the author's. The author sign-off is recorded in the [Human Sign-off](#human-sign-off) field below; agents do not set it.
 
 | # | Check | Status | Basis |
 |---|-------|--------|-------|
@@ -763,7 +763,7 @@ Prepared 2026-10-22 by the drafting agent; the decisions below are the author's.
 | 2 | Syntax reviewed | Done, with remarks | Remarks below; the words are decided by the syntax pipeline |
 | 3 | Edge cases probed | Done | Six gaps found and closed by decisions 19–24 |
 | 4 | Desugaring checked (Level 2) | Done | Step 0 formula; member kinds fixed by decision 19; the `call` expansion kept as a definition by decision 24 |
-| 5 | Author's sign-off | **Pending** | The field is empty; agents do not set it |
+| 5 | Author's sign-off | **Done: LOCKED** | Recorded in the Human Sign-off field on 2026-10-22; agents did not set it |
 | 6 | No ambiguities | Done for v0.1 semantics | Gaps D1–D6 closed; what remains is deferred explicitly (decisions 13, 15, 17) |
 
 ### Remarks for the syntax pipeline
@@ -855,9 +855,9 @@ Prepared 2026-10-22 by the drafting agent; the decisions below are the author's.
 
 1. **Done:** Decision Pipeline run (2026-10-19); Concept Design Review Steps 0–5 (2026-10-21), see the progress table.
 2. **Done:** Step 6, Tooling Implications (2026-10-21): one new Tooling Requirement, `ORTHON-TEST.md`, and notes in `LANGUAGE_SERVER.md`, `ORTHON-DESCRIBE.md` and `ORTHON-PROVE.md`; see Step 6.
-3. **Step 7, Convergence Check:** the syntax review and the probing of edge cases are done and the resulting decisions 19–24 are recorded (2026-10-22), see [Step 7](#step-7--convergence-check). **Remaining:** the author's sign-off after reading Steps 0–7. The words (`contract`, `obeys`) and the position candidates stay in [`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md).
-4. **Step 8, EDR-098** (Architecture): **drafted 2026-10-22 as Proposed** ([`EDR-098`](../../../decision_records/architecture/EDR-098-trait-contract-unification.md)); it carries the Step 2 tables verbatim and states its relation to EDR-019 (amended) and EDR-056 (amended). Remaining: the author's acceptance, the seven gates in `DECISION_LOG.md`. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
-5. **Validation:** all seven gates with entries in `DECISION_LOG.md`; a measurement protocol for the LLM Generability Gate.
+3. **Done: Step 7, Convergence Check.** The syntax review and the probing of edge cases are complete, decisions 19–24 are recorded, and the author sign-off is LOCKED (2026-10-22); see [Step 7](#step-7--convergence-check). The remaining syntax choices — the words (`contract`, `obeys`) and the position candidates — stay in [`CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md).
+4. **Step 8, EDR-098** (Architecture): **drafted 2026-10-22 as Proposed** ([`EDR-098`](../../../decision_records/architecture/EDR-098-trait-contract-unification.md)); it carries the Step 2 tables verbatim and states its relation to EDR-019 (amended) and EDR-056 (amended). The seven gates have been run and recorded in [`DECISION_LOG.md`](../../../gates/DECISION_LOG.md); their Flag resolutions and the author's acceptance remain before the EDR can be accepted. **Do not file a contract-object EDR before this hypothesis is decided:** it would be superseded immediately.
+5. **Validation:** the LLM Generability Gate measurement protocol is prepared. Run it after the syntax variants are decided, or compare the variants, and record the result before final acceptance.
 6. **If accepted:** the merged concept document in `what/concepts/` (8-section `_concept.md` template), registration in `CORE_CONCEPTS.md` and `INDEX.md`, the rename cascade over about 52 files as a tracked task, and the syntax pipeline for the words.
 
 ## Human Sign-off
