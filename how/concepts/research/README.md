@@ -33,6 +33,8 @@ proposals:
 - `imperative-crutch-*.md` — anti-pattern analysis (informs design, not a feature)
 - `imperative-crutches-index.md` — index of anti-pattern analysis
 - `language-llm-comparison.md` — language comparison reference
+- `CONCURRENCY_APPROACHES_AND_TRENDS.md` — comparative concurrency research
+  and implementation-strategy trends
 
 > **Note (2026-08-15):** Syntax hypotheses previously kept here (for example
 > `TYPE_ANNOTATION_SYNTAX.md`, `SHADOWING_SYNTAX.md`) and in `important/`
