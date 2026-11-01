@@ -233,6 +233,11 @@ before moving to specification.
 The [`_language-design.md`](gates/_language-design.md) checklist provides
 the concrete review form that records the outcome of each gate check.
 
+For significant semantic invariants, use [Nyquist Validation](gates/methods/NYQUIST_VALIDATION_METHOD.md)
+to ask whether the selected examples, interaction analysis, and gate
+evidence would reveal a violation. Record uncovered scenarios and the
+limits of the evidence before claiming sufficient coverage.
+
 ---
 
 ## Output

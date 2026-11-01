@@ -33,6 +33,12 @@ For each proposed feature, run through these 10 questions in order:
 10. Is it worth adding at all?
 ```
 
+For proposals that continue to detailed design, use
+[Nyquist Validation](../gates/methods/NYQUIST_VALIDATION_METHOD.md)
+while preparing gate evidence to check whether significant semantic
+invariant violations would be detectable. This supplemental method
+does not change the ten-question pre-filter.
+
 ## Decision Flow
 
 ```

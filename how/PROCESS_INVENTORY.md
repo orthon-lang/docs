@@ -23,6 +23,7 @@ specific failure mode each one prevents.
 | Logical Analysis | Method | EDR-003 | Layering violations that seem harmless | Architecture erodes through accumulated small breaches |
 | TRIZ | Method | EDR-003 | Strategy compromises accepted too early | Implementation strategy becomes locked into semantics |
 | Einstein's Method | Method | EDR-003 | Complexity that becomes permanent debt | Irreversible design mistakes |
+| [Nyquist Validation](gates/methods/NYQUIST_VALIDATION_METHOD.md) | Supplemental method | EDR-099 | Significant invariant violations hidden by insufficient observations | Gate evidence appears complete while a semantic failure remains invisible |
 | Language Design Gate Checklist | Checklist | EDR-004 | Gates without operational teeth | Surface-level validation; perfunctory gate-passing |
 | Fitness Functions | Guard | EDR-005 | No measurable architectural health checks | Architectural decay accumulates undetected |
 | Implementation Policies | Policy | EDR-006 | What and how entangled | Cannot change implementation strategy without changing semantics |

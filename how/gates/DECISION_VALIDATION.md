@@ -313,6 +313,17 @@ validation process.
 Each method is described in its own file under [`methods/`](methods/),
 with the full technique, application steps, and the gate it serves.
 
+### Supplemental Method: Nyquist Validation
+
+[Nyquist Validation](methods/NYQUIST_VALIDATION_METHOD.md) audits whether
+the selected evidence would actually reveal significant violations of
+the proposal's semantic invariants. Apply it after problem framing and
+while preparing or reviewing gate evidence, especially for interactions
+between concepts, event-order cases, and behaviour across strategies.
+Record the invariant, violation scenario, discriminating observation,
+and uncovered cases. This is a cross-gate coverage audit; the seven
+validation gates and their assigned methods remain unchanged.
+
 ---
 
 ## Gate Flow

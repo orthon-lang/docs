@@ -1377,6 +1377,17 @@ raw = user!                # forced unwrap (panics if None)
 - **Source:** `../what/concepts/NULL_SAFETY.md`, [EDR-018](../how/decision_records/architecture/EDR-018-null-safety.md)
 - **See also:** [Option Type](#option-type), [Exhaustiveness](#exhaustiveness), [Flow-Sensitive Narrowing](#flow-sensitive-narrowing)
 
+### Nyquist Validation
+
+An Orthon process method for checking whether selected design evidence
+would reveal significant violations of a semantic invariant. It maps
+invariants to violation scenarios and discriminating observations,
+then records uncovered cases and the scope of the conclusion. The
+Nyquist-Shannon theorem supplies an analogy, not a numerical guarantee.
+
+- **Source:** [Nyquist Validation Method](../how/gates/methods/NYQUIST_VALIDATION_METHOD.md), [EDR-099](../how/decision_records/process/EDR-099-nyquist-validation-method.md)
+- **See also:** [Orthogonality](#orthogonality)
+
 ---
 
 ## O
