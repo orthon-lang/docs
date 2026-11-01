@@ -41,24 +41,20 @@ does not change the ten-question pre-filter.
 
 ## Decision Flow
 
-```
-Proposal
-    │
-    ▼
-Q1–Q3 ──► If "library problem" or "exists in primitives" → REJECT as language feature
-    │
-    ▼
-Q4     ──► If violates principle → REJECT (or escalate to EDR for principle change)
-    │
-    ▼
-Q5–Q7  ──► If expressible as sugar or composition → mark as syntactic sugar
-    │
-    ▼
-Q8     ──► If optimisation, not semantics → move to OPTIMIZATION_MODEL
-    │
-    ▼
-Q9     ──► Assess compatibility impact
-    │
-    ▼
-Q10    ──► Final value judgement → ACCEPT / DEFER / REJECT
+```mermaid
+flowchart TD
+    P[Proposed feature] --> Q13["Q1–Q3: Problem, layer, existing primitives"]
+    Q13 -->|Library problem or existing primitives| RL[Reject as language feature]
+    Q13 -->|Continue| Q4{"Q4: Violates a design principle?"}
+    Q4 -->|Yes| RP[Reject or escalate for a principle-change EDR]
+    Q4 -->|No| Q57["Q5–Q7: Semantics, composition, and sugar"]
+    Q57 -->|Expressible as sugar or composition| S[Mark as syntactic sugar]
+    Q57 -->|Continue| Q8{"Q8: Optimisation rather than semantics?"}
+    S --> Q8
+    Q8 -->|Yes| O[Move to OPTIMIZATION_MODEL]
+    Q8 -->|No| Q9["Q9: Assess compatibility impact"]
+    Q9 --> Q10{"Q10: Is it worth adding?"}
+    Q10 --> A[Accept]
+    Q10 --> D[Defer]
+    Q10 --> R[Reject]
 ```

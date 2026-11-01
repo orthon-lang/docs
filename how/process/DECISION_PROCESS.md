@@ -25,6 +25,28 @@ criteria, and how the decision is recorded.**
 | **Tier 3 — Process** | How design work is done | Solo author | EDR (Process category) | "Adopt 8-phase pipeline" |
 | **Tier 4 — Inline** | Small decisions within a section | Solo author | Inline note in document | "Tuples are ordered by default" |
 
+## Decision Flow
+
+```mermaid
+flowchart TD
+    D[Design decision] --> T{Decision tier}
+    T -->|Tier 1: Principle| H[Obtain explicit human sign-off]
+    T -->|Tier 2: Language concept| P[Apply the decision pipeline]
+    P --> H
+    H --> E[File an EDR in the appropriate category]
+    T -->|Tier 3: Process| E3[File a process EDR]
+    T -->|Tier 4: Inline| I[Record an inline decision and rationale]
+    E --> X[Index the EDR]
+    E3 --> X
+    E --> V{Validation gates run?}
+    V -->|Yes| L[Record per-gate reasoning in the decision log]
+    V -->|No| N[No per-gate log required]
+```
+
+The pipeline is a pre-filter for proposed features. Tier 1–2 EDRs require
+human sign-off before filing; the diagram does not replace the applicable
+review and validation procedures.
+
 ## Decision Pipeline
 
 For any proposed feature (Tier 1–2), run through the

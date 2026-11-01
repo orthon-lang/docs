@@ -77,6 +77,25 @@ decision.
 | 7 | Convergence Check | Is the design baked and human-approved? | Sign-off field + verdict |
 | 8 | EDR | Record the decision with rationale | EDR file |
 
+### Procedure Flow
+
+```mermaid
+flowchart TD
+    I["1. Idea / Problem"] --> G{Independently stated problem?}
+    G -->|No| R[Reject]
+    G -->|Yes| A["2. Alternatives"]
+    A --> M["3. Minimal Solution"]
+    M --> P["4. Principle Check"]
+    P --> E["5. Examples"]
+    E --> T["6. Tooling Implications"]
+    T --> C{"7. Convergence Check: all checks pass, including human sign-off?"}
+    C -->|No| M
+    C -->|Yes| D["8. File the EDR"]
+```
+
+A principle violation is handled under the requirements in Step 4; the
+flow above does not waive them.
+
 ### Step Details
 
 #### 1. Idea / Problem
