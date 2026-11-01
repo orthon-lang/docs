@@ -168,6 +168,41 @@ EXECUTION_CONTEXT_INVOCATION (per-gate reasoning).
 
 ---
 
+### Open Questions for Follow-up Decisions
+
+These questions refine the interaction of execution contexts with other
+concepts. They do not reopen the accepted invocation operators, context
+constructors, submission return types, or the requirement to resolve pending
+`spawn`/`fork` work before context destruction.
+
+1. **Recoverable errors across a context boundary.** When a submitted
+   function returns `Result<T, E>` or an error union, how is that value
+   exposed by `await(ctx)` or the `spawn`/`fork` result stream? Does a failed
+   `delegate` message remain observable only through owner state, or is a
+   separate error-reporting mechanism required? Define the interaction with
+   ERROR_HANDLING (EDR-020) and ERROR_UNION (EDR-023) without introducing
+   implicit exception propagation.
+2. **Terminal failures in submitted work.** If a submitted invocation ends
+   in `PROGRAM_ERROR`, `EXECUTION_ERROR`, or `PLATFORM_ERROR`, what is the
+   termination scope and diagnostic path for each context type? Specify
+   whether the owner, context, or entire program terminates; terminal
+   failures must not become recoverable values by accident (EDR-089).
+3. **Cancellation scope.** Does `stop()` cancel only pending submissions or
+   also work already running in a `spawn`/`fork` context? Is cancellation
+   cooperative, and what guarantees apply to cleanup and partially produced
+   results? The accepted requirement for explicit resolution remains; the
+   worker-shutdown mechanism is an Implementation Strategy concern.
+4. **Cancellation for single-owner contexts.** Is explicit cancellation
+   needed for a `defer(obj)` invocation or a queued `delegate(obj)` message
+   before context destruction? If so, define its scope and observation
+   rules without changing the accepted ownership and destructor contract.
+5. **Time bounds and failure policies.** Should deadlines, timeouts,
+   retries, and supervision be expressed by context constructors, library
+   composition, or a separate policy layer? Determine whether any of these
+   requires new Core semantics before proposing syntax.
+
+---
+
 ### Compliance
 
 - `execution_context` is the 10th primitive in `PRIMITIVE_BLOCKS.md`;
