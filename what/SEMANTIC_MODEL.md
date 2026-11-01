@@ -262,15 +262,27 @@ transfer must be syntactically visible — and explicitly defers the
 choice of concrete syntax to Phase 5 (Syntax Design).** All three
 candidate syntaxes express identical semantics; none is favored here.
 
-**No enforcement mechanism prescribed.** This section defines *what
-ownership means*, deliberately not *how the compiler verifies it*.
-Rust's static borrow checker, `IDENTITY_BASED_SAFETY.md`'s
-ownership-plus-escape-analysis model, and other enforcement strategies
-are all compatible implementations of the same semantic contract. Per
-`DESIGN_PRINCIPLES.md` § Implementation Independence
-(`how/gates/DECISION_VALIDATION.md`'s `IMPLEMENTATION_INDEPENDENCE_GATE`),
-the choice of enforcement mechanism belongs to Implementation Strategy
-(Phase 7), not to the Core semantic model.
+**The enforcement algorithm is not prescribed; the guarantee is.** This
+section defines *what ownership means* without selecting one compiler
+algorithm for proving it. A borrow checker, escape analysis, or another
+sound static analysis may implement the same contract. This freedom does
+not move ownership enforcement out of the compiler: ownership and
+borrowing are guaranteed compile-time analyses (Layer 4 of the compiler's
+verification pipeline; see [`COMPILER_AS_STATIC_ANALYZER.md`](concepts/COMPILER_AS_STATIC_ANALYZER.md)
+and [EDR-030](../how/decision_records/architecture/EDR-030-compiler-as-static-analyzer.md)).
+The compiler must reject a program when it cannot establish the required
+ownership, lifetime, or exclusive-access invariant. Runtime checks may
+verify declared conditions that depend on runtime values, but they do not
+replace these static proofs. Properties that cannot be expressed or
+verified by the language remain subject to tests, external analyzers, or
+formal proofs.
+
+This is the boundary required by `DESIGN_PRINCIPLES.md` § Implementation
+Independence (`how/gates/DECISION_VALIDATION.md`'s
+`IMPLEMENTATION_INDEPENDENCE_GATE`): an Implementation Strategy may
+choose the sound static analysis used to establish the guarantee, but it
+may not weaken the Core semantic contract or defer its proof to runtime
+or programmer discipline.
 
 **No GC, no RC by default.** Consistent with [Lifetime](#lifetime),
 ownership plus move semantics eliminates the need for reference counting
