@@ -38,6 +38,63 @@ Declaration by Assignment is a **Language** construct, processed here with a cle
 
 ---
 
+### Proposed Phase 5 Amendment: `:=` as an Ownership-Transfer Assignment
+
+**Status:** Proposed — not accepted; requires Phase 5 review and human sign-off.
+
+This proposal reuses `:=` as an infix marker for moving ownership from an
+existing named binding into a destination binding:
+
+```orthon
+destination := source
+```
+
+The intended semantics are that `destination` receives the value owned by
+`source`, and `source` becomes unusable after the transfer. The operator would
+therefore make the ownership change visible at its site, as required by the
+semantic model, while giving declaration-by-assignment's ordinary `=` a
+separate role. `:=` would not mean mutable reassignment or a general-purpose
+declaration operator.
+
+The proposal is attractive because it combines assignment and transfer in one
+visible form and avoids adding a `move` keyword or prefix marker to this
+variable-to-variable case. It also has costs that Phase 5 must resolve:
+
+- The `:=` spelling is used by other languages for declaration or assignment,
+  so its move meaning may surprise readers and generated code.
+- It covers a destination assignment, but does not directly express transfer
+  into a consuming function argument, a return, or another expression context.
+- The grammar and type rules must distinguish a new destination from an
+  already-declared mutable destination, and define whether a moved-from name
+  may be rebound.
+- It must compose with explicit type annotations, destructuring, shadowing,
+  and partial moves without creating context-dependent meanings.
+
+**Alternatives to compare:** a `move source` expression, a `$source` prefix
+operator, and an ownership metaproperty. These candidates should be compared
+against the same ownership semantics and all consuming contexts; this proposal
+does not establish that `:=` is the sole or canonical transfer syntax.
+
+**Gate criteria for acceptance:**
+
+- [ ] Define the grammar and typing rules for `destination := source`.
+- [ ] Specify source invalidation, destination binding/reassignment, and
+      moved-from rebinding behavior.
+- [ ] Show equivalent ownership-transfer forms for function arguments,
+      returns, and other consuming contexts, or explicitly limit the operator's
+      scope.
+- [ ] Check interactions with annotations, destructuring, shadowing, and
+      partial moves.
+- [ ] Compare `:=` with `move`, `$`, and `@ownership` for least astonishment,
+      explicitness, and LLM generability.
+- [ ] Validate against the language-design gate and record human sign-off
+      before accepting the amendment.
+
+Until those criteria are resolved, the accepted declaration-by-assignment
+semantics above remain unchanged, and `:=` is only a syntax hypothesis.
+
+---
+
 ### Consequences
 
 - **Positive:**
