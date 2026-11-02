@@ -212,6 +212,7 @@
 | EDR-097 | Architecture | [Contracts Amendment — Result Named in the Signature](architecture/EDR-097-contracts-result-named-old-deferred.md) | Accepted | 2026-10-21 | Amends EDR-056 |
 | EDR-098 | Architecture | [Trait and Function Contract Unification](architecture/EDR-098-trait-contract-unification.md) | Proposed | 2026-10-22 | Amends EDR-019, EDR-056 |
 | EDR-099 | Process | [Nyquist Validation as a Supplemental Method](process/EDR-099-nyquist-validation-method.md) | Accepted | 2026-11-01 | — |
+| EDR-100 | Process | [Syntax Exceptions Registry](process/EDR-100-syntax-exceptions-registry.md) | Accepted | 2026-11-02 | — |
 
 ### Process
 | ID | Title | Status | Date |
@@ -227,6 +228,7 @@
 | EDR-087 | [Syntax Acceptance Process](process/EDR-087-syntax-acceptance-process.md) | Accepted | 2026-08-15 |
 | EDR-088 | [Concept Design Review — Alternatives Phase](process/EDR-088-alternatives-phase.md) | Accepted | 2026-08-20 |
 | EDR-099 | [Nyquist Validation as a Supplemental Method](process/EDR-099-nyquist-validation-method.md) | Accepted | 2026-11-01 |
+| EDR-100 | [Syntax Exceptions Registry](process/EDR-100-syntax-exceptions-registry.md) | Accepted | 2026-11-02 |
 
 ### Quality
 | ID | Title | Status | Date |
@@ -256,3 +258,5 @@
 
 - 2026-09-28 — editorial: fn->fun typo fix applied repo-wide incl. decision records; no decision change.
 - 2026-09-28 — editorial: `[T]` -> `<T>` generics-notation migration (EDR-086) applied repo-wide incl. decision records; no decision change.
+
+- 2026-11-02 — EDR-100 added: Syntax Exceptions Registry makes deviations from the one-syntactic-element/one-responsibility rule explicit and requires registry consultation in the Syntax Pipeline.
