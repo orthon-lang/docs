@@ -12,84 +12,28 @@
 
 ## Pipeline Overview
 
-```
-how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
-        │                                Raw analysis from other languages.
-        │                                Input material, not Orthon spec.
-        ▼
-┌─────────────────────────────┐
-│ Decision Pipeline (10 Qs)   │  ◄── PRE-FILTER
-│ how/process/                │      Is this a language feature at all?
-│   DECISION_PIPELINE.md      │      Exit paths:
-└──────────┬──────────────────┘       • "Library problem" → REJECT
-           │                          • "Exists in primitives" → REJECT
-           │                          • Syntactic sugar → mark accordingly
-           ▼                          • Optimisation → move to OPTIMIZATION_MODEL
-┌─────────────────────────────┐      • ACCEPT / DEFER / REJECT
-│ Primitive Decomposition     │  ◄── DECOMPOSITION CHECK
-│ Check                       │      Does the concept decompose to
-│ what/PRIMITIVE_BLOCKS.md    │      the minimal primitive set?
-│ what/SEMANTIC_MODEL.md      │
-└──────────┬──────────────────┘
-           │
-           ▼
-┌─────────────────────────────┐
-│ Semantic Layer              │  ◄── LAYER CLASSIFICATION
-│ Classification              │      Level 0 (Data), Level 1 (Primitive Ops),
-│ how/gates/                  │      Level 2 (Patterns), Level 3+ (Lib)
-│   _language-design.md §1    │
-└──────────┬──────────────────┘
-           │
-           ▼
-┌─────────────────────────────┐
-│ Concept Design Review       │  ◄── DESIGN: steps 1–6
-│ how/concept-design-review.md│      Problem, alternatives, minimal solution,
-└──────────┬──────────────────┘      principles, examples, tooling
-           ▼
-┌─────────────────────────────┐
-│ Validation                  │  ◄── Applicable gates and fitness functions
-│                             │      Language Design Gate checklist
-└──────────┬──────────────────┘      Failure → revise and recheck
-           ▼
-┌─────────────────────────────┐
-│ Convergence Check           │  ◄── Step 7: Human Sign-off required
-└──────────┬──────────────────┘
-           ▼
-┌─────────────────────────────┐
-│ EDR (Architecture category) │  ◄── Record the approved decision
-└──────────┬──────────────────┘
-           ▼
-┌─────────────────────────────┐
-│ what/concepts/{NAME}.md     │  ◄── ORTHON-SPECIFIC DRAFT
-│                             │      Accepted design — Orthon semantics
-│                             │      (not raw research)
-└──────────┬──────────────────┘
-           │
-           ▼
-┌─────────────────────────────┐
-│ Cross-Cutting Review        │  ◄── PHASE 6 INTEGRATION
-│ what/CROSS_CUTTING.md       │      Pair-wise interaction analysis
-│ what/CONFLICT_REGISTRY.md   │      Conflict detection & resolution
-│ notes/interaction-matrix-   │      (happens after multiple concepts
-│   format.md                 │       are accepted — M1, Phase 6)
-└──────────┬──────────────────┘
-           │
-           ▼
-┌─────────────────────────────┐
-│ what/CORE_CONCEPTS.md       │  ◄── REGISTRY
-│                             │      Final entry: accepted, validated,
-│                             │      cross-checked concept
-└──────────┬──────────────────┘
-           │
-           │ gap discovered?
-           │  ├── Type A (missing concept) → research/ (full pipeline)
-           │  ├── Type B (unresolved detail) → notes/ (lightweight)
-           │  └── Type C (cross-concept) → CONFLICT_REGISTRY
-           ▼
-┌─────────────────────────────┐
-│ Post-Acceptance Gap         │  ◄── ITERATIVE REFINEMENT
-│ Resolution (Stage 10)       │      See § Stage 10 for full procedure
-└─────────────────────────────┘
+```mermaid
+flowchart TD
+    R["Research inbox<br/>Raw analysis; not Orthon specification"] --> P{"Decision Pipeline<br/>10-question pre-filter"}
+    P -->|Accept for design| D["Primitive decomposition<br/>Check against the primitive set"]
+    P -->|Library problem or existing primitives| X["Reject as language feature"]
+    P -->|Syntactic sugar| S["Document as syntax variant"]
+    P -->|Optimisation| O["Move to OPTIMIZATION_MODEL"]
+    P -->|Defer or reject| H["Defer or reject proposal"]
+    D --> L["Semantic layer classification<br/>Data, primitives, patterns, or library"]
+    L --> C["Concept Design Review: steps 1–6<br/>Problem, alternatives, solution, principles, examples, tooling"]
+    C --> V{"Validation<br/>Applicable gates, fitness functions, and checklist"}
+    V -->|Fail or unresolved flag| C
+    V -->|Pass| G{"Convergence Check<br/>Human Sign-off required"}
+    G -->|Revise| C
+    G -->|Approved| E["Architecture EDR<br/>Record the approved decision"]
+    E --> A["Accepted concept document<br/>what/concepts/"]
+    A --> I["Cross-Cutting Review<br/>Interactions and conflicts"]
+    I --> Q["Registry entry<br/>what/CORE_CONCEPTS.md"]
+    Q -->|Gap discovered| T{"Post-acceptance gap"}
+    T -->|Type A: missing concept| R
+    T -->|Type B: unresolved detail| B["Lightweight resolution in notes/"]
+    T -->|Type C: cross-concept conflict| F["Record in CONFLICT_REGISTRY"]
 ```
 
 ---
@@ -176,22 +120,18 @@ the checklist follow, then Step 7. See
 [`concept-design-review.md`](concept-design-review.md) for the full
 procedure with step descriptions and gate mappings.
 
-```
-  1. Idea/Problem
-  2. Alternatives
-  3. Minimal Solution
-  4. Principle Check
-  5. Examples
-  6. Tooling Implications
-      │
-      ▼  ← iteration loop (if check fails)
-  Validation gates + fitness functions + Language Design Gate checklist
-      │
-      ▼
-  7. Convergence Check (Human sign-off)
-      │
-      ▼
-  EDR (separate formal record)
+```mermaid
+flowchart TD
+    I["1. Idea / Problem"] --> A["2. Alternatives"]
+    A --> M["3. Minimal Solution"]
+    M --> P["4. Principle Check"]
+    P --> E["5. Examples"]
+    E --> T["6. Tooling Implications"]
+    T --> V{"Validation gates, fitness functions,<br/>and Language Design Gate checklist"}
+    V -->|Fail or unresolved flag| M
+    V -->|Pass| C{"7. Convergence Check<br/>Human Sign-off"}
+    C -->|Revise| M
+    C -->|Approved| D["EDR: separate formal record"]
 ```
 
 **Step 7 — Convergence Check (pre-EDR gate).** After validation and before writing the EDR,
@@ -396,14 +336,14 @@ This is the public face of the concept — the registry that answers
 Not every concept follows the full pipeline. The Decision Pipeline
 (Stage 2) may redirect a proposal to one of these alternate paths:
 
-```
-                          ┌── REJECT (library problem)
-                          │
-Proposal ──► Decision ────┼── Syntactic Sugar ──► Documented as syntax
-              Pipeline    │                        variant; no new semantics
-                          ├── Optimisation ──────► what/OPTIMIZATION_MODEL.md
-                          │
-                          └── ACCEPT ────────────► Full pipeline (stages 3–11)
+```mermaid
+flowchart TD
+    P["Proposal"] --> D{"Decision Pipeline"}
+    D -->|Library problem| R["Reject as language feature"]
+    D -->|Syntactic sugar| S["Document as syntax variant<br/>No new semantics"]
+    D -->|Optimisation| O["what/OPTIMIZATION_MODEL.md"]
+    D -->|Accept| A["Full pipeline: stages 3–11"]
+    D -->|Defer| F["Postpone to a later milestone"]
 ```
 
 A proposal can also be **DEFER**red — acknowledged as valuable but
