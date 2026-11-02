@@ -29,16 +29,19 @@ The caret communicates exclusive access as a distinct, temporary authority:
 exclusive borrowing compact and visible at the use site without introducing a
 loop-specific ownership convention.
 
-`^` is reserved for exclusive borrow. XOR must use the named form
-`xor(left, right)` so every symbol retains one semantic meaning. `|` is not an
-XOR substitute because it already participates in union types and the
-provisional distribution operator.
+`^` is an arity-distinguished operator family: unary `^value` denotes an
+exclusive borrow, while binary `left ^ right` denotes XOR. `xor(left, right)`
+is the named form of the binary operation. `|` is not an XOR substitute
+because it already participates in union types and the provisional
+distribution operator.
 
 ## Suggested action
 
 1. Run the syntax decision pipeline and the language-design gate for the
-   language-wide `^` spelling; obtain the required human sign-off before filing
-   an Architecture EDR.
+   language-wide `^` operator family; obtain the required human sign-off before
+   filing an Architecture EDR. The decision must explicitly amend Semantic
+   Purity's current "one symbol, one meaning" formulation or demonstrate that
+   its single semantic role admits unary exclusive borrow and binary XOR.
 2. Amend the Reference, OWNERSHIP, and MUTABILITY decisions that currently own
    the provisional `&mut` spelling, then amend EDR-094 and its accepted syntax
    record.
@@ -49,5 +52,10 @@ provisional distribution operator.
 4. Retain `&mut` only when explicitly describing Rust syntax, a historical
    alternative, or an external interoperability boundary; label every such use
    accordingly.
-5. Add a canonical `xor(left, right)` form to the operator/reference material
-   when Boolean and bitwise XOR semantics are specified.
+5. Add the canonical, equivalent XOR forms to the operator/reference material
+   when Boolean and bitwise XOR semantics are specified:
+
+   ```orthon
+   xor(left, right)
+   left ^ right
+   ```
