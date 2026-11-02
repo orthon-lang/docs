@@ -1,6 +1,6 @@
 # Concept Design Review
 
-> The 8-step procedure for designing and validating each language
+> The procedure for designing and validating each language
 > concept during Milestone 2 of the design process.
 >
 > **Applies to:** [ROADMAP](../when/ROADMAP.md) § Milestone 2
@@ -15,7 +15,7 @@
 
 The Concept Design Review is the core design workflow of the Orthon
 project. Each concept identified in the Language Inventory (Milestone 1)
-undergoes a uniform 8-step procedure that ensures the design is:
+undergoes a uniform review procedure that ensures the design is:
 
 - **Problem-driven** — starts from a real programmer need, not a
   technically interesting idea.
@@ -35,14 +35,17 @@ govern language design decisions. They serve distinct roles:
 
 | Artifact | Role | Answers | Applied |
 |----------|------|---------|---------|
-| **8-step procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
-| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the completed 8-step output |
+| **Review procedure** (this document) | **Process** — what to do, in what order | *How do we design a concept?* | During each concept review |
+| **Decision Validation gates** (`DECISION_VALIDATION.md`) | **Criteria** — what the result must satisfy | *Is the design sound?* | Evaluates the proposed design before convergence |
 | **Language Design Gate** (`_language-design.md`) | **Checklist** — what to verify concretely | *Did we check everything?* | Operationalises the gates into a review form |
 
-**The flow:** The 8-step procedure produces a concept design. That design
-is then evaluated through the seven Decision Validation gates. The
-`_language-design.md` checklist records the outcome of each check. Only
-concepts that pass all gates and satisfy the checklist are accepted.
+**The flow:** Steps 1–6 produce a concept design. The applicable Decision
+Validation gates and fitness functions evaluate it; the Language Design
+Gate checklist records the checks. Step 7 then checks convergence and
+requires Human Sign-off. The EDR records the approved decision afterwards.
+A failed check returns the design to revision; repeat affected checks.
+If fundamental semantics change after sign-off, repeat the affected checks
+and obtain a new Human Sign-off before filing the EDR.
 
 ---
 
@@ -57,14 +60,11 @@ concepts that pass all gates and satisfy the checklist are accepted.
 
 ---
 
-## 8-Step Procedure
+## Review Procedure
 
-Each concept goes through the following 8 steps in order. Procedure steps
-capture the creative design work; the deliverable (EDR + concept document)
-is handled separately in the Output section below. Steps 1–6 produce the
-design; Step 7 (Convergence Check) is the pre-EDR gate that requires an
-explicit Human Sign-off; Step 8 (EDR) records the settled, human-approved
-decision.
+Steps 1–6 produce the design. Complete validation and the checklist
+before Step 7 (Convergence Check). After explicit Human Sign-off, file
+the EDR as a separate deliverable.
 
 | # | Step | Purpose | Answer |
 |---|------|---------|--------|
@@ -74,8 +74,8 @@ decision.
 | 4 | Principle Check | Which Design Principles does it satisfy? | Principle mapping |
 | 5 | Examples | Show all canonical forms | Examples list |
 | 6 | Tooling Implications | Does this concept imply tooling requirements? | Tooling requirement(s) or "none" |
-| 7 | Convergence Check | Is the design baked and human-approved? | Sign-off field + verdict |
-| 8 | EDR | Record the decision with rationale | EDR file |
+| — | Validation | Do applicable gates and fitness functions pass? | Gate evidence and completed checklist |
+| 7 | Convergence Check | Is the validated design baked and human-approved? | Sign-off field + verdict |
 
 ### Procedure Flow
 
@@ -88,9 +88,11 @@ flowchart TD
     M --> P["4. Principle Check"]
     P --> E["5. Examples"]
     E --> T["6. Tooling Implications"]
-    T --> C{"7. Convergence Check: all checks pass, including human sign-off?"}
+    T --> V["Validation gates, fitness functions, and checklist"]
+    V -->|Fail or unresolved flag| M
+    V -->|Pass| C{"7. Convergence Check: human sign-off?"}
     C -->|No| M
-    C -->|Yes| D["8. File the EDR"]
+    C -->|Yes| D["File the EDR"]
 ```
 
 A principle violation is handled under the requirements in Step 4; the
@@ -143,7 +145,7 @@ also flows into the concept doc's "Alternative Strategies" and the
 
 **Output:** a comparison table with a Selection row — the chosen candidate
 becomes the input to Step 3 (Minimal Solution). The table is carried
-verbatim into the EDR's "Alternatives Considered" field (Step 8).
+verbatim into the EDR's "Alternatives Considered" field.
 
 #### 3. Minimal Solution
 
@@ -196,10 +198,12 @@ If yes, create a Tooling Requirement in `how/tooling/` using the
 
 #### 7. Convergence Check
 
-Before writing the EDR, verify the design is "baked". This is a lightweight
-pre-EDR gate — it prevents premature formalisation. All six sub-checks
+After validation and before writing the EDR, verify the design is "baked". This is a lightweight
+pre-EDR gate — it prevents premature formalisation. All sub-checks
 must pass:
 
+- [ ] **Validation complete** — applicable gates and fitness functions pass;
+      the Language Design Gate checklist is complete
 - [ ] **Alternatives documented** — Step 2 produced at least three
       candidates with a Selection row recorded before selection
 - [ ] **Syntax reviewed** — no conflicts with existing syntax (Semantic
@@ -224,7 +228,7 @@ not a draft for iteration.
 
 **Output:** A completed Convergence Check with the Human sign-off field.
 
-#### 8. EDR
+### EDR — Formal Record
 
 Create an Engineering Decision Record (Architecture category) accepting
 the concept. Use the [`_edr-architecture.md`](templates/_edr-architecture.md)
@@ -239,8 +243,8 @@ Human sign-off from step 7 is populated.
 
 ## Validation
 
-After the 8-step procedure is complete, the concept design must be
-validated through all 7 Decision Validation gates defined in
+After design steps 1–6 and before Convergence Check and EDR, validate
+the concept through the applicable Decision Validation gates defined in
 [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — see that
 document for the gate catalogue with criteria tables and gate selection
 matrix.
@@ -248,6 +252,9 @@ matrix.
 Each gate produces a binary verdict (pass / fail) or a conditional flag.
 A proposal with any **fail** or unresolved **flag** must be revised
 before moving to specification.
+
+Evaluate applicable [fitness functions](architecture/FITNESS_FUNCTIONS.md)
+alongside the gates and record their results in the concept gate evaluation.
 
 The [`_language-design.md`](gates/_language-design.md) checklist provides
 the concrete review form that records the outcome of each gate check.
@@ -268,10 +275,10 @@ The deliverables of a Concept Design Review are:
    template for the required structure).
 2. **EDR** in `docs/how/decision_records/architecture/` — records the decision, rationale, and
    alternatives considered (Architecture category).
-3. **CORE_CONCEPTS.md registration** — the concept is en
-4. **Tooling Requirement(s)** (optional) — in `docs/how/tooling/` if the
-   concept has tooling implications (see Step 5).tered into the
+3. **CORE_CONCEPTS.md registration** — the concept is entered into the
    accepted-concept registry at `what/CORE_CONCEPTS.md`.
+4. **Tooling Requirement(s)** (optional) — in `docs/how/tooling/` if the
+   concept has tooling implications (see Step 6).
 
 ---
 
@@ -285,7 +292,7 @@ The transition from **DRAFT** (concept research in `how/concepts/research/`) to
 | Criteria | Requirement |
 |----------|-------------|
 | **Owner** | Solo author (per `TODO.md` convention) |
-| **Procedure** | All 8 Concept Design Review steps completed |
+| **Procedure** | Design, validation, and Convergence Check completed |
 | **EDR** | Architecture-category EDR filed in `decision_records/architecture/` |
 | **Gate validation** | Passes all 7 Decision Validation gates (`DECISION_VALIDATION.md`) |
 | **LLM Generability Gate** | Passes the 5-criteria LLM Generability Gate check — see [`llm-native-concept-shortlist.md`](../notes/llm-native-concept-shortlist.md) § LLM Generability Gate Requirement |

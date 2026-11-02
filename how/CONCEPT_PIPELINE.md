@@ -42,50 +42,22 @@ how/concepts/research/{NAME}.md    ◄── RESEARCH INBOX
            │
            ▼
 ┌─────────────────────────────┐
-│ Concept Design Review       │  ◄── DETAILED DESIGN
-│ (8 steps)                   │      1. Idea/Problem
-│ how/concept-design-review.md│      2. Alternatives
-│                             │      3. Minimal Solution
-│                             │      4. Principle Check
-│                             │      5. Examples
-│                             │      6. Tooling Implications
-│               ▲             │      7. Convergence Check ★
-│               │ iteration   │      8. EDR (only when baked)
-│               │             │
-└───────────────┼─────────────┘
-                │ (pass)
-                ▼
-┌─────────────────────────────┐
-│ Decision Validation Gates   │  ◄── VALIDATION
-│ 7 gates                     │      Each gate = binary verdict or flag
-│ how/gates/                  │
-│   DECISION_VALIDATION.md    │      Required gates (new construct):
-└──────────┬──────────────────┘      • USER_VALUE_GATE
-           │                         • LOGICAL_CONSISTENCY_GATE
-           │                         • CONCEPTUAL_SIMPLICITY_GATE
-           │                         • ARCHITECTURAL_INTEGRITY_GATE
-           │                         • IMPLEMENTATION_INDEPENDENCE_GATE
-           │                         • LONG_TERM_MAINTAINABILITY_GATE
-           │                         • LLM_GENERABILITY_GATE
-           │                         (Fewer gates for syntax-only or
-           │                          stdlib-only proposals — see
-           │                          DECISION_VALIDATION.md § Gate Selection)
+│ Concept Design Review       │  ◄── DESIGN: steps 1–6
+│ how/concept-design-review.md│      Problem, alternatives, minimal solution,
+└──────────┬──────────────────┘      principles, examples, tooling
            ▼
 ┌─────────────────────────────┐
-│ Language Design Gate        │  ◄── OPERATIONAL CHECKLIST
-│ Checklist                   │      19 criteria — all must pass
-│ how/gates/                  │      Records verdict in Decision Journal
-│   _language-design.md       │
-└──────────┬──────────────────┘
-           │
+│ Validation                  │  ◄── Applicable gates and fitness functions
+│                             │      Language Design Gate checklist
+└──────────┬──────────────────┘      Failure → revise and recheck
            ▼
 ┌─────────────────────────────┐
-│ EDR (Architecture category) │  ◄── FORMAL RECORD
-│ how/decision_records/       │      Context · Decision · Consequences
-│   architecture/             │      Alternatives · Related Concepts
-│   EDR-NNN-{name}.md        │
+│ Convergence Check           │  ◄── Step 7: Human Sign-off required
 └──────────┬──────────────────┘
-           │
+           ▼
+┌─────────────────────────────┐
+│ EDR (Architecture category) │  ◄── Record the approved decision
+└──────────┬──────────────────┘
            ▼
 ┌─────────────────────────────┐
 │ what/concepts/{NAME}.md     │  ◄── ORTHON-SPECIFIC DRAFT
@@ -195,12 +167,13 @@ composition formula. See EDR-012 for the full classification rule.
 
 ---
 
-### 5. Concept Design Review (8 Steps)
+### 5. Concept Design Review
 
 **Document:** [`how/concept-design-review.md`](concept-design-review.md)
 
-The core design workflow. Each concept undergoes these steps in order —
-see [`concept-design-review.md`](concept-design-review.md) for the full
+The core design workflow. Steps 1–6 produce the design; validation and
+the checklist follow, then Step 7. See
+[`concept-design-review.md`](concept-design-review.md) for the full
 procedure with step descriptions and gate mappings.
 
 ```
@@ -212,16 +185,21 @@ procedure with step descriptions and gate mappings.
   6. Tooling Implications
       │
       ▼  ← iteration loop (if check fails)
-  7. Convergence Check (Human sign-off) ◄── pre-EDR gate
+  Validation gates + fitness functions + Language Design Gate checklist
       │
       ▼
-  8. EDR
+  7. Convergence Check (Human sign-off)
+      │
+      ▼
+  EDR (separate formal record)
 ```
 
-**Step 7 — Convergence Check (pre-EDR gate).** Before writing the EDR,
+**Step 7 — Convergence Check (pre-EDR gate).** After validation and before writing the EDR,
 verify the design is "baked". This is a lightweight checklist, not a
 full validation gate — it prevents premature formalisation:
 
+- [ ] **Validation complete** — applicable gates and fitness functions pass;
+      the Language Design Gate checklist is complete
 - [ ] **Alternatives documented** — Step 2 produced at least three
       candidates with a Selection row recorded before selection
 - [ ] **Syntax reviewed** — no conflicts with existing syntax (Semantic Purity,
@@ -238,7 +216,9 @@ full validation gate — it prevents premature formalisation:
 - [ ] **No remaining ambiguity** — all terms defined; no "decide later"
       items that could change fundamental semantics
 
-If any item fails → return to step 3 (Minimal Solution) and iterate.
+If any item fails → return to step 3 (Minimal Solution), iterate, and repeat
+the affected checks. If fundamental semantics change after sign-off, repeat
+the affected checks and obtain a new Human Sign-off before filing the EDR.
 **Do NOT proceed to the EDR until the Human sign-off field is populated.**
 EDR is a **record** of a stable, human-approved decision, not a draft
 for iteration.
@@ -266,7 +246,7 @@ final review confirms no surprises remain.
   but does not change the core decision, use the Type B path (§ Stage 10): log it
   with a gate-impact assessment; do not re-run the full pipeline.
 
-**Step 8 (EDR)** creates the Architecture-category EDR file.
+The EDR is a separate formal record created after Human Sign-off.
 Interactions analysis is deferred to Phase 6 (Cross-Cutting Review)
 and is not part of the individual Concept Design Review.
 
@@ -276,8 +256,8 @@ and is not part of the individual Concept Design Review.
 
 **Document:** [`how/gates/DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md)
 
-After the 8-step design, the concept is evaluated through 7 independent
-validation gates. Each gate produces a binary verdict (pass / fail) or
+After design steps 1–6 and before Convergence Check, evaluate the concept
+through the applicable validation gates and fitness functions. Each gate produces a binary verdict (pass / fail) or
 a conditional flag. Any **fail** or unresolved **flag** means the
 concept must be revised.
 
@@ -291,7 +271,7 @@ which gates apply to which decision type.
 
 **Document:** [`how/gates/_language-design.md`](gates/_language-design.md)
 
-19 operational criteria that operationalise the validation gates into
+Before Convergence Check, complete the operational criteria that operationalise the validation gates into
 concrete yes/no checks. Every criterion must be satisfied before the
 concept enters specification. The Decision Journal at the end records
 each verdict with date, concept, verdict, and rationale.
@@ -386,7 +366,7 @@ pipeline pass.
 [`notes/interaction-matrix-format.md`](../notes/interaction-matrix-format.md)
 
 Happens after multiple concepts are accepted (M1, Phase 6). Each concept's
-interaction data (from Concept Design Review Step 8) feeds into the
+interaction data from the concept design and validation feeds into the
 pair-wise interaction matrix. Conflicts are tracked in the Conflict Registry
 with resolution status. Goal: zero open conflicts at end of Phase 6.
 
