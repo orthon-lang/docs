@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 Phase: 04.1 (concepts-human-s-verification) — EXECUTING
 Plan: 18 of 18
 Status: Phase complete — ready for verification
-Last activity: 2026-11-01 - Completed quick task 261101-ntd: add Nyquist Validation as a supplemental method
+Last activity: 2026-11-02 - Completed quick task 261102-ctl: define syntax exceptions registry and integrate it into the Syntax Pipeline and project process
 
 Progress: [█████████░] 94%
 
@@ -173,6 +173,7 @@ Recent decisions affecting current work:
 | 63 | Inheritance of contract conditions (Tier 4 inline) | 2026-10-23 | cec060b | — |
 | 64 | Several contracts per element (Tier 4 inline) | 2026-10-31 | 08c96a4 | — |
 | 261101-ntd | Add Nyquist Validation as a supplemental method | 2026-11-01 | 947476c | [261101-ntd-add-nyquist-validation-as-an-additional-](./quick/261101-ntd-add-nyquist-validation-as-an-additional-/) |
+| 261102-ctl | Define syntax exceptions registry and integrate it into the Syntax Pipeline and project process | 2026-11-02 | f3fab28, 132c3dc | [261102-ctl-define-syntax-exceptions-registry-and-in](./quick/261102-ctl-define-syntax-exceptions-registry-and-in/) |
 
 ### Roadmap Evolution
 
