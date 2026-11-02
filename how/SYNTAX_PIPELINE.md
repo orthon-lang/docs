@@ -32,53 +32,79 @@ are the acceptance criteria.
 
 ## Pipeline Overview
 
+```mermaid
+flowchart TD
+    subgraph STAGE_1["Stage 1"]
+        H["Syntax hypothesis inbox<br/>how/syntax/{NAME}.md<br/>Open question, candidates, coupling"]
+    end
+    subgraph STAGE_2["Stage 2"]
+        P["Decision Pipeline<br/>Language? Library? Sugar? Optimisation?"]
+    end
+    subgraph STAGE_3["Stage 3"]
+        C["Coupling & Overload Check<br/>Syntax Exceptions Registry Check"]
+    end
+    subgraph STAGE_4["Stage 4"]
+        S["Syntax Principles (5)<br/>Acceptance criteria"]
+    end
+    subgraph STAGE_5["Stage 5"]
+        G["Syntax Acceptance Gates<br/>Required and applicable optional gates"]
+    end
+    subgraph STAGE_6["Stage 6"]
+        L["Language Design Gate<br/>Relevant operational checklist"]
+    end
+    subgraph STAGE_6B["Stage 6b"]
+        A["Human Sign-off<br/>Non-automatable LOCKED / changes verdict"]
+    end
+    subgraph STAGE_7["Stage 7"]
+        D["Architecture EDR<br/>Record the decision and applicable exception"]
+    end
+    subgraph STAGE_8["Stage 8"]
+        W["Accepted syntax record<br/>what/syntax/{NAME}.md"]
+    end
+    subgraph STAGE_9["Stage 9"]
+        U["Hub update and provenance<br/>SYNTAX.md + resolved hypothesis"]
+    end
+    subgraph STAGE_10["Stage 10"]
+        Gm["Grammar<br/>PARSER.md"]
+    end
+
+    STAGE_1 --> STAGE_2 --> STAGE_3 --> STAGE_4 --> STAGE_5 --> STAGE_6 --> STAGE_6B --> STAGE_7 --> STAGE_8 --> STAGE_9 --> STAGE_10
 ```
-how/syntax/{NAME}.md                ◄── SYNTAX HYPOTHESIS INBOX
-        │                                Open question; candidates; coupling.
-        ▼
-Decision Pipeline (10 Q)            ◄── PRE-FILTER (reuse DECISION_PIPELINE.md)
-        │                                Language? Library? Sugar? Optimisation?
-        ▼
-Coupling & Overload Check           ◄── SYNTAX-SPECIFIC CONTROL
-Syntax Exceptions Registry Check        Symbol/keyword collision sweep across ALL
-        │                                accepted concepts and the exceptions registry;
-        │                                cross-hypothesis coupling (`,`, `:`, `<>`, `->`,
-        │                                `require`/`using`/`where` tail).
-        ▼
-Syntax Principles (5)               ◄── ACCEPTANCE CRITERIA
-        │                                what/SYNTAX.md § Syntax Principles (ratified by EDR-087)
-        ▼
-Syntax Acceptance Gates             ◄── VALIDATION (DECISION_VALIDATION.md § Gate Selection)
-        │                                Required: LOGICAL_CONSISTENCY, CONCEPTUAL_SIMPLICITY,
-        │                                ARCHITECTURAL_INTEGRITY, LLM_GENERABILITY.
-        │                                Optional: USER_VALUE (if sugar), IMPLEMENTATION_INDEPENDENCE,
-        │                                LONG_TERM_MAINTAINABILITY.
-        ▼
-Language Design Gate (relevant)     ◄── OPERATIONAL CHECKLIST (_language-design.md)
-        │                                Named equivalence, all canonical forms, explicitness,
-        │                                orthogonality, LLM generability.
-        ▼
-Human Sign-off (Stage 6b)           ◄── NON-AUTOMATABLE GATE (solo author confirms)
-        │                                Reviewed-by · Date · Verdict [LOCKED / changes]
-        ▼
-EDR (Architecture category)         ◄── FORMAL RECORD (one per syntax decision)
-        │
-        ▼
-what/syntax/{NAME}.md               ◄── ACCEPTED SYNTAX RECORD (What layer)
-        │
-        ▼
-SYNTAX.md hub + "Resolved" mark     ◄── HUB UPDATE + PROVENANCE
-        │                                SYNTAX.md gains a pointer; hypothesis doc marked
-        │                                "Resolved — see SYNTAX.md § …" (RANGE_STEP.md precedent).
-        ▼
-PARSER.md                           ◄── GRAMMAR (concrete grammar updated)
+
+### Stage 3 — Registry outcomes
+
+```mermaid
+flowchart TD
+    subgraph STAGE_1["Stage 1"]
+        H["Syntax hypothesis inbox"]
+    end
+    subgraph STAGE_3["Stage 3: Coupling & Overload Check"]
+        R["Syntax Exceptions Registry Check<br/>Collision or registered exception?"]
+        R --> N["No collision"]
+        R --> E["Existing accepted exception<br/>Verify its documented boundary"]
+        R --> X["New exception proposed<br/>Prefer redesign; otherwise justify, approve, and register it"]
+    R --> O["Open conflict<br/>Resolve, reject, or explicitly defer<br/>Do not accept the additional role"]
+    end
+    subgraph STAGE_4["Stage 4"]
+        S["Syntax Principles"]
+    end
+    N --> STAGE_4
+    E --> STAGE_4
+    X --> STAGE_4
+    O --> STAGE_1
 ```
 
 **Unified Phase 5 input flow:**
 
-```
-research semantic concepts → EDR + concepts → deferred syntax decisions → EDR + resolved syntax
-        (how/concepts/research/)   (EDR + what/concepts/)      (how/syntax/)      (EDR + what/syntax/ + SYNTAX.md hub)
+```mermaid
+flowchart TD
+    subgraph STAGE_5["Stage 5: Syntax Acceptance Gates"]
+        R["Semantic concept research<br/>how/concepts/research/"]
+        C["Accepted concept<br/>EDR + what/concepts/"]
+        H["Deferred syntax decision<br/>how/syntax/"]
+        S["Accepted syntax<br/>EDR + what/syntax/ + SYNTAX.md"]
+    end
+    R --> C --> H --> S
 ```
 
 ---
