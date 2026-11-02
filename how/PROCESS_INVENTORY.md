@@ -30,6 +30,7 @@ specific failure mode each one prevents.
 | Implementation Strategies | Strategy | EDR-006 | Ad-hoc strategy selection | No coherent implementation profiles for different use cases |
 | Concept Design Review (8-step) | Procedure | EDR-007, EDR-088 | Unstructured, inconsistent concept design | Variable quality across language concepts |
 | Syntax Pipeline | Procedure | EDR-087 | Deferred syntax decisions lost or decided ad hoc | Syntax chosen without the existing gates; overloaded symbols recur |
+| [Syntax Exceptions Registry](SYNTAX_EXCEPTIONS.md) | Process control | EDR-100 | Unrecorded context-dependent syntax and forgotten collision history | Invisible design debt silently weakens the one-syntactic-element/one-responsibility rule |
 | Architecture Decision Records (ADR) | Record | EDR-001 | Decisions without documented rationale | Design amnesia — "why did we choose this?" |
 | Tools Decision Records (TDR) | Record | EDR-001 | Process tools without documented rationale | Process becomes unexamined ritual |
 | Layered Architecture | Architecture | EDR-010 | Cross-layer coupling | Changes in one layer ripple unpredictably to others |
@@ -52,6 +53,8 @@ flowchart TD
     EDR-005["EDR-005: Fitness Functions"] --> EDR-007
     EDR-006 --> EDR-007
     EDR-007 --> EDR-001["EDR-001: EDR System"]
+    EDR-087["EDR-087: Syntax Pipeline"] --> EDR-100["EDR-100: Syntax Exceptions Registry"]
+    EDR-100 --> SER["SYNTAX_EXCEPTIONS.md"]
     EDR-007 --> TLR["Tooling Requirements"]
     TLR -.-> ROADMAP["ROADMAP.md § M3"]
     EDR-001 --> EDR-011["EDR-011: Process Inventory"]
@@ -63,6 +66,7 @@ flowchart TD
     EDR-006 -.-> EDR-011
     EDR-007 -.-> EDR-011
     EDR-010 -.-> EDR-011
+    EDR-100 -.-> EDR-011
     TLR -.-> EDR-011
 ```
 
@@ -96,6 +100,7 @@ Which tools are active at each milestone:
 - [`ROADMAP.md`](../when/ROADMAP.md) — milestone definitions
 - [`DECISION_VALIDATION.md`](gates/DECISION_VALIDATION.md) — gate catalogue
 - [`SYNTAX_PIPELINE.md`](SYNTAX_PIPELINE.md) — syntax acceptance pipeline (EDR-087)
+- [`SYNTAX_EXCEPTIONS.md`](SYNTAX_EXCEPTIONS.md) — registry of syntax exceptions and collision history (EDR-100)
 - [`tdr/`](tdr/) — superseded TDR records (migrated to EDR)
 - [`decision_records/`](decision_records/) — active Engineering Decision Records
 - [`decision_records/INDEX.md`](decision_records/INDEX.md) — unified EDR journal

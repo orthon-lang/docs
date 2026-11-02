@@ -39,10 +39,11 @@ how/syntax/{NAME}.md                ◄── SYNTAX HYPOTHESIS INBOX
 Decision Pipeline (10 Q)            ◄── PRE-FILTER (reuse DECISION_PIPELINE.md)
         │                                Language? Library? Sugar? Optimisation?
         ▼
-Coupling & Overload Check           ◄── SYNTAX-SPECIFIC GATE
-        │                                Symbol/keyword collision sweep across ALL
-        │                                accepted concepts; cross-hypothesis coupling
-        │                                (`,`, `:`, `<>`, `->`, `require`/`using`/`where` tail).
+Coupling & Overload Check           ◄── SYNTAX-SPECIFIC CONTROL
+Syntax Exceptions Registry Check        Symbol/keyword collision sweep across ALL
+        │                                accepted concepts and the exceptions registry;
+        │                                cross-hypothesis coupling (`,`, `:`, `<>`, `->`,
+        │                                `require`/`using`/`where` tail).
         ▼
 Syntax Principles (5)               ◄── ACCEPTANCE CRITERIA
         │                                what/SYNTAX.md § Syntax Principles (ratified by EDR-087)
@@ -111,10 +112,12 @@ The result of a pipeline run is recorded as a **«Decision Pipeline Run»**
 section inside the hypothesis document (not as an EDR — the EDR records the
 eventual *decision*, the run is provenance).
 
-### Stage 3 — Coupling & Overload Check *(syntax-specific)*
+### Stage 3 — Coupling & Overload Check + Syntax Exceptions Registry Check *(syntax-specific)*
 
-The one gate the semantic pipeline does not have. Every syntax decision must
-pass a **symbol/keyword collision sweep across all accepted concepts**:
+This is the syntax-specific control, not a new validation gate. Every syntax
+decision must pass a **symbol/keyword collision sweep across all accepted
+concepts** and consult the [Syntax Exceptions
+Registry](SYNTAX_EXCEPTIONS.md):
 
 - The proposed symbol/keyword must not already carry a different meaning in
   another concept (**one symbol → one meaning**).
@@ -123,6 +126,22 @@ pass a **symbol/keyword collision sweep across all accepted concepts**:
 - Cross-hypothesis coupling must be explicit: `,`, `:`, `<>`, `->`, and the
   signature tail (`require` / `using` / `where` / `-> Return`) are known
   contention points (see `FUNCTION_RETURN_SYNTAX.md`, `BOUNDS_IN_ANGLE_BRACKETS.md`).
+
+The review records exactly one outcome:
+
+1. **No collision** — the proposed element has no conflicting responsibility.
+2. **Existing accepted exception applies** — the proposal stays within the
+   registry entry's documented boundary.
+3. **Open conflict** — the proposal cannot be accepted until the collision is
+   resolved, rejected, or explicitly deferred.
+4. **New exception proposed** — redesign is preferred. If redesign does not
+   preserve the required semantics, the normal acceptance path, including
+   human sign-off, must justify the exception and create its registry entry
+   before acceptance.
+
+An unregistered exception is a design defect, not a context-derived
+allowance. The syntax-hypothesis queue records decisions in progress; the
+registry records exceptions and collision history.
 
 ### Stage 4 — Syntax Principles
 
@@ -175,13 +194,16 @@ the gate verdicts remain the EDR's validation trail.
 Each accepted syntax decision gets an Architecture-category EDR recording
 context, decision, consequences, and alternatives — the same record type as
 a semantic concept. The hypothesis doc's «Decision Pipeline Run» and the
-gate verdicts become the EDR's validation trail.
+gate verdicts become the EDR's validation trail. When an exception applies,
+the EDR must link to its registry entry and the entry must link back.
 
 ### Stage 8 — Accepted Syntax Record
 
 The accepted syntax is written to `what/syntax/{NAME}.md` (What layer) —
 the canonical reference for that construct's surface form. This mirrors
-`how/concepts/research/` → `what/concepts/`.
+`how/concepts/research/` → `what/concepts/`. When an exception applies, the
+record links to its registry entry; the registry remains control metadata,
+not a replacement for this canonical record.
 
 ### Stage 9 — Hub Update + Provenance
 
@@ -212,4 +234,6 @@ Phase 5 (Syntax Design) runs in two passes, in order:
    (ROADMAP Phase 5 step 2), folding results into `what/syntax/` + the hub.
 
 Exit criteria: *"Every language concept has defined syntax"* AND *"All open
-syntax hypotheses in `how/syntax/` resolved and folded into `SYNTAX.md`."*
+syntax hypotheses in `how/syntax/` resolved and folded into `SYNTAX.md`"*
+AND *"Every open registry conflict is resolved, rejected, or explicitly
+deferred, and every accepted exception has complete reciprocal provenance."*

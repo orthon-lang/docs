@@ -38,7 +38,10 @@ needs a syntax decision".
   *"Phase 5 input — syntax hypothesis; not a concept under current review."*
 - **One question per file.** If a hypothesis spawns a distinct question, split it.
 - **Coupling is explicit.** Each file lists the other syntax questions it
-  couples with (same symbol, same position, same construct).
+  couples with (same symbol, same position, same construct). The collision
+  sweep also consults [`how/SYNTAX_EXCEPTIONS.md`](../SYNTAX_EXCEPTIONS.md):
+  the queue tracks decisions, while the registry tracks exceptions and
+  collision history.
 - **Indexed here.** Every hypothesis is registered in the Decision Queue
   below; do not add a file without a queue row.
 - **Coupled-by-pointer.** Some open syntax questions live in concept
@@ -57,7 +60,8 @@ Decision Pipeline (10 Q)      ◄── PRE-FILTER (reuse how/process/DECISION_P
       │                            Language feature? Library? Sugar? Optimisation?
       ▼
 Coupling & Overload Check     ◄── SYNTAX-SPECIFIC (SYNTAX_PIPELINE.md § Stage 3)
-      │                            Symbol/keyword collision sweep across ALL concepts
+Registry Check                     Collision sweep across ALL concepts and the
+      │                            Syntax Exceptions Registry (EDR-100).
       │                            (precedents: EDR-086 `:`, EDR-083 `:` in ranges).
       ▼
 Syntax Principles (5)         ◄── ACCEPTANCE CRITERIA (what/SYNTAX.md § Syntax Principles)
