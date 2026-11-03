@@ -124,6 +124,8 @@ agents/GSD flows must not self-certify it.
 
 | Question | Home document | Status | Human review |
 |----------|---------------|--------|--------------|
+| Ownership transfer spelling | [OWNERSHIP_TRANSFER_OPERATOR.md](../concepts/research/essential/OWNERSHIP_TRANSFER_OPERATOR.md) | Open; v0.1 requires an essential transfer form | Pending |
+| Returned-borrow relationship and result notation | [OWNERSHIP_BORROW_SCOPES.md](../concepts/research/essential/OWNERSHIP_BORROW_SCOPES.md) | Open; full interface form for v0.1, `-> buffer` shorthand deferred beyond v0.1 | Pending |
 | Creation-time `using` literal syntax (was: capture keyword / lambda syntax) | `../concepts/research/essential/CLOSURE_CAPTURE.md` (semantics locked — EDR-081 Amendment 2026-08-16; syntax open), `../../notes/code-block-semantics.md` | Open (coupled — syntax only) | Pending |
 | Blanket-impl syntax | `../concepts/research/important/TRAIT_BLANKET_IMPLEMENTATION.md` | Open (coupled) | Pending |
 | Contract keyword (`contract` vs `trait`) and name of multi-instance contracts (the conformance word moved to [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md)) | `../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md` (semantics hypothesis; syntax open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-18) | Pending |

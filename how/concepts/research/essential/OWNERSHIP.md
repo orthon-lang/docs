@@ -8,6 +8,39 @@
 >
 > **Last updated:** 2026-07-20
 
+## Accepted Baseline and Research Map
+
+[EDR-013](../../../decision_records/architecture/EDR-013-semantic-model.md)
+merged this research's single-owner, move, and borrow model into the accepted
+[semantic model](../../../../what/SEMANTIC_MODEL.md); this historical research
+file as a whole is not an accepted specification. [EDR-030](../../../decision_records/architecture/EDR-030-compiler-as-static-analyzer.md)
+requires compile-time ownership analysis. `proc` exclusivity and
+[EDR-094](../../../decision_records/architecture/EDR-094-for-expression-and-iteration-ownership.md)'s
+iteration rules constrain the work below. Earlier claims in this file are
+historical research and must be checked against those accepted sources.
+
+**Working decisions from the current review:** explicit `Resource` marking;
+regular/copyable and resource/move-only terminology; explicit lexical borrow
+boundaries; safe FFI must not create untracked aliases; and returned borrows
+with proven owner relationships. The detailed returned-borrow and interface
+decisions are recorded below. These are research decisions awaiting review,
+not amendments to accepted EDRs.
+
+| Research question | Hypothesis | Depends on |
+|---|---|---|
+| Type categories and composition | [Ownership type categories](OWNERSHIP_TYPE_CATEGORIES.md) | Accepted ownership and type rules |
+| Transfer and invalidation | [Ownership transfer](OWNERSHIP_TRANSFER.md) | Type categories |
+| Temporary access and `proc` | [Borrowing and exclusivity](OWNERSHIP_BORROWING_EXCLUSIVITY.md) | Types and transfer |
+| Borrow scopes and returned views | [Borrow scopes](OWNERSHIP_BORROW_SCOPES.md) | Borrowing and transfer |
+| Managed resource lifecycle | [Resource lifecycle](OWNERSHIP_RESOURCE_LIFECYCLE.md) | Types, transfer, borrow scopes |
+
+Iteration and FFI are interaction cases in these documents and their existing
+concepts, rather than new standalone hypotheses. The [transfer operator](OWNERSHIP_TRANSFER_OPERATOR.md)
+remains syntax research. The `-> buffer` shorthand is a post-v0.1 candidate;
+all syntax decisions follow the [syntax pipeline](../../../SYNTAX_PIPELINE.md).
+See the [post-acceptance question tracker](../../../../notes/ownership-open-questions.md)
+for routing and review status.
+
 ## Issue (Why)
 
 How do you efficiently manage memory and prevent leaks without runtime overhead or unpredictable pauses?
@@ -114,6 +147,22 @@ Arena-based allocation with ownership and static borrow checking (Rust-style). N
 > concurrency. Whether every resource requires an execution context remains
 > unresolved; this decision introduces no such requirement. This is a working
 > research decision, not an accepted EDR or a completed design gate.
+
+### Interface Inference and Version Scope — Working Decisions
+
+- The compiler infers a returned borrow's relationship to its owner when the
+  relationship is unambiguous. The precise inference rules remain open.
+- Public interfaces explicitly declare result types and use the full form;
+  inference of an unambiguous borrow relationship is a separate concern from
+  inference of the result type. The full form's syntax and the treatment of
+  ambiguous relationships remain open.
+- The illustrative `-> buffer` form names a borrow source while leaving the
+  result type to inference. It is a candidate only for non-public functions
+  after v0.1, not an accepted syntax or part of v0.1.
+- Convenience forms, abbreviations, and usability enhancements are deferred
+  beyond v0.1. Essential mechanisms required for correctness and the chosen
+  core semantics still need to be identified and designed for the initial
+  version; they are not automatically classified as optional conveniences.
 
 This comparison is research evidence, not an accepted design or executable
 test. It applies [Nyquist Validation](../../../gates/methods/NYQUIST_VALIDATION_METHOD.md)
