@@ -46,6 +46,7 @@ Requirements for the v0.1 specification. Each maps to roadmap phases (the 8-phas
 - [ ] **FITNESS-02**: Review every existing fitness function and create an individual Quality EDR for each without one; preserve EDR-101 and identify unknown historical rationale explicitly.
 - [ ] **FITNESS-03**: Design Interaction Coverage, add it to the fitness function catalogue, and register its individual Quality EDR.
 - [ ] **FITNESS-04**: Design Unresolved Conflict Age, add it to the fitness function catalogue, and register its individual Quality EDR.
+- [ ] **FITNESS-05**: Evaluate the usefulness of Composition Surface's canonical-form count and Deterministic Behavior's implementation-dependent check; document alternatives and design-stage evidence, coordinated with FITNESS-02.
 
 ### Foundation Completion (resolves CONCERNS.md governance/process gaps) — Phase 1.1 ✅
 
@@ -200,6 +201,7 @@ Deferred to post-Freeze (Milestones 8-9 and LLM tooling). Tracked but not in cur
 | FITNESS-02 | Unscheduled | Pending |
 | FITNESS-03 | Unscheduled | Pending |
 | FITNESS-04 | Unscheduled | Pending |
+| FITNESS-05 | Unscheduled | Pending |
 | SEM-01 | Phase 2 | Complete |
 | SEM-02 | Phase 2 | Complete |
 | SEM-03 | Phase 2 | Complete |

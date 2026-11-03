@@ -68,6 +68,11 @@
   - **Target:** unscheduled
   - **Ref:** `.planning/todos/pending/fitness-function-unresolved-conflict-age.md`
   - **Req:** FITNESS-04
+- [ ] **FITNESS-05:** Evaluate whether Composition Surface and Deterministic Behavior use useful, currently applicable measurements.
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/review-composition-surface-and-deterministic-behavior.md`
+  - **Req:** FITNESS-05
 
 ## Milestone 0 — Vision
 
