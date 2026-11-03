@@ -546,6 +546,15 @@ When reviewing a concept or design document with the author:
    systemic: reopen every LOCK built on that assumption, not only the one the
    author corrected, and hold any pending EDR from this session until the
    affected questions are re-locked.
+8. **Syntax questions.** Before presenting the decision summary, check whether
+   the review exposed a new form, an open choice between forms, or a collision.
+   If so, link an existing syntax hypothesis or register the question in the
+   [`how/syntax/` Decision Queue](how/syntax/README.md#decision-queue) under
+   the existing [Syntax Pipeline](how/SYNTAX_PIPELINE.md#stage-1--syntax-hypothesis-inbox).
+   Include the link in the summary. If no syntax question remains, create no
+   syntax artifact. A question that may change semantics stays in concept
+   review; an actual collision is also tracked in the
+   [Syntax Exceptions Registry](how/SYNTAX_EXCEPTIONS.md).
 
 Answering everything at once mixes concerns and produces decisions that do not hold.
 A review may not fit in one session; leftover questions are reviewed in a separate one.
