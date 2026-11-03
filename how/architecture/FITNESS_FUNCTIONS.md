@@ -43,6 +43,8 @@ with runtime quality attributes deferred to the implementation milestone
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Transparency principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — initial fitness function
+
 A concept that requires more than one substantive semantic change
 after its initial Gate approval triggers an architectural review.
 Frequent semantic revision of a single concept indicates the concept
@@ -56,6 +58,8 @@ after Gate approval. Threshold: >1 change triggers review.
 ## Layered Isolation
 
 **Source:** [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md) — Layered Architecture
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — initial fitness function
 
 A change to one layer (Core Language, Standard Library, Implementation
 Strategy) must not ripple into another layer's semantics. If a strategy
@@ -71,6 +75,8 @@ modifications in multiple layers? If yes, layer boundary is breached.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — initial fitness function
+
 The number of documented canonical forms for a concept must not
 decrease across revisions — composition should expand, not contract.
 
@@ -82,6 +88,8 @@ Negative diff → composition decay.
 ## Data First
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Data First principle
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-090](../decision_records/architecture/EDR-090-data-oriented-programming.md) — Data First principle
 
 Every new concept must operate on Data as the primary abstraction.
 No concept may introduce behavior without a Data representation.
@@ -97,6 +105,8 @@ explicitly justified.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 No two concepts overlap in responsibility. The composability matrix
 must have no forbidden pairs — every pair of concepts must compose
 meaningfully.
@@ -110,6 +120,8 @@ a forbidden pair, triggering an architectural review.
 ## Emergence / Decomposability
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Orthogonality principle; [PRIMITIVE_BLOCKS.md](../../what/PRIMITIVE_BLOCKS.md) — Purpose & Scope; [ARCHITECTURE.md](ARCHITECTURE.md) — Semantic Dependency Architecture
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-012](../decision_records/architecture/EDR-012-semantic-dependency-architecture.md) — semantic decomposition
 
 A desired capability is architecturally adequate when it *emerges*
 from the composition of simpler, orthogonal parts. If a capability
@@ -129,6 +141,8 @@ last two, triggers an architectural review.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Explicitness / Explicit Semantics principles
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 Semantic changes must be syntactically visible. No hidden conversions,
 implicit side-effects, or invisible ownership transfers.
 
@@ -141,6 +155,8 @@ Hidden semantics → fitness failure.
 ## Minimal Core
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Minimal Core principle; [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md)
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
 
 Core Language changes must be justified against composition alternatives.
 A new core concept must demonstrate that it cannot be expressed through
@@ -156,6 +172,8 @@ If the justification is absent or weak, the proposal is rejected.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Named Before Symbolic principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 Every symbolic operator must have an equivalent named function.
 
 **Measured by:** Operator inventory: for each symbolic operator in the
@@ -167,6 +185,8 @@ the Standard Library or Core.
 ## LLM Generability
 
 **Source:** [EDR-014](../decision_records/architecture/EDR-014-llm-generability-gate.md); [\_language-design.md](../gates/_language-design.md) — LLM generability criterion
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
 
 Every construct must be expressible in a machine-readable schema with no
 ambiguities that an LLM could misinterpret. The Static Analyser must be
@@ -183,6 +203,8 @@ generate incorrect code?
 
 **Source:** [EDR-010](../decision_records/architecture/EDR-010-layered-architecture.md); [IMPLEMENTATION_POLICIES.md](../IMPLEMENTATION_POLICIES.md)
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-006](../decision_records/process/EDR-006-policies-and-strategies.md) — policies and strategies
+
 Core concepts must not depend on specific Policy values. A concept's
 semantics must be valid under any valid Policy assignment.
 
@@ -197,6 +219,8 @@ reference counting" is not).
 
 **Source:** [CONVENTIONS.md](../../.planning/codebase/CONVENTIONS.md) — Cross-reference conventions; [AGENTS.md](../../AGENTS.md) §10.8
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 All "See also" links between documents must resolve to existing files.
 
 **Measured by:** Automated link checker run at each phase boundary.
@@ -207,6 +231,8 @@ Broken links are documented and fixed before phase completion.
 ## Document Freshness
 
 **Source:** [DOCUMENTATION_PRINCIPLES.md](../DOCUMENTATION_PRINCIPLES.md) — Date-Stamp Requirement
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
 
 Documents with `> **Last updated:**` more than 90 days in the past
 trigger a freshness review.
@@ -221,6 +247,8 @@ at the next phase boundary.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Deterministic Behavior principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 The same source code must produce the same observable behavior across
 optimization levels and implementations.
 
@@ -233,6 +261,8 @@ If behavior differs, the concept or strategy violates determinism.
 ## Invariant Violation Detectability
 
 **Source:** [EDR-099](../decision_records/process/EDR-099-nyquist-validation-method.md) — Nyquist Validation; [Nyquist Validation method](../gates/methods/NYQUIST_VALIDATION_METHOD.md)
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-101](../decision_records/quality/EDR-101-invariant-violation-detectability.md) — this fitness function
 
 For each new or substantively revised concept, identify semantic
 invariants whose violation could change observable behaviour, safety,
@@ -257,6 +287,8 @@ executable test.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Representation Symmetry principle
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
+
 Reversible transformations of representations must use symmetric syntax
 (prefix to create, postfix to restore).
 
@@ -269,6 +301,8 @@ transformations are flagged.
 ## Concepts In Flight
 
 **Source:** [Pipeline Throughput Gaps](../../notes/pipeline-throughput-gaps.md) — Gap 4
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
 
 Measures how many concepts are currently in the active design pipeline —
 any concept in `how/concepts/research/` that has entered the Concept Design
@@ -291,7 +325,9 @@ will change once Phase 4 begins accepting concepts.
 
 ## Oldest Open Proposal
 
-**Source:** [TODO.md](../../../TODO.md) — GAP-04
+**Source:** [TODO.md](../../TODO.md) — GAP-04
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue
 
 Tracks the age (in days) of the oldest concept research document that has
 not yet entered the Concept Design Review. A growing age indicates the
@@ -309,6 +345,8 @@ the oldest research document's age. Expected to become actionable in Phase 4.
 
 **Source:** [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) — Transparency principle; [\_language-design.md](../gates/_language-design.md) — Traceability criterion
 
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-001](../decision_records/process/EDR-001-edr-system.md) — decision records; [EDR-015](../decision_records/process/EDR-015-decision-log.md) — decision log
+
 Every design decision must be traceable from origin through alternatives
 to final decision, recorded in an EDR or gate entry.
 
@@ -321,6 +359,8 @@ decisions are flagged.
 ## Human Sign-off Coverage
 
 **Source:** [concept-design-review.md](../concept-design-review.md) — Step 7 Convergence Check; [SYNTAX_PIPELINE.md](../SYNTAX_PIPELINE.md) — Stage 6b
+
+**Related EDR:** [EDR-005](../decision_records/quality/EDR-005-fitness-functions.md) — fitness function catalogue; [EDR-007](../decision_records/process/EDR-007-concept-design-review.md) — concept review; [EDR-087](../decision_records/process/EDR-087-syntax-acceptance-process.md) — syntax process
 
 Every accepted concept and syntax decision must carry a dated Human
 Sign-off field — `Reviewed-by: <author> · Date: YYYY-MM-DD · Verdict:
