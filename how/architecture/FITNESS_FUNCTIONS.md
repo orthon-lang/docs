@@ -1,6 +1,6 @@
 # Fitness Functions
 
-> **Last updated:** 2026-07-20
+> **Last updated:** 2026-11-03
 >
 > Architectural fitness functions guard against decay of the core
 > design. Each function is a measurable check applied when a concept
@@ -227,6 +227,29 @@ optimization levels and implementations.
 **Measured by:** Cross-strategy test: compile and run the same program
 under two different Implementation Strategies. Output must be identical.
 If behavior differs, the concept or strategy violates determinism.
+
+---
+
+## Invariant Violation Detectability
+
+**Source:** [EDR-099](../decision_records/process/EDR-099-nyquist-validation-method.md) — Nyquist Validation; [Nyquist Validation method](../gates/methods/NYQUIST_VALIDATION_METHOD.md)
+
+For each new or substantively revised concept, identify semantic
+invariants whose violation could change observable behaviour, safety,
+or semantic consistency. The selected design evidence must distinguish
+a valid outcome from a violation for each significant scenario. If no
+such invariant is identified, record why this check does not apply.
+
+**Measured by:** Count the identified significant violation scenarios
+without a discriminating observation in the concept's validation
+evidence. Each scenario must name the canonical invariant, the
+violating outcome, the expected outcome, and the observation that
+distinguishes them. A nonzero count blocks Human Sign-off until the
+evidence is strengthened or the scenario is shown not to be
+significant. Zero uncovered scenarios means only that the *identified*
+scenarios are covered; it does not prove that every possible violation
+has been found. A documented scenario is design evidence, not a passed
+executable test.
 
 ---
 
