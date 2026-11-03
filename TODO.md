@@ -51,6 +51,24 @@
   - **Ref:** `.planning/todos/pending/translate-non-english-content.md` (scan: `git grep -lP '[\x{0400}-\x{04FF}]' -- '*.md'`)
   - **Req:** DEBT-19
 
+## Fitness Function Backlog
+
+- [ ] **FITNESS-02:** Review existing fitness functions and create an individual EDR for each function that lacks one, following EDR-101.
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/fitness-functions-individual-edrs.md`
+  - **Req:** FITNESS-02
+- [ ] **FITNESS-03:** Design and add the Interaction Coverage fitness function with its own EDR.
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/fitness-function-interaction-coverage.md`
+  - **Req:** FITNESS-03
+- [ ] **FITNESS-04:** Design and add the Unresolved Conflict Age fitness function with its own EDR.
+  - **Owner:** Solo author
+  - **Target:** unscheduled
+  - **Ref:** `.planning/todos/pending/fitness-function-unresolved-conflict-age.md`
+  - **Req:** FITNESS-04
+
 ## Milestone 0 — Vision
 
 - [x] review Manifesto (`docs/why/MANIFESTO.md`), Vision (`docs/why/VISION.md`), Zen (`docs/why/ZEN.md`) using Working Backwards rationale (`docs/why/WORKING_BACKWARDS.md`)
