@@ -45,12 +45,16 @@ State the decision clearly and concretely. This is the single outcome of this re
 
 ### Consequences
 
-What does this decision make easier and what does it make harder?
+What does this decision make easier and what does it make harder? What
+new tension does it create?
 
 - **Positive:**
   - …
 - **Negative:**
   - … (trade-offs, overhead)
+- **New contradiction:**
+  - … (the tension this decision itself creates — the relocated cost, as
+    distinct from the trade-off accepted above)
 
 ---
 

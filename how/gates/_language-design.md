@@ -84,6 +84,9 @@
 - [ ] **Traceability** — is the full path from origin to decision
       documented (alternatives considered, rationale, rejected
       approaches)?
+- [ ] **New contradiction** — has the tension this decision creates been
+      named (the relocated cost, as distinct from the trade-off it
+      accepts)? (EDR-102)
 - [ ] **Gate guard** — has a similar proposal been rejected before? If
       so, what circumstances have changed?
 - [ ] **Evolution strategy** — is the decision's future-proofing
@@ -107,3 +110,4 @@
 |------|---------|---------|-----------|
 | 2026-07-19 | LLM_GENERABILITY_GATE | Added as 7th gate criterion | EDR-014 — LLM-native pillar requires explicit LLM generability validation for every language construct |
 | 2026-07-21 | SEMANTIC_LAYER_CLASSIFICATION | Added as 1st gate criterion | EDR-012 — every concept must be classified into a Semantic Dependency Architecture level |
+| 2026-11-06 | NEW_CONTRADICTION | Added as gate criterion | EDR-102 — every decision names the tension it creates, distinct from the trade-off it accepts |
