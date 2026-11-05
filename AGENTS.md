@@ -75,6 +75,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/gates/DECISION_VALIDATION.md` | How | Six independent validation gates for language design decisions |
 | `how/process/DECISION_PROCESS.md` | How | One-page decision authority — who decides what, using which criteria |
 | `how/process/DECISION_PIPELINE.md` | How | 10-question pipeline — pre-filter before detailed concept design |
+| `how/process/DIALECTICAL_METHOD.md` | How | Dialectical method — reconstruct axes, overlay Orthon, name trade-off and new contradiction |
 | `how/EXPLORING_THE_DOCS.md` | How | Using `graphify` to build a queryable knowledge graph of this repository for orientation and research |
 | `what/SEMANTIC_MODEL.md` | What | Unified semantic model — identity, ownership, mutation, evaluation, visibility, lifetime |
 | `what/PRIMITIVE_BLOCKS.md` | What | Minimal orthogonal primitive blocks — all features decompose to these |
@@ -85,6 +86,7 @@ An agent must **always** anchor new content to the correct layer. A "Why" argume
 | `how/syntax/README.md` | How | Syntax hypothesis inbox + decision queue — open Phase 5 decisions (EDR-087) |
 | `what/CROSS_CUTTING.md` | What | Interaction matrix — pair-wise concept interaction analysis |
 | `what/CONFLICT_REGISTRY.md` | What | Concept-boundary conflict tracking and resolution |
+| `what/DIALECTICAL_TRADEOFFS.md` | What | Dialectical trade-off ledger — Orthon's position per axis, trade-off accepted, new contradiction |
 | `what/EXECUTION_MODEL.md` | What | Execution semantics — what the language guarantees about execution |
 | `what/OPTIMIZATION_MODEL.md` | What | Semantics vs. optimisation boundary |
 | `how/EVOLUTION_MODEL.md` | How | Versioning, deprecation, experimental features, feature gates |
