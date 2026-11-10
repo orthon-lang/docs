@@ -836,6 +836,13 @@ Prepared 2026-10-22 by the drafting agent; the decisions below are the author's.
 
 1. **Unique type per function — kept as a definition only (Review decision 15).** The premise stays as the definition that explains `obeys` on a function. How it relates to the structural function type (coercion or erasure through a callable bound), generics, and dispatch is **deferred to v0.2** with higher-order contracts; coupled to `FUNCTIONS.md` open question 4 and `ANONYMOUS_FUNCTION.md`. No longer a blocker for v0.1.
 2. **Name of the construct.** `contract` (matches TRAITS' own wording; possible Solidity association) or keep `trait` (alternative A2)? A1 and A2 are semantically equivalent; the choice is **deferred until the syntax is accepted** (author, 2026-10-22). Until then `contract` is a provisional spelling and no document is renamed; the rename cascade is sized for A1 and is smaller for A2.
+
+   **Additional candidates (2026-11-10)**
+
+   - **Behavioral specification (`spec`).** Candidate declaration keyword for the unified construct. The name describes a specification that either a type or a function can satisfy. It would use the same conformance semantics as A1 and A2.
+   - **Virtual type.** Candidate name and model for the abstraction. The naming-only interpretation would use the same conformance semantics as A1 and A2. The semantic interpretation would allow a declaration such as `Printable` to serve directly as a value type. That interpretation requires defining whether one variable can hold values of different conforming types, how it selects an implementation, and how it relates to explicit erasure through `dyn`. It also needs to account for function conformance under the unified model.
+
+   Both candidates remain open in the [syntax decision queue](../../../syntax/README.md#decision-queue).
 3. **Deferred to v0.2 (Review decision 17). Name of multi-instance contracts.** `law` is judged too heavy. Candidates: `property` (collides with the PROPERTIES concept), `rule` (matches the business-rule use but is generic), `check`, `claim`, `holds`, `axiom` (as heavy as `law`). Undecided.
 4. **Closed (Review decision 17): multi-instance contracts are deferred to v0.2.** Needed for `Eq` and `Serialize`, but not blocking.
 5. **Conformance keyword.** `obeys` is the candidate to replace `impl` (Review decisions, item 14). Word, position, multiple contracts, lambdas, and blanket conformance are tracked in [`../../../syntax/CONFORMANCE_SYNTAX.md`](../../../syntax/CONFORMANCE_SYNTAX.md); associated types remain open here.
