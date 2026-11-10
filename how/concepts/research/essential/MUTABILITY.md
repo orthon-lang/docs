@@ -7,6 +7,8 @@
 > acceptance via EDR (Architecture category).
 >
 > **Last updated:** 2026-07-20
+>
+> **Related discussion:** [Immutability: Levels and Trade-offs](../../../../notes/immutability-levels-and-tradeoffs.md) compares language mechanisms and identifies a discrepancy between this draft's call-site `mut` and the semantic model's declaration-level approach.
 
 ## Issue (Why)
 
