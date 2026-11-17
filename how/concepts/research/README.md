@@ -115,6 +115,27 @@ proposals:
 > examines `stop()`, running work, and cancellation in single-owner contexts.
 > Neither changes the accepted Invocation model.
 
+> **Note (2026-11-17):** Four linked `important/` hypotheses, all
+> **research/unverified**, capture the tail-call discussion:
+> [H1 — TRE](important/TAIL_RECURSION_ELIMINATION.md),
+> [H2 — PTC](important/PROPER_TAIL_CALLS.md),
+> [H3 — Control Transfer](important/CONTROL_TRANSFER.md), and
+> [H4 — Execution Contracts](important/EXECUTION_CONTRACTS.md).
+> They compare automatic analysis, `@tailrec`, and resource guarantees.
+> None changes accepted semantics or establishes a core requirement.
+
+> The cross-hypothesis reasoning is summarized in
+> [TAIL_CALL_HYPOTHESES_SUMMARY.md](important/TAIL_CALL_HYPOTHESES_SUMMARY.md).
+
+> **Note (2026-11-17):**
+> [Compiler-Managed Concurrency](important/COMPILER_MANAGED_CONCURRENCY.md)
+> records one **research/unverified** hypothesis: existing Invocation and
+> ownership boundaries may let explicitly selected compiler/runtime Strategies
+> hide scheduling and internal synchronization machinery. Includes the
+> virtual-thread analogy, EDR-085 constraints, open effect/alias questions,
+> counterexamples, and measurable verification criteria. No semantics or syntax
+> is accepted by this research.
+
 ## Adding Research
 
 To add a new concept research document:

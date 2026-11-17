@@ -131,6 +131,8 @@ agents/GSD flows must not self-certify it.
 | Behavioral specification declaration name (`contract`, `trait`, `spec`, or virtual type) and name of multi-instance contracts (conformance spelling tracked in [CONFORMANCE_SYNTAX.md](CONFORMANCE_SYNTAX.md)) | [TRAIT_CONTRACT_UNIFICATION.md](../concepts/research/essential/TRAIT_CONTRACT_UNIFICATION.md), Open Question 2 | Open (opened 2026-10-18, candidates added 2026-11-10). Virtual type may require a semantic review if it denotes a value type. | Pending |
 | Error type notation: `!T` vs `Result<T>` with an inferred `E`, tags as types, the top error type, and the other meanings of `!` (forced unwrap, negative bounds) | `../concepts/research/essential/ERROR_REPRESENTATION_UNIFICATION.md` (semantics hypothesis; notation open — spellings provisional) | Open (coupled — syntax only; opened 2026-10-21) | Pending |
 
+| Tail-call/resource contract spelling: `@tailrec` vs `guarantees stack: constant`; `ensures` vs a separate `guarantees` category and its relationship to `effects` | [H4 — Execution Contracts](../concepts/research/important/EXECUTION_CONTRACTS.md), [H1 — TRE](../concepts/research/important/TAIL_RECURSION_ELIMINATION.md) | Open (research/unverified, 2026-11-17; blocked on scope and enforcement; no equivalence accepted) | Pending |
+
 ### Resolved (accepted — record in `what/syntax/`)
 
 | Question | Record | Decision | Status | Human review |
